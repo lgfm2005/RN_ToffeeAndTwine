@@ -507,8 +507,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Heather Swan (DDC2YY5T7F)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 72;
 				DEVELOPMENT_TEAM = DDC2YY5T7F;
 				ENABLE_BITCODE = NO;
@@ -525,7 +525,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.toffeeTwine.apps;
 				PRODUCT_NAME = toffeetwine;
-				PROVISIONING_PROFILE_SPECIFIER = ProvisioningToffeeTwinesProfileLive;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -538,7 +538,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Heather Swan (DDC2YY5T7F)";
+				CODE_SIGN_IDENTITY = "Apple Development: Heather Swan (4M9KC9KVVT)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 72;
 				DEVELOPMENT_TEAM = DDC2YY5T7F;
@@ -555,7 +555,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.toffeeTwine.apps;
 				PRODUCT_NAME = toffeetwine;
-				PROVISIONING_PROFILE_SPECIFIER = ProvisioningToffeeTwinesProfileLive;
+				PROVISIONING_PROFILE_SPECIFIER = ToffeeTwineDevProfile;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

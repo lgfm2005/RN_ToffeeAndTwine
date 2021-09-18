@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
-} from 'react-native';
+  Platform,
+} from "react-native";
 
 // Asset
 import {
@@ -17,54 +18,67 @@ import {
   imgGift,
   imgGoogle,
   imgFacebook,
-} from '../Assets/utils/Image';
-import {AppString} from '../Assets/utils/AppString';
-import {FilledButton, OutLinedButton} from '../Components/Button/Button';
-import CommonStyle, {fontsize16} from '../Assets/Style/CommonStyle';
-import {FONT} from '../Assets/utils/FONT';
-import {COLORS} from '../Assets/utils/COLORS';
-import {OrLine} from '../Components/Line/OrLine';
-import {MyWhiteStatusbar} from '../Components/MyStatusBar/MyWhiteStatusbar';
+} from "../Assets/utils/Image";
+import { AppString } from "../Assets/utils/AppString";
+import { FilledButton, OutLinedButton } from "../Components/Button/Button";
+import CommonStyle, { fontsize16 } from "../Assets/Style/CommonStyle";
+import { FONT } from "../Assets/utils/FONT";
+import { COLORS } from "../Assets/utils/COLORS";
+import { OrLine } from "../Components/Line/OrLine";
+import { MyWhiteStatusbar } from "../Components/MyStatusBar/MyWhiteStatusbar";
+import KeyboardManager from "react-native-keyboard-manager";
 
-const MainScreen = ({navigation}) => {
+const MainScreen = ({ navigation }) => {
+  if (Platform.OS === "ios") {
+    KeyboardManager.setToolbarPreviousNextButtonEnable(true);
+  }
+
   return (
     <SafeAreaView
       //   style={CommonStyle.MainContainer}
       style={{
-        height: '100%',
+        height: "100%",
         backgroundColor: COLORS.white,
-      }}>
+      }}
+    >
       {/* <MyWhiteStatusbar /> */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
         contentContainerStyle={{
-          width: '100%',
+          width: "100%",
           backgroundColor: COLORS.white,
-        }}>
+        }}
+      >
         <View
           style={{
-            height: '100%',
+            height: "100%",
             // marginTop: 68,
             marginBottom: 68,
             //   backgroundColor: 'blue',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <View
             style={[
               // CommonStyle.my32,
               // CommonStyle.Container,
               CommonStyle.Container,
               {
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
               },
-            ]}>
+            ]}
+          >
             <Image source={imgToffeeTwineLogo} style={CommonStyle.logoImage} />
             <Text
-              style={[CommonStyle.giftThoughtfully, {fontFamily: FONT.Gilroy}]}>
+              style={[
+                CommonStyle.giftThoughtfully,
+                { fontFamily: FONT.Gilroy },
+              ]}
+            >
               {AppString.GiftThoughtfully}
             </Text>
           </View>
@@ -75,9 +89,9 @@ const MainScreen = ({navigation}) => {
               CommonStyle.imgGiftTutorial,
               // CommonS tyle.my32,
               {
-                width: '100%',
+                width: "100%",
                 height: 230,
-                resizeMode: 'cover',
+                resizeMode: "cover",
                 marginTop: 48,
                 marginBottom: 48,
               },
@@ -89,23 +103,24 @@ const MainScreen = ({navigation}) => {
               CommonStyle.Container,
               // CommonStyle.my32,
               // {marginTop: 12, marginBottom: 12},
-            ]}>
+            ]}
+          >
             <FilledButton
               buttonName={AppString.Signup}
               onPress={() => {
-                navigation.navigate('Signup');
+                navigation.navigate("Signup");
               }}
             />
 
             <OutLinedButton
               buttonName={AppString.Signin}
               onPress={() => {
-                navigation.navigate('SignIn');
+                navigation.navigate("SignIn");
               }}
             />
 
             <View style={[CommonStyle.mb32, {}]}>
-              <OrLine LineName={'OR'} />
+              <OrLine LineName={"OR"} />
             </View>
 
             <View style={[CommonStyle.googleFb]}>
