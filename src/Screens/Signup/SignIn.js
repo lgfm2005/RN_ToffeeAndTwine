@@ -11,14 +11,27 @@ import { COLORS } from '../../Assets/utils/COLORS';
 import { OrLine } from '../../Components/Line/OrLine';
 import { FormInput, ShowFormInput } from '../../Components/FormInput';
 
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import {useActions} from "../../redux/actions";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const SignIn = ({ navigation }) => {
 
+    const {
+        Login,
+      } = useActions();
     const keyboardVerticalOffset = Platform.OS === 'ios' ? 5 : 0
+    const [getLoader, setLoader] = useState(false);
+
     const [getEmail, setEmail] = useState('');
     const [getCreatePassword, setCreatePassword] = useState('');
+
+    const handleLogin = async () => {
+        setLoader(true)
+        const {error, response} = await Login(getEmail, getCreatePassword, "");
+        setLoader(false)
+        navigation.navigate('Navigation')
+      };
 
     return (
         <SafeAreaView style={[CommonStyle.MainContainer]}>
@@ -61,7 +74,7 @@ const SignIn = ({ navigation }) => {
                         <View>
                             <FilledButton
                                 buttonName={AppString.Signin}
-                                onPress={() => { navigation.navigate('Navigation') }}
+                                onPress={() => handleLogin() }
                             />
                         </View>
 
@@ -92,7 +105,7 @@ const SignIn = ({ navigation }) => {
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
-
+ <Spinner visible={getLoader}/>
         </SafeAreaView >
     )
 }

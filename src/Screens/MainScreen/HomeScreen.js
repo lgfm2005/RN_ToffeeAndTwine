@@ -184,8 +184,13 @@ const UpgradeCatData = [
 ];
 
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 10 : 0;
+import {useSelector} from "react-redux";
 
 const HomeScreen = () => {
+
+  const user = useSelector((state) => state.session);
+  debugger
+
   // AddItemShow
   const [getAddItemShowModal, setAddItemShowModal] = useState(false);
   const [getAddItemShowItem, setAddItemShowItem] = useState('');
