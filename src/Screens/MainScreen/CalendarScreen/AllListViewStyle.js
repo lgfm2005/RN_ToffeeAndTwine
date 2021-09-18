@@ -1,22 +1,20 @@
 import {StyleSheet, View, TouchableOpacity, Dimensions} from 'react-native';
-import CommonStyle, {fontsize20} from '../../Assets/Style/CommonStyle';
-
-import {COLORS} from '../../Assets/utils/COLORS';
-import {fontsize14} from '../../Assets/Style/CommonStyle';
+import {COLORS} from '../../../Assets/utils/COLORS';
+import {fontsize14} from '../../../Assets/Style/CommonStyle';
 const {width} = Dimensions.get('screen');
 
 export const AllListViewStyle = StyleSheet.create({
   itemContainer: {
     flexDirection: 'column',
     marginBottom: 16,
-    minWidth: '18%',
+    minWidth: '22%',
     // width: '100%',
     // width: width / 7,
     alignItems: 'center',
     // paddingLeft: "1%",
     // paddingRight: '1%',
-    marginLeft: '1%',
-    marginRight: '1%',
+    marginLeft: '1.5%',
+    marginRight: '1.5%',
   },
   addItem: {
     borderWidth: 1,
@@ -63,6 +61,8 @@ export const AllListViewStyle = StyleSheet.create({
     ...fontsize14,
     marginTop: 5,
     alignItems: 'center',
+
+    overflow: 'hidden',
   },
   popupImage: {
     width: 45,
