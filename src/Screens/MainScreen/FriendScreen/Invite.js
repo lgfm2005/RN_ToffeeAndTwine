@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,16 +9,16 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-} from 'react-native';
-import CommonStyle from '../../../Assets/Style/CommonStyle';
-import {AppString} from '../../../Assets/utils/AppString';
-import {imgInvite} from '../../../Assets/utils/Image';
-import {FilledButton, POPLinkButton} from '../../../Components/Button/Button';
-import {MyWhiteStatusbar} from '../../../Components/MyStatusBar/MyWhiteStatusbar';
+} from "react-native";
+import CommonStyle from "../../../Assets/Style/CommonStyle";
+import { AppString } from "../../../Assets/utils/AppString";
+import { imgInvite } from "../../../Assets/utils/Image";
+import { FilledButton, POPLinkButton } from "../../../Components/Button/Button";
+import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 
 // Asset
 
-const Invite = ({navigation}) => {
+const Invite = ({ navigation }) => {
   return (
     <View>
       <MyWhiteStatusbar />

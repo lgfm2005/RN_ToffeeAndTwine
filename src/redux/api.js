@@ -5,25 +5,18 @@ const baseAPIDev = axios.create({
   baseURL: ApiConstants.BASE_URL_DEV,
 });
 
-
 const createAuthorizationHeader = async (session) => {
   if (!session?.token && !session?.access_token) {
     return {};
   }
-  return {Authorization: `Bearer ${session.token || session.access_token}`};
+  return { Authorization: `Bearer ${session.token || session.access_token}` };
 };
 
 const createApikey = async () => {
-  return {"api_key": `AIzMzWBGoZ8Pq4QRKLcwDCG3-jPY278wxT8nMz9`};
+  return { api_key: `AIzMzWBGoZ8Pq4QRKLcwDCG3-jPY278wxT8nMz9` };
 };
 
-const api = async (
-  session,
-  endpoint,
-  method = "get",
-  body,
-  contentType,
-) => {
+const api = async (session, endpoint, method = "get", body, contentType) => {
   const headers = {
     ...(await createAuthorizationHeader(session)),
     ...(await createApikey()),
@@ -31,15 +24,11 @@ const api = async (
   };
 
   if (method === "get" || method === "delete") {
-    return await baseAPIDev[method](endpoint, {headers});
+    return await baseAPIDev[method](endpoint, { headers });
   }
-  return await baseAPIDev[method](
-    endpoint,
-    body,
-    {
-      headers,
-    },
-  );
+  return await baseAPIDev[method](endpoint, body, {
+    headers,
+  });
 };
 
 // export const Auth = {
@@ -59,18 +48,45 @@ const api = async (
 
 export const User = {
   login: async (data, session) =>
- 
     await api(session, "/rest_api/controller_user/login", "post", data),
 };
 
-// export const ForgotPassword = {
-//   password: async (isDevMode, email) =>
-//     await api(
-//       isDevMode,
-//       null,
-//       `/syncauto/authentication/forgot-password?email=${email}`,
-//       "post",
-//     ),
-// };
+export const Signups = {
+  signUp: async (data, session) =>
+    await api(session, `/rest_api/controller_user/registration`, "post", data),
+};
 
+export const ForgotPassword = {
+  password: async (data, session) =>
+    await api(
+      session,
+      `/rest_api/controller_user/forgot_password`,
+      "post",
+      data
+    ),
+};
 
+export const ForgotPasswordOTP = {
+  OTP: async (data, session) =>
+    await api(
+      session,
+      `/rest_api/controller_user/forgot_password_enter_otp`,
+      "post",
+      data
+    ),
+};
+
+export const ChangeNewPassword = {
+  password: async (data, session) =>
+    await api(
+      session,
+      `/rest_api/controller_user/change_password_from_forgot_password`,
+      "post",
+      data
+    ),
+};
+
+export const ResendOtp = {
+  OTP: async (data, session) =>
+    await api(session, `/rest_api/controller_user/resent_otp`, "post", data),
+};

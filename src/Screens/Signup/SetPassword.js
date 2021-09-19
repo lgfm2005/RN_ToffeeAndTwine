@@ -29,13 +29,27 @@ import { COLORS } from "../../Assets/utils/COLORS";
 import { OrLine } from "../../Components/Line/OrLine";
 import { FormInput, ShowFormInput } from "../../Components/FormInput";
 import BackToolBar from "../../Components/BackToolBar";
+import { useActions } from "../../redux/actions";
+import { isEmailValid } from "../../utils";
+import Validation from "../../utils/validation";
+import { showMessage } from "react-native-flash-message";
+import Spinner from "react-native-loading-spinner-overlay";
+import { ChangeNewPassword, ResendOtp } from "../../redux/api";
 
-const SetPassword = ({ navigation }) => {
+const SetPassword = ({ navigation, route }) => {
+  const { ForgotPasswordOTPS, ResendOTPs, ChangePassword } = useActions();
+
+  const { VerificationCode, getEmail } = route.params;
   const [getOtp, setOtp] = useState("");
   const [getTimer, setTimer] = useState(60);
   const [getText, setText] = useState("");
   const [getResend, setResend] = useState(false);
   const [getOtpCheck, setOtpCheck] = useState("");
+  const [verificationCode, setVerificationCode] = useState(VerificationCode);
+  const [isVerification, setIsVerification] = useState(false);
+
+  const [getLoader, setLoader] = useState(false);
+
   const [getCreatePassword, setCreatePassword] = useState("");
   const [getConfirmPassword, setConfirmPassword] = useState("");
 
@@ -53,19 +67,91 @@ const SetPassword = ({ navigation }) => {
     return () => clearInterval(interval);
   }, [getResend]);
 
-  const Resend = () => {
-    let tempResendValue = !getResend;
-    setResend(tempResendValue);
-    setTimer(60);
-    setText("");
+  const Resend = async () => {
+    setLoader(true);
+    const { error, response } = await ResendOTPs(getEmail);
+    setLoader(false);
+
+    if (response.data.StatusCode == "1") {
+      let tempResendValue = !getResend;
+      setResend(tempResendValue);
+      setTimer(60);
+      setText("");
+
+      showMessage({
+        message: "Alert",
+        description: response.data.Message,
+        type: "success",
+      });
+    } else {
+      showMessage({
+        message: "Alert",
+        description: response.data.Message,
+        type: "danger",
+      });
+    }
   };
 
-  const Submit = () => {
-    if (getOtpCheck == "") {
-      setOtpCheck(getOtp);
-      Keyboard.dismiss();
+  const Submit = async () => {
+    if (isVerification) {
+      if (Validation.removeBadSpaces(getCreatePassword) === "") {
+        showMessage({
+          message: "Please enter Password",
+          type: "danger",
+        });
+        return;
+      } else if (Validation.removeBadSpaces(getConfirmPassword) === "") {
+        showMessage({
+          message: "Please enter confirm password",
+          type: "danger",
+        });
+        return;
+      } else if (getConfirmPassword != getCreatePassword) {
+        showMessage({
+          message: "confirm password does not match",
+          type: "danger",
+        });
+        return;
+      }
+
+      setLoader(true);
+      const { error, response } = await ChangePassword(
+        1,
+        getCreatePassword,
+        getConfirmPassword
+      );
+      setLoader(false);
+
+      if (response.data.StatusCode == "1") {
+        showMessage({
+          message: "Alert",
+          description: response.data.Message,
+          type: "success",
+        });
+        navigation.navigate("SignIn");
+      } else {
+        showMessage({
+          message: "Alert",
+          description: response.data.Message,
+          type: "danger",
+        });
+      }
     } else {
-      navigation.navigate("SignIn");
+      if (getOtp.length == 6) {
+        setLoader(true);
+        const { error, response } = await ForgotPasswordOTPS(getEmail, getOtp);
+        setLoader(false);
+
+        if (response.data.StatusCode == "1") {
+          setIsVerification(true);
+        } else {
+          showMessage({
+            message: "Alert",
+            description: response.data.Message,
+            type: "danger",
+          });
+        }
+      }
     }
   };
 
@@ -129,7 +215,7 @@ const SetPassword = ({ navigation }) => {
               </View>
             </View>
 
-            {getOtpCheck == "123456" ? (
+            {isVerification ? (
               <View>
                 <View style={CommonStyle.formGroup}>
                   <Text style={CommonStyle.formLabel}>
@@ -159,7 +245,7 @@ const SetPassword = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={
-                  getOtpCheck ? AppString.ResetPassword : AppString.verifyotp
+                  isVerification ? AppString.ResetPassword : AppString.verifyotp
                 }
                 onPress={() => Submit()}
               />
@@ -167,6 +253,7 @@ const SetPassword = ({ navigation }) => {
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
+      <Spinner visible={getLoader} />
     </SafeAreaView>
   );
 };

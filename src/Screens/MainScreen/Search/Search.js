@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   FlatList,
@@ -9,59 +9,59 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-} from 'react-native';
+} from "react-native";
 
 // Lib
 // import {Searchbar} from 'react-native-paper';
-import {SearchBar} from 'react-native-elements';
+import { SearchBar } from "react-native-elements";
 // Asset
 import CommonStyle, {
   fontsize10,
   fontsize12,
-} from '../../../Assets/Style/CommonStyle';
-import {demodp} from '../../../Assets/utils/Image';
-import {AppString, Remove} from '../../../Assets/utils/AppString';
-import {FilledButton} from '../../../Components/Button/Button';
-import {SearchBarStyle} from './SearchBarStyle';
-import {Smallbtn} from '../../../Components/Button/ButtonStyle';
-import {MyWhiteStatusbar} from '../../../Components/MyStatusBar/MyWhiteStatusbar';
-import {COLORS} from '../../../Assets/utils/COLORS';
+} from "../../../Assets/Style/CommonStyle";
+import { demodp } from "../../../Assets/utils/Image";
+import { AppString, Remove } from "../../../Assets/utils/AppString";
+import { FilledButton } from "../../../Components/Button/Button";
+import { SearchBarStyle } from "./SearchBarStyle";
+import { Smallbtn } from "../../../Components/Button/ButtonStyle";
+import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
+import { COLORS } from "../../../Assets/utils/COLORS";
 
 const Data = [
   {
     id: 1,
-    Name: 'Gregory Thomson',
+    Name: "Gregory Thomson",
     Image: demodp,
   },
   {
     id: 2,
-    Name: 'Gregory Thomson',
+    Name: "Gregory Thomson",
     Image: demodp,
   },
   {
     id: 3,
-    Name: 'Gregory Thomson',
+    Name: "Gregory Thomson",
     Image: demodp,
   },
   {
     id: 4,
-    Name: 'Gregory Thomson',
+    Name: "Gregory Thomson",
     Image: demodp,
   },
 ];
 
-const Search = ({navigation}) => {
-  const [searchQuery, setSearchQuery] = React.useState('');
+const Search = ({ navigation }) => {
+  const [searchQuery, setSearchQuery] = React.useState("");
 
-  const onChangeSearch = query => setSearchQuery(query);
+  const onChangeSearch = (query) => setSearchQuery(query);
 
   const RemoveFriend = (Id, Name) => {
-    console.log('RemoveFriend', Id, Name);
+    console.log("RemoveFriend", Id, Name);
   };
 
-  const OpenUserProfile = userName => {
-    console.log('OpenUserProfile', userName);
-    navigation.navigate('UserProfile', {userName: userName});
+  const OpenUserProfile = (userName) => {
+    console.log("OpenUserProfile", userName);
+    navigation.navigate("UserProfile", { userName: userName });
   };
 
   const RenderItem = (item, index) => {
@@ -95,16 +95,16 @@ const Search = ({navigation}) => {
             onChangeText={onChangeSearch}
             value={searchQuery}
             platform="ios"
-            onCancel={() => navigation.navigate('NavFriendScreen')}
+            onCancel={() => navigation.navigate("NavFriendScreen")}
             containerStyle={{
               backgroundColor: COLORS.Secondary,
-              alignSelf: 'center',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              alignContent: 'center',
-              borderBottomColor: 'transparent',
-              borderTopColor: 'transparent',
+              alignSelf: "center",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              alignContent: "center",
+              borderBottomColor: "transparent",
+              borderTopColor: "transparent",
             }}
           />
         </View>
@@ -112,8 +112,8 @@ const Search = ({navigation}) => {
         <View style={SearchBarStyle.backgroundColor}>
           <FlatList
             data={Data}
-            renderItem={({item, index}) => RenderItem(item, index)}
-            keyExtractor={item => item.id}
+            renderItem={({ item, index }) => RenderItem(item, index)}
+            keyExtractor={(item) => item.id}
           />
         </View>
       </View>

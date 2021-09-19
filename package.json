@@ -25,6 +25,7 @@
     "react-native-custom-radio-group": "^1.0.1",
     "react-native-date-picker": "^4.0.0",
     "react-native-elements": "^3.4.2",
+    "react-native-flash-message": "^0.2.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-image-crop-picker": "^0.36.2",
     "react-native-keyboard-manager": "^6.5.4-3",

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,20 +9,20 @@ import {
   TouchableOpacity,
   Platform,
   ScrollView,
-} from 'react-native';
+} from "react-native";
 
 // Lib
-import LinearGradient from 'react-native-linear-gradient';
+import LinearGradient from "react-native-linear-gradient";
 
 // Asset
-import {imgbirthdayCakeGary} from '../../../Assets/utils/Image';
-import CommonStyle from '../../../Assets/Style/CommonStyle';
-import {ToolbarMain} from '../../../Components/ToolbarMain/ToolbarMain';
-import {COLORS} from '../../../Assets/utils/COLORS';
-import {FilledButton} from '../../../Components/Button/Button';
-import {Mediumbtn} from '../../../Components/Button/ButtonStyle';
-import {AppString} from '../../../Assets/utils/AppString';
-import {ProfileScreenStyle} from './ProfileScreenStyle';
+import { imgbirthdayCakeGary } from "../../../Assets/utils/Image";
+import CommonStyle from "../../../Assets/Style/CommonStyle";
+import { ToolbarMain } from "../../../Components/ToolbarMain/ToolbarMain";
+import { COLORS } from "../../../Assets/utils/COLORS";
+import { FilledButton } from "../../../Components/Button/Button";
+import { Mediumbtn } from "../../../Components/Button/ButtonStyle";
+import { AppString } from "../../../Assets/utils/AppString";
+import { ProfileScreenStyle } from "./ProfileScreenStyle";
 import {
   imgWhiteShare,
   imgBackleftWhite,
@@ -43,13 +43,13 @@ import {
   imgShoes,
   demodp,
   imgImport,
-} from '../../../Assets/utils/Image';
-import {MainScreenStyle} from '../MainScreenStyle';
-import {CalendarList} from '../../../Components/AllListVIew/CalendarList';
-import {MyBlackStatusbar} from '../../../Components/MyStatusBar/MyBlackStatusbar';
-import {MyWhiteStatusbar} from '../../../Components/MyStatusBar/MyWhiteStatusbar';
-import {ProfileToolBar} from '../../../Components/ProfileToolBar/ProfileToolBar';
-import {FONT} from '../../../Assets/utils/FONT';
+} from "../../../Assets/utils/Image";
+import { MainScreenStyle } from "../MainScreenStyle";
+import { CalendarList } from "../../../Components/AllListVIew/CalendarList";
+import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
+import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
+import { ProfileToolBar } from "../../../Components/ProfileToolBar/ProfileToolBar";
+import { FONT } from "../../../Assets/utils/FONT";
 
 const Data = [
   {
@@ -89,33 +89,37 @@ const Data = [
   },
 ];
 
-const MyProfile = ({navigation}) => {
+const MyProfile = ({ navigation }) => {
   return (
     <View style={[CommonStyle.BgColorWhite, CommonStyle.mb10]}>
       <View
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 0,
           right: 0,
           left: 0,
           zIndex: 1,
-        }}>
+        }}
+      >
         <LinearGradient
           colors={[
-            'rgba(0,0,0,1)',
-            'rgba(0,0,0,0.8)',
-            'rgba(0,0,0,0.6)',
-            'rgba(0,0,0,0.4)',
-            'rgba(0,0,0,0.0)',
-          ]}>
-          <View style={[CommonStyle.ProfileToolbarbg, {alignItems: 'center'}]}>
+            "rgba(0,0,0,1)",
+            "rgba(0,0,0,0.8)",
+            "rgba(0,0,0,0.6)",
+            "rgba(0,0,0,0.4)",
+            "rgba(0,0,0,0.0)",
+          ]}
+        >
+          <View
+            style={[CommonStyle.ProfileToolbarbg, { alignItems: "center" }]}
+          >
             <TouchableOpacity>
               <Image
                 source={imgBackleftWhite}
                 style={CommonStyle.imgIconSize}
               />
             </TouchableOpacity>
-            <Text style={[CommonStyle.txtTitle, {color: COLORS.Secondary}]}>
+            <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
               MyProfile
             </Text>
             <TouchableOpacity onPress={() => {}}>
@@ -127,12 +131,14 @@ const MyProfile = ({navigation}) => {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        bounces={false}>
+        bounces={false}
+      >
         <View style={CommonStyle.authPage}>
           <View style={CommonStyle.imgmask}>
             <ImageBackground
               source={iimgprofiledemo3}
-              style={CommonStyle.imgProfileBackground}></ImageBackground>
+              style={CommonStyle.imgProfileBackground}
+            ></ImageBackground>
             <Image
               source={imgProfileBackground}
               style={CommonStyle.imgmaskbg}
@@ -152,9 +158,10 @@ const MyProfile = ({navigation}) => {
                     <Text
                       style={[
                         CommonStyle.txtContent,
-                        {color: COLORS.PrimaryLight},
-                      ]}>
-                      {' '}
+                        { color: COLORS.PrimaryLight },
+                      ]}
+                    >
+                      {" "}
                       Birthday: April, 14th
                     </Text>
                   </View>
@@ -162,7 +169,7 @@ const MyProfile = ({navigation}) => {
                 <FilledButton
                   buttonName={AppString.Edit}
                   styleBtn={Mediumbtn}
-                  onPress={() => navigation.navigate('EditProfile')}
+                  onPress={() => navigation.navigate("EditProfile")}
                 />
               </View>
             </View>
@@ -170,40 +177,46 @@ const MyProfile = ({navigation}) => {
             <View style={[ProfileScreenStyle.MomentStatus]}>
               <View>
                 <Text
-                  style={[CommonStyle.txtTitle, {fontFamily: FONT.NotoSans}]}>
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
                   1
                 </Text>
                 <Text
                   style={[
                     CommonStyle.txtContent,
-                    {fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight},
-                  ]}>
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                  ]}
+                >
                   Moments
                 </Text>
               </View>
               <View>
                 <Text
-                  style={[CommonStyle.txtTitle, {fontFamily: FONT.NotoSans}]}>
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
                   10k
                 </Text>
                 <Text
                   style={[
                     CommonStyle.txtContent,
-                    {fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight},
-                  ]}>
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                  ]}
+                >
                   Followers
                 </Text>
               </View>
               <View>
                 <Text
-                  style={[CommonStyle.txtTitle, {fontFamily: FONT.NotoSans}]}>
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
                   920
                 </Text>
                 <Text
                   style={[
                     CommonStyle.txtContent,
-                    {fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight},
-                  ]}>
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                  ]}
+                >
                   Following
                 </Text>
               </View>
@@ -214,8 +227,9 @@ const MyProfile = ({navigation}) => {
                 style={[
                   CommonStyle.txtTitle,
                   CommonStyle.textUpperCase,
-                  {fontFamily: FONT.NotoSans, marginTop: 16},
-                ]}>
+                  { fontFamily: FONT.NotoSans, marginTop: 16 },
+                ]}
+              >
                 {AppString.FavoriteThings}
               </Text>
 
@@ -223,7 +237,8 @@ const MyProfile = ({navigation}) => {
                 contentContainerStyle={[
                   MainScreenStyle.scrollItemStyle,
                   CommonStyle.toppadding16,
-                ]}>
+                ]}
+              >
                 {Data.map((item, index) => (
                   <CalendarList
                     ImageUrl={item.Image}
@@ -243,15 +258,17 @@ const MyProfile = ({navigation}) => {
                 style={[
                   CommonStyle.txtTitle,
                   CommonStyle.textUpperCase,
-                  {fontFamily: FONT.NotoSans, marginTop: 16},
-                ]}>
+                  { fontFamily: FONT.NotoSans, marginTop: 16 },
+                ]}
+              >
                 {AppString.SpecialMoments}
               </Text>
               <ScrollView
                 contentContainerStyle={[
                   MainScreenStyle.scrollItemStyle,
                   CommonStyle.toppadding16,
-                ]}>
+                ]}
+              >
                 {Data.map((item, index) => (
                   <CalendarList
                     ImageUrl={item.Image}

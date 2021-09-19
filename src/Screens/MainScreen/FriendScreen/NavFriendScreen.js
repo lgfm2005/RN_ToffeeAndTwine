@@ -1,24 +1,24 @@
-import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import * as React from "react";
+import { Text, View, StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 // Lib
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {COLORS} from '../../../Assets/utils/COLORS';
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import { COLORS } from "../../../Assets/utils/COLORS";
 
 // Asset
-import Followers from './Followers';
-import Following from './Following';
-import FriendFollowersList from './FriendFollowersList';
-import Invite from './Invite';
-import {FriendsToolbar} from '../../../Components/FriendsToolbar/FriendsToolbar';
-import {MyWhiteStatusbar} from '../../../Components/MyStatusBar/MyWhiteStatusbar';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import Followers from "./Followers";
+import Following from "./Following";
+import FriendFollowersList from "./FriendFollowersList";
+import Invite from "./Invite";
+import { FriendsToolbar } from "../../../Components/FriendsToolbar/FriendsToolbar";
+import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Tab = createMaterialTopTabNavigator();
 
-const NavFriendScreen = ({navigation}) => {
+const NavFriendScreen = ({ navigation }) => {
   return (
     <View
       style={{
@@ -26,10 +26,11 @@ const NavFriendScreen = ({navigation}) => {
         paddingTop: getStatusBarHeight(),
         backgroundColor: COLORS.Secondary,
         // backgroundColor: 'red',
-      }}>
-      <FriendsToolbar onPress={() => navigation.navigate('Search')} />
+      }}
+    >
+      <FriendsToolbar onPress={() => navigation.navigate("Search")} />
       <Tab.Navigator
-        initialRouteName={'Followers'}
+        initialRouteName={"Followers"}
         screenOptions={{
           tabBarActiveTintColor: COLORS.Primary,
           tabBarInactiveTintColor: COLORS.PrimaryLight,
@@ -40,7 +41,8 @@ const NavFriendScreen = ({navigation}) => {
           // tabBarOptions: {
           //     upperCaseLabel: false,
           // },
-        }}>
+        }}
+      >
         {/* <Tab.Screen
           name="FriendFollowersList"
           component={FriendFollowersList}

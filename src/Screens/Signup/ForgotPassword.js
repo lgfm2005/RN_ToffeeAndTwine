@@ -26,10 +26,58 @@ import { COLORS } from "../../Assets/utils/COLORS";
 import { OrLine } from "../../Components/Line/OrLine";
 import { FormInput } from "../../Components/FormInput";
 import BackToolBar from "../../Components/BackToolBar";
+import Spinner from "react-native-loading-spinner-overlay";
+
+import { useActions } from "../../redux/actions";
+import { isEmailValid } from "../../utils";
+import Validation from "../../utils/validation";
+import { showMessage } from "react-native-flash-message";
 
 const ForgotPassword = ({ navigation }) => {
+  const { ForgotPasswords } = useActions();
+
   const keyboardVerticalOffset = Platform.OS === "ios" ? 15 : 0;
   const [getEmail, setEmail] = useState("");
+  const [getLoader, setLoader] = useState(false);
+
+  const handleForgotPassword = async () => {
+    if (Validation.removeBadSpaces(getEmail) === "") {
+      showMessage({
+        message: "Please enter a email",
+        type: "danger",
+      });
+      return;
+    } else if (!isEmailValid(getEmail)) {
+      showMessage({
+        message: "Enter a valid email",
+        type: "danger",
+      });
+      return;
+    }
+
+    setLoader(true);
+    const { error, response } = await ForgotPasswords(getEmail);
+    setLoader(false);
+
+    if (response.data.StatusCode == "1") {
+      showMessage({
+        message: "Alert",
+        description: response.data.Message,
+        type: "success",
+      });
+      debugger;
+      navigation.navigate("SetPassword", {
+        VerificationCode: response.data.Result[0].VerificationCode,
+        getEmail: getEmail,
+      });
+    } else {
+      showMessage({
+        message: "Alert",
+        description: response.data.Message,
+        type: "danger",
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={CommonStyle.MainContainer}>
@@ -76,12 +124,13 @@ const ForgotPassword = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.ResetPassword}
-                onPress={() => navigation.navigate("SetPassword")}
+                onPress={() => handleForgotPassword()}
               />
             </View>
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
+      <Spinner visible={getLoader} />
     </SafeAreaView>
   );
 };

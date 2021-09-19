@@ -1,20 +1,20 @@
-import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import * as React from "react";
+import { Text, View, StyleSheet } from "react-native";
 
-import {createStackNavigator} from '@react-navigation/stack';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import { createStackNavigator } from "@react-navigation/stack";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 // Lib
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {COLORS} from '../../../Assets/utils/COLORS';
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import { COLORS } from "../../../Assets/utils/COLORS";
 
 // Asset
-import MyProfile from '../ProfileScreen/MyProfile';
-import Gifting from './Gifting';
-import UpcomingMoments from './UpcomingMoments';
-import UpcomingUpGrade from './UpcomingUpGrade';
-import UpComingThankyou from './UpComingThankyou';
-import {NotificationToolbar} from '../../../Components/NotificationToolbar/NotificationToolbar';
+import MyProfile from "../ProfileScreen/MyProfile";
+import Gifting from "./Gifting";
+import UpcomingMoments from "./UpcomingMoments";
+import UpcomingUpGrade from "./UpcomingUpGrade";
+import UpComingThankyou from "./UpComingThankyou";
+import { NotificationToolbar } from "../../../Components/NotificationToolbar/NotificationToolbar";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -25,7 +25,8 @@ function UpcomingMomentScreen() {
       initialRouteName="UpcomingUpGrade"
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <Stack.Screen name="UpcomingUpGrade" component={UpcomingUpGrade} />
       <Stack.Screen name="UpComingThankyou" component={UpComingThankyou} />
       <Stack.Screen name="UpcomingMoments" component={UpcomingMoments} />
@@ -41,17 +42,19 @@ const NavNotificationScreen = () => {
         flex: 1,
         paddingTop: getStatusBarHeight(),
         backgroundColor: COLORS.Secondary,
-      }}>
+      }}
+    >
       <NotificationToolbar />
       <Tab.Navigator
-        initialRouteName={'Gifting'}
+        initialRouteName={"Gifting"}
         screenOptions={{
           tabBarActiveTintColor: COLORS.Primary,
           tabBarInactiveTintColor: COLORS.PrimaryLight,
           tabBarIndicatorStyle: {
             backgroundColor: COLORS.Primary,
           },
-        }}>
+        }}
+      >
         <Tab.Screen name="Gifting" component={Gifting} />
         <Tab.Screen name="Upcoming Moments" component={UpcomingMomentScreen} />
       </Tab.Navigator>

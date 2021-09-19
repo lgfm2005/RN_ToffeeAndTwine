@@ -1,12 +1,12 @@
-import * as React from 'react';
-import {Image, Text} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import * as React from "react";
+import { Image, Text } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Assets
-import CommonStyle from '../../Assets/Style/CommonStyle';
-import {COLORS} from '../../Assets/utils/COLORS';
+import CommonStyle from "../../Assets/Style/CommonStyle";
+import { COLORS } from "../../Assets/utils/COLORS";
 import {
   imgLeftBack,
   imgNavHome,
@@ -19,27 +19,27 @@ import {
   imgNavOFriend,
   imgNavNotification,
   imgNavONotification,
-} from '../../Assets/utils/Image';
+} from "../../Assets/utils/Image";
 
 // Asset
-import {ToolbarMain} from '../../Components/ToolbarMain/ToolbarMain';
+import { ToolbarMain } from "../../Components/ToolbarMain/ToolbarMain";
 
 // Main Screen
-import HomeScreen from '../MainScreen/HomeScreen';
-import MyProfile from '../MainScreen/ProfileScreen/MyProfile';
-import EditProfile from '../MainScreen/ProfileScreen/EditProfile';
-import Search from '../MainScreen/Search/Search';
-import FriendFollowersList from '../MainScreen/FriendScreen/FriendFollowersList';
-import CalendarScreen from '../MainScreen/CalendarScreen';
-import SettingScreen from '../MainScreen/SettingScreen';
-import UserProfile from '../MainScreen/UserProfile/UserProfile';
-import NavNotificationScreen from '../MainScreen/NotificationScreen/NavNotificationScreen';
-import NavFriendScreen from '../MainScreen/FriendScreen/NavFriendScreen';
+import HomeScreen from "../MainScreen/HomeScreen";
+import MyProfile from "../MainScreen/ProfileScreen/MyProfile";
+import EditProfile from "../MainScreen/ProfileScreen/EditProfile";
+import Search from "../MainScreen/Search/Search";
+import FriendFollowersList from "../MainScreen/FriendScreen/FriendFollowersList";
+import CalendarScreen from "../MainScreen/CalendarScreen";
+import SettingScreen from "../MainScreen/SettingScreen";
+import UserProfile from "../MainScreen/UserProfile/UserProfile";
+import NavNotificationScreen from "../MainScreen/NotificationScreen/NavNotificationScreen";
+import NavFriendScreen from "../MainScreen/FriendScreen/NavFriendScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function Home({navigation}) {
+function Home({ navigation }) {
   return (
     <Stack.Navigator
       initialRouteName="HomeScreen"
@@ -51,7 +51,8 @@ function Home({navigation}) {
         headerTitle: false,
         headerRight: false,
         headerLeft: false,
-      }}>
+      }}
+    >
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
@@ -66,10 +67,10 @@ function Home({navigation}) {
           headerBackgroundContainerStyle: {
             backgroundColor: COLORS.Secondary,
           },
-          headerTitle: props => (
+          headerTitle: (props) => (
             <ToolbarMain
               onPress={() => {
-                navigation.navigate('SettingScreen');
+                navigation.navigate("SettingScreen");
               }}
             />
           ),
@@ -93,7 +94,7 @@ function Home({navigation}) {
         //             navigation.navigate('HomeScreen')
         //         }} />
         // }}
-        options={{header: () => null}}
+        options={{ header: () => null }}
       />
     </Stack.Navigator>
   );
@@ -106,21 +107,22 @@ function Profile() {
         headerTitle: false,
         headerRight: false,
         headerLeft: false,
-      }}>
+      }}
+    >
       <Stack.Screen
         name="MyProfile"
         component={MyProfile}
-        options={{header: () => null}}
+        options={{ header: () => null }}
       />
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
-        options={{header: () => null}}
+        options={{ header: () => null }}
       />
     </Stack.Navigator>
   );
 }
-function Calendar({navigation}) {
+function Calendar({ navigation }) {
   return (
     <Stack.Navigator
       initialRouteName="CalendarScreen"
@@ -128,7 +130,8 @@ function Calendar({navigation}) {
         headerTitle: false,
         headerRight: false,
         headerLeft: false,
-      }}>
+      }}
+    >
       <Stack.Screen
         name="CalendarScreen"
         component={CalendarScreen}
@@ -143,10 +146,10 @@ function Calendar({navigation}) {
           headerBackgroundContainerStyle: {
             backgroundColor: COLORS.Secondary,
           },
-          headerTitle: props => (
+          headerTitle: (props) => (
             <ToolbarMain
               onPress={() => {
-                navigation.navigate('SettingScreen');
+                navigation.navigate("SettingScreen");
               }}
             />
           ),
@@ -156,7 +159,7 @@ function Calendar({navigation}) {
       <Stack.Screen
         name="SettingScreen"
         component={SettingScreen}
-        options={{header: () => null}}
+        options={{ header: () => null }}
       />
     </Stack.Navigator>
   );
@@ -170,7 +173,8 @@ function Friend() {
       }}
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <Stack.Screen name="NavFriendScreen" component={NavFriendScreen} />
       <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="UserProfile" component={UserProfile} />
@@ -187,7 +191,8 @@ function Notification() {
       initialRouteName="NavNotificationScreen"
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <Stack.Screen
         name="NavNotificationScreen"
         component={NavNotificationScreen}
@@ -206,8 +211,8 @@ const Navigation = () => {
           shadowOpacity: 0,
           borderColor: COLORS.BottomBarBG,
           backgroundColor: COLORS.BottomBarBG,
-          position: 'absolute',
-          overflow: 'hidden',
+          position: "absolute",
+          overflow: "hidden",
           left: 0,
           bottom: 0,
           right: 0,
@@ -217,12 +222,13 @@ const Navigation = () => {
         tabBarLabel: () => {
           return null;
         },
-      }}>
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={focused ? imgNavOHome : imgNavHome}
               style={CommonStyle.bottomBarImg}
@@ -234,7 +240,7 @@ const Navigation = () => {
         name="Profile"
         component={Profile}
         options={{
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={focused ? imgNavOMyprofile : imgNavMyprofile}
               style={CommonStyle.bottomBarImg}
@@ -246,7 +252,7 @@ const Navigation = () => {
         name="Calendar"
         component={Calendar}
         options={{
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={focused ? imgNavOCalendar : imgNavCalendar}
               style={CommonStyle.bottomBarImg}
@@ -258,7 +264,7 @@ const Navigation = () => {
         name="Friend"
         component={Friend}
         options={{
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={focused ? imgNavOFriend : imgNavFriend}
               style={CommonStyle.bottomBarImg}
@@ -270,7 +276,7 @@ const Navigation = () => {
         name="Notification"
         component={Notification}
         options={{
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={focused ? imgNavONotification : imgNavNotification}
               style={CommonStyle.bottomBarImg}

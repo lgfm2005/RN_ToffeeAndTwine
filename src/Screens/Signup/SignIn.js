@@ -10,6 +10,7 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
+import { showMessage } from "react-native-flash-message";
 
 // Asset
 import {
@@ -26,7 +27,6 @@ import { COLORS } from "../../Assets/utils/COLORS";
 import { OrLine } from "../../Components/Line/OrLine";
 import { FormInput, ShowFormInput } from "../../Components/FormInput";
 
-import { useDispatch, useSelector } from "react-redux";
 import { useActions } from "../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
 
@@ -42,7 +42,21 @@ const SignIn = ({ navigation }) => {
     setLoader(true);
     const { error, response } = await Login(getEmail, getCreatePassword, "");
     setLoader(false);
-    navigation.navigate("Navigation");
+
+    if (response.data.StatusCode == "1") {
+      showMessage({
+        message: "Alert",
+        description: response.data.Message,
+        type: "success",
+      });
+      navigation.navigate("Navigation");
+    } else {
+      showMessage({
+        message: "Alert",
+        description: error,
+        type: "danger",
+      });
+    }
   };
 
   return (

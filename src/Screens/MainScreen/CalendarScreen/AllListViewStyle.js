@@ -1,25 +1,25 @@
-import {StyleSheet, View, TouchableOpacity, Dimensions} from 'react-native';
-import {COLORS} from '../../../Assets/utils/COLORS';
-import {fontsize14} from '../../../Assets/Style/CommonStyle';
-const {width} = Dimensions.get('screen');
+import { StyleSheet, View, TouchableOpacity, Dimensions } from "react-native";
+import { COLORS } from "../../../Assets/utils/COLORS";
+import { fontsize14 } from "../../../Assets/Style/CommonStyle";
+const { width } = Dimensions.get("screen");
 
 export const AllListViewStyle = StyleSheet.create({
   itemContainer: {
-    flexDirection: 'column',
+    flexDirection: "column",
     marginBottom: 16,
-    minWidth: '22%',
+    minWidth: "22%",
     // width: '100%',
     // width: width / 7,
-    alignItems: 'center',
+    alignItems: "center",
     // paddingLeft: "1%",
     // paddingRight: '1%',
-    marginLeft: '1.5%',
-    marginRight: '1.5%',
+    marginLeft: "1.5%",
+    marginRight: "1.5%",
   },
   addItem: {
     borderWidth: 1,
     borderColor: COLORS.PrimaryLight,
-    borderStyle: 'dashed',
+    borderStyle: "dashed",
     backgroundColor: COLORS.SecondaryLight,
   },
   listIconbg: {
@@ -27,31 +27,31 @@ export const AllListViewStyle = StyleSheet.create({
     height: 52,
     borderRadius: 52 / 2,
     backgroundColor: COLORS.black,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   grayListIconbg: {
     width: 52,
     height: 52,
     borderRadius: 52 / 2,
     backgroundColor: COLORS.PrimaryLight,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   RemovebglistIconbg: {
     width: 24,
     height: 24,
     borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   upgradeListbg: {
     width: 38,
     height: 38,
     borderRadius: 20,
     backgroundColor: COLORS.gray,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   listIcon: {
     width: 30,
@@ -60,9 +60,9 @@ export const AllListViewStyle = StyleSheet.create({
   listfont: {
     ...fontsize14,
     marginTop: 5,
-    alignItems: 'center',
+    alignItems: "center",
 
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   popupImage: {
     width: 45,

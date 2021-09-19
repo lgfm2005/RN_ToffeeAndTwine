@@ -1,5 +1,5 @@
-import {beforeEach} from 'jest-circus';
-import React, {useEffect, useState} from 'react';
+import { beforeEach } from "jest-circus";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,23 +11,23 @@ import {
   Platform,
   Modal,
   ScrollView,
-} from 'react-native';
+} from "react-native";
 
 // Lib
 // import Modal from 'react-native-modal';
 
-import CommonStyle from '../../../Assets/Style/CommonStyle';
-import {AppString} from '../../../Assets/utils/AppString';
-import {COLORS} from '../../../Assets/utils/COLORS';
-import {imgInvite, imgcross, imgThankYou} from '../../../Assets/utils/Image';
-import {FilledButton, POPLinkButton} from '../../../Components/Button/Button';
+import CommonStyle from "../../../Assets/Style/CommonStyle";
+import { AppString } from "../../../Assets/utils/AppString";
+import { COLORS } from "../../../Assets/utils/COLORS";
+import { imgInvite, imgcross, imgThankYou } from "../../../Assets/utils/Image";
+import { FilledButton, POPLinkButton } from "../../../Components/Button/Button";
 
-const UpcomingUpGrade = ({navigation}) => {
+const UpcomingUpGrade = ({ navigation }) => {
   const [getUpgradeModel, setUpgradeModel] = useState(false);
 
   const CloseItem = () => {
     setUpgradeModel(false);
-    navigation.navigate('UpcomingMoments');
+    navigation.navigate("UpcomingMoments");
   };
   const UpGradePayment = () => {
     setUpgradeModel(true);
@@ -38,29 +38,30 @@ const UpcomingUpGrade = ({navigation}) => {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        style={[CommonStyle.BgColorWhite, {height: '100%'}]}>
+        style={[CommonStyle.BgColorWhite, { height: "100%" }]}
+      >
         <Image source={imgInvite} style={[CommonStyle.imgGiftTutorial]} />
         <View style={[CommonStyle.Container, CommonStyle.BgColorWhite]}>
           <View>
             <View style={CommonStyle.Row}>
               <Text style={CommonStyle.txtContent}>
                 {AppString.Upgradenow}
-                <Text style={{color: COLORS.gold}}> {AppString.price} </Text>
+                <Text style={{ color: COLORS.gold }}> {AppString.price} </Text>
                 {AppString.Upgradefriendspecialmoments}
               </Text>
             </View>
-            <Text style={[CommonStyle.txtContent, {lineHeight: 24}]}>
+            <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
               {AppString.UpgradeIncludes}
             </Text>
-            <View style={{paddingLeft: 15}}>
-              <Text style={[CommonStyle.txtContent, {lineHeight: 24}]}>
-                {'\u2022'} {AppString.Notificationsfriends}
+            <View style={{ paddingLeft: 15 }}>
+              <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
+                {"\u2022"} {AppString.Notificationsfriends}
               </Text>
-              <Text style={[CommonStyle.txtContent, {lineHeight: 24}]}>
-                {'\u2022'} {AppString.giftlisthints}
+              <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
+                {"\u2022"} {AppString.giftlisthints}
               </Text>
-              <Text style={[CommonStyle.txtContent, {lineHeight: 24}]}>
-                {'\u2022'} {AppString.sharewithfriends}
+              <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
+                {"\u2022"} {AppString.sharewithfriends}
               </Text>
             </View>
             <View style={CommonStyle.centerRow}>
@@ -78,14 +79,15 @@ const UpcomingUpGrade = ({navigation}) => {
           <View
             style={[
               {
-                width: '100%',
-                height: '100%',
+                width: "100%",
+                height: "100%",
                 backgroundColor: COLORS.BgColorWhite,
               },
-            ]}>
+            ]}
+          >
             <SafeAreaView>
               <TouchableOpacity onPress={() => CloseItem()}>
-                <View style={[CommonStyle.rowEnd, {paddingRight: 15}]}>
+                <View style={[CommonStyle.rowEnd, { paddingRight: 15 }]}>
                   <Image source={imgcross} style={CommonStyle.imgIconSize} />
                 </View>
               </TouchableOpacity>
@@ -93,15 +95,19 @@ const UpcomingUpGrade = ({navigation}) => {
                 style={[
                   CommonStyle.BgColorWhite,
                   {
-                    width: '100%',
-                    height: '90%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    width: "100%",
+                    height: "90%",
+                    justifyContent: "center",
+                    alignItems: "center",
                   },
-                ]}>
+                ]}
+              >
                 <Image
                   source={imgThankYou}
-                  style={[CommonStyle.imgGiftTutorial, {resizeMode: 'contain'}]}
+                  style={[
+                    CommonStyle.imgGiftTutorial,
+                    { resizeMode: "contain" },
+                  ]}
                 />
                 <View style={CommonStyle.p16}>
                   <Text style={[CommonStyle.txtContent]}>

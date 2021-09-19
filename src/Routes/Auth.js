@@ -1,23 +1,24 @@
-import * as React from 'react';
-import {Image} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import * as React from "react";
+import { Image } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Auth Screen
-import Slider from '../Screens/Signup/Silder/Slider';
-import MainScreen from '../Screens/MainScreen';
-import Signup from '../Screens/Signup/Signup';
-import TutorialFirst from '../Screens/Signup/Tutorial/TutorialFirst';
-import TutorialSecond from '../Screens/Signup/Tutorial/TutorialSecond';
-import TutorialThird from '../Screens/Signup/Tutorial/TutorialThird';
-import SignIn from '../Screens/Signup/SignIn';
-import SetPassword from '../Screens/Signup/SetPassword';
-import ForgotPassword from '../Screens/Signup/ForgotPassword';
+import Slider from "../Screens/Signup/Silder/Slider";
+import MainScreen from "../Screens/MainScreen";
+import Signup from "../Screens/Signup/Signup";
+import TutorialFirst from "../Screens/Signup/Tutorial/TutorialFirst";
+import TutorialSecond from "../Screens/Signup/Tutorial/TutorialSecond";
+import TutorialThird from "../Screens/Signup/Tutorial/TutorialThird";
+import SignIn from "../Screens/Signup/SignIn";
+import SetPassword from "../Screens/Signup/SetPassword";
+import ForgotPassword from "../Screens/Signup/ForgotPassword";
 
 // After Login
-import Navigation from '../Screens/Navigation/Navigation';
-import HomeScreen from '../Screens/MainScreen/HomeScreen';
+import Navigation from "../Screens/Navigation/Navigation";
+import HomeScreen from "../Screens/MainScreen/HomeScreen";
+import FlashMessage from "react-native-flash-message";
 
 const Stack = createStackNavigator();
 
@@ -26,7 +27,8 @@ const Auth = () => {
     <NavigationContainer independent={true}>
       <Stack.Navigator
         initialRouteName="MainScreen"
-        screenOptions={{headerShown: false}}>
+        screenOptions={{ headerShown: false }}
+      >
         {/* <Stack.Screen name="Slider" component={Slider} /> */}
 
         <Stack.Screen name="MainScreen" component={MainScreen} />
@@ -40,6 +42,12 @@ const Auth = () => {
 
         <Stack.Screen name="Navigation" component={Navigation} />
       </Stack.Navigator>
+      <FlashMessage
+        autoHide={true}
+        position="top"
+        icon="auto"
+        duration={4000}
+      />
     </NavigationContainer>
   );
 };

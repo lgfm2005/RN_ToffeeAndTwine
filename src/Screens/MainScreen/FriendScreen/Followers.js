@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   FlatList,
@@ -9,52 +9,52 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-} from 'react-native';
+} from "react-native";
 
 // Asset
 import CommonStyle, {
   fontsize10,
   fontsize12,
-} from '../../../Assets/Style/CommonStyle';
-import {demodp} from '../../../Assets/utils/Image';
-import {AppString, Remove} from '../../../Assets/utils/AppString';
-import {FilledButton} from '../../../Components/Button/Button';
-import {FriendScreenStyle} from './FriendScreenStyle';
-import {Smallbtn} from '../../../Components/Button/ButtonStyle';
-import {COLORS} from '../../../Assets/utils/COLORS';
-import {MyWhiteStatusbar} from '../../../Components/MyStatusBar/MyWhiteStatusbar';
+} from "../../../Assets/Style/CommonStyle";
+import { demodp } from "../../../Assets/utils/Image";
+import { AppString, Remove } from "../../../Assets/utils/AppString";
+import { FilledButton } from "../../../Components/Button/Button";
+import { FriendScreenStyle } from "./FriendScreenStyle";
+import { Smallbtn } from "../../../Components/Button/ButtonStyle";
+import { COLORS } from "../../../Assets/utils/COLORS";
+import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 
 const Data = [
   {
     id: 1,
-    Name: 'Gregory Thomson',
+    Name: "Gregory Thomson",
     Image: demodp,
   },
   {
     id: 2,
-    Name: 'Gregory Thomson',
+    Name: "Gregory Thomson",
     Image: demodp,
   },
   {
     id: 3,
-    Name: 'Gregory Thomson',
+    Name: "Gregory Thomson",
     Image: demodp,
   },
   {
     id: 4,
-    Name: 'Gregory Thomson',
+    Name: "Gregory Thomson",
     Image: demodp,
   },
 ];
 
-const Followers = ({navigation}) => {
+const Followers = ({ navigation }) => {
   const RemoveFriend = (Id, Name) => {
-    console.log('RemoveFriend', Id, Name);
+    console.log("RemoveFriend", Id, Name);
     // navigation.navigate('FriendFollowersList');
   };
   const selectFriend = (Id, Name) => {
-    console.log('RemoveFriend', Id, Name);
-    navigation.navigate('FriendFollowersList');
+    console.log("RemoveFriend", Id, Name);
+    navigation.navigate("FriendFollowersList");
   };
 
   const RenderItem = (item, index) => {
@@ -85,8 +85,8 @@ const Followers = ({navigation}) => {
         <View style={FriendScreenStyle.backgroundColor}>
           <FlatList
             data={Data}
-            renderItem={({item, index}) => RenderItem(item, index)}
-            keyExtractor={item => item.id}
+            renderItem={({ item, index }) => RenderItem(item, index)}
+            keyExtractor={(item) => item.id}
           />
         </View>
       </View>

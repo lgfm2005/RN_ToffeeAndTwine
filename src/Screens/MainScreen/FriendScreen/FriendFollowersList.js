@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,25 +9,25 @@ import {
   TouchableOpacity,
   Platform,
   ScrollView,
-} from 'react-native';
+} from "react-native";
 
 // Lib
-import LinearGradient from 'react-native-linear-gradient';
-import Modal from 'react-native-modal';
+import LinearGradient from "react-native-linear-gradient";
+import Modal from "react-native-modal";
 
 // Asset
-import {imgbirthdayCakeGary} from '../../../Assets/utils/Image';
-import CommonStyle from '../../../Assets/Style/CommonStyle';
-import {ToolbarMain} from '../../../Components/ToolbarMain/ToolbarMain';
-import {COLORS} from '../../../Assets/utils/COLORS';
+import { imgbirthdayCakeGary } from "../../../Assets/utils/Image";
+import CommonStyle from "../../../Assets/Style/CommonStyle";
+import { ToolbarMain } from "../../../Components/ToolbarMain/ToolbarMain";
+import { COLORS } from "../../../Assets/utils/COLORS";
 import {
   FilledButton,
   ImagePOPLinkButton,
   POPLinkButton,
   POPOutLinkButton,
-} from '../../../Components/Button/Button';
-import {Mediumbtn} from '../../../Components/Button/ButtonStyle';
-import {AppString} from '../../../Assets/utils/AppString';
+} from "../../../Components/Button/Button";
+import { Mediumbtn } from "../../../Components/Button/ButtonStyle";
+import { AppString } from "../../../Assets/utils/AppString";
 import {
   imgWhitegift,
   imgUserBlock,
@@ -44,16 +44,16 @@ import {
   imgWhiteChristmas,
   imgWhiteDot,
   demofaceman,
-} from '../../../Assets/utils/Image';
-import {MainScreenStyle} from '../MainScreenStyle';
-import {CalendarList} from '../../../Components/AllListVIew/CalendarList';
-import {MyBlackStatusbar} from '../../../Components/MyStatusBar/MyBlackStatusbar';
-import {MyWhiteStatusbar} from '../../../Components/MyStatusBar/MyWhiteStatusbar';
-import {ProfileToolBar} from '../../../Components/ProfileToolBar/ProfileToolBar';
-import TutorialStyle from '../../Signup/Tutorial/TutorialStyle';
-import {EditShowSimpleView} from '../../../Components/FormInput';
-import {FriendScreenStyle} from './FriendScreenStyle';
-import {FONT} from '../../../Assets/utils/FONT';
+} from "../../../Assets/utils/Image";
+import { MainScreenStyle } from "../MainScreenStyle";
+import { CalendarList } from "../../../Components/AllListVIew/CalendarList";
+import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
+import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
+import { ProfileToolBar } from "../../../Components/ProfileToolBar/ProfileToolBar";
+import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
+import { EditShowSimpleView } from "../../../Components/FormInput";
+import { FriendScreenStyle } from "./FriendScreenStyle";
+import { FONT } from "../../../Assets/utils/FONT";
 
 const Data = [
   {
@@ -81,7 +81,7 @@ const SprecialMOmentsData = [
   },
 ];
 
-const FriendFollowersList = ({route, navigation}) => {
+const FriendFollowersList = ({ route, navigation }) => {
   // const {userName} = route.params;
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
@@ -98,11 +98,11 @@ const FriendFollowersList = ({route, navigation}) => {
     setAwesomeShowModal(false);
   };
   const UserBlock = () => {
-    console.log('===>>>11111');
+    console.log("===>>>11111");
     setUserBlockModal(true);
   };
-  const FavoriteThings = favItem => {
-    console.log('favItem', favItem);
+  const FavoriteThings = (favItem) => {
+    console.log("favItem", favItem);
     setAddNewItem(favItem);
     setFavoriteThingsModal(true);
   };
@@ -121,30 +121,35 @@ const FriendFollowersList = ({route, navigation}) => {
       <MyBlackStatusbar />
       <View
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 0,
           right: 0,
           left: 0,
           zIndex: 1,
-        }}>
+        }}
+      >
         <LinearGradient
           colors={[
-            'rgba(0,0,0,1)',
-            'rgba(0,0,0,0.8)',
-            'rgba(0,0,0,0.6)',
-            'rgba(0,0,0,0.4)',
-            'rgba(0,0,0,0.0)',
-          ]}>
-          <View style={[CommonStyle.ProfileToolbarbg, {alignItems: 'center'}]}>
+            "rgba(0,0,0,1)",
+            "rgba(0,0,0,0.8)",
+            "rgba(0,0,0,0.6)",
+            "rgba(0,0,0,0.4)",
+            "rgba(0,0,0,0.0)",
+          ]}
+        >
+          <View
+            style={[CommonStyle.ProfileToolbarbg, { alignItems: "center" }]}
+          >
             <TouchableOpacity
-              onPress={() => navigation.navigate('NavFriendScreen')}>
+              onPress={() => navigation.navigate("NavFriendScreen")}
+            >
               <Image
                 source={imgBackleftWhite}
                 style={CommonStyle.imgIconSize}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => UserBlock()}>
-              <Text style={[CommonStyle.txtTitle, {color: COLORS.Secondary}]}>
+              <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
                 Gregory Thomson
               </Text>
             </TouchableOpacity>
@@ -159,12 +164,14 @@ const FriendFollowersList = ({route, navigation}) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         bounces={false}
-        style={{marginBottom: 15}}>
+        style={{ marginBottom: 15 }}
+      >
         <View style={CommonStyle.authPage}>
           <View style={CommonStyle.imgmask}>
             <ImageBackground
               source={demofaceman}
-              style={[CommonStyle.imgProfileBackground]}></ImageBackground>
+              style={[CommonStyle.imgProfileBackground]}
+            ></ImageBackground>
             <Image
               source={imgProfileBackground}
               style={CommonStyle.imgmaskbg}
@@ -187,9 +194,10 @@ const FriendFollowersList = ({route, navigation}) => {
                     <Text
                       style={[
                         CommonStyle.txtContent,
-                        {color: COLORS.PrimaryLight},
-                      ]}>
-                      {' '}
+                        { color: COLORS.PrimaryLight },
+                      ]}
+                    >
+                      {" "}
                       Birthday: April, 14th
                     </Text>
                   </View>
@@ -205,40 +213,46 @@ const FriendFollowersList = ({route, navigation}) => {
             <View style={[FriendScreenStyle.MomentStatus]}>
               <View>
                 <Text
-                  style={[CommonStyle.txtTitle, {fontFamily: FONT.NotoSans}]}>
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
                   1
                 </Text>
                 <Text
                   style={[
                     CommonStyle.txtContent,
-                    {fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight},
-                  ]}>
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                  ]}
+                >
                   Moments
                 </Text>
               </View>
               <View>
                 <Text
-                  style={[CommonStyle.txtTitle, {fontFamily: FONT.NotoSans}]}>
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
                   10k
                 </Text>
                 <Text
                   style={[
                     CommonStyle.txtContent,
-                    {fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight},
-                  ]}>
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                  ]}
+                >
                   Followers
                 </Text>
               </View>
               <View>
                 <Text
-                  style={[CommonStyle.txtTitle, {fontFamily: FONT.NotoSans}]}>
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
                   920
                 </Text>
                 <Text
                   style={[
                     CommonStyle.txtContent,
-                    {fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight},
-                  ]}>
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                  ]}
+                >
                   Following
                 </Text>
               </View>
@@ -249,15 +263,17 @@ const FriendFollowersList = ({route, navigation}) => {
                 style={[
                   CommonStyle.txtTitle,
                   CommonStyle.textUpperCase,
-                  {fontFamily: FONT.NotoSans, marginTop: 16},
-                ]}>
+                  { fontFamily: FONT.NotoSans, marginTop: 16 },
+                ]}
+              >
                 {AppString.FavoriteThings}
               </Text>
               <ScrollView
                 contentContainerStyle={[
                   MainScreenStyle.scrollItemStyle,
                   CommonStyle.toppadding16,
-                ]}>
+                ]}
+              >
                 {Data.map((item, index) => (
                   <CalendarList
                     ImageUrl={item.Image}
@@ -277,15 +293,17 @@ const FriendFollowersList = ({route, navigation}) => {
                 style={[
                   CommonStyle.txtTitle,
                   CommonStyle.textUpperCase,
-                  {fontFamily: FONT.NotoSans, marginTop: 16},
-                ]}>
+                  { fontFamily: FONT.NotoSans, marginTop: 16 },
+                ]}
+              >
                 {AppString.SpecialMoments}
               </Text>
               <ScrollView
                 contentContainerStyle={[
                   MainScreenStyle.scrollItemStyle,
                   CommonStyle.toppadding16,
-                ]}>
+                ]}
+              >
                 {SprecialMOmentsData.map((item, index) => (
                   <CalendarList
                     ImageUrl={item.Image}
@@ -302,16 +320,17 @@ const FriendFollowersList = ({route, navigation}) => {
 
             {getUserBlockModal == true ? (
               <Modal
-                testID={'modal'}
+                testID={"modal"}
                 isVisible={getUserBlockModal}
-                onBackdropPress={() => CloseItem()}>
+                onBackdropPress={() => CloseItem()}
+              >
                 <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
                   <View style={CommonStyle.Row}>
                     <Image
                       source={imgUserBlock}
                       style={CommonStyle.imgIconSize}
                     />
-                    <Text style={[CommonStyle.txtTitle, {paddingLeft: 15}]}>
+                    <Text style={[CommonStyle.txtTitle, { paddingLeft: 15 }]}>
                       Block
                     </Text>
                   </View>
@@ -321,26 +340,28 @@ const FriendFollowersList = ({route, navigation}) => {
 
             {getFavoriteThingsModal == true ? (
               <Modal
-                testID={'modal'}
+                testID={"modal"}
                 isVisible={getFavoriteThingsModal}
-                onBackdropPress={() => CloseItem()}>
+                onBackdropPress={() => CloseItem()}
+              >
                 <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
                   <View style={CommonStyle.Row}>
-                    <View style={{width: '20%'}}>
+                    <View style={{ width: "20%" }}>
                       {/* <Image source={{ uri: getImage }} style={CommonStyle.popupProfileImage} /> */}
                       <Image
                         source={imgImport}
                         style={CommonStyle.popupProfileImage}
                       />
                     </View>
-                    <View style={{width: '60%'}}>
+                    <View style={{ width: "60%" }}>
                       <Text
                         style={[
                           CommonStyle.txtTitle,
                           CommonStyle.p16,
                           CommonStyle.textUpperCase,
-                          {textAlign: 'center'},
-                        ]}>
+                          { textAlign: "center" },
+                        ]}
+                      >
                         {getAddNewItem}
                       </Text>
                     </View>
@@ -348,33 +369,34 @@ const FriendFollowersList = ({route, navigation}) => {
 
                   <View style={CommonStyle.my16}>
                     <EditShowSimpleView
-                      TitleName={'Color'}
-                      buttonName={'Demo'}
+                      TitleName={"Color"}
+                      buttonName={"Demo"}
                     />
                     <EditShowSimpleView
-                      TitleName={'Type'}
-                      buttonName={'Demo'}
+                      TitleName={"Type"}
+                      buttonName={"Demo"}
                     />
                     <EditShowSimpleView
-                      TitleName={'Amount'}
-                      buttonName={'Demo'}
+                      TitleName={"Amount"}
+                      buttonName={"Demo"}
                     />
                     <EditShowSimpleView
-                      TitleName={'Vase'}
-                      buttonName={'Demo'}
+                      TitleName={"Vase"}
+                      buttonName={"Demo"}
                     />
                     <EditShowSimpleView
-                      TitleName={'Link'}
-                      buttonName={'Demo'}
+                      TitleName={"Link"}
+                      buttonName={"Demo"}
                     />
                     <EditShowSimpleView
-                      TitleName={'Other Info'}
-                      buttonName={'Demo'}
+                      TitleName={"Other Info"}
+                      buttonName={"Demo"}
                     />
                   </View>
 
                   <View
-                    style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
                     <ImagePOPLinkButton
                       buttonName={AppString.Giftit}
                       buttonImage={imgWhitegift}
@@ -386,26 +408,28 @@ const FriendFollowersList = ({route, navigation}) => {
             ) : null}
             {getNotificationSendModal == true ? (
               <Modal
-                testID={'modal'}
+                testID={"modal"}
                 isVisible={getNotificationSendModal}
-                onBackdropPress={() => CloseItem()}>
+                onBackdropPress={() => CloseItem()}
+              >
                 <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
                   <View style={CommonStyle.Row}>
-                    <View style={{width: '20%'}}>
+                    <View style={{ width: "20%" }}>
                       {/* <Image source={{ uri: getImage }} style={CommonStyle.popupProfileImage} /> */}
                       <Image
                         source={imgImport}
                         style={CommonStyle.popupProfileImage}
                       />
                     </View>
-                    <View style={{width: '60%'}}>
+                    <View style={{ width: "60%" }}>
                       <Text
                         style={[
                           CommonStyle.txtTitle,
                           CommonStyle.p16,
                           CommonStyle.textUpperCase,
-                          {textAlign: 'center'},
-                        ]}>
+                          { textAlign: "center" },
+                        ]}
+                      >
                         {getAddNewItem}
                       </Text>
                     </View>
@@ -414,7 +438,8 @@ const FriendFollowersList = ({route, navigation}) => {
                   <Text style={CommonStyle.txtTitle}>{AppString.planning}</Text>
 
                   <View
-                    style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
                     <POPOutLinkButton
                       buttonName={AppString.NoThanks}
                       onPress={() => CloseItem()}
@@ -430,18 +455,19 @@ const FriendFollowersList = ({route, navigation}) => {
             ) : null}
             {getAwesomeShowModal == true ? (
               <Modal
-                testID={'modal'}
+                testID={"modal"}
                 isVisible={getAwesomeShowModal}
-                onBackdropPress={() => CloseItem()}>
+                onBackdropPress={() => CloseItem()}
+              >
                 <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
-                  <View style={[CommonStyle.centerRow, {width: '100%'}]}>
+                  <View style={[CommonStyle.centerRow, { width: "100%" }]}>
                     <Image
                       source={imgCheckCircle}
                       style={CommonStyle.popupProfileImage}
                     />
                   </View>
 
-                  <Text style={[CommonStyle.txtTitle, {marginTop: 10}]}>
+                  <Text style={[CommonStyle.txtTitle, { marginTop: 10 }]}>
                     {AppString.FriendsAwesome}
                   </Text>
                 </View>
