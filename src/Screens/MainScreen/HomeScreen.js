@@ -191,7 +191,8 @@ import { useSelector } from "react-redux";
 
 const HomeScreen = () => {
   const user = useSelector((state) => state.session);
-  debugger;
+  console.log("User===>>>", user);
+  // debugger;
 
   // AddItemShow
   const [getAddItemShowModal, setAddItemShowModal] = useState(false);

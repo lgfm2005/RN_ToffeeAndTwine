@@ -89,6 +89,7 @@ const SignIn = ({ navigation }) => {
                 buttonName={AppString.Enteremailaddress}
                 textChange={(Email) => setEmail(Email)}
               />
+              <Text>wef</Text>
             </View>
 
             <View style={CommonStyle.formGroup}>
@@ -101,6 +102,7 @@ const SignIn = ({ navigation }) => {
                   setCreatePassword(CreatePassword)
                 }
               />
+              <Text>wef</Text>
             </View>
 
             <View style={CommonStyle.Right}>

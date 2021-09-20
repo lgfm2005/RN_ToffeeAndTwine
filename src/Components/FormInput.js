@@ -13,7 +13,12 @@ import { COLORS } from "../Assets/utils/COLORS";
 import { FONT } from "../Assets/utils/FONT";
 import { imgEye, imgEyeOff } from "../Assets/utils/Image";
 
-export const FormInput = ({ buttonName, textChange, ...props }) => {
+export const FormInput = ({
+  buttonName,
+  textChange,
+  onChangeText,
+  ...props
+}) => {
   return (
     <TextInput
       style={CommonStyle.formControl}

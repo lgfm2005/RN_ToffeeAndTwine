@@ -90,3 +90,18 @@ export const ResendOtp = {
   OTP: async (data, session) =>
     await api(session, `/rest_api/controller_user/resent_otp`, "post", data),
 };
+
+export const UpdateProfile = {
+  UpdateProfile: async (data, session) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/update_profile`,
+      "post",
+      data
+    ),
+};
+
+export const GetSpecialDay = {
+  get: async (session) =>
+    await api(session, `/rest_api/controller_profile/get_special_day`, "get"),
+};

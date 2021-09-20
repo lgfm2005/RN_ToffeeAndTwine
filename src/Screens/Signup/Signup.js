@@ -35,7 +35,7 @@ import Validation from "../../utils/validation";
 import { showMessage } from "react-native-flash-message";
 
 const Signup = ({ navigation }) => {
-  const { signUp } = useActions();
+  const { signUp, GetSpecialDay } = useActions();
 
   const keyboardVerticalOffset = Platform.OS === "ios" ? 1 : 0;
   const [getEmail, setEmail] = useState("");
@@ -92,24 +92,27 @@ const Signup = ({ navigation }) => {
       return;
     }
     setLoader(true);
-    const { error, response } = await signUp(
+    //GetSpecialDay
+    const { GetSpecialDayerror, GetSpecialDayresponse } = await GetSpecialDay();
+    console.log("GetSpecialDayresponse==>", GetSpecialDayresponse);
+    //signUp
+    const { signUperror, signUpresponse } = await signUp(
       getEmail,
       getCreatePassword,
       getConfirmPassword
     );
     setLoader(false);
-
-    if (response.data.StatusCode == "1") {
+    if (signUpresponse.data.StatusCode == "1") {
       showMessage({
         message: "Alert",
-        description: response.data.Message,
+        description: signUpresponse.data.Message,
         type: "success",
       });
       navigation.navigate("TutorialFirst");
     } else {
       showMessage({
         message: "Alert",
-        description: response.data.Message,
+        description: signUpresponse.data.Message,
         type: "danger",
       });
     }

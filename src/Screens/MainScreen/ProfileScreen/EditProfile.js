@@ -15,7 +15,9 @@ import {
 // Lib
 import Modal from "react-native-modal";
 import LinearGradient from "react-native-linear-gradient";
-
+import Spinner from "react-native-loading-spinner-overlay";
+import { useSelector } from "react-redux";
+import { useActions } from "../../../redux/actions";
 // Asset
 import {
   imgWhiteEdit,
@@ -66,10 +68,14 @@ const Data = [
 ];
 
 const EditProfile = ({ navigation }) => {
+  const user = useSelector((state) => state.session);
+  const { updateProfile } = useActions();
+
   const [getHighlightMomentModel, setHighlightMomentModel] = useState(false);
   const [getHighlightMoment, setHighlightMoment] = useState("Coffee");
-  const [getFirstName, setFirstName] = useState("");
+  const [getFirstName, setFirstName] = useState(user.userLname);
   const [getLastName, setLastName] = useState("");
+  const [getLoader, setLoader] = useState(false);
 
   const CloseItem = () => {
     setHighlightMomentModel(false);
@@ -80,6 +86,18 @@ const EditProfile = ({ navigation }) => {
   const HighlightMomentView = (Title) => {
     setHighlightMoment(Title);
     setHighlightMomentModel(false);
+  };
+
+  const APIUpdateProfile = async () => {
+    // setLoader(true);
+    const { error, response } = await updateProfile(getFirstName, getLastName);
+    // console.log("getFirstName===>", getFirstName);
+    // console.log("getLastName===>", getLastName);
+    // console.log("response===>", response);
+    // console.log("error===>", error);
+    // setLoader(false);
+    // debugger;
+    // navigation.navigate("MyProfile");
   };
 
   const RenderItem = (item, index) => {
@@ -151,7 +169,9 @@ const EditProfile = ({ navigation }) => {
               <View style={CommonStyle.formGroup}>
                 <Text style={CommonStyle.formLabel}>{AppString.FirstName}</Text>
                 <FormInput
-                  buttonName={AppString.FirstName}
+                  // buttonName={AppString.FirstName}
+                  buttonName={user.userFname}
+                  placeholderTextColor={COLORS.Primary}
                   textChange={(FirstName) => setFirstName(FirstName)}
                 />
               </View>
@@ -159,7 +179,9 @@ const EditProfile = ({ navigation }) => {
               <View style={CommonStyle.formGroup}>
                 <Text style={CommonStyle.formLabel}>{AppString.LastName}</Text>
                 <FormInput
-                  buttonName={AppString.LastName}
+                  // buttonName={AppString.LastName}
+                  buttonName={user.userLname}
+                  placeholderTextColor={COLORS.Primary}
                   textChange={(LastName) => setLastName(LastName)}
                 />
               </View>
@@ -189,9 +211,7 @@ const EditProfile = ({ navigation }) => {
               <View>
                 <FilledButton
                   buttonName={AppString.Updateprofile}
-                  onPress={() => {
-                    navigation.navigate("MyProfile");
-                  }}
+                  onPress={() => APIUpdateProfile()}
                 />
               </View>
             </View>
@@ -214,6 +234,7 @@ const EditProfile = ({ navigation }) => {
           </View>
         </ScrollView>
       </SafeAreaView>
+      <Spinner visible={getLoader} />
     </View>
   );
 };

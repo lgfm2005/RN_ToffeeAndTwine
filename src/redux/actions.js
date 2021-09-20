@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT } from "./types";
+import { LOGIN, GETSPECIALDAY, LOGOUT } from "./types";
 import { createAction } from "redux-actions";
 import * as API from "./api";
 import { showMessage } from "react-native-flash-message";
@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 const loginAction = createAction(LOGIN);
 const logoutAction = createAction(LOGOUT);
+
+// const getSpecialDay = createAction(GETSPECIALDAY);
 
 export const useActions = () => {
   const dispatch = useDispatch();
@@ -42,6 +44,7 @@ export const useActions = () => {
       return { response, error };
     },
 
+    // Logout
     Logout: async () => {
       dispatch(loginValidAction("false"));
       dispatch(logoutAction());
@@ -115,9 +118,60 @@ export const useActions = () => {
       return { response, error };
     },
 
+    updateProfile: async (userFname, userLname) => {
+      var data = new FormData();
+      data.append("FName", userFname);
+      data.append("LName", userLname);
+      let response, error;
+      try {
+        debugger;
+        response = await API.UpdateProfile.UpdateProfile(data);
+        debugger;
+        if (response.data.StatusCode == "1") {
+          debugger;
+          dispatch(
+            loginAction({
+              userFname: userFname,
+              userLname: userLname,
+            })
+          );
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    GetSpecialDay: async () => {
+      // const response = await API.GetSpecialDay.get();
+      // debugger;
+      // return { response };
+      let response, error;
+      debugger;
+      try {
+        debugger;
+        response = await API.GetSpecialDay.get();
+        debugger;
+        if (response.data.StatusCode == "1") {
+          debugger;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    // GetAssets: async (ses, accountId) => {
+    //   const session = await refresh();
+    //   const response = await API.Assets.get(devAccess, session, accountId);
+    //   dispatch(getAssetsAction(response.data.data));
+    //   return {response};
+    // },
+
     // ChangeNewPassword: async (sessions, resetPassWordToken, newPassword) => {
     //   let response, error;
-
     //   try {
     //     response = await API.changeNewPassword.get(
     //       devAccess,
