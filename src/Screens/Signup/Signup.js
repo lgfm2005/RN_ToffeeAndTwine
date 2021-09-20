@@ -93,8 +93,8 @@ const Signup = ({ navigation }) => {
     }
     setLoader(true);
     //GetSpecialDay
-    const { GetSpecialDayerror, GetSpecialDayresponse } = await GetSpecialDay();
-    console.log("GetSpecialDayresponse==>", GetSpecialDayresponse);
+    const { response, error } = await GetSpecialDay();
+    console.log("GetSpecialDayresponse==>", response);
     //signUp
     const { signUperror, signUpresponse } = await signUp(
       getEmail,

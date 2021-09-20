@@ -101,7 +101,52 @@ export const UpdateProfile = {
     ),
 };
 
-export const GetSpecialDay = {
+export const GetSpecialDays = {
   get: async (session) =>
     await api(session, `/rest_api/controller_profile/get_special_day`, "get"),
+};
+
+export const GetCategories = {
+  get: async (session) =>
+    await api(session, `/rest_api/controller_profile/get_categories`, "get"),
+};
+
+export const AdddCategorySpecialDays = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/add_category_special_day`,
+      "post",
+      data
+    ),
+};
+
+export const AddCategoryQuestion = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/add_category_question`,
+      "post",
+      data
+    ),
+};
+
+export const DeleteUserCategorySpecialDay = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/delete_user_category_special_day`,
+      "post",
+      data
+    ),
+};
+
+export const DeleteUserCategoryQuestion = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/delete_user_category_question`,
+      "post",
+      data
+    ),
 };

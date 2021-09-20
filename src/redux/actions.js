@@ -56,13 +56,13 @@ export const useActions = () => {
       data.append("Password", Password);
       data.append("CPassword", CPassword);
 
-      let response, error;
+      let signUpresponse, signUperror;
       try {
-        response = await API.Signups.signUp(data);
+        signUpresponse = await API.Signups.signUp(data);
       } catch (e) {
-        error = e;
+        signUperror = e;
       }
-      return { response, error };
+      return { signUpresponse, signUperror };
     },
 
     ForgotPasswords: async (email) => {
@@ -124,15 +124,16 @@ export const useActions = () => {
       data.append("LName", userLname);
       let response, error;
       try {
-        debugger;
-        response = await API.UpdateProfile.UpdateProfile(data);
-        debugger;
+        response = await API.UpdateProfile.UpdateProfile(data, sessions);
         if (response.data.StatusCode == "1") {
-          debugger;
           dispatch(
             loginAction({
+              token: sessions.token,
+              userId: sessions.userId,
+              userIsActive: sessions.userIsActive,
               userFname: userFname,
               userLname: userLname,
+              userOtp: sessions.userOtp,
             })
           );
         } else {
@@ -145,17 +146,102 @@ export const useActions = () => {
     },
 
     GetSpecialDay: async () => {
-      // const response = await API.GetSpecialDay.get();
-      // debugger;
-      // return { response };
       let response, error;
-      debugger;
       try {
-        debugger;
-        response = await API.GetSpecialDay.get();
-        debugger;
+        response = await API.GetSpecialDays.get();
         if (response.data.StatusCode == "1") {
-          debugger;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    GetCategoryList: async () => {
+      let response, error;
+      try {
+        response = await API.GetCategories.get();
+        if (response.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    addCategoryspecialDay: async (
+      SpecialDayID,
+      UserSpecialDayValue,
+      IsFirst
+    ) => {
+      var data = new FormData();
+      data.append("SpecialDayID", SpecialDayID);
+      data.append("UserSpecialDayValue", UserSpecialDayValue);
+      data.append("IsFirst", IsFirst);
+
+      let response, error;
+      try {
+        response = await API.addCategoryspecialDay.get(sessions, data);
+        if (response.data.StatusCode == "1") {
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    addCategoryQuestion: async (
+      CategoryID,
+      CategoryQuestionID,
+      CategoryQuestionValue
+    ) => {
+      var data = new FormData();
+      data.append("CategoryID[]", CategoryID);
+      data.append("CategoryQuestionID[]", CategoryQuestionID);
+      data.append("CategoryQuestionValue[]", IsFirst);
+
+      let response, error;
+      try {
+        response = await API.AddCategoryQuestion.get(sessions, data);
+        if (response.data.StatusCode == "1") {
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    deleteUserCategorySpecialDay: async (UserSpecialDayID) => {
+      var data = new FormData();
+      data.append("UserSpecialDayID", UserSpecialDayID);
+
+      let response, error;
+      try {
+        response = await API.DeleteUserCategorySpecialDay.get(sessions, data);
+        if (response.data.StatusCode == "1") {
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    deleteUserCategoryQuestion: async (UserQuestionID) => {
+      var data = new FormData();
+      data.append("UserQuestionID", UserQuestionID);
+
+      let response, error;
+      try {
+        response = await API.DeleteUserCategoryQuestion.get(sessions, data);
+        if (response.data.StatusCode == "1") {
+        } else {
+          error = response.data.Message;
         }
       } catch (e) {
         error = e;
