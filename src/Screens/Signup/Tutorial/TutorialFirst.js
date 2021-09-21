@@ -53,7 +53,8 @@ const data = [
   },
 ];
 
-const TutorialFirst = ({ navigation, props }) => {
+const TutorialFirst = ({ navigation, props, route }) => {
+  const { listGetSpecialDay } = route.params;
   const [getFirstName, setFirstName] = useState("");
   const [getLastName, setLastName] = useState("");
   const [getRadioName, setRadioName] = useState("");
@@ -153,7 +154,7 @@ const TutorialFirst = ({ navigation, props }) => {
                     </Text>
                     <View>
                       <RadioButtonContainer
-                        values={data}
+                        values={listGetSpecialDay}
                         onPress={onRadioButtonPress}
                       />
                     </View>

@@ -148,7 +148,7 @@ const TutorialSecond = ({ navigation, props }) => {
           <BackToolBar
             titleName={AppString.Skip}
             ImageLink={imgLeftBack}
-            onPressImage={() => navigation.navigate("TutorialFirst")}
+            onPressImage={() => navigation.goBack()}
             onPressText={() => navigation.navigate("Navigation")}
           />
         </View>

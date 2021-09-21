@@ -100,16 +100,24 @@ const Signup = ({ navigation }) => {
     );
 
     //GetSpecialDay
-    const { response, error } = await GetSpecialDay();
-    console.log("GetSpecialDayresponse==>", response);
-    debugger;
+    if (signUpresponse.data.StatusCode == "1") {
+      var tokens = signUpresponse.data.Result.Token;
+      const { response, error } = await GetSpecialDay({
+        token: tokens,
+      });
+      console.log("GetSpecialDayresponse==>", response);
+      if (signUpresponse.data.StatusCode == "1") {
+        if (response.data.StatusCode == "1") {
+          navigation.navigate("TutorialFirst", {
+            listGetSpecialDay: response.data.Result,
+          });
+        }
+      } else {
+        setInvalidEmailPassword(true);
+      }
+    }
 
     setLoader(false);
-    if (signUpresponse.data.StatusCode == "1") {
-      navigation.navigate("TutorialFirst");
-    } else {
-      setInvalidEmailPassword(true);
-    }
   };
 
   return (

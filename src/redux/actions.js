@@ -60,6 +60,16 @@ export const useActions = () => {
       try {
         signUpresponse = await API.Signups.signUp(data);
         if (signUpresponse.data.StatusCode == "1") {
+          dispatch(
+            loginAction({
+              token: response.data.Result[0].Token,
+              userId: "1",
+              userIsActive: "1",
+              userFname: "",
+              userLname: "",
+              userOtp: "",
+            })
+          );
         }
       } catch (e) {
         signUperror = e;
@@ -127,9 +137,7 @@ export const useActions = () => {
       let response, error;
       try {
         response = await API.UpdateProfile.UpdateProfile(data, sessions);
-        debugger;
         if (response.data.StatusCode == "1") {
-          debugger;
           dispatch(
             loginAction({
               token: sessions.token,
@@ -150,13 +158,11 @@ export const useActions = () => {
     },
 
     // Check Bhaveshbhai
-    GetSpecialDay: async () => {
+    GetSpecialDay: async (session) => {
       let response, error;
       try {
-        response = await API.GetSpecialDays.get();
-        debugger;
+        response = await API.GetSpecialDays.get(session);
         if (response.data.StatusCode == "1") {
-          debugger;
         }
       } catch (e) {
         error = e;
@@ -186,13 +192,13 @@ export const useActions = () => {
       IsFirst
     ) => {
       var data = new FormData();
-      data.append("SpecialDayID", SpecialDayID);
-      data.append("UserSpecialDayValue", UserSpecialDayValue);
+      data.append("SpecialMomentID", SpecialDayID);
+      data.append("UserSpecialMomentValue", UserSpecialDayValue);
       data.append("IsFirst", IsFirst);
 
       let response, error;
       try {
-        response = await API.addCategoryspecialDay.get(sessions, data);
+        response = await API.AdddCategorySpecialDays.get(sessions, data);
         if (response.data.StatusCode == "1") {
         } else {
           error = response.data.Message;
@@ -211,7 +217,7 @@ export const useActions = () => {
       var data = new FormData();
       data.append("CategoryID[]", CategoryID);
       data.append("CategoryQuestionID[]", CategoryQuestionID);
-      data.append("CategoryQuestionValue[]", IsFirst);
+      data.append("CategoryQuestionValue[]", CategoryQuestionValue);
 
       let response, error;
       try {

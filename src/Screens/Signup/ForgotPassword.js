@@ -65,7 +65,6 @@ const ForgotPassword = ({ navigation }) => {
         description: response.data.Message,
         type: "success",
       });
-      debugger;
       navigation.navigate("SetPassword", {
         VerificationCode: response.data.Result[0].VerificationCode,
         getEmail: getEmail,
