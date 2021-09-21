@@ -33,6 +33,7 @@ import { useActions } from "../../redux/actions";
 import { isEmailValid } from "../../utils";
 import Validation from "../../utils/validation";
 import { showMessage } from "react-native-flash-message";
+import { isEmail } from "../../Components/EmailCheck";
 
 const Signup = ({ navigation }) => {
   const { signUp, GetSpecialDay } = useActions();
@@ -41,6 +42,8 @@ const Signup = ({ navigation }) => {
   const [getEmail, setEmail] = useState("");
   const [getCreatePassword, setCreatePassword] = useState("");
   const [getConfirmPassword, setConfirmPassword] = useState("");
+
+  const [getInvalidEmailPassword, setInvalidEmailPassword] = useState(false);
   const [keyboardShow, setKeyboardShow] = useState(false);
   const [getLoader, setLoader] = useState(false);
 
@@ -59,62 +62,53 @@ const Signup = ({ navigation }) => {
     Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
   }, []);
 
+  const isvalidForm = () => {
+    if (
+      isEmailValid(getEmail) &&
+      getCreatePassword != "" &&
+      getConfirmPassword != ""
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const handleSignUp = async () => {
     if (Validation.removeBadSpaces(getEmail) === "") {
-      showMessage({
-        message: "Please enter a email",
-        type: "danger",
-      });
+      setInvalidEmailPassword(true);
       return;
     } else if (!isEmailValid(getEmail)) {
-      showMessage({
-        message: "Enter a valid email",
-        type: "danger",
-      });
+      setInvalidEmailPassword(true);
       return;
     } else if (Validation.removeBadSpaces(getCreatePassword) === "") {
-      showMessage({
-        message: "Please enter Password",
-        type: "danger",
-      });
+      setInvalidEmailPassword(true);
       return;
     } else if (Validation.removeBadSpaces(getConfirmPassword) === "") {
-      showMessage({
-        message: "Please enter confirm password",
-        type: "danger",
-      });
+      setInvalidEmailPassword(true);
       return;
     } else if (getConfirmPassword != getCreatePassword) {
-      showMessage({
-        message: "confirm password does not match",
-        type: "danger",
-      });
+      setInvalidEmailPassword(true);
       return;
     }
     setLoader(true);
-    //GetSpecialDay
-    const { response, error } = await GetSpecialDay();
-    console.log("GetSpecialDayresponse==>", response);
+
     //signUp
     const { signUperror, signUpresponse } = await signUp(
       getEmail,
       getCreatePassword,
       getConfirmPassword
     );
+
+    //GetSpecialDay
+    const { response, error } = await GetSpecialDay();
+    console.log("GetSpecialDayresponse==>", response);
+    debugger;
+
     setLoader(false);
     if (signUpresponse.data.StatusCode == "1") {
-      showMessage({
-        message: "Alert",
-        description: signUpresponse.data.Message,
-        type: "success",
-      });
       navigation.navigate("TutorialFirst");
     } else {
-      showMessage({
-        message: "Alert",
-        description: signUpresponse.data.Message,
-        type: "danger",
-      });
+      setInvalidEmailPassword(true);
     }
   };
 
@@ -175,11 +169,19 @@ const Signup = ({ navigation }) => {
                   setConfirmPassword(ConfirmPassword)
                 }
               />
+
+              {getInvalidEmailPassword == true ? (
+                <Text style={CommonStyle.txtErrorMessage}>
+                  {AppString.InvaildEmailPassword}
+                </Text>
+              ) : null}
             </View>
             <View>
               <FilledButton
                 buttonName={AppString.Signup}
                 onPress={() => handleSignUp()}
+                btncheck={isvalidForm()}
+                btnabled={isvalidForm()}
               />
             </View>
 

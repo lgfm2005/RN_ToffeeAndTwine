@@ -29,33 +29,35 @@ import { FormInput, ShowFormInput } from "../../Components/FormInput";
 
 import { useActions } from "../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
+import { ButtonStyle } from "../../Components/Button/ButtonStyle";
+import { isEmailValid } from "../../utils";
 
 const SignIn = ({ navigation }) => {
   const { Login } = useActions();
   const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
-  const [getLoader, setLoader] = useState(false);
 
   const [getEmail, setEmail] = useState("");
   const [getCreatePassword, setCreatePassword] = useState("");
+  const [getInvalidEmailPassword, setInvalidEmailPassword] = useState(false);
 
-  const handleLogin = async () => {
+  const [getLoader, setLoader] = useState(false);
+
+  const isvalidForm = () => {
+    if (isEmailValid(getEmail) && getCreatePassword != "") {
+      return true;
+    }
+    return false;
+  };
+
+  const handleLogin = async (getEmail, getCreatePassword) => {
     setLoader(true);
     const { error, response } = await Login(getEmail, getCreatePassword, "");
     setLoader(false);
-
     if (response.data.StatusCode == "1") {
-      showMessage({
-        message: "Alert",
-        description: response.data.Message,
-        type: "success",
-      });
       navigation.navigate("Navigation");
     } else {
-      showMessage({
-        message: "Alert",
-        description: error,
-        type: "danger",
-      });
+      setInvalidEmailPassword(true);
+      console.log("Error", error);
     }
   };
 
@@ -89,7 +91,6 @@ const SignIn = ({ navigation }) => {
                 buttonName={AppString.Enteremailaddress}
                 textChange={(Email) => setEmail(Email)}
               />
-              <Text>wef</Text>
             </View>
 
             <View style={CommonStyle.formGroup}>
@@ -102,7 +103,11 @@ const SignIn = ({ navigation }) => {
                   setCreatePassword(CreatePassword)
                 }
               />
-              <Text>wef</Text>
+              {getInvalidEmailPassword == true ? (
+                <Text style={CommonStyle.txtErrorMessage}>
+                  {AppString.InvaildEmailPassword}
+                </Text>
+              ) : null}
             </View>
 
             <View style={CommonStyle.Right}>
@@ -118,7 +123,10 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                onPress={() => handleLogin()}
+                // onPress={() => handleLogin(getEmail, getCreatePassword)}
+                onPress={() => handleLogin("uss.hitesh@gmail.com", "123456")}
+                // btncheck={isvalidForm()}
+                // btnabled={isvalidForm()}
               />
             </View>
 

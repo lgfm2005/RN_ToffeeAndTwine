@@ -1,20 +1,33 @@
-import React from 'react';
-import {StyleSheet, View, TouchableOpacity, Text, Image} from 'react-native';
-import CommonStyle from '../../Assets/Style/CommonStyle';
+import React from "react";
+import { StyleSheet, View, TouchableOpacity, Text, Image } from "react-native";
+import CommonStyle from "../../Assets/Style/CommonStyle";
 
-import {ButtonStyle} from '../../Components/Button/ButtonStyle';
+import { ButtonStyle } from "../../Components/Button/ButtonStyle";
 
 export const FilledButton = ({
   buttonName,
   styleBtn,
   fontStyle,
   onPress,
+  btncheck,
+  btnabled,
   ...props
 }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity
+      onPress={onPress}
+      disabled={btnabled == "" ? true : false}
+    >
       <View>
-        <View style={[ButtonStyle.FilledButton, styleBtn]}>
+        <View
+          style={[
+            ButtonStyle.FilledButton,
+            styleBtn,
+            btncheck == ""
+              ? ButtonStyle.buttonDisabled
+              : ButtonStyle.buttonEnabled,
+          ]}
+        >
           <Text style={[ButtonStyle.FilledButtonText, fontStyle]}>
             {buttonName}
           </Text>
@@ -24,11 +37,11 @@ export const FilledButton = ({
   );
 };
 
-export const OutLinedButton = ({buttonName, onPress, ...props}) => {
+export const OutLinedButton = ({ buttonName, onPress, ...props }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View>
-        <View style={[ButtonStyle.OutLinedButtonStyle, {marginBottom: 32}]}>
+        <View style={[ButtonStyle.OutLinedButtonStyle, { marginBottom: 32 }]}>
           <Text style={ButtonStyle.OutLinedButtonText}>{buttonName}</Text>
         </View>
       </View>
@@ -36,7 +49,7 @@ export const OutLinedButton = ({buttonName, onPress, ...props}) => {
   );
 };
 
-export const POPLinkButton = ({buttonName, onPress, ...props}) => {
+export const POPLinkButton = ({ buttonName, onPress, ...props }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View>
@@ -48,7 +61,7 @@ export const POPLinkButton = ({buttonName, onPress, ...props}) => {
   );
 };
 
-export const POPOutLinkButton = ({buttonName, onPress, ...props}) => {
+export const POPOutLinkButton = ({ buttonName, onPress, ...props }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View>
@@ -70,11 +83,12 @@ export const ImagePOPLinkButton = ({
     <TouchableOpacity onPress={onPress}>
       <View>
         <View
-          style={[ButtonStyle.popFilledButtonStyle, {flexDirection: 'row'}]}>
+          style={[ButtonStyle.popFilledButtonStyle, { flexDirection: "row" }]}
+        >
           <Text style={ButtonStyle.popFilledButtonText}>{buttonName}</Text>
           <Image
             source={buttonImage}
-            style={[CommonStyle.imgIconSize, {marginLeft: 10}]}
+            style={[CommonStyle.imgIconSize, { marginLeft: 10 }]}
           />
         </View>
       </View>

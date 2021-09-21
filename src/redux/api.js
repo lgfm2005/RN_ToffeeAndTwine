@@ -101,14 +101,20 @@ export const UpdateProfile = {
     ),
 };
 
+// Check Bhaveshbhai
 export const GetSpecialDays = {
   get: async (session) =>
     await api(session, `/rest_api/controller_profile/get_special_day`, "get"),
 };
 
 export const GetCategories = {
-  get: async (session) =>
-    await api(session, `/rest_api/controller_profile/get_categories`, "get"),
+  categories: async (data, session) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/get_categories`,
+      "post",
+      data
+    ),
 };
 
 export const AdddCategorySpecialDays = {

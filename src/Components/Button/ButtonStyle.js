@@ -1,20 +1,20 @@
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import CommonStyle, {
   fontsize14,
   fontsize16,
   fontsize20,
-} from '../../Assets/Style/CommonStyle';
+} from "../../Assets/Style/CommonStyle";
 
-import {COLORS} from '../../Assets/utils/COLORS';
-import {FONT} from '../../Assets/utils/FONT';
+import { COLORS } from "../../Assets/utils/COLORS";
+import { FONT } from "../../Assets/utils/FONT";
 
 export const BaseButton = {
-  width: '100%',
+  width: "100%",
   height: 50,
   borderRadius: 50 / 2,
   borderWidth: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
+  justifyContent: "center",
+  alignItems: "center",
   // ...CommonStyle.mb32
   marginBottom: 12,
 };
@@ -22,7 +22,7 @@ export const BaseButton = {
 export const BaseButtonText = {
   ...fontsize20,
   fontFamily: FONT.Gilroy,
-  textTransform: 'uppercase',
+  textTransform: "uppercase",
 };
 
 export const POPLinkButtonStyle = {
@@ -30,13 +30,13 @@ export const POPLinkButtonStyle = {
   height: 48,
   borderRadius: 30,
   borderWidth: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
+  justifyContent: "center",
+  alignItems: "center",
 };
 export const POPLinkButtonText = {
   ...fontsize16,
   fontFamily: FONT.Gilroy,
-  textTransform: 'uppercase',
+  textTransform: "uppercase",
 };
 
 export const Smallbtn = {
@@ -55,17 +55,27 @@ export const FrinedFilledButtonStyle = {
   height: 45,
   borderRadius: 30,
   borderWidth: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
+  justifyContent: "center",
+  alignItems: "center",
 };
 export const FrinedFilledButtonText = {
   ...fontsize14,
-  textTransform: 'uppercase',
+  textTransform: "uppercase",
 };
 
 export const ButtonStyle = StyleSheet.create({
   // Black
   FilledButton: {
+    ...BaseButton,
+    borderColor: COLORS.Primary,
+    backgroundColor: COLORS.Primary,
+  },
+  buttonDisabled: {
+    ...BaseButton,
+    borderColor: COLORS.PrimaryLight,
+    backgroundColor: COLORS.PrimaryLight,
+  },
+  buttonEnabled: {
     ...BaseButton,
     borderColor: COLORS.Primary,
     backgroundColor: COLORS.Primary,

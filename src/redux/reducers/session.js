@@ -1,4 +1,4 @@
-import { LOGIN, GET_SPECIAL_DAY, LOGOUT } from "../types";
+import { LOGIN, SIGNUP, GET_SPECIAL_DAY, LOGOUT } from "../types";
 
 const initialState = {};
 
@@ -9,12 +9,6 @@ export default (state = initialState, action) => {
         action.payload;
       return { token, userId, userIsActive, userFname, userLname, userOtp };
     }
-
-    case GET_SPECIAL_DAY: {
-      debugger;
-      return action.payload;
-    }
-
     case LOGOUT: {
       return initialState;
     }

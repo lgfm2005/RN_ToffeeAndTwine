@@ -89,14 +89,15 @@ const EditProfile = ({ navigation }) => {
   };
 
   const APIUpdateProfile = async () => {
-    // setLoader(true);
+    setLoader(true);
     const { error, response } = await updateProfile(getFirstName, getLastName);
+    debugger;
     // console.log("getFirstName===>", getFirstName);
     // console.log("getLastName===>", getLastName);
-    // console.log("response===>", response);
-    // console.log("error===>", error);
+    console.log("response===>", response);
+    console.log("error===>", error);
+    debugger;
     // setLoader(false);
-    // debugger;
     // navigation.navigate("MyProfile");
   };
 

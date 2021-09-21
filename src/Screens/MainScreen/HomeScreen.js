@@ -54,6 +54,7 @@ import { SelectCategoriesList } from "../../Components/AllListVIew/SelectCategor
 import { MyBlackStatusbar } from "../../Components/MyStatusBar/MyBlackStatusbar";
 import { MyWhiteStatusbar } from "../../Components/MyStatusBar/MyWhiteStatusbar";
 import { FONT } from "../../Assets/utils/FONT";
+import { useActions } from "../../redux/actions";
 
 const Data = [
   {
@@ -190,9 +191,20 @@ const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 import { useSelector } from "react-redux";
 
 const HomeScreen = () => {
+  const { CategoryList } = useActions();
+
   const user = useSelector((state) => state.session);
   console.log("User===>>>", user);
-  // debugger;
+
+  const categories = useSelector((state) => state.categories);
+  console.log("categories ===>>>", categories);
+
+  useEffect(async () => {
+    const { GetCategoryListerror, GetCategoryListresponse } =
+      await CategoryList();
+    console.log("GetCategoryListerror ===>>>", GetCategoryListerror);
+    console.log("GetCategoryListresponse ===>>>", GetCategoryListresponse);
+  }, []);
 
   // AddItemShow
   const [getAddItemShowModal, setAddItemShowModal] = useState(false);

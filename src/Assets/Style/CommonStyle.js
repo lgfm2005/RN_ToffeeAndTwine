@@ -1,11 +1,11 @@
-import {StyleSheet, Dimensions} from 'react-native';
-import {COLORS} from '../utils/COLORS';
-import {FONT} from '../utils/FONT';
+import { StyleSheet, Dimensions } from "react-native";
+import { COLORS } from "../utils/COLORS";
+import { FONT } from "../utils/FONT";
 
-const WindowWidth = Dimensions.get('window').width;
-const WindowHeight = Dimensions.get('window').height;
-const ScreenWidth = Dimensions.get('screen').width;
-const ScreenHeight = Dimensions.get('screen').height;
+const WindowWidth = Dimensions.get("window").width;
+const WindowHeight = Dimensions.get("window").height;
+const ScreenWidth = Dimensions.get("screen").width;
+const ScreenHeight = Dimensions.get("screen").height;
 
 // export const redBorder = {
 //     borderColor: 'red',
@@ -13,7 +13,7 @@ const ScreenHeight = Dimensions.get('screen').height;
 // }
 
 export const baseContainer = {
-  width: '100%',
+  width: "100%",
   paddingLeft: 24,
   paddingRight: 24,
   backgroundColor: COLORS.RootBG,
@@ -61,16 +61,16 @@ export const p24 = {
 
 export default CommonStyle = StyleSheet.create({
   Base: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     // ...redBorder
   },
   MainContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     // alignItems: 'center',
     // backgroundColor: 'red',
-    height: '100%',
+    height: "100%",
     backgroundColor: COLORS.RootBG,
   },
   Container: {
@@ -103,9 +103,9 @@ export default CommonStyle = StyleSheet.create({
     marginTop: 16,
   },
   imgGiftTutorial: {
-    width: '100%',
+    width: "100%",
     height: 250,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   txtTitle: {
     lineHeight: 32,
@@ -123,7 +123,7 @@ export default CommonStyle = StyleSheet.create({
     ...mb16,
   },
   formInputGroup: {
-    flexDirection: 'row',
+    flexDirection: "row",
     // ...mb32
   },
   formLabel: {
@@ -134,11 +134,11 @@ export default CommonStyle = StyleSheet.create({
   formPopUpLabel: {
     ...fontsize16,
     fontFamily: FONT.Gilroy,
-    fontWeight: '500',
-    width: '30%',
+    fontWeight: "500",
+    width: "30%",
   },
   formControl: {
-    width: '100%',
+    width: "100%",
     height: 46,
     backgroundColor: COLORS.Secondary,
     borderColor: COLORS.Primary,
@@ -153,26 +153,26 @@ export default CommonStyle = StyleSheet.create({
     // ...mb32
   },
   formSimpleEditView: {
-    width: '50%',
+    width: "50%",
     height: 46,
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: COLORS.Secondary,
     paddingLeft: 16,
   },
   formSimpletxtEditView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
   },
   logoImage: {
-    width: '100%',
+    width: "100%",
     height: 40,
-    resizeMode: 'contain',
+    resizeMode: "contain",
     ...mb32,
   },
   giftThoughtfully: {
     ...fontsize24,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: FONT.Gilroy,
     color: COLORS.gray,
     // ...mb32
@@ -195,30 +195,30 @@ export default CommonStyle = StyleSheet.create({
     borderBottomLeftRadius: 0,
     paddingLeft: 8,
     paddingRight: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   googleFb: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   authPage: {
-    height: '100%',
+    height: "100%",
     paddingBottom: 64,
-    position: 'relative',
+    position: "relative",
     // backgroundColor: 'blue'
   },
   rowEnd: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   BgColorWhite: {
     backgroundColor: COLORS.Secondary,
   },
   Right: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   p32: {
     ...p32,
@@ -233,12 +233,12 @@ export default CommonStyle = StyleSheet.create({
     padding: 8,
   },
   centerRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   Row: {
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
   },
   bottomBarImg: {
     width: 34,
@@ -257,11 +257,11 @@ export default CommonStyle = StyleSheet.create({
   userName: {
     ...fontsize24,
     paddingLeft: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     fontFamily: FONT.NotoSans,
   },
   textUpperCase: {
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
   },
   imgIconSize: {
     height: 24,
@@ -284,14 +284,14 @@ export default CommonStyle = StyleSheet.create({
     paddingBottom: 16,
   },
   alignItemsBaseLine: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
+    flexDirection: "row",
+    alignItems: "baseline",
   },
   center: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   height: {
-    height: '100%',
+    height: "100%",
   },
   Windowwidth: {
     width: WindowWidth,
@@ -316,12 +316,12 @@ export default CommonStyle = StyleSheet.create({
     borderRadius: 40,
   },
   MainScreen: {
-    position: 'relative',
+    position: "relative",
     paddingTop: 70,
     paddingBottom: 64,
   },
   BottomContent: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     right: 0,
     left: 0,
@@ -330,35 +330,35 @@ export default CommonStyle = StyleSheet.create({
     paddingTop: 16,
   },
   RowSpace: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   imgProfileBackground: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
   imgmask: {
-    position: 'relative',
-    overflow: 'hidden',
-    width: '100%',
+    position: "relative",
+    overflow: "hidden",
+    width: "100%",
     height: 400,
 
     // backgroundColor: 'red'
   },
   imgmaskbg: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     right: 0,
     left: 0,
     zIndex: 0,
-    width: '100%',
+    width: "100%",
     height: 400,
   },
   ProfileToolbarbg: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
     height: 100,
     paddingTop: 50,
     paddingLeft: 15,
@@ -370,9 +370,14 @@ export default CommonStyle = StyleSheet.create({
     borderRadius: 40,
   },
   PopModalWidth60: {
-    width: '60%',
+    width: "60%",
   },
   PopModalWidth100: {
-    width: '100%',
+    width: "100%",
+  },
+  txtErrorMessage: {
+    fontFamily: FONT.Gilroy,
+    ...fontsize14,
+    color: COLORS.red,
   },
 });

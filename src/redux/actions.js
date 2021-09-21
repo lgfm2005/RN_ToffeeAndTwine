@@ -1,4 +1,4 @@
-import { LOGIN, GETSPECIALDAY, LOGOUT } from "./types";
+import { LOGIN, GETSPECIALDAY, CATEGORIES, LOGOUT } from "./types";
 import { createAction } from "redux-actions";
 import * as API from "./api";
 import { showMessage } from "react-native-flash-message";
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const loginAction = createAction(LOGIN);
 const logoutAction = createAction(LOGOUT);
+const categoriesAction = createAction(CATEGORIES);
 
 // const getSpecialDay = createAction(GETSPECIALDAY);
 
@@ -55,10 +56,11 @@ export const useActions = () => {
       data.append("Email", Email);
       data.append("Password", Password);
       data.append("CPassword", CPassword);
-
       let signUpresponse, signUperror;
       try {
         signUpresponse = await API.Signups.signUp(data);
+        if (signUpresponse.data.StatusCode == "1") {
+        }
       } catch (e) {
         signUperror = e;
       }
@@ -125,7 +127,9 @@ export const useActions = () => {
       let response, error;
       try {
         response = await API.UpdateProfile.UpdateProfile(data, sessions);
+        debugger;
         if (response.data.StatusCode == "1") {
+          debugger;
           dispatch(
             loginAction({
               token: sessions.token,
@@ -145,11 +149,14 @@ export const useActions = () => {
       return { response, error };
     },
 
+    // Check Bhaveshbhai
     GetSpecialDay: async () => {
       let response, error;
       try {
         response = await API.GetSpecialDays.get();
+        debugger;
         if (response.data.StatusCode == "1") {
+          debugger;
         }
       } catch (e) {
         error = e;
@@ -157,16 +164,20 @@ export const useActions = () => {
       return { response, error };
     },
 
-    GetCategoryList: async () => {
-      let response, error;
+    CategoryList: async () => {
+      let GetCategoryListresponse, GetCategoryListerror;
+      var data = new FormData();
+      data.append("LimitRecord", "30");
       try {
-        response = await API.GetCategories.get();
+        response = await API.GetCategories.categories(data, sessions);
         if (response.data.StatusCode == "1") {
+          console.log("questions SC ===>>", response.data.Result);
+          dispatch(categoriesAction(response.data.Result));
         }
       } catch (e) {
-        error = e;
+        GetCategoryListerror = e;
       }
-      return { response, error };
+      return { GetCategoryListresponse, GetCategoryListerror };
     },
 
     addCategoryspecialDay: async (

@@ -7,6 +7,7 @@ export const FORGOT_PASSWORD = "FORGOT_PASSWORD";
 
 // Profile
 export const UPDATE_PROFILE = "UPDATE_PROFILE";
+export const CATEGORIES = "CATEGORIES";
 
 // Get
 export const GET_SPECIAL_DAY = "GET_SPECIAL_DAY";
