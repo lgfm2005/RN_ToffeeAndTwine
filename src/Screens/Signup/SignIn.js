@@ -33,7 +33,7 @@ import { ButtonStyle } from "../../Components/Button/ButtonStyle";
 import { isEmailValid } from "../../utils";
 
 const SignIn = ({ navigation }) => {
-  const { Login } = useActions();
+  const { Login, CategoryList } = useActions();
   const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
   const [getEmail, setEmail] = useState("");
@@ -52,6 +52,10 @@ const SignIn = ({ navigation }) => {
   const handleLogin = async (getEmail, getCreatePassword) => {
     setLoader(true);
     const { error, response } = await Login(getEmail, getCreatePassword, "");
+    const { GetCategoryListerror, GetCategoryListresponse } =
+      await CategoryList(30);
+    // console.log("GetCategoryListerror ===>>>", GetCategoryListerror);
+    // console.log("GetCategoryListresponse ===>>>", GetCategoryListresponse);
     setLoader(false);
     if (response.data.StatusCode == "1") {
       navigation.navigate("Navigation");
@@ -123,8 +127,8 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                // onPress={() => handleLogin(getEmail, getCreatePassword)}
-                onPress={() => handleLogin("uss.hitesh@gmail.com", "123456")}
+                onPress={() => handleLogin(getEmail, getCreatePassword)}
+                // onPress={() => handleLogin("uss.hitesh@gmail.com", "123456")}
                 // btncheck={isvalidForm()}
                 // btnabled={isvalidForm()}
               />

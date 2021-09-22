@@ -156,8 +156,28 @@ export const useActions = () => {
       }
       return { response, error };
     },
+    CategoryList: async (LimitRecord) => {
+      let GetCategoryListresponse, GetCategoryListerror;
+      var data = new FormData();
+      data.append("LimitRecord", LimitRecord);
+      try {
+        GetCategoryListresponse = await API.GetCategories.categories(
+          data,
+          sessions
+        );
+        if (GetCategoryListresponse.data.StatusCode == "1") {
+          console.log(
+            "questions SC ===>>",
+            GetCategoryListresponse.data.Result
+          );
+          dispatch(categoriesAction(GetCategoryListresponse.data.Result));
+        }
+      } catch (e) {
+        GetCategoryListerror = e;
+      }
+      return { GetCategoryListresponse, GetCategoryListerror };
+    },
 
-    // Check Bhaveshbhai
     GetSpecialDay: async (session) => {
       let response, error;
       try {
@@ -170,43 +190,32 @@ export const useActions = () => {
       return { response, error };
     },
 
-    CategoryList: async () => {
-      let GetCategoryListresponse, GetCategoryListerror;
-      var data = new FormData();
-      data.append("LimitRecord", "30");
-      try {
-        response = await API.GetCategories.categories(data, sessions);
-        if (response.data.StatusCode == "1") {
-          console.log("questions SC ===>>", response.data.Result);
-          dispatch(categoriesAction(response.data.Result));
-        }
-      } catch (e) {
-        GetCategoryListerror = e;
-      }
-      return { GetCategoryListresponse, GetCategoryListerror };
-    },
-
     addCategoryspecialDay: async (
       SpecialDayID,
       UserSpecialDayValue,
-      IsFirst
+      IsFirst,
+      sessions
     ) => {
       var data = new FormData();
       data.append("SpecialMomentID", SpecialDayID);
       data.append("UserSpecialMomentValue", UserSpecialDayValue);
       data.append("IsFirst", IsFirst);
 
-      let response, error;
+      let addCategoryspecialDayResponse, addCategoryspecialDayError;
       try {
-        response = await API.AdddCategorySpecialDays.get(sessions, data);
-        if (response.data.StatusCode == "1") {
+        addCategoryspecialDayResponse = await API.AdddCategorySpecialDays.get(
+          sessions,
+          data
+        );
+        if (addCategoryspecialDayResponse.data.StatusCode == "1") {
         } else {
-          error = response.data.Message;
+          addCategoryspecialDayError =
+            addCategoryspecialDayResponse.data.Message;
         }
       } catch (e) {
-        error = e;
+        addCategoryspecialDayError = e;
       }
-      return { response, error };
+      return { addCategoryspecialDayResponse, addCategoryspecialDayError };
     },
 
     addCategoryQuestion: async (

@@ -49,12 +49,12 @@ const Signup = ({ navigation }) => {
 
   const _keyboardDidShow = () => {
     setKeyboardShow(true);
-    console.log("Keyboard Shown");
+    // console.log("Keyboard Shown");
   };
 
   const _keyboardDidHide = () => {
     setKeyboardShow(false);
-    console.log("Keyboard Hidden");
+    // console.log("Keyboard Hidden");
   };
 
   useEffect(() => {
@@ -105,11 +105,11 @@ const Signup = ({ navigation }) => {
       const { response, error } = await GetSpecialDay({
         token: tokens,
       });
-      console.log("GetSpecialDayresponse==>", response);
       if (signUpresponse.data.StatusCode == "1") {
         if (response.data.StatusCode == "1") {
           navigation.navigate("TutorialFirst", {
             listGetSpecialDay: response.data.Result,
+            token: tokens,
           });
         }
       } else {

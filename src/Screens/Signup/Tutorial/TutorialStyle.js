@@ -64,6 +64,14 @@ export default CommonStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  GraySilderbgImg: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    backgroundColor: COLORS.PrimaryLight,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   silderIcon: {
     width: 24,
     height: 24,

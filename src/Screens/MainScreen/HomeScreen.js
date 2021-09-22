@@ -46,6 +46,7 @@ import {
   POPOutLinkButton,
 } from "../../Components/Button/Button";
 import { ScrollView } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
 
 import { ExploreShareList } from "../../Components/AllListVIew/ExploreShareList";
 import { UpgradeCategoriesList } from "../../Components/AllListVIew/UpgradeCategoriesList";
@@ -188,23 +189,14 @@ const UpgradeCatData = [
 ];
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
-import { useSelector } from "react-redux";
 
 const HomeScreen = () => {
   const { CategoryList } = useActions();
-
   const user = useSelector((state) => state.session);
-  console.log("User===>>>", user);
+  // console.log("User===>>>", user);
 
   const categories = useSelector((state) => state.categories);
-  console.log("categories ===>>>", categories);
-
-  useEffect(async () => {
-    const { GetCategoryListerror, GetCategoryListresponse } =
-      await CategoryList();
-    console.log("GetCategoryListerror ===>>>", GetCategoryListerror);
-    console.log("GetCategoryListresponse ===>>>", GetCategoryListresponse);
-  }, []);
+  // console.log("categories ===>>>", categories);
 
   // AddItemShow
   const [getAddItemShowModal, setAddItemShowModal] = useState(false);
@@ -225,6 +217,7 @@ const HomeScreen = () => {
   // getupgradeItemModal
   const [getupgradeItemModal, setupgradeItemModal] = useState(false);
 
+  const [getQuestions, setQuestions] = useState("");
   const [getImage, setImage] = useState("");
   const [getFirstName, setFirstName] = useState("");
   const [getSecondName, setSecondName] = useState("");
@@ -268,19 +261,26 @@ const HomeScreen = () => {
   };
 
   // Add --> Select categories
-  const SelectCategoriesItem = (Name, Image, id) => {
-    console.log(" Select categories ===>>>", Name, Image, id);
+  const SelectCategoriesItem = (Name, Image, id, questions) => {
+    console.log(" Select categories ===>>>", Name, Image, id, questions);
     setAddItemShowModal(false);
     // setAddNewFreshItemModal(true)
-    AddNewFreshItem(Name, Image, id);
+    AddNewFreshItem(Name, Image, id, questions);
   };
 
   // Add --> Select Categories --> New Item
-  const AddNewFreshItem = (Name, Image, id) => {
-    console.log("Select Categories --> New Item ===>>>", Name, Image, id);
+  const AddNewFreshItem = (Name, Image, id, questions) => {
+    console.log(
+      "Select Categories --> New Item ===>>>",
+      Name,
+      Image,
+      id,
+      questions
+    );
     setAddNewItemModal(false);
     setEditItemModal(true);
     setAddNewItem(Name);
+    setQuestions(questions);
   };
 
   // Old Select Categories -- > Edit Item
@@ -386,11 +386,12 @@ const HomeScreen = () => {
                   { justifyContent: "flex-start" },
                 ]}
               >
-                {UpgradeCatData.map((item, index) => (
+                {categories.map((item, index) => (
                   <UpgradeCategoriesList
-                    ImageUrl={item.Image}
-                    ExploreName={item.Name}
-                    Id={item.id}
+                    ImageUrl={""}
+                    // ImageUrl={item.Image}
+                    ExploreName={item.category_name}
+                    Id={item.category_id}
                     index={index}
                     key={index}
                     DataLength={Data.length}
@@ -427,19 +428,20 @@ const HomeScreen = () => {
                           MainScreenStyle.scrollItemStyle,
                         ]}
                       >
-                        {Data.map((item, index) => (
+                        {categories.map((item, index) => (
                           <SelectCategoriesList
                             ImageUrl={item.Image}
-                            ExploreName={item.Name}
-                            Id={item.id}
+                            ExploreName={item.category_name}
+                            Id={item.category_id}
                             index={index}
                             key={index}
                             DataLength={Data.length}
                             onPress={() =>
                               SelectCategoriesItem(
-                                item.Name,
+                                item.category_name,
                                 item.Image,
-                                item.id
+                                item.category_id,
+                                item.questions
                               )
                             }
                           />
@@ -662,37 +664,26 @@ const HomeScreen = () => {
 
                     <View style={CommonStyle.my16}>
                       <SimpleInputEditView
-                        TitleName={"Color"}
-                        placeholder={"Enter here"}
+                        TitleName={getQuestions[0].category_question}
+                        placeholder={getQuestions[0].category_placeholder}
                         onChangeText={(FirstName) => setFirstName(FirstName)}
                       />
                       <SimpleInputEditView
-                        TitleName={"Type"}
-                        placeholder={"Enter here"}
+                        TitleName={getQuestions[1].category_question}
+                        placeholder={getQuestions[1].category_placeholder}
                         onChangeText={(SecondName) => setSecondName(SecondName)}
                       />
                       <SimpleInputEditView
-                        TitleName={"Amount"}
-                        placeholder={"Enter here"}
+                        TitleName={getQuestions[2].category_question}
+                        placeholder={getQuestions[2].category_placeholder}
                         onChangeText={(ThirdName) => setThirdName(ThirdName)}
                       />
                       <SimpleInputEditView
-                        TitleName={"Vase"}
-                        placeholder={"Enter here"}
+                        TitleName={getQuestions[3].category_question}
+                        placeholder={getQuestions[3].category_placeholder}
                         onChangeText={(FourName) => setFourName(FourName)}
                       />
-                      <SimpleInputEditView
-                        TitleName={"Link"}
-                        placeholder={"Enter here"}
-                        onChangeText={(FiveName) => setFiveName(FiveName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Other Info"}
-                        placeholder={"Enter here"}
-                        onChangeText={(SixName) => setSixName(SixName)}
-                      />
                     </View>
-
                     <View
                       style={{ flexDirection: "row", justifyContent: "center" }}
                     >

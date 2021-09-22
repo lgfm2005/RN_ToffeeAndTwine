@@ -15,6 +15,7 @@ import {
 import RadioGroup from "react-native-custom-radio-group";
 import Modal from "react-native-modal";
 import DatePicker from "react-native-date-picker";
+import Spinner from "react-native-loading-spinner-overlay";
 
 // Asset
 import { AppString } from "../../../Assets/utils/AppString";
@@ -31,54 +32,79 @@ import {
   POPLinkButton,
   POPOutLinkButton,
 } from "../../../Components/Button/Button";
-// import NotBorderBlackButton from '../../../Components/NotBorderBlackButton';
 import RadioButtonContainer from "../../../Components/RadioButtonContainer";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { FONT } from "../../../Assets/utils/FONT";
+import { useActions } from "../../../redux/actions";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
-const data = [
-  {
-    text: AppString.Birthday,
-  },
-  {
-    text: AppString.Anniversary,
-  },
-  {
-    text: AppString.Graduation,
-  },
-  {
-    text: AppString.Christmas,
-  },
-];
+// const data = [
+//   {
+//     text: AppString.Birthday,
+//   },
+//   {
+//     text: AppString.Anniversary,
+//   },
+//   {
+//     text: AppString.Graduation,
+//   },
+//   {
+//     text: AppString.Christmas,
+//   },
+// ];
 
 const TutorialFirst = ({ navigation, props, route }) => {
-  const { listGetSpecialDay } = route.params;
+  const { listGetSpecialDay, token } = route.params;
+  const { updateProfile, addCategoryspecialDay } = useActions();
+
   const [getFirstName, setFirstName] = useState("");
   const [getLastName, setLastName] = useState("");
-  const [getRadioName, setRadioName] = useState("");
+  const [getRadioId, setRadioId] = useState("");
+  const [getLoader, setLoader] = useState(false);
 
+  const [getValidationCheck, setValidationCheck] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
+  const [getFinaldate, setFinalDate] = useState();
   const [date, setDate] = useState(new Date());
 
-  const onRadioButtonPress = (itemIdx) => {
-    console.log("Clicked", itemIdx);
-    setRadioName(data[itemIdx].text);
+  const onRadioButtonPress = (idx, momentId) => {
+    console.log("Clicked ==>", idx, momentId);
+    setRadioId(momentId);
     setModalVisible(true);
   };
 
   const CloseDatePicker = () => {
     setModalVisible(false);
   };
-  const SaveDatePicker = () => {
+  const SaveDatePicker = async () => {
     setModalVisible(false);
+    setValidationCheck("GetAllData");
     console.log("getFirstName ===>>", getFirstName);
     console.log("getLastName ===>>", getLastName);
-    console.log("getLastName ===>>", getRadioName);
-    console.log("getRadioName ===>>", date);
-    // if (getFirstName != "" && getLastName != "" && getRadioName != "" && date != "") {
-    //     props.slide1Check();
+    console.log("getRadioId ===>>", getRadioId);
+    var DateSubstring =
+      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    setFinalDate(DateSubstring);
+    console.log("getRadioName ===>>", DateSubstring);
+  };
+
+  const SubmitData = async () => {
+    navigation.navigate("TutorialSecond");
+    // setLoader(true);
+    // const { error, response } = await updateProfile(
+    //   getFirstName,
+    //   getLastName,
+    //   token
+    // );
+    // console.log("response ===> ", response);
+    // console.log("error ===> ", error);
+    // // const { addCategoryspecialDayerror, addCategoryspecialDayResponse } =
+    // //   await addCategoryspecialDay(getRadioId, getFinaldate, "1");
+    // setLoader(true);
+    // if (response.data.StatusCode == "1") {
+    //   setLoader(false);
+    //   navigation.navigate("TutorialSecond");
     // }
   };
 
@@ -234,9 +260,16 @@ const TutorialFirst = ({ navigation, props, route }) => {
           </View>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate("TutorialSecond")}
+              onPress={() => SubmitData()}
+              disabled={getValidationCheck != "" ? false : true}
             >
-              <View style={TutorialStyle.SilderbgImg}>
+              <View
+                style={[
+                  getValidationCheck != ""
+                    ? TutorialStyle.SilderbgImg
+                    : TutorialStyle.GraySilderbgImg,
+                ]}
+              >
                 <Image
                   source={imgArrowRight}
                   style={TutorialStyle.silderIcon}
@@ -246,6 +279,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
           </View>
         </View>
       </View>
+      <Spinner visible={getLoader} />
     </SafeAreaView>
   );
 };

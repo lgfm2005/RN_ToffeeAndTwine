@@ -6,9 +6,9 @@ import TutorialStyle from "../Screens/Signup/Tutorial/TutorialStyle";
 export default function RadioButtonContainer({ values, onPress }) {
   const [currentSelectedItem, setCurrentSelectedItem] = useState(null);
 
-  const _onPress = (idx) => {
-    onPress(idx);
-    setCurrentSelectedItem(idx);
+  const _onPress = (idx, momentId) => {
+    onPress(idx, momentId);
+    setCurrentSelectedItem(idx, momentId);
   };
 
   const _renderRadioButtons = () => {
@@ -17,7 +17,8 @@ export default function RadioButtonContainer({ values, onPress }) {
       return (
         <RadioButton
           key={idx}
-          onRadioButtonPress={() => _onPress(idx)}
+          onRadioButtonPress={() => _onPress(idx, listItem.special_moment_id)}
+          // onRadioButtonPress={() => _onPress(listItem.special_moment_name)}
           isChecked={isChecked}
           text={listItem.special_moment_name}
         />
