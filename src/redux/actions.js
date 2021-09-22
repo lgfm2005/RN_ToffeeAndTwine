@@ -266,26 +266,70 @@ export const useActions = () => {
       return { response, error };
     },
 
-    // GetAssets: async (ses, accountId) => {
-    //   const session = await refresh();
-    //   const response = await API.Assets.get(devAccess, session, accountId);
-    //   dispatch(getAssetsAction(response.data.data));
-    //   return {response};
-    // },
+    updateCategoryQuestion: async (
+      UserCategoryQuestionID,
+      CategoryQuestionValue
+    ) => {
+      var data = new FormData();
+      data.append("UserCategoryQuestionID[]", UserCategoryQuestionID);
+      data.append("CategoryQuestionValue[]", CategoryQuestionValue);
 
-    // ChangeNewPassword: async (sessions, resetPassWordToken, newPassword) => {
-    //   let response, error;
-    //   try {
-    //     response = await API.changeNewPassword.get(
-    //       devAccess,
-    //       session,
-    //       resetPassWordToken,
-    //       newPassword,
-    //     );
-    //   } catch (e) {
-    //     error = e;
-    //   }
-    //   return {response, error};
-    // },
+      let response, error;
+      try {
+        response = await API.UpdateCategoryQuestion.get(sessions, data);
+        if (response.data.StatusCode == "1") {
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    getUserCategorySpecialMoment: async () => {
+      let response, error;
+      try {
+        response = await API.GetUserCategorySpecialMoment.get(sessions);
+        if (response.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    getUserCategoryQuestion: async () => {
+      let response, error;
+      try {
+        response = await API.GetUserCategoryQuestion.get(sessions);
+        if (response.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    updateCategorySpecialMoment: async (
+      UserSpecialMomentID,
+      UserSpecialMomentValue
+    ) => {
+      var data = new FormData();
+      data.append("UserSpecialMomentID", UserSpecialMomentID);
+      data.append("UserSpecialMomentValue", UserSpecialMomentValue);
+
+      let response, error;
+      try {
+        response = await API.UpdateCategorySpecialMoment.get(sessions, data);
+        if (response.data.StatusCode == "1") {
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
   };
 };

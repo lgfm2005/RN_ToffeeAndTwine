@@ -145,7 +145,7 @@ export const DeleteUserCategorySpecialDay = {
   get: async (session, data) =>
     await api(
       session,
-      `/rest_api/controller_profile/delete_user_category_special_day`,
+      `/rest_api/controller_profile/delete_user_category_special_moment`,
       "post",
       data
     ),
@@ -156,6 +156,44 @@ export const DeleteUserCategoryQuestion = {
     await api(
       session,
       `/rest_api/controller_profile/delete_user_category_question`,
+      "post",
+      data
+    ),
+};
+
+export const GetUserCategorySpecialMoment = {
+  get: async (session) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/get_user_category_special_moment`,
+      "get"
+    ),
+};
+
+export const GetUserCategoryQuestion = {
+  get: async (session) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/get_user_category_question`,
+      "get"
+    ),
+};
+
+export const UpdateCategorySpecialMoment = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/update_category_special_moment`,
+      "post",
+      data
+    ),
+};
+
+export const UpdateCategoryQuestion = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/update_category_question`,
       "post",
       data
     ),
