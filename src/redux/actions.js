@@ -130,22 +130,26 @@ export const useActions = () => {
       return { response, error };
     },
 
-    updateProfile: async (userFname, userLname) => {
+    updateProfile: async (userFname, userLname, tokens) => {
+      var session = sessions;
+      if (tokens) {
+        session = tokens;
+      }
       var data = new FormData();
       data.append("FName", userFname);
       data.append("LName", userLname);
       let response, error;
       try {
-        response = await API.UpdateProfile.UpdateProfile(data, sessions);
+        response = await API.UpdateProfile.UpdateProfile(data, session);
         if (response.data.StatusCode == "1") {
           dispatch(
             loginAction({
-              token: sessions.token,
-              userId: sessions.userId,
-              userIsActive: sessions.userIsActive,
+              token: session.token,
+              userId: tokens ? "1" : sessions.userId,
+              userIsActive: tokens ? false : sessions.userIsActive,
               userFname: userFname,
               userLname: userLname,
-              userOtp: sessions.userOtp,
+              userOtp: tokens ? "43223423" : sessions.userOtp,
             })
           );
         } else {
@@ -156,14 +160,18 @@ export const useActions = () => {
       }
       return { response, error };
     },
-    CategoryList: async (LimitRecord) => {
+    CategoryList: async (LimitRecord, tokens) => {
+      var session = sessions;
+      if (tokens) {
+        session = tokens;
+      }
       let GetCategoryListresponse, GetCategoryListerror;
       var data = new FormData();
       data.append("LimitRecord", LimitRecord);
       try {
         GetCategoryListresponse = await API.GetCategories.categories(
           data,
-          sessions
+          session
         );
         if (GetCategoryListresponse.data.StatusCode == "1") {
           console.log(
@@ -194,8 +202,12 @@ export const useActions = () => {
       SpecialDayID,
       UserSpecialDayValue,
       IsFirst,
-      sessions
+      tokens
     ) => {
+      var session = sessions;
+      if (tokens) {
+        session = tokens;
+      }
       var data = new FormData();
       data.append("SpecialMomentID", SpecialDayID);
       data.append("UserSpecialMomentValue", UserSpecialDayValue);
@@ -204,7 +216,7 @@ export const useActions = () => {
       let addCategoryspecialDayResponse, addCategoryspecialDayError;
       try {
         addCategoryspecialDayResponse = await API.AdddCategorySpecialDays.get(
-          sessions,
+          session,
           data
         );
         if (addCategoryspecialDayResponse.data.StatusCode == "1") {

@@ -105,8 +105,17 @@ const numColumns = 5;
 const size = Dimensions.get("window").width;
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
-const TutorialSecond = ({ navigation, props }) => {
+const TutorialSecond = ({ navigation, props, route }) => {
+  const { categoryList } = route.params;
+  const [listOfCategory, setListOfCategory] = useState(categoryList);
   const [isModalVisible, setModalVisible] = useState(false);
+  //------- TODO ----- impliment for select icon when save
+  // var list = listOfCategory
+  // var items = list[index]
+  // items.isSelected = true
+  // list[index] = items
+  // setListOfCategory(list)
+
   const [getModalName, setModalName] = useState("");
 
   const [getImage, setImage] = useState("");
@@ -179,7 +188,7 @@ const TutorialSecond = ({ navigation, props }) => {
                 scrollEnabled={false}
                 contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
               >
-                {Data.map((item, index) => (
+                {listOfCategory.map((item, index) => (
                   <UpgradeCategoriesList
                     ImageUrl={item.Image}
                     ExploreName={item.Name}

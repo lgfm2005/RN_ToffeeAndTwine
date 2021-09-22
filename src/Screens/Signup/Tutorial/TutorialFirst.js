@@ -23,7 +23,9 @@ import {
   imgGiftTutorialfirst,
   imgBirthdayCake,
   imgArrowRight,
+  imgBook,
 } from "../../../Assets/utils/Image";
+
 import CommonStyle from "../../../Assets/Style/CommonStyle";
 import FontSize from "../../../Assets/utils/FontSize";
 import TutorialStyle from "./TutorialStyle";
@@ -56,7 +58,7 @@ const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
 const TutorialFirst = ({ navigation, props, route }) => {
   const { listGetSpecialDay, token } = route.params;
-  const { updateProfile, addCategoryspecialDay } = useActions();
+  const { updateProfile, addCategoryspecialDay, CategoryList } = useActions();
 
   const [getFirstName, setFirstName] = useState("");
   const [getLastName, setLastName] = useState("");
@@ -80,6 +82,9 @@ const TutorialFirst = ({ navigation, props, route }) => {
   const SaveDatePicker = async () => {
     setModalVisible(false);
     setValidationCheck("GetAllData");
+    if (getFirstName == "" || getLastName == "") {
+      setValidationCheck("");
+    }
     console.log("getFirstName ===>>", getFirstName);
     console.log("getLastName ===>>", getLastName);
     console.log("getRadioId ===>>", getRadioId);
@@ -89,23 +94,58 @@ const TutorialFirst = ({ navigation, props, route }) => {
     console.log("getRadioName ===>>", DateSubstring);
   };
 
+  const onSetFirstname = (name) => {
+    if (name == "" || getLastName == "") {
+      setValidationCheck("");
+    } else {
+      setValidationCheck("GetAllData");
+    }
+    setFirstName(name);
+  };
+
+  const onSetLastname = (name) => {
+    if (name == "" || getFirstName == "") {
+      setValidationCheck("");
+    } else {
+      setValidationCheck("GetAllData");
+    }
+    setLastName(name);
+  };
+
   const SubmitData = async () => {
-    navigation.navigate("TutorialSecond");
-    // setLoader(true);
-    // const { error, response } = await updateProfile(
-    //   getFirstName,
-    //   getLastName,
-    //   token
-    // );
-    // console.log("response ===> ", response);
-    // console.log("error ===> ", error);
-    // // const { addCategoryspecialDayerror, addCategoryspecialDayResponse } =
-    // //   await addCategoryspecialDay(getRadioId, getFinaldate, "1");
-    // setLoader(true);
-    // if (response.data.StatusCode == "1") {
-    //   setLoader(false);
-    //   navigation.navigate("TutorialSecond");
-    // }
+    setLoader(true);
+    const tokens = { token: token };
+    const { error, response } = await updateProfile(
+      getFirstName,
+      getLastName,
+      tokens
+    );
+
+    const { addCategoryspecialDayerror, addCategoryspecialDayResponse } =
+      await addCategoryspecialDay(getRadioId, getFinaldate, "1", tokens);
+
+    const { GetCategoryListerror, GetCategoryListresponse } =
+      await CategoryList(10, tokens);
+    var listOfCategory = [];
+    if (GetCategoryListresponse.data.StatusCode == "1") {
+      var listOfCategorys = GetCategoryListresponse.data.Result;
+      listOfCategorys.map((item, index) => {
+        var items = {
+          id: item.category_id,
+          Name: item.category_name,
+          Image: imgBook,
+          isSelected: false,
+          questions: item.questions,
+        };
+        listOfCategory.push(items);
+      });
+    }
+
+    setLoader(true);
+    if (response.data.StatusCode == "1") {
+      setLoader(false);
+      navigation.navigate("TutorialSecond", { categoryList: listOfCategory });
+    }
   };
 
   return (
@@ -155,7 +195,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
                       </Text>
                       <FullFormInput
                         buttonName={AppString.EnterFirstName}
-                        textChange={(FirstName) => setFirstName(FirstName)}
+                        textChange={(FirstName) => onSetFirstname(FirstName)}
                       />
                     </View>
                     <View style={TutorialStyle.inputHalf}>
@@ -169,7 +209,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
                       </Text>
                       <FullFormInput
                         buttonName={AppString.EnterLastName}
-                        textChange={(LastName) => setLastName(LastName)}
+                        textChange={(LastName) => onSetLastname(LastName)}
                       />
                     </View>
                   </View>
