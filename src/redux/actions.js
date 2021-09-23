@@ -353,5 +353,35 @@ export const useActions = () => {
       }
       return { response, error };
     },
+
+    updateSetting: async (NotifyGifting, NotifySpecialMoment) => {
+      var data = new FormData();
+      data.append("NotifyGifting", NotifyGifting);
+      data.append("NotifySpecialMoment", NotifySpecialMoment);
+
+      let response, error;
+      try {
+        response = await API.UpdateSetting.get(sessions, data);
+        if (response.data.StatusCode == "1") {
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    getSetting: async () => {
+      let response, error;
+      try {
+        response = await API.GetSetting.get(sessions);
+        if (response.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
   };
 };
