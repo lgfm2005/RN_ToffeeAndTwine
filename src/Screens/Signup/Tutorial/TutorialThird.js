@@ -5,7 +5,7 @@ import {
   Text,
   View,
   Image,
-  FlatList,
+  Share,
   ScrollView,
   Dimensions,
   TouchableOpacity,
@@ -15,6 +15,7 @@ import {
 // Lib
 import ImagePicker from "react-native-image-crop-picker";
 import Modal from "react-native-modal";
+import Spinner from "react-native-loading-spinner-overlay";
 
 // Asset
 import { AppString } from "../../../Assets/utils/AppString";
@@ -31,10 +32,43 @@ import {
 import { SimpleInputEditView } from "../../../Components/FormInput";
 import BackToolBar from "../../../Components/BackToolBar";
 import { FONT } from "../../../Assets/utils/FONT";
+import { useActions } from "../../../redux/actions";
 
-const TutorialThird = ({ navigation, props }) => {
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [getModalName, setModalName] = useState("");
+const TutorialThird = ({ navigation, route }) => {
+  const { tokens } = route.params;
+  const { CategoryList } = useActions();
+  const [getLoader, setLoader] = useState(false);
+
+  const HomeScreen = async () => {
+    setLoader(true);
+    const { GetCategoryListerror, GetCategoryListresponse } =
+      await CategoryList(30, tokens);
+    if (GetCategoryListresponse.data.StatusCode == "1") {
+      setLoader(false);
+      navigation.navigate("Navigation");
+    }
+  };
+
+  const ShareAppLink = async () => {
+    try {
+      const result = await Share.share({
+        title: "App link",
+        message: "Please install this app and stay safe ",
+        url: "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en",
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <SafeAreaView style={CommonStyle.MainContainer}>
@@ -43,8 +77,8 @@ const TutorialThird = ({ navigation, props }) => {
           <BackToolBar
             titleName={AppString.Skip}
             ImageLink={imgLeftBack}
-            onPressImage={() => navigation.navigate("TutorialSecond")}
-            onPressText={() => navigation.navigate("Navigation")}
+            onPressImage={() => navigation.goBack()}
+            onPressText={() => HomeScreen()}
           />
         </View>
 
@@ -64,7 +98,10 @@ const TutorialThird = ({ navigation, props }) => {
             </Text>
 
             <View style={{ paddingLeft: 50, paddingRight: 50 }}>
-              <FilledButton buttonName={AppString.Invite} onPress={() => {}} />
+              <FilledButton
+                buttonName={AppString.Invite}
+                onPress={() => ShareAppLink()}
+              />
             </View>
           </View>
         </View>
@@ -99,6 +136,7 @@ const TutorialThird = ({ navigation, props }) => {
           </View>
         </View>
       </View>
+      <Spinner visible={getLoader} />
     </SafeAreaView>
   );
 };

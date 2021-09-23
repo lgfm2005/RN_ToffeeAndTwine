@@ -144,7 +144,10 @@ const TutorialFirst = ({ navigation, props, route }) => {
     setLoader(true);
     if (response.data.StatusCode == "1") {
       setLoader(false);
-      navigation.navigate("TutorialSecond", { categoryList: listOfCategory });
+      navigation.navigate("TutorialSecond", {
+        categoryList: listOfCategory,
+        tokens: tokens,
+      });
     }
   };
 

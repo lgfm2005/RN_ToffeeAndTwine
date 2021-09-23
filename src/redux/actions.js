@@ -174,10 +174,6 @@ export const useActions = () => {
           session
         );
         if (GetCategoryListresponse.data.StatusCode == "1") {
-          console.log(
-            "questions SC ===>>",
-            GetCategoryListresponse.data.Result
-          );
           dispatch(categoriesAction(GetCategoryListresponse.data.Result));
         }
       } catch (e) {
@@ -230,27 +226,32 @@ export const useActions = () => {
       return { addCategoryspecialDayResponse, addCategoryspecialDayError };
     },
 
-    addCategoryQuestion: async (
-      CategoryID,
-      CategoryQuestionID,
-      CategoryQuestionValue
-    ) => {
-      var data = new FormData();
-      data.append("CategoryID[]", CategoryID);
-      data.append("CategoryQuestionID[]", CategoryQuestionID);
-      data.append("CategoryQuestionValue[]", CategoryQuestionValue);
+    addCategoryQuestion: async (tokens, data) => {
+      var session = sessions;
+      if (tokens) {
+        session = tokens;
+      }
+      console.log("Data", data);
+      console.log("tokens", tokens);
+      // var data = new FormData();
+      // data.append("CategoryID[]", CategoryID);
+      // data.append("CategoryQuestionID[]", CategoryQuestionID);
+      // data.append("CategoryQuestionValue[]", CategoryQuestionValue);
 
-      let response, error;
+      let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
-        response = await API.AddCategoryQuestion.get(sessions, data);
-        if (response.data.StatusCode == "1") {
+        addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
+          sessions,
+          data
+        );
+        if (addCategoryQuestionResponse.data.StatusCode == "1") {
         } else {
-          error = response.data.Message;
+          addCategoryQuestionError = addCategoryQuestionResponse.data.Message;
         }
       } catch (e) {
-        error = e;
+        addCategoryQuestionError = e;
       }
-      return { response, error };
+      return { addCategoryQuestionResponse, addCategoryQuestionError };
     },
 
     deleteUserCategorySpecialDay: async (UserSpecialDayID) => {
