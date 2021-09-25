@@ -38,6 +38,12 @@ import { useActions } from "../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ButtonStyle } from "../../Components/Button/ButtonStyle";
 import { isEmailValid } from "../../utils";
+import {
+  AccessToken,
+  LoginManager,
+  GraphRequest,
+  GraphRequestManager,
+} from "react-native-fbsdk";
 
 const SignIn = ({ navigation }) => {
   const { Login, CategoryList, getUserCategoryQuestion } = useActions();
@@ -160,6 +166,54 @@ const SignIn = ({ navigation }) => {
     }
   };
 
+  const fbSignIn = async () => {
+    LoginManager.logInWithPermissions(["email", "public_profile"]).then(
+      function (result) {
+        console.log("result", result);
+        if (result.isCancelled) {
+          // Toast.show("Login cancelled")
+        } else {
+          AccessToken.getCurrentAccessToken()
+            .then((data) => {
+              console.log(data);
+              // Create a graph request asking for user information with a callback to handle the response.
+              const infoRequest = new GraphRequest(
+                "/me",
+                {
+                  httpMethod: "GET",
+                  version: "v10.0",
+                  parameters: {
+                    fields: {
+                      string:
+                        "id,name,first_name,last_name,email,picture.type(large)",
+                    },
+                  },
+                },
+                (error, result) => {
+                  if (error) {
+                    console.log("error:", error);
+                    Toast.show("Something went wrong!");
+                  } else {
+                    console.log("result:", result);
+                  }
+                }
+              );
+              // Start the graph request.
+              new GraphRequestManager().addRequest(infoRequest).start();
+            })
+            .catch((error) => {
+              console.log("error: ", error);
+              Toast.show("Something went wrong!");
+            });
+        }
+      },
+      function (error) {
+        console.log("Login fail with error: " + error);
+        Toast.show("Something went wrong!");
+      }
+    );
+  };
+
   return (
     <SafeAreaView style={[CommonStyle.MainContainer]}>
       <ScrollView
@@ -240,7 +294,10 @@ const SignIn = ({ navigation }) => {
               >
                 <Image source={imgGoogle} style={Styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}} style={Styles.iconbg}>
+              <TouchableOpacity
+                onPress={() => fbSignIn()}
+                style={Styles.iconbg}
+              >
                 <Image source={imgFacebook} style={Styles.icon} />
               </TouchableOpacity>
             </View>
