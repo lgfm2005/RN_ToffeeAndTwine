@@ -12,6 +12,8 @@ target 'toffeetwine' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
+
   target 'toffeetwineTests' do
     inherit! :complete
     # Pods for testing
