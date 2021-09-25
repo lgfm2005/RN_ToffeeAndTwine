@@ -1,4 +1,6 @@
 export const AppString = {
+  webClientId:
+    "746234887774-8v8v0oa4k99ldm9o5s1029fv93v8ofbv.apps.googleusercontent.com",
   Signup: "Sign Up",
   Signin: "Sign In",
   GiftThoughtfully: "Gift Thoughtfully",

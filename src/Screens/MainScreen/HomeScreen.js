@@ -14,6 +14,7 @@ import {
 // Lib
 import ImagePicker from "react-native-image-crop-picker";
 import Modal from "react-native-modal";
+import Spinner from "react-native-loading-spinner-overlay";
 
 // Asset
 import CommonStyle from "../../Assets/Style/CommonStyle";
@@ -95,116 +96,58 @@ const Data = [
   },
 ];
 
-const UpgradeCatData = [
-  {
-    id: 1,
-    Name: AppString.Coffee,
-    Image: imgCoffee,
-  },
-  {
-    id: 2,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-  {
-    id: 3,
-    Name: AppString.Flowers,
-    Image: imgFlowers,
-  },
-  {
-    id: 4,
-    Name: AppString.Laptop,
-    Image: imgLaptop,
-  },
-  {
-    id: 5,
-    Name: AppString.Ring,
-    Image: imgRing,
-  },
-  {
-    id: 6,
-    Name: AppString.Book,
-    Image: imgBook,
-  },
-  {
-    id: 7,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-  {
-    id: 8,
-    Name: AppString.Flowers,
-    Image: imgFlowers,
-  },
-  {
-    id: 9,
-    Name: AppString.Laptop,
-    Image: imgLaptop,
-  },
-  {
-    id: 10,
-    Name: AppString.Ring,
-    Image: imgRing,
-  },
-  {
-    id: 11,
-    Name: AppString.Book,
-    Image: imgBook,
-  },
-  {
-    id: 12,
-    Name: AppString.Book,
-    Image: imgBook,
-  },
-  {
-    id: 13,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-  {
-    id: 14,
-    Name: AppString.Flowers,
-    Image: imgFlowers,
-  },
-  {
-    id: 15,
-    Name: AppString.Laptop,
-    Image: imgLaptop,
-  },
-  {
-    id: 16,
-    Name: AppString.Ring,
-    Image: imgRing,
-  },
-  {
-    id: 17,
-    Name: AppString.Book,
-    Image: imgBook,
-  },
-  {
-    id: 18,
-    Name: AppString.Book,
-    Image: imgBook,
-  },
-];
-
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
-
+var temp = [];
+var data = new FormData();
+var items, list, userData;
 const HomeScreen = () => {
-  const { CategoryList } = useActions();
-  const user = useSelector((state) => state.session);
-  // console.log("User===>>>", user);
-
+  const {
+    addCategoryQuestion,
+    CategoryList,
+    getUserCategoryQuestion,
+    updateCategoryQuestion,
+  } = useActions();
+  userData = useSelector((state) => state.session);
   const categories = useSelector((state) => state.categories);
   // console.log("categories ===>>>", categories);
+
+  const userCategoryQuestion = useSelector(
+    (state) => state.UserCategoryQuestion
+  );
+  // console.log("userCategoryQuestion ===>>>", userCategoryQuestion);
+
+  useEffect(async () => {
+    setLoader(true);
+
+    const { GetCategoryListerror, GetCategoryListresponse } =
+      await CategoryList(30);
+    if (GetCategoryListresponse.data.StatusCode == "1") {
+      // getFilterCatgories();
+      // console.log("Category List Response Done");
+      setLoader(false);
+    } else {
+      // console.log("Category List Error", GetCategoryListerror);
+    }
+
+    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+      await getUserCategoryQuestion();
+    if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+      // console.log(
+      //   "User Category Question Response Done  ===>>>",
+      //   UserCategoryQuestionResponse
+      // );
+      setLoader(false);
+    } else {
+      // console.log(
+      //   "User Category Question Response Error  ===>>>",
+      //   GetCategoryListerror
+      // );
+    }
+  }, []);
 
   // AddItemShow
   const [getAddItemShowModal, setAddItemShowModal] = useState(false);
   const [getAddItemShowItem, setAddItemShowItem] = useState("");
-
-  // AddNewFreshItem
-  const [getAddNewFreshItemModal, setAddNewFreshItemModal] = useState(false);
-  const [getAddNewFreshItem, setAddNewFreshItemItem] = useState("");
 
   // getEditItemModal
   const [getEditItemModal, setEditItemModal] = useState(false);
@@ -214,17 +157,28 @@ const HomeScreen = () => {
   const [getAddNewItemModal, setAddNewItemModal] = useState(false);
   const [getAddNewItem, setAddNewItem] = useState("");
 
-  // getupgradeItemModal
+  // Update Data Modal
+  const [getUpdateDataModal, setUpdateDataModal] = useState(false);
+  const [getUpdateDataItem, setUpdateDataItem] = useState("");
+
+  // Payment for upgrade
   const [getupgradeItemModal, setupgradeItemModal] = useState(false);
 
   const [getQuestions, setQuestions] = useState("");
   const [getImage, setImage] = useState("");
-  const [getFirstName, setFirstName] = useState("");
-  const [getSecondName, setSecondName] = useState("");
-  const [getThirdName, setThirdName] = useState("");
-  const [getFourName, setFourName] = useState("");
-  const [getFiveName, setFiveName] = useState("");
-  const [getSixName, setSixName] = useState("");
+  const [getQuestionsData, setQuestionsData] = useState([]);
+  const [getShowOldQuestion, setShowOldQuestion] = useState([]);
+  const [getUpdateQuestionData, setUpdateQuestionData] = useState([]);
+  const [getLoader, setLoader] = useState(false);
+  const [getFilterCat, setFilterCat] = useState([]);
+
+  // const getFilterCatgories = () => {
+  //   var tempcategories = categories.filter((item) => {
+  //     return !item.category_id.includes([1, 2, 3, 4, 5]);
+  //   });
+  //   setFilterCat(tempcategories);
+  //   console.log(getFilterCat);
+  // };
 
   const ImageChange = () => {
     ImagePicker.openPicker({
@@ -237,35 +191,146 @@ const HomeScreen = () => {
     });
   };
 
-  // Save All Item
-  const SaveItem = () => {
-    setAddNewFreshItemModal(false);
-    setAddItemShowModal(false);
-    setEditItemModal(false);
-    setAddNewItemModal(false);
-  };
-
   // Close All Item
   const CloseItem = () => {
-    setAddNewFreshItemModal(false);
+    // setAddNewFreshItemModal(false);
     setAddItemShowModal(false);
     setEditItemModal(false);
     setAddNewItemModal(false);
     setupgradeItemModal(false);
+    setUpdateDataModal(false);
   };
 
-  // Add New --> Show
+  // All categories Select show (Show All Item)
   const AddItemShow = () => {
-    console.log("Show");
+    console.log("All categories Select show (Show All Item)");
     setAddItemShowModal(true);
   };
 
-  // Add --> Select categories
-  const SelectCategoriesItem = (Name, Image, id, questions) => {
+  // All categories Select show  ---> Add Save item
+  const SelectCategoriesItem = (Name, Image, id, questions, key) => {
     console.log(" Select categories ===>>>", Name, Image, id, questions);
     setAddItemShowModal(false);
+    // console.log("Key  ===>", key);
+
     // setAddNewFreshItemModal(true)
     AddNewFreshItem(Name, Image, id, questions);
+  };
+
+  // Add New Categories Question
+  const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
+    temp[key] = { categoryId, categoryQuestionId, value, key };
+    setQuestionsData(temp);
+  };
+
+  // Submit Add New Categories Question
+  const SaveItem = async () => {
+    setUpdateDataModal(false);
+    setAddItemShowModal(false);
+    setEditItemModal(false);
+    setAddNewItemModal(false);
+    setLoader(true);
+
+    getQuestionsData.map((item) => {
+      data.append("IsFirst", 1);
+      data.append("CategoryID[]", item.categoryId);
+      data.append("CategoryQuestionID[]", item.categoryQuestionId);
+      data.append("CategoryQuestionValue[]", item.value);
+    });
+
+    // API
+    const { addCategoryQuestionError, addCategoryQuestionResponse } =
+      await addCategoryQuestion(userData.token, data);
+    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+      await getUserCategoryQuestion();
+
+    if (
+      addCategoryQuestionResponse.data.StatusCode == "1" &&
+      UserCategoryQuestionResponse.data.StatusCode == "1"
+    ) {
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
+      setLoader(false);
+      // console.log(
+      //   "User Category Question Response Error  ===>>>",
+      //   UserCategoryQuestionResponse
+      // );
+      // console.log("Question Response ==>>>", addCategoryQuestionResponse);
+    } else {
+      // setAddNewFreshItemModal(true);
+      setAddItemShowModal(true);
+      setEditItemModal(true);
+      setAddNewItemModal(true);
+      // console.log("Question Error ==>>>", addCategoryQuestionError);
+      // console.log(
+      //   "User Category Question Response Error  ===>>>",
+      //   UserCategoryQuestionError
+      // );
+    }
+    setLoader(false);
+  };
+
+  // Update Categories Question
+  const UpdateQuestionData = (categoryQuestionId, value, key) => {
+    temp[key] = { categoryQuestionId, value };
+    setUpdateQuestionData(temp);
+  };
+  // Submit Update Data Categories Question
+  const SubmitUpdateQuestionData = async () => {
+    setUpdateDataModal(true);
+    setAddItemShowModal(false);
+    setEditItemModal(false);
+    setAddNewItemModal(false);
+    setLoader(true);
+
+    console.log("getUpdateQuestionData", getUpdateQuestionData);
+    getUpdateQuestionData.map((item) => {
+      data.append("UserCategoryQuestionID[]", item.categoryQuestionId);
+      data.append("CategoryQuestionValue[]", item.value);
+    });
+    // API
+    const { updateCategoryQuestionResponse, updateCategoryQuestionError } =
+      await updateCategoryQuestion(userData.token, data);
+
+    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+      await getUserCategoryQuestion();
+
+    if (
+      updateCategoryQuestionResponse.data.StatusCode == "1" &&
+      UserCategoryQuestionResponse.data.StatusCode == "1"
+    ) {
+      // setAddNewFreshItemModal(false);
+      setUpdateDataModal(false);
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
+
+      // console.log(
+      //   "User Category Question Response Done  ===>>>",
+      //   UserCategoryQuestionResponse
+      // );
+      // console.log("Question Response ==>>>", updateCategoryQuestionResponse);
+    } else {
+      setUpdateDataModal(true);
+      // console.log("Question Error ==>>>", updateCategoryQuestionError);
+      // console.log(
+      //   "User Category Question Response Error  ===>>>",
+      //   GetCategoryListerror
+      // );
+    }
+    setLoader(false);
+  };
+
+  // Select Item Categories --> Open
+  const ShowOldItem = (Name, Image, id, key, questions) => {
+    console.log("Name", Name);
+    console.log("Image", Image);
+    console.log("id", id);
+    console.log("key", key);
+    setAddNewItemModal(true);
+    setAddNewItem(Name);
+    setShowOldQuestion(questions);
   };
 
   // Add --> Select Categories --> New Item
@@ -286,19 +351,14 @@ const HomeScreen = () => {
   // Old Select Categories -- > Edit Item
   const AddEditItem = (getAddNewItem) => {
     setAddNewItemModal(false);
-    setEditItemModal(true);
-    setEditItem(getAddNewItem);
+    setUpdateDataModal(true);
+    setUpdateDataItem(getAddNewItem);
+
+    // setEditItemModal(true);
+    // setEditItem(getAddNewItem);
   };
 
-  // Select old Categories --> Open
-  const AddNewItem = (Name, Image, id) => {
-    console.log("Name", Name);
-    console.log("Image", Image);
-    console.log("id", id);
-    setAddNewItemModal(true);
-    setAddNewItem(Name);
-  };
-
+  // Payment for upgrade
   const upgradeItem = () => {
     console.log("111");
     setupgradeItemModal(true);
@@ -317,7 +377,9 @@ const HomeScreen = () => {
             <View style={CommonStyle.Container}>
               <View style={[CommonStyle.my16, CommonStyle.Row]}>
                 <Image source={demodp} style={CommonStyle.ProfileImage} />
-                <Text style={[CommonStyle.userName]}>Heather Swan</Text>
+                <Text style={[CommonStyle.userName]}>
+                  {userData.userFname + " " + userData.userLname}
+                </Text>
               </View>
 
               <Text
@@ -344,18 +406,34 @@ const HomeScreen = () => {
                     { justifyContent: "flex-start" },
                   ]}
                 >
-                  {Data.map((item, index) => (
-                    <ExploreShareList
-                      ImageUrl={item.Image}
-                      ExploreName={item.Name}
-                      Id={item.id}
-                      index={index}
-                      key={index}
-                      DataLength={Data.length}
-                      onPress={() => AddNewItem(item.Name, item.Image, item.id)}
-                      AddNewOnPress={() => AddItemShow()}
-                    />
-                  ))}
+                  {userCategoryQuestion.map((item, index) => {
+                    return (
+                      <ExploreShareList
+                        ImageUrl={imgBook}
+                        ExploreName={item.category_name}
+                        Id={item.category_id}
+                        index={index}
+                        key={index}
+                        DataLength={userCategoryQuestion.length}
+                        ShowBtn={false}
+                        onPress={() =>
+                          ShowOldItem(
+                            item.category_name,
+                            item.Image,
+                            item.category_id,
+                            index,
+                            item.questions
+                          )
+                        }
+                        AddNewOnPress={() => AddItemShow(index)}
+                      />
+                    );
+                  })}
+                  <ExploreShareList
+                    ShowBtn={true}
+                    key={1}
+                    AddNewOnPress={() => AddItemShow(0)}
+                  />
                 </ScrollView>
               </View>
             </View>
@@ -388,13 +466,12 @@ const HomeScreen = () => {
               >
                 {categories.map((item, index) => (
                   <UpgradeCategoriesList
-                    ImageUrl={""}
-                    // ImageUrl={item.Image}
+                    ImageUrl={imgBook}
                     ExploreName={item.category_name}
                     Id={item.category_id}
                     index={index}
                     key={index}
-                    DataLength={Data.length}
+                    DataLength={item.category_id}
                     onPress={() => upgradeItem()}
                     // AddNewOnPress={() => upgradeItem()}
                   />
@@ -402,16 +479,14 @@ const HomeScreen = () => {
               </ScrollView>
             </View>
 
+            {/* All categories Select show ( Show All Item) */}
             {getAddItemShowModal == true ? (
               <Modal
                 testID={"modal"}
                 isVisible={getAddItemShowModal}
                 onBackdropPress={() => CloseItem()}
               >
-                <KeyboardAvoidingView
-                  behavior="position"
-                  keyboardVerticalOffset={keyboardVerticalOffset}
-                >
+                <SafeAreaView>
                   <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
                     <Text
                       style={[
@@ -430,18 +505,19 @@ const HomeScreen = () => {
                       >
                         {categories.map((item, index) => (
                           <SelectCategoriesList
-                            ImageUrl={item.Image}
+                            ImageUrl={imgBook}
                             ExploreName={item.category_name}
                             Id={item.category_id}
                             index={index}
                             key={index}
-                            DataLength={Data.length}
+                            // DataLength={Data.length}
                             onPress={() =>
                               SelectCategoriesItem(
                                 item.category_name,
                                 item.Image,
                                 item.category_id,
-                                item.questions
+                                item.questions,
+                                index
                               )
                             }
                           />
@@ -449,14 +525,15 @@ const HomeScreen = () => {
                       </ScrollView>
                     </View>
                   </View>
-                </KeyboardAvoidingView>
+                </SafeAreaView>
               </Modal>
             ) : null}
 
-            {getAddNewFreshItemModal == true ? (
+            {/* Old categories Update */}
+            {getUpdateDataModal == true ? (
               <Modal
                 testID={"modal"}
-                isVisible={getAddNewFreshItem}
+                isVisible={getUpdateDataModal}
                 onBackdropPress={() => CloseItem()}
               >
                 <KeyboardAvoidingView
@@ -487,44 +564,28 @@ const HomeScreen = () => {
                             { textAlign: "center", marginTop: 10 },
                           ]}
                         >
-                          {getAddNewItem}
+                          {getUpdateDataItem}
                         </Text>
                       </View>
                     </View>
 
                     <View style={CommonStyle.my16}>
-                      <SimpleInputEditView
-                        TitleName={"Color"}
-                        placeholder={"Enter here"}
-                        onChangeText={(FirstName) => setFirstName(FirstName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Type"}
-                        placeholder={"Enter here"}
-                        onChangeText={(SecondName) => setSecondName(SecondName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Amount"}
-                        placeholder={"Enter here"}
-                        onChangeText={(ThirdName) => setThirdName(ThirdName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Vase"}
-                        placeholder={"Enter here"}
-                        onChangeText={(FourName) => setFourName(FourName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Link"}
-                        placeholder={"Enter here"}
-                        onChangeText={(FiveName) => setFiveName(FiveName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Other Info"}
-                        placeholder={"Enter here"}
-                        onChangeText={(SixName) => setSixName(SixName)}
-                      />
+                      {getShowOldQuestion.map((item, key) => {
+                        return (
+                          <SimpleInputEditView
+                            TitleName={item.category_question}
+                            buttonName={item.category_placeholder}
+                            onChangeText={(value) =>
+                              UpdateQuestionData(
+                                item.user_category_question_id,
+                                value,
+                                key
+                              )
+                            }
+                          />
+                        );
+                      })}
                     </View>
-
                     <View
                       style={{ flexDirection: "row", justifyContent: "center" }}
                     >
@@ -535,7 +596,7 @@ const HomeScreen = () => {
 
                       <POPLinkButton
                         buttonName={AppString.Save}
-                        onPress={() => SaveItem()}
+                        onPress={() => SubmitUpdateQuestionData()}
                       />
                     </View>
                   </View>
@@ -543,6 +604,7 @@ const HomeScreen = () => {
               </Modal>
             ) : null}
 
+            {/* Show User Category Question */}
             {getAddNewItemModal == true ? (
               <Modal
                 testID={"modal"}
@@ -556,7 +618,7 @@ const HomeScreen = () => {
                   <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
                     <View style={CommonStyle.Row}>
                       <View style={{ width: "20%" }}>
-                        <TouchableOpacity onPress={() => ImageChange()}>
+                        <TouchableOpacity disabled={true}>
                           {getImage != "" ? (
                             <Image
                               source={{ uri: getImage }}
@@ -582,32 +644,15 @@ const HomeScreen = () => {
                         </Text>
                       </View>
                     </View>
-
                     <View style={CommonStyle.my16}>
-                      <EditShowSimpleView
-                        TitleName={"Color"}
-                        buttonName={"Demo111"}
-                      />
-                      <EditShowSimpleView
-                        TitleName={"Type"}
-                        buttonName={"Demo"}
-                      />
-                      <EditShowSimpleView
-                        TitleName={"Amount"}
-                        buttonName={"Demo"}
-                      />
-                      <EditShowSimpleView
-                        TitleName={"Vase"}
-                        buttonName={"Demo"}
-                      />
-                      <EditShowSimpleView
-                        TitleName={"Link"}
-                        buttonName={"Demo"}
-                      />
-                      <EditShowSimpleView
-                        TitleName={"Other Info"}
-                        buttonName={"Demo"}
-                      />
+                      {getShowOldQuestion.map((item, index) => {
+                        return (
+                          <EditShowSimpleView
+                            TitleName={item.category_question}
+                            buttonName={item.question_value}
+                          />
+                        );
+                      })}
                     </View>
 
                     <View
@@ -620,7 +665,7 @@ const HomeScreen = () => {
 
                       <POPLinkButton
                         buttonName={AppString.Edit}
-                        onPress={() => AddEditItem()}
+                        onPress={() => AddEditItem(getAddNewItem)}
                       />
                     </View>
                   </View>
@@ -663,7 +708,24 @@ const HomeScreen = () => {
                     </View>
 
                     <View style={CommonStyle.my16}>
-                      <SimpleInputEditView
+                      {getQuestions.map((item, key) => {
+                        return (
+                          <SimpleInputEditView
+                            TitleName={item.category_question}
+                            placeholder={item.category_placeholder}
+                            onChangeText={(value) =>
+                              HandelQuestionData(
+                                item.category_id,
+                                item.category_question_id,
+                                value,
+                                key
+                              )
+                            }
+                          />
+                        );
+                      })}
+
+                      {/* <SimpleInputEditView
                         TitleName={getQuestions[0].category_question}
                         placeholder={getQuestions[0].category_placeholder}
                         onChangeText={(FirstName) => setFirstName(FirstName)}
@@ -682,7 +744,7 @@ const HomeScreen = () => {
                         TitleName={getQuestions[3].category_question}
                         placeholder={getQuestions[3].category_placeholder}
                         onChangeText={(FourName) => setFourName(FourName)}
-                      />
+                      /> */}
                     </View>
                     <View
                       style={{ flexDirection: "row", justifyContent: "center" }}
@@ -702,6 +764,7 @@ const HomeScreen = () => {
               </Modal>
             ) : null}
 
+            {/* Payment for upgrade */}
             {getupgradeItemModal == true ? (
               <Modal
                 testID={"modal"}
@@ -754,6 +817,7 @@ const HomeScreen = () => {
           </View>
         </ScrollView>
       </SafeAreaView>
+      <Spinner visible={getLoader} />
     </View>
   );
 };

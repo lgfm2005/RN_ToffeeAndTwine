@@ -41,21 +41,6 @@ import { useActions } from "../../../redux/actions";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
-// const data = [
-//   {
-//     text: AppString.Birthday,
-//   },
-//   {
-//     text: AppString.Anniversary,
-//   },
-//   {
-//     text: AppString.Graduation,
-//   },
-//   {
-//     text: AppString.Christmas,
-//   },
-// ];
-
 const TutorialFirst = ({ navigation, props, route }) => {
   const { listGetSpecialDay, token } = route.params;
   const { updateProfile, addCategoryspecialDay, CategoryList } = useActions();
@@ -144,7 +129,10 @@ const TutorialFirst = ({ navigation, props, route }) => {
     setLoader(true);
     if (response.data.StatusCode == "1") {
       setLoader(false);
-      navigation.navigate("TutorialSecond", { categoryList: listOfCategory });
+      navigation.navigate("TutorialSecond", {
+        categoryList: listOfCategory,
+        tokens: tokens,
+      });
     }
   };
 

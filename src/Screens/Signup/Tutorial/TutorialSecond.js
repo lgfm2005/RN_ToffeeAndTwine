@@ -15,6 +15,7 @@ import {
 // Lib
 import ImagePicker from "react-native-image-crop-picker";
 import Modal from "react-native-modal";
+import Spinner from "react-native-loading-spinner-overlay";
 
 // Asset
 import { AppString } from "../../../Assets/utils/AppString";
@@ -29,16 +30,6 @@ import { FilledButton } from "../../../Components/Button/Button";
 import {
   imgArrowRight,
   imgSilderSecond,
-  imgCoffee,
-  imgDesserts,
-  imgFlowers,
-  imgLaptop,
-  imgRing,
-  imgBook,
-  imgCandy,
-  imgClothes,
-  imgJewelry,
-  imgShoes,
   imgImport,
   imgLeftBack,
 } from "../../../Assets/utils/Image";
@@ -47,88 +38,65 @@ import BackToolBar from "../../../Components/BackToolBar";
 import { MainScreenStyle } from "../../MainScreen/MainScreenStyle";
 import { UpgradeCategoriesList } from "../../../Components/AllListVIew/UpgradeCategoriesList";
 import { FONT } from "../../../Assets/utils/FONT";
+import { useActions } from "../../../redux/actions";
 
-const Data = [
-  {
-    id: 1,
-    Name: AppString.Coffee,
-    Image: imgCoffee,
-  },
-  {
-    id: 2,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-  {
-    id: 3,
-    Name: AppString.Flowers,
-    Image: imgFlowers,
-  },
-  {
-    id: 4,
-    Name: AppString.Laptop,
-    Image: imgLaptop,
-  },
-  {
-    id: 5,
-    Name: AppString.Ring,
-    Image: imgRing,
-  },
-  {
-    id: 6,
-    Name: AppString.Book,
-    Image: imgBook,
-  },
-  {
-    id: 7,
-    Name: AppString.Candy,
-    Image: imgCandy,
-  },
-  {
-    id: 8,
-    Name: AppString.Clothes,
-    Image: imgClothes,
-  },
-  {
-    id: 9,
-    Name: AppString.Jewelry,
-    Image: imgJewelry,
-  },
-  {
-    id: 10,
-    Name: AppString.Shoes,
-    Image: imgShoes,
-  },
-];
-
-const numColumns = 5;
-const size = Dimensions.get("window").width;
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
-
+var temp = [];
+var data = new FormData();
+var items, list;
 const TutorialSecond = ({ navigation, props, route }) => {
-  const { categoryList } = route.params;
-  const [listOfCategory, setListOfCategory] = useState(categoryList);
+  const { addCategoryQuestion, CategoryList } = useActions();
+
+  const { categoryList, tokens } = route.params;
+
+  const [getlistOfCategory, setListOfCategory] = useState(categoryList);
+  const [getIndexIcon, setIndexIcon] = useState("");
+  const [getQuestions, setQuestions] = useState("");
+  const [getQuestionsData, setQuestionsData] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
-  //------- TODO ----- impliment for select icon when save
-  // var list = listOfCategory
-  // var items = list[index]
-  // items.isSelected = true
-  // list[index] = items
-  // setListOfCategory(list)
+  const [getLoader, setLoader] = useState(false);
 
   const [getModalName, setModalName] = useState("");
 
   const [getImage, setImage] = useState("");
-  const [getFirstName, setFirstName] = useState("");
-  const [getSecondName, setSecondName] = useState("");
-  const [getThirdName, setThirdName] = useState("");
-  const [getFourName, setFourName] = useState("");
-  const [getFiveName, setFiveName] = useState("");
-  const [getSixName, setSixName] = useState("");
 
-  const popUp = (popUpName) => {
-    setModalVisible(true);
+  const NextScreen = async () => {
+    setLoader(true);
+    const { GetCategoryListerror, GetCategoryListresponse } =
+      await CategoryList(30, tokens);
+    if (GetCategoryListresponse.data.StatusCode == "1") {
+      setLoader(false);
+      navigation.navigate("Navigation");
+    }
+  };
+
+  const TutorialThirdScreen = async () => {
+    setLoader(true);
+    const { GetCategoryListerror, GetCategoryListresponse } =
+      await CategoryList(30, tokens);
+    if (GetCategoryListresponse.data.StatusCode == "1") {
+      setLoader(false);
+      navigation.navigate("TutorialThird", {
+        tokens: tokens,
+      });
+    }
+  };
+
+  const popUp = (popUpName, questionsList, index) => {
+    let flag = false;
+    getlistOfCategory.map((item) => {
+      if (flag == false)
+        if (item.isSelected == true) {
+          setModalVisible(false);
+          flag = true;
+        } else {
+          setModalVisible(true);
+        }
+    });
+
     setModalName(popUpName);
+    setQuestions(questionsList);
+    setIndexIcon(index);
   };
 
   const ImageChange = () => {
@@ -146,8 +114,40 @@ const TutorialSecond = ({ navigation, props, route }) => {
     setModalVisible(false);
   };
 
-  const SaveDatePicker = () => {
+  const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
+    temp[key] = { categoryId, categoryQuestionId, value, key };
+    setQuestionsData(temp);
+  };
+
+  const SubmitData = async () => {
     setModalVisible(false);
+    setLoader(true);
+
+    getQuestionsData.map((item) => {
+      data.append("IsFirst", 0);
+      data.append("CategoryID[]", item.categoryId);
+      data.append("CategoryQuestionID[]", item.categoryQuestionId);
+      data.append("CategoryQuestionValue[]", item.value);
+    });
+
+    // API
+    const { addCategoryQuestionError, addCategoryQuestionResponse } =
+      await addCategoryQuestion(tokens, data);
+    if (addCategoryQuestionResponse.data.StatusCode == "1") {
+      setModalVisible(false);
+
+      // List Icon COLOR Change
+      list = getlistOfCategory;
+      items = list[getIndexIcon];
+      items.isSelected = true;
+      list[getIndexIcon] = items;
+
+      console.log("Question Response ==>>>", addCategoryQuestionResponse);
+    } else {
+      setModalVisible(true);
+      console.log("Question Error ==>>>", addCategoryQuestionError);
+    }
+    setLoader(false);
   };
 
   return (
@@ -158,7 +158,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
             titleName={AppString.Skip}
             ImageLink={imgLeftBack}
             onPressImage={() => navigation.goBack()}
-            onPressText={() => navigation.navigate("Navigation")}
+            onPressText={() => NextScreen()}
           />
         </View>
 
@@ -188,14 +188,15 @@ const TutorialSecond = ({ navigation, props, route }) => {
                 scrollEnabled={false}
                 contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
               >
-                {listOfCategory.map((item, index) => (
+                {getlistOfCategory.map((item, index) => (
                   <UpgradeCategoriesList
                     ImageUrl={item.Image}
                     ExploreName={item.Name}
+                    checkColor={item.isSelected}
                     Id={item.id}
                     index={index}
                     key={index}
-                    onPress={() => popUp(item.Name)}
+                    onPress={() => popUp(item.Name, item.questions, index)}
                   />
                 ))}
               </ScrollView>
@@ -237,36 +238,23 @@ const TutorialSecond = ({ navigation, props, route }) => {
                     </View>
 
                     <View style={CommonStyle.my16}>
-                      <SimpleInputEditView
-                        TitleName={"Color"}
-                        placeholder={"Enter here"}
-                        onChangeText={(FirstName) => setFirstName(FirstName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Type"}
-                        placeholder={"Enter here"}
-                        onChangeText={(SecondName) => setSecondName(SecondName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Amount"}
-                        placeholder={"Enter here"}
-                        onChangeText={(ThirdName) => setThirdName(ThirdName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Vase"}
-                        placeholder={"Enter here"}
-                        onChangeText={(FourName) => setFourName(FourName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Link"}
-                        placeholder={"Enter here"}
-                        onChangeText={(FiveName) => setFiveName(FiveName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Other Info"}
-                        placeholder={"Enter here"}
-                        onChangeText={(SixName) => setSixName(SixName)}
-                      />
+                      {getQuestions.map((item, key) => {
+                        return (
+                          <SimpleInputEditView
+                            key={key}
+                            TitleName={item.category_question}
+                            placeholder={item.category_placeholder}
+                            onChangeText={(value) =>
+                              HandelQuestionData(
+                                item.category_id,
+                                item.category_question_id,
+                                value,
+                                key
+                              )
+                            }
+                          />
+                        );
+                      })}
                     </View>
 
                     <View style={CommonStyle.Row}>
@@ -277,7 +265,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
 
                       <POPLinkButton
                         buttonName={AppString.Save}
-                        onPress={() => SaveDatePicker()}
+                        onPress={() => SubmitData()}
                       />
                     </View>
                   </View>
@@ -309,9 +297,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
             />
           </View>
           <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("TutorialThird")}
-            >
+            <TouchableOpacity onPress={() => TutorialThirdScreen()}>
               <View style={TutorialStyle.SilderbgImg}>
                 <Image
                   source={imgArrowRight}
@@ -322,6 +308,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
           </View>
         </View>
       </View>
+      <Spinner visible={getLoader} />
     </SafeAreaView>
   );
 };

@@ -15,6 +15,7 @@ target 'toffeetwine' do
   target 'toffeetwineTests' do
     inherit! :complete
     # Pods for testing
+    pod 'Firebase/Analytics'
   end
 
   # Enables Flipper.

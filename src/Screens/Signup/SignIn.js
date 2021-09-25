@@ -10,7 +10,14 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
+
+// Lib
 import { showMessage } from "react-native-flash-message";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from "react-native-google-signin";
 
 // Asset
 import {
@@ -33,14 +40,77 @@ import { ButtonStyle } from "../../Components/Button/ButtonStyle";
 import { isEmailValid } from "../../utils";
 
 const SignIn = ({ navigation }) => {
-  const { Login, CategoryList } = useActions();
+  const { Login, CategoryList, getUserCategoryQuestion } = useActions();
   const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
+
+  // Facebook And Google
+  const [userInfo, setUserInfo] = useState(null);
+  const [gettingLoginStatus, setGettingLoginStatus] = useState(true);
 
   const [getEmail, setEmail] = useState("");
   const [getCreatePassword, setCreatePassword] = useState("");
   const [getInvalidEmailPassword, setInvalidEmailPassword] = useState(false);
 
   const [getLoader, setLoader] = useState(false);
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: AppString.webClientId,
+    });
+    SignedIn();
+  }, []);
+
+  const SignedIn = async () => {
+    const isSignedIn = await GoogleSignin.isSignedIn();
+    if (isSignedIn) {
+      getCurrentUserInfo();
+    } else {
+      console.log("Please Login");
+    }
+    setGettingLoginStatus(false);
+  };
+
+  const getCurrentUserInfo = async () => {
+    try {
+      let info = await GoogleSignin.signInSilently();
+      console.log("User Info --> ", info);
+      setUserInfo(info);
+      navigation.navigate("Navigation");
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+        alert("User has not signed in yet");
+        console.log("User has not signed in yet");
+      } else {
+        alert("Unable to get user's info");
+        console.log("Unable to get user's info");
+      }
+    }
+  };
+
+  const GoogleLogin = async () => {
+    // It will prompt google Signin Widget
+    try {
+      await GoogleSignin.hasPlayServices({
+        // Check if device has Google Play Services installed
+        // Always resolves to true on iOS
+        showPlayServicesUpdateDialog: true,
+      });
+      const userInfo = await GoogleSignin.signIn();
+      console.log("User Info --> ", userInfo);
+      setUserInfo(userInfo);
+    } catch (error) {
+      console.log("Message", JSON.stringify(error));
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        alert("User Cancelled the Login Flow");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        alert("Signing In");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        alert("Play Services Not Available or Outdated");
+      } else {
+        alert(error.message);
+      }
+    }
+  };
 
   const isvalidForm = () => {
     if (isEmailValid(getEmail) && getCreatePassword != "") {
@@ -49,13 +119,30 @@ const SignIn = ({ navigation }) => {
     return false;
   };
 
-  const handleLogin = async (getEmail, getCreatePassword) => {
+  const handleSignIn = async (getEmail, getCreatePassword) => {
     setLoader(true);
     const { error, response } = await Login(getEmail, getCreatePassword, "");
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(30);
-    // console.log("GetCategoryListerror ===>>>", GetCategoryListerror);
-    // console.log("GetCategoryListresponse ===>>>", GetCategoryListresponse);
+    if (GetCategoryListresponse.data.StatusCode == "1") {
+      console.log("Category Question Response Done");
+    } else {
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        GetCategoryListerror
+      );
+    }
+
+    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+      await getUserCategoryQuestion();
+    if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+      console.log("User Category Question Response Done");
+    } else {
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        GetCategoryListerror
+      );
+    }
     setLoader(false);
     if (response.data.StatusCode == "1") {
       navigation.navigate("Navigation");
@@ -127,8 +214,8 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                onPress={() => handleLogin(getEmail, getCreatePassword)}
-                // onPress={() => handleLogin("uss.hitesh@gmail.com", "123456")}
+                // onPress={() => handleLogin(getEmail, getCreatePassword)}
+                onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
                 // btncheck={isvalidForm()}
                 // btnabled={isvalidForm()}
               />
@@ -139,7 +226,10 @@ const SignIn = ({ navigation }) => {
             </View>
 
             <View style={[CommonStyle.mb32, CommonStyle.googleFb]}>
-              <TouchableOpacity onPress={() => {}} style={Styles.iconbg}>
+              <TouchableOpacity
+                onPress={() => GoogleLogin()}
+                style={Styles.iconbg}
+              >
                 <Image source={imgGoogle} style={Styles.icon} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {}} style={Styles.iconbg}>

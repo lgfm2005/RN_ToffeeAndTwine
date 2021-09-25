@@ -1,4 +1,10 @@
-import { LOGIN, GETSPECIALDAY, CATEGORIES, LOGOUT } from "./types";
+import {
+  LOGIN,
+  USERCATEGORYQUESTION,
+  GETSPECIALDAY,
+  CATEGORIES,
+  LOGOUT,
+} from "./types";
 import { createAction } from "redux-actions";
 import * as API from "./api";
 import { showMessage } from "react-native-flash-message";
@@ -8,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 const loginAction = createAction(LOGIN);
 const logoutAction = createAction(LOGOUT);
 const categoriesAction = createAction(CATEGORIES);
+const userCategoryQuestion = createAction(USERCATEGORYQUESTION);
 
 // const getSpecialDay = createAction(GETSPECIALDAY);
 
@@ -174,10 +181,6 @@ export const useActions = () => {
           session
         );
         if (GetCategoryListresponse.data.StatusCode == "1") {
-          console.log(
-            "questions SC ===>>",
-            GetCategoryListresponse.data.Result
-          );
           dispatch(categoriesAction(GetCategoryListresponse.data.Result));
         }
       } catch (e) {
@@ -230,29 +233,6 @@ export const useActions = () => {
       return { addCategoryspecialDayResponse, addCategoryspecialDayError };
     },
 
-    addCategoryQuestion: async (
-      CategoryID,
-      CategoryQuestionID,
-      CategoryQuestionValue
-    ) => {
-      var data = new FormData();
-      data.append("CategoryID[]", CategoryID);
-      data.append("CategoryQuestionID[]", CategoryQuestionID);
-      data.append("CategoryQuestionValue[]", CategoryQuestionValue);
-
-      let response, error;
-      try {
-        response = await API.AddCategoryQuestion.get(sessions, data);
-        if (response.data.StatusCode == "1") {
-        } else {
-          error = response.data.Message;
-        }
-      } catch (e) {
-        error = e;
-      }
-      return { response, error };
-    },
-
     deleteUserCategorySpecialDay: async (UserSpecialDayID) => {
       var data = new FormData();
       data.append("UserSpecialDayID", UserSpecialDayID);
@@ -287,25 +267,58 @@ export const useActions = () => {
       return { response, error };
     },
 
-    updateCategoryQuestion: async (
-      UserCategoryQuestionID,
-      CategoryQuestionValue
-    ) => {
-      var data = new FormData();
-      data.append("UserCategoryQuestionID[]", UserCategoryQuestionID);
-      data.append("CategoryQuestionValue[]", CategoryQuestionValue);
+    addCategoryQuestion: async (tokens, data) => {
+      var session = sessions;
+      if (tokens) {
+        session = tokens;
+      }
+      console.log("Data", data);
+      console.log("tokens", tokens);
+      // var data = new FormData();
+      // data.append("CategoryID[]", CategoryID);
+      // data.append("CategoryQuestionID[]", CategoryQuestionID);
+      // data.append("CategoryQuestionValue[]", CategoryQuestionValue);
 
-      let response, error;
+      let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
-        response = await API.UpdateCategoryQuestion.get(sessions, data);
-        if (response.data.StatusCode == "1") {
+        addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
+          sessions,
+          data
+        );
+        if (addCategoryQuestionResponse.data.StatusCode == "1") {
         } else {
-          error = response.data.Message;
+          addCategoryQuestionError = addCategoryQuestionResponse.data.Message;
         }
       } catch (e) {
-        error = e;
+        addCategoryQuestionError = e;
       }
-      return { response, error };
+      return { addCategoryQuestionResponse, addCategoryQuestionError };
+    },
+
+    updateCategoryQuestion: async (tokens, data) => {
+      var session = sessions;
+      if (tokens) {
+        session = tokens;
+      }
+      // var data = new FormData();
+      // data.append("UserCategoryQuestionID[]", UserCategoryQuestionID);
+      // data.append("CategoryQuestionValue[]", CategoryQuestionValue);
+
+      let updateCategoryQuestionResponse, updateCategoryQuestionError;
+      try {
+        updateCategoryQuestionResponse = await API.UpdateCategoryQuestion.get(
+          sessions,
+          data
+        );
+        if (updateCategoryQuestionResponse.data.StatusCode == "1") {
+        } else {
+          updateCategoryQuestionError =
+            updateCategoryQuestionResponse.data.Message;
+        }
+      } catch (e) {
+        updateCategoryQuestionError = e;
+      }
+      return { updateCategoryQuestionResponse, updateCategoryQuestionError };
     },
 
     getUserCategorySpecialMoment: async () => {
@@ -321,15 +334,20 @@ export const useActions = () => {
     },
 
     getUserCategoryQuestion: async () => {
-      let response, error;
+      let UserCategoryQuestionResponse, UserCategoryQuestionError;
       try {
-        response = await API.GetUserCategoryQuestion.get(sessions);
-        if (response.data.StatusCode == "1") {
+        UserCategoryQuestionResponse = await API.GetUserCategoryQuestion.get(
+          sessions
+        );
+        if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+          dispatch(
+            userCategoryQuestion(UserCategoryQuestionResponse.data.Result)
+          );
         }
       } catch (e) {
-        error = e;
+        UserCategoryQuestionError = e;
       }
-      return { response, error };
+      return { UserCategoryQuestionResponse, UserCategoryQuestionError };
     },
 
     updateCategorySpecialMoment: async (
