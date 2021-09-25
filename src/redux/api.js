@@ -101,8 +101,7 @@ export const UpdateProfile = {
     ),
 };
 
-// Check Bhaveshbhai
-export const GetSpecialDays = {
+export const GetSpecialMoment = {
   get: async (session) =>
     await api(
       session,

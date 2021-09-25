@@ -31,9 +31,10 @@ export const CalSelectCategoriesList = ({
             <Image source={ImageUrl} style={AllListViewStyle.listIcon} />
           </View>
           <Text>
-            {ExploreName.length > 9
+            {ExploreName}
+            {/* {ExploreName.length > 9
               ? ExploreName.substring(0, 9 - 3) + "..."
-              : ExploreName}
+              : ExploreName} */}
           </Text>
           {/* <Text style={AllListViewStyle.listfont}>{ExploreName}</Text> */}
         </View>

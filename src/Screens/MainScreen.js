@@ -34,6 +34,7 @@ import {
 } from "react-native-google-signin";
 
 import Spinner from "react-native-loading-spinner-overlay";
+import OneSignal from "react-native-onesignal";
 
 const MainScreen = ({ navigation }) => {
   if (Platform.OS === "ios") {
@@ -50,6 +51,39 @@ const MainScreen = ({ navigation }) => {
     });
     SignedIn();
   }, []);
+
+  const onOpened = async (openResult, accountDetails) => {
+    var eventId = openResult.notification.additionalData.eventId;
+  };
+
+  const registerForPushNotifications = (permission) => {
+    // console.log("registerForPushNotifications::", permission);
+    // do something with permission value
+  };
+
+  React.useEffect(() => {
+    OneSignal.setAppId("1b61c026-91b6-40fe-ad5d-829673a4817c");
+
+    // Calling registerForPushNotifications
+    OneSignal.promptForPushNotificationsWithUserResponse(
+      registerForPushNotifications
+    );
+    // if (session.environmentPrefix) {
+    //   var prefix =
+    //     "WU-" +
+    //     String(session.environmentPrefix) +
+    //     "-" +
+    //     String(session.userId);
+    //   OneSignal.setExternalUserId("raj12345");
+    // }
+    OneSignal.setExternalUserId("raj12345");
+    OneSignal.setNotificationOpenedHandler((handler) => onOpened(handler));
+  }, []);
+
+  // if (userValidate == "false") {
+  //   connection.stop();
+  //   OneSignal.removeExternalUserId();
+  // }
 
   const SignedIn = async () => {
     const isSignedIn = await GoogleSignin.isSignedIn();

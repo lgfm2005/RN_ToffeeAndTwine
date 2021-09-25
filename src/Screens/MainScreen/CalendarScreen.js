@@ -16,6 +16,7 @@ import {
 import ImagePicker from "react-native-image-crop-picker";
 import Modal from "react-native-modal";
 import { Calendar } from "react-native-calendars";
+import { useSelector } from "react-redux";
 
 // Asset
 import CommonStyle from "../../Assets/Style/CommonStyle";
@@ -47,7 +48,6 @@ import { MyBlackStatusbar } from "../../Components/MyStatusBar/MyBlackStatusbar"
 import { FONT } from "../../Assets/utils/FONT";
 // import {SelectCategoriesList} from '../../Components/AllListVIew/SelectCategoriesList';
 import { CalSelectCategoriesList } from "./CalendarScreen/CalSelectCategoriesList";
-
 const Data = [
   {
     id: 1,
@@ -205,6 +205,9 @@ const CalenderDate = [
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
 const CalendarScreen = () => {
+  const userData = useSelector((state) => state.session);
+  const specialMoment = useSelector((state) => state.specialMoment);
+  console.log("specialMoment ===>", specialMoment);
   // CalenderDate
   const [getCalenderDateModal, setCalenderDateModal] = useState(false);
   const [getCalenderDateItem, setCalenderDateItem] = useState([]);
@@ -322,7 +325,9 @@ const CalendarScreen = () => {
             <View style={[CommonStyle.Container]}>
               <View style={[CommonStyle.my16, CommonStyle.Row]}>
                 <Image source={demodp} style={CommonStyle.ProfileImage} />
-                <Text style={CommonStyle.userName}>Heather Swan</Text>
+                <Text style={CommonStyle.userName}>
+                  {userData.userFname + " " + userData.userLname}
+                </Text>
               </View>
 
               <Text
@@ -683,6 +688,7 @@ const CalendarScreen = () => {
               </Modal>
             ) : null}
 
+            {/* Show All Select Moment List */}
             {getAddItemShowModal == true ? (
               <Modal
                 testID={"modal"}
@@ -710,17 +716,21 @@ const CalendarScreen = () => {
                           MainScreenStyle.scrollItemStyle,
                         ]}
                       >
-                        {AddItemData.map((item, index) => (
+                        {specialMoment.map((item, index) => (
                           <CalSelectCategoriesList
-                            ImageUrl={item.Image}
-                            ExploreName={item.Name}
-                            Id={item.id}
+                            ImageUrl={imgWhiteBirthday}
+                            ExploreName={item.special_moment_name}
+                            Id={item.special_moment_id}
                             index={index}
                             key={index}
                             DataLength={Data.length}
                             style={{ width: "23%" }}
                             onPress={() => {
-                              SelectMoment(item.Name, item.Image, item.id);
+                              SelectMoment(
+                                item.special_moment_name,
+                                item.Image,
+                                item.special_moment_id
+                              );
                             }}
                           />
                         ))}

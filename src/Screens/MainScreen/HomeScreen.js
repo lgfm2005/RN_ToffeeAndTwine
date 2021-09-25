@@ -106,15 +106,14 @@ const HomeScreen = () => {
     CategoryList,
     getUserCategoryQuestion,
     updateCategoryQuestion,
+    GetSpecialMoment,
   } = useActions();
+
   userData = useSelector((state) => state.session);
   const categories = useSelector((state) => state.categories);
-  // console.log("categories ===>>>", categories);
-
   const userCategoryQuestion = useSelector(
     (state) => state.UserCategoryQuestion
   );
-  // console.log("userCategoryQuestion ===>>>", userCategoryQuestion);
 
   useEffect(async () => {
     setLoader(true);
@@ -122,7 +121,6 @@ const HomeScreen = () => {
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(30);
     if (GetCategoryListresponse.data.StatusCode == "1") {
-      // getFilterCatgories();
       // console.log("Category List Response Done");
       setLoader(false);
     } else {
@@ -132,6 +130,8 @@ const HomeScreen = () => {
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
     if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+      getFilterCatgories(UserCategoryQuestionResponse.data.Result);
+
       // console.log(
       //   "User Category Question Response Done  ===>>>",
       //   UserCategoryQuestionResponse
@@ -142,6 +142,15 @@ const HomeScreen = () => {
       //   "User Category Question Response Error  ===>>>",
       //   GetCategoryListerror
       // );
+    }
+
+    const { specialMomentResponse, specialMomentError } =
+      await GetSpecialMoment();
+    if (specialMomentResponse.data.StatusCode == "1") {
+      console.log("special MomentResponse Done");
+      setLoader(false);
+    } else {
+      console.log(" special Moment Error");
     }
   }, []);
 
@@ -170,15 +179,20 @@ const HomeScreen = () => {
   const [getShowOldQuestion, setShowOldQuestion] = useState([]);
   const [getUpdateQuestionData, setUpdateQuestionData] = useState([]);
   const [getLoader, setLoader] = useState(false);
-  const [getFilterCat, setFilterCat] = useState([]);
+  debugger;
+  const [getFilterCat, setFilterCat] = useState(categories);
 
-  // const getFilterCatgories = () => {
-  //   var tempcategories = categories.filter((item) => {
-  //     return !item.category_id.includes([1, 2, 3, 4, 5]);
-  //   });
-  //   setFilterCat(tempcategories);
-  //   console.log(getFilterCat);
-  // };
+  const getFilterCatgories = (data) => {
+    debugger;
+    var dataCategory = categories;
+    data.map((items, indexs) => {
+      dataCategory = dataCategory.filter((item) => {
+        return item.category_id !== items.category_id;
+      });
+    });
+    setFilterCat(dataCategory);
+    // console.log(getFilterCat);
+  };
 
   const ImageChange = () => {
     ImagePicker.openPicker({
@@ -464,7 +478,7 @@ const HomeScreen = () => {
                   { justifyContent: "flex-start" },
                 ]}
               >
-                {categories.map((item, index) => (
+                {getFilterCat.map((item, index) => (
                   <UpgradeCategoriesList
                     ImageUrl={imgBook}
                     ExploreName={item.category_name}
@@ -503,7 +517,7 @@ const HomeScreen = () => {
                           MainScreenStyle.scrollItemStyle,
                         ]}
                       >
-                        {categories.map((item, index) => (
+                        {getFilterCat.map((item, index) => (
                           <SelectCategoriesList
                             ImageUrl={imgBook}
                             ExploreName={item.category_name}

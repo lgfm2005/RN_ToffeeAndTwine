@@ -12,6 +12,8 @@ target 'toffeetwine' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
+
   target 'toffeetwineTests' do
     inherit! :complete
     # Pods for testing

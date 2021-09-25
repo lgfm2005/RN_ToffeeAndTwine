@@ -2,6 +2,7 @@ import {
   LOGIN,
   USERCATEGORYQUESTION,
   GETSPECIALDAY,
+  SPECIALMOMENT,
   CATEGORIES,
   LOGOUT,
 } from "./types";
@@ -15,6 +16,7 @@ const loginAction = createAction(LOGIN);
 const logoutAction = createAction(LOGOUT);
 const categoriesAction = createAction(CATEGORIES);
 const userCategoryQuestion = createAction(USERCATEGORYQUESTION);
+const userSpecialMoment = createAction(SPECIALMOMENT);
 
 // const getSpecialDay = createAction(GETSPECIALDAY);
 
@@ -189,16 +191,17 @@ export const useActions = () => {
       return { GetCategoryListresponse, GetCategoryListerror };
     },
 
-    GetSpecialDay: async (session) => {
-      let response, error;
+    GetSpecialMoment: async () => {
+      let specialMomentResponse, specialMomentError;
       try {
-        response = await API.GetSpecialDays.get(session);
-        if (response.data.StatusCode == "1") {
+        specialMomentResponse = await API.GetSpecialMoment.get(sessions);
+        if (specialMomentResponse.data.StatusCode == "1") {
+          dispatch(userSpecialMoment(specialMomentResponse.data.Result));
         }
       } catch (e) {
-        error = e;
+        specialMomentError = e;
       }
-      return { response, error };
+      return { specialMomentResponse, specialMomentError };
     },
 
     addCategoryspecialDay: async (
@@ -333,12 +336,18 @@ export const useActions = () => {
       return { response, error };
     },
 
-    getUserCategoryQuestion: async () => {
+    getUserCategoryQuestion: async (token) => {
+      var session = sessions;
+      if (token) {
+        session = token;
+      }
+
       let UserCategoryQuestionResponse, UserCategoryQuestionError;
       try {
         UserCategoryQuestionResponse = await API.GetUserCategoryQuestion.get(
-          sessions
+          session
         );
+        debugger;
         if (UserCategoryQuestionResponse.data.StatusCode == "1") {
           dispatch(
             userCategoryQuestion(UserCategoryQuestionResponse.data.Result)

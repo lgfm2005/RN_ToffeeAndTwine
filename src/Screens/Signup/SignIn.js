@@ -122,27 +122,35 @@ const SignIn = ({ navigation }) => {
   const handleSignIn = async (getEmail, getCreatePassword) => {
     setLoader(true);
     const { error, response } = await Login(getEmail, getCreatePassword, "");
-    const { GetCategoryListerror, GetCategoryListresponse } =
-      await CategoryList(30);
-    if (GetCategoryListresponse.data.StatusCode == "1") {
-      console.log("Category Question Response Done");
+    debugger;
+    if (response.data.StatusCode == "1") {
+      const tokens = response.data.Result[0].Token;
+      const token = { token: tokens };
+      debugger;
+      const { GetCategoryListerror, GetCategoryListresponse } =
+        await CategoryList(30, token);
+      if (GetCategoryListresponse.data.StatusCode == "1") {
+        console.log("Category Question Response Done");
+      } else {
+        console.log(
+          "User Category Question Response Error  ===>>>",
+          GetCategoryListerror
+        );
+      }
+
+      const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+        await getUserCategoryQuestion(token);
+      if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+        console.log("User Category Question Response Done");
+      } else {
+        console.log(
+          "User Category Question Response Error  ===>>>",
+          GetCategoryListerror
+        );
+      }
     } else {
-      console.log(
-        "User Category Question Response Error  ===>>>",
-        GetCategoryListerror
-      );
     }
 
-    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
-      await getUserCategoryQuestion();
-    if (UserCategoryQuestionResponse.data.StatusCode == "1") {
-      console.log("User Category Question Response Done");
-    } else {
-      console.log(
-        "User Category Question Response Error  ===>>>",
-        GetCategoryListerror
-      );
-    }
     setLoader(false);
     if (response.data.StatusCode == "1") {
       navigation.navigate("Navigation");
