@@ -17,6 +17,7 @@ import ImagePicker from "react-native-image-crop-picker";
 import Modal from "react-native-modal";
 import { Calendar } from "react-native-calendars";
 import { useSelector } from "react-redux";
+import DatePicker from "react-native-date-picker";
 
 // Asset
 import CommonStyle from "../../Assets/Style/CommonStyle";
@@ -207,7 +208,7 @@ const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 const CalendarScreen = () => {
   const userData = useSelector((state) => state.session);
   const specialMoment = useSelector((state) => state.specialMoment);
-  console.log("specialMoment ===>", specialMoment);
+  // console.log("specialMoment ===>", specialMoment);
   // CalenderDate
   const [getCalenderDateModal, setCalenderDateModal] = useState(false);
   const [getCalenderDateItem, setCalenderDateItem] = useState([]);
@@ -231,6 +232,21 @@ const CalendarScreen = () => {
   const [getFourName, setFourName] = useState("");
   const [getFiveName, setFiveName] = useState("");
   const [getSixName, setSixName] = useState("");
+
+  //  Show All Select Moment List (Select Only one) --- 1.Select Moment
+  const SelectMoment = (Name, Image, id) => {
+    setAddItemShowModal(false);
+    AddNewItemShow(Name, Image, id);
+  };
+
+  //  Show Moment (Select Only one) --- 2.Select Moment
+  const AddNewItemShow = (Name, Image, id) => {
+    setEditItemModal(true);
+    console.log("Name", Name);
+    console.log("Image", Image);
+    console.log("id", id);
+    setAddNewItem(Name);
+  };
 
   const ImageChange = () => {
     ImagePicker.openPicker({
@@ -276,20 +292,6 @@ const CalendarScreen = () => {
 
   const AddItemShow = () => {
     setAddItemShowModal(true);
-  };
-
-  const SelectMoment = (Name, Image, id) => {
-    setAddItemShowModal(false);
-    NEWAddNewItem(Name, Image, id);
-  };
-
-  // Full New Item --> ADD
-  const NEWAddNewItem = (Name, Image, id) => {
-    console.log("Name", Name);
-    console.log("Image", Image);
-    console.log("id", id);
-    setEditItemModal(true);
-    setAddNewItem(Name);
   };
 
   const CalendarModule = (date) => {
@@ -531,6 +533,85 @@ const CalendarScreen = () => {
                 </KeyboardAvoidingView>
               </Modal>
             ) : null}
+
+            {getEditItemModal == true ? (
+              <Modal testID={"modal"} isVisible={getEditItemModal}>
+                <KeyboardAvoidingView
+                  behavior="position"
+                  keyboardVerticalOffset={keyboardVerticalOffset}
+                >
+                  <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+                    <View style={{ flexDirection: "row" }}>
+                      <View style={{ width: "20%" }}>
+                        <TouchableOpacity onPress={() => ImageChange()}>
+                          {getImage != "" ? (
+                            <Image
+                              source={{ uri: getImage }}
+                              style={Styles.popupImage}
+                            />
+                          ) : (
+                            <Image
+                              source={imgImport}
+                              style={Styles.popupImage}
+                            />
+                          )}
+                        </TouchableOpacity>
+                      </View>
+                      <View style={{ width: "60%" }}>
+                        <Text
+                          style={[
+                            CommonStyle.txtTitle,
+                            CommonStyle.textUpperCase,
+                            { textAlign: "center", marginTop: 10 },
+                          ]}
+                        >
+                          {getAddNewItem}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View style={CommonStyle.my16}>
+                      <SimpleInputEditView
+                        TitleName={"Title"}
+                        placeholder={"Enter here"}
+                        onChangeText={(FirstName) => setFirstName(FirstName)}
+                      />
+                      <SimpleInputEditView
+                        TitleName={"Date"}
+                        placeholder={"Enter here"}
+                        onChangeText={(SecondName) => setSecondName(SecondName)}
+                      />
+                      <SimpleInputEditView
+                        TitleName={"Link"}
+                        placeholder={"Enter here"}
+                        onChangeText={(ThirdName) => setThirdName(ThirdName)}
+                      />
+                      <SimpleInputEditView
+                        TitleName={"Other Info"}
+                        placeholder={"Enter here"}
+                        onChangeText={(FourName) => setFourName(FourName)}
+                      />
+                    </View>
+
+                    <View
+                      style={{ flexDirection: "row", justifyContent: "center" }}
+                    >
+                      <POPOutLinkButton
+                        buttonName={AppString.Cancel}
+                        onPress={() => CloseItem()}
+                      />
+
+                      <POPLinkButton
+                        buttonName={AppString.Save}
+                        onPress={() => SaveItem()}
+                      />
+                    </View>
+                  </View>
+                </KeyboardAvoidingView>
+              </Modal>
+            ) : null}
+
+            {/* Show Select Moment Ans List ---- 2. Select Moment*/}
             {getAddNewItemModal == true ? (
               <Modal
                 testID={"modal"}
@@ -611,84 +692,7 @@ const CalendarScreen = () => {
               </Modal>
             ) : null}
 
-            {getEditItemModal == true ? (
-              <Modal testID={"modal"} isVisible={getEditItemModal}>
-                <KeyboardAvoidingView
-                  behavior="position"
-                  keyboardVerticalOffset={keyboardVerticalOffset}
-                >
-                  <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                    <View style={{ flexDirection: "row" }}>
-                      <View style={{ width: "20%" }}>
-                        <TouchableOpacity onPress={() => ImageChange()}>
-                          {getImage != "" ? (
-                            <Image
-                              source={{ uri: getImage }}
-                              style={Styles.popupImage}
-                            />
-                          ) : (
-                            <Image
-                              source={imgImport}
-                              style={Styles.popupImage}
-                            />
-                          )}
-                        </TouchableOpacity>
-                      </View>
-                      <View style={{ width: "60%" }}>
-                        <Text
-                          style={[
-                            CommonStyle.txtTitle,
-                            CommonStyle.textUpperCase,
-                            { textAlign: "center", marginTop: 10 },
-                          ]}
-                        >
-                          {getAddNewItem}
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View style={CommonStyle.my16}>
-                      <SimpleInputEditView
-                        TitleName={"Title"}
-                        placeholder={"Enter here"}
-                        onChangeText={(FirstName) => setFirstName(FirstName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Date"}
-                        placeholder={"Enter here"}
-                        onChangeText={(SecondName) => setSecondName(SecondName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Link"}
-                        placeholder={"Enter here"}
-                        onChangeText={(ThirdName) => setThirdName(ThirdName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={"Other Info"}
-                        placeholder={"Enter here"}
-                        onChangeText={(FourName) => setFourName(FourName)}
-                      />
-                    </View>
-
-                    <View
-                      style={{ flexDirection: "row", justifyContent: "center" }}
-                    >
-                      <POPOutLinkButton
-                        buttonName={AppString.Cancel}
-                        onPress={() => CloseItem()}
-                      />
-
-                      <POPLinkButton
-                        buttonName={AppString.Save}
-                        onPress={() => SaveItem()}
-                      />
-                    </View>
-                  </View>
-                </KeyboardAvoidingView>
-              </Modal>
-            ) : null}
-
-            {/* Show All Select Moment List */}
+            {/* Show All Select Moment List ---- 1. Select Moment*/}
             {getAddItemShowModal == true ? (
               <Modal
                 testID={"modal"}

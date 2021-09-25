@@ -42,7 +42,7 @@ import { showMessage } from "react-native-flash-message";
 import { isEmail } from "../../Components/EmailCheck";
 
 const Signup = ({ navigation }) => {
-  const { signUp, GetSpecialDay } = useActions();
+  const { signUp, GetSpecialMoment } = useActions();
 
   const keyboardVerticalOffset = Platform.OS === "ios" ? 1 : 0;
 
@@ -171,16 +171,17 @@ const Signup = ({ navigation }) => {
       getConfirmPassword
     );
 
-    //GetSpecialDay
+    //GetSpecialMoment
     if (signUpresponse.data.StatusCode == "1") {
       var tokens = signUpresponse.data.Result.Token;
-      const { response, error } = await GetSpecialDay({
-        token: tokens,
-      });
+      const { specialMomentResponse, specialMomentError } =
+        await GetSpecialMoment({
+          token: tokens,
+        });
       if (signUpresponse.data.StatusCode == "1") {
-        if (response.data.StatusCode == "1") {
+        if (specialMomentResponse.data.StatusCode == "1") {
           navigation.navigate("TutorialFirst", {
-            listGetSpecialDay: response.data.Result,
+            listGetSpecialDay: specialMomentResponse.data.Result,
             token: tokens,
           });
         }
