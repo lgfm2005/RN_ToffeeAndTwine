@@ -40,7 +40,7 @@ import { ButtonStyle } from "../../Components/Button/ButtonStyle";
 import { isEmailValid } from "../../utils";
 
 const SignIn = ({ navigation }) => {
-  const { Login, CategoryList } = useActions();
+  const { Login, CategoryList, getUserCategoryQuestion } = useActions();
   const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
   // Facebook And Google
@@ -124,8 +124,25 @@ const SignIn = ({ navigation }) => {
     const { error, response } = await Login(getEmail, getCreatePassword, "");
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(30);
-    // console.log("GetCategoryListerror ===>>>", GetCategoryListerror);
-    // console.log("GetCategoryListresponse ===>>>", GetCategoryListresponse);
+    if (GetCategoryListresponse.data.StatusCode == "1") {
+      console.log("Category Question Response Done");
+    } else {
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        GetCategoryListerror
+      );
+    }
+
+    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+      await getUserCategoryQuestion();
+    if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+      console.log("User Category Question Response Done");
+    } else {
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        GetCategoryListerror
+      );
+    }
     setLoader(false);
     if (response.data.StatusCode == "1") {
       navigation.navigate("Navigation");
