@@ -236,21 +236,32 @@ export const useActions = () => {
       return { addCategoryspecialDayResponse, addCategoryspecialDayError };
     },
 
-    deleteUserCategorySpecialDay: async (UserSpecialDayID) => {
-      var data = new FormData();
-      data.append("UserSpecialDayID", UserSpecialDayID);
+    addCategoryQuestion: async (tokens, data) => {
+      var session = sessions;
+      if (tokens) {
+        session = tokens;
+      }
+      console.log("Data", data);
+      console.log("tokens", tokens);
+      // var data = new FormData();
+      // data.append("CategoryID[]", CategoryID);
+      // data.append("CategoryQuestionID[]", CategoryQuestionID);
+      // data.append("CategoryQuestionValue[]", CategoryQuestionValue);
 
-      let response, error;
+      let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
-        response = await API.DeleteUserCategorySpecialDay.get(sessions, data);
-        if (response.data.StatusCode == "1") {
+        addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
+          sessions,
+          data
+        );
+        if (addCategoryQuestionResponse.data.StatusCode == "1") {
         } else {
-          error = response.data.Message;
+          addCategoryQuestionError = addCategoryQuestionResponse.data.Message;
         }
       } catch (e) {
-        error = e;
+        addCategoryQuestionError = e;
       }
-      return { response, error };
+      return { addCategoryQuestionResponse, addCategoryQuestionError };
     },
 
     deleteUserCategoryQuestion: async (UserQuestionID) => {
@@ -373,6 +384,36 @@ export const useActions = () => {
         if (response.data.StatusCode == "1") {
         } else {
           error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    updateSetting: async (NotifyGifting, NotifySpecialMoment) => {
+      var data = new FormData();
+      data.append("NotifyGifting", NotifyGifting);
+      data.append("NotifySpecialMoment", NotifySpecialMoment);
+
+      let response, error;
+      try {
+        response = await API.UpdateSetting.get(sessions, data);
+        if (response.data.StatusCode == "1") {
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    getSetting: async () => {
+      let response, error;
+      try {
+        response = await API.GetSetting.get(sessions);
+        if (response.data.StatusCode == "1") {
         }
       } catch (e) {
         error = e;

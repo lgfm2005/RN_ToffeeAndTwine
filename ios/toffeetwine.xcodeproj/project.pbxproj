@@ -209,7 +209,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				FC0CC3CD0DE3A85B5331FCA9 /* [CP] Embed Pods Frameworks */,
 				15CF70D17BB7E306C1A1DDE0 /* [CP] Copy Pods Resources */,
-				F3FA312EAF2A947147F017F3 /* [CP-User] [RNFB] Core Configuration */,
+				B7F24B7452F18B61A6FC245E /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -390,7 +390,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-toffeetwine-toffeetwineTests/Pods-toffeetwine-toffeetwineTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F3FA312EAF2A947147F017F3 /* [CP-User] [RNFB] Core Configuration */ = {
+		B7F24B7452F18B61A6FC245E /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

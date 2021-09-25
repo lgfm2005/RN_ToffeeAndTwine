@@ -197,3 +197,18 @@ export const UpdateCategoryQuestion = {
       data
     ),
 };
+
+export const UpdateSetting = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/update_settings`,
+      "post",
+      data
+    ),
+};
+
+export const GetSetting = {
+  get: async (session) =>
+    await api(session, `/rest_api/controller_profile/get_settings`, "get"),
+};

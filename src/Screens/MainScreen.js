@@ -139,6 +139,8 @@ const MainScreen = ({ navigation }) => {
     }
   };
 
+  const Facebook = () => {};
+
   // const _signOut = async () => {
   //   setGettingLoginStatus(true);
   //   // Remove user session from the device.
