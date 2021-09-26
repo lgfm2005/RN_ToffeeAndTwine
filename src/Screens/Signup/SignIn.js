@@ -46,7 +46,8 @@ import {
 } from "react-native-fbsdk";
 
 const SignIn = ({ navigation }) => {
-  const { Login, CategoryList, getUserCategoryQuestion } = useActions();
+  const { Login, CategoryList, getUserCategoryQuestion, socialAuth } =
+    useActions();
   const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
   // Facebook And Google
@@ -93,6 +94,18 @@ const SignIn = ({ navigation }) => {
     }
   };
 
+  const socialAuthLogin = (firstName, lastName, email, type) => {
+    const { error, response } = await socialAuth(
+      firstName,
+      lastName,
+      email,
+      type
+    );
+    if (response.data.StatusCode == "1") {
+      const tokens = response.data.Result.Token;
+    }
+  };
+
   const GoogleLogin = async () => {
     // It will prompt google Signin Widget
     try {
@@ -128,11 +141,9 @@ const SignIn = ({ navigation }) => {
   const handleSignIn = async (getEmail, getCreatePassword) => {
     setLoader(true);
     const { error, response } = await Login(getEmail, getCreatePassword, "");
-    debugger;
     if (response.data.StatusCode == "1") {
       const tokens = response.data.Result[0].Token;
       const token = { token: tokens };
-      debugger;
       const { GetCategoryListerror, GetCategoryListresponse } =
         await CategoryList(30, token);
       if (GetCategoryListresponse.data.StatusCode == "1") {

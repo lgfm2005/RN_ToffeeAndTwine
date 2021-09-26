@@ -420,5 +420,35 @@ export const useActions = () => {
       }
       return { response, error };
     },
+
+    socialAuth: async (userFname, userLname, Email, Type) => {
+      var data = new FormData();
+      data.append("FName", userFname);
+      data.append("LName", userLname);
+      data.append("Email", Email);
+      data.append("Type", Type);
+
+      let response, error;
+      try {
+        response = await API.SocialAuth.get(data, sessions);
+        if (response.data.StatusCode == "1") {
+          dispatch(
+            loginAction({
+              token: response.data.Result.Token,
+              userId: sessions ? "1" : sessions.userId,
+              userIsActive: tokens ? false : sessions.userIsActive,
+              userFname: userFname,
+              userLname: userLname,
+              userOtp: tokens ? "43223423" : sessions.userOtp,
+            })
+          );
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
   };
 };
