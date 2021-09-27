@@ -155,16 +155,27 @@ export const useActions = () => {
       if (tokens) {
         session = tokens;
       }
+
+      var urlImage = "";
+      debugger;
+      if (!ImageUrl.length == 0) {
+        urlImage =
+          "data:" +
+          JSON.parse(ImageUrl).mime +
+          ";base64," +
+          JSON.parse(ImageUrl).data;
+      }
+      debugger;
       var data = new FormData();
       data.append("FName", userFname);
       data.append("LName", userLname);
       data.append("Image", ImageUrl);
       data.append("DefaultSpecialMoment", DefaultSpecialMoment);
-      console.log(":efewjfkehfehfiewfhwef,", DefaultSpecialMoment);
       let response, error;
       try {
         response = await API.UpdateProfile.UpdateProfile(data, session);
         if (response.data.StatusCode == "1") {
+          debugger;
           dispatch(
             loginAction({
               token: session.token,
@@ -172,13 +183,9 @@ export const useActions = () => {
               userIsActive: tokens ? false : sessions.userIsActive,
               userFname: userFname,
               userLname: userLname,
-              userProfileImage:
-                "data:" +
-                JSON.parse(ImageUrl).mime +
-                ";base64," +
-                JSON.parse(ImageUrl).data,
-              defaultSpecialMoment: sessions.DefaultSpecialMoment,
               userOtp: tokens ? "43223423" : sessions.userOtp,
+              userProfileImage: urlImage,
+              defaultSpecialMoment: DefaultSpecialMoment,
             })
           );
         } else {
@@ -187,6 +194,7 @@ export const useActions = () => {
       } catch (e) {
         error = e;
       }
+      debugger;
       return { response, error };
     },
     CategoryList: async (LimitRecord, tokens) => {
@@ -409,7 +417,7 @@ export const useActions = () => {
         UserCategoryQuestionResponse = await API.GetUserCategoryQuestion.get(
           session
         );
-        debugger;
+
         if (UserCategoryQuestionResponse.data.StatusCode == "1") {
           dispatch(
             userCategoryQuestion(UserCategoryQuestionResponse.data.Result)

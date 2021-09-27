@@ -9,22 +9,23 @@ export default (state = initialState, action) => {
       const {
         token,
         userId,
-        userProfileImage,
         userIsActive,
         userFname,
         userLname,
-        defaultSpecialMoment,
         userOtp,
+        userProfileImage,
+        defaultSpecialMoment,
       } = action.payload;
+      debugger;
       return {
         token,
         userId,
-        userProfileImage,
         userIsActive,
         userFname,
         userLname,
-        defaultSpecialMoment,
         userOtp,
+        userProfileImage,
+        defaultSpecialMoment,
       };
     }
     case LOGOUT: {

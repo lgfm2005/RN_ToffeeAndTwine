@@ -158,11 +158,10 @@ const HomeScreen = () => {
   const [getShowOldQuestion, setShowOldQuestion] = useState([]);
   const [getUpdateQuestionData, setUpdateQuestionData] = useState([]);
   const [getLoader, setLoader] = useState(false);
-  debugger;
+
   const [getFilterCat, setFilterCat] = useState(categories);
 
   const getFilterCatgories = (data) => {
-    debugger;
     var dataCategory = categories;
     data.map((items, indexs) => {
       dataCategory = dataCategory.filter((item) => {
