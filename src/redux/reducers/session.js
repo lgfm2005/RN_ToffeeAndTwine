@@ -5,9 +5,24 @@ const initialState = {};
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOGIN: {
-      const { token, userId, userIsActive, userFname, userLname, userOtp } =
-        action.payload;
-      return { token, userId, userIsActive, userFname, userLname, userOtp };
+      const {
+        token,
+        userId,
+        userProfileImage,
+        userIsActive,
+        userFname,
+        userLname,
+        userOtp,
+      } = action.payload;
+      return {
+        token,
+        userId,
+        userProfileImage,
+        userIsActive,
+        userFname,
+        userLname,
+        userOtp,
+      };
     }
     case LOGOUT: {
       return initialState;

@@ -3,6 +3,7 @@ import {
   USERCATEGORYQUESTION,
   GETSPECIALDAY,
   SPECIALMOMENT,
+  USERSPECIALMOMENT,
   CATEGORIES,
   LOGOUT,
 } from "./types";
@@ -16,7 +17,8 @@ const loginAction = createAction(LOGIN);
 const logoutAction = createAction(LOGOUT);
 const categoriesAction = createAction(CATEGORIES);
 const userCategoryQuestion = createAction(USERCATEGORYQUESTION);
-const userSpecialMoment = createAction(SPECIALMOMENT);
+const SpecialMoment = createAction(SPECIALMOMENT);
+const userSpecialMoment = createAction(USERSPECIALMOMENT);
 
 // const getSpecialDay = createAction(GETSPECIALDAY);
 
@@ -38,6 +40,7 @@ export const useActions = () => {
             loginAction({
               token: response.data.Result[0].Token,
               userId: response.data.Result[0].user_id,
+              userProfileImage: response.data.Result[0].user_profile_image,
               userIsActive: response.data.Result[0].user_is_active,
               userFname: response.data.Result[0].user_fname,
               userLname: response.data.Result[0].user_lname,
@@ -196,7 +199,7 @@ export const useActions = () => {
       try {
         specialMomentResponse = await API.GetSpecialMoment.get(sessions);
         if (specialMomentResponse.data.StatusCode == "1") {
-          dispatch(userSpecialMoment(specialMomentResponse.data.Result));
+          dispatch(SpecialMoment(specialMomentResponse.data.Result));
         }
       } catch (e) {
         specialMomentError = e;
@@ -281,6 +284,29 @@ export const useActions = () => {
       return { response, error };
     },
 
+    deleteUserCategorySpecialDay: async (UserSpecialMomentID) => {
+      var data = new FormData();
+      data.append("UserSpecialMomentID", UserSpecialMomentID);
+
+      let deleteUserCategorySpecialDayResponse,
+        deleteUserCategorySpecialDayError;
+      try {
+        deleteUserCategorySpecialDayResponse =
+          await API.DeleteUserCategorySpecialDay.get(sessions, data);
+        if (deleteUserCategorySpecialDayResponse.data.StatusCode == "1") {
+        } else {
+          deleteUserCategorySpecialDayError =
+            responsdeleteUserCategorySpecialDayResponsee.data.Message;
+        }
+      } catch (e) {
+        deleteUserCategorySpecialDayError = e;
+      }
+      return {
+        deleteUserCategorySpecialDayResponse,
+        deleteUserCategorySpecialDayError,
+      };
+    },
+
     addCategoryQuestion: async (tokens, data) => {
       var session = sessions;
       if (tokens) {
@@ -336,15 +362,23 @@ export const useActions = () => {
     },
 
     getUserCategorySpecialMoment: async () => {
-      let response, error;
+      let getUserCategorySpecialMomentResponse,
+        getUserCategorySpecialMomentError;
       try {
-        response = await API.GetUserCategorySpecialMoment.get(sessions);
-        if (response.data.StatusCode == "1") {
+        getUserCategorySpecialMomentResponse =
+          await API.GetUserCategorySpecialMoment.get(sessions);
+        if (getUserCategorySpecialMomentResponse.data.StatusCode == "1") {
+          dispatch(
+            userSpecialMoment(getUserCategorySpecialMomentResponse.data.Result)
+          );
         }
       } catch (e) {
-        error = e;
+        getUserCategorySpecialMomentError = e;
       }
-      return { response, error };
+      return {
+        getUserCategorySpecialMomentResponse,
+        getUserCategorySpecialMomentError,
+      };
     },
 
     getUserCategoryQuestion: async (token) => {
@@ -378,17 +412,22 @@ export const useActions = () => {
       data.append("UserSpecialMomentID", UserSpecialMomentID);
       data.append("UserSpecialMomentValue", UserSpecialMomentValue);
 
-      let response, error;
+      let updateCategorySpecialMomentResponse, updateCategorySpecialMomentError;
       try {
-        response = await API.UpdateCategorySpecialMoment.get(sessions, data);
-        if (response.data.StatusCode == "1") {
+        updateCategorySpecialMomentResponse =
+          await API.UpdateCategorySpecialMoment.get(sessions, data);
+        if (updateCategorySpecialMomentResponse.data.StatusCode == "1") {
         } else {
-          error = response.data.Message;
+          updateCategorySpecialMomentError =
+            updateCategorySpecialMomentResponse.data.Message;
         }
       } catch (e) {
-        error = e;
+        updateCategorySpecialMomentError = e;
       }
-      return { response, error };
+      return {
+        updateCategorySpecialMomentResponse,
+        updateCategorySpecialMomentError,
+      };
     },
 
     updateSetting: async (NotifyGifting, NotifySpecialMoment) => {

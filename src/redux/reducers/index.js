@@ -4,6 +4,7 @@ import updateProfile from "./updateProfile";
 import categories from "./categories";
 import UserCategoryQuestion from "./UserCategoryQuestion";
 import specialMoment from "./specialMoment";
+import UserSpecialMoment from "./UserSpecialMoment";
 
 export default combineReducers({
   session,
@@ -11,4 +12,5 @@ export default combineReducers({
   categories,
   UserCategoryQuestion,
   specialMoment,
+  UserSpecialMoment,
 });

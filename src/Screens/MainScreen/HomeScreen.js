@@ -107,6 +107,7 @@ const HomeScreen = () => {
     getUserCategoryQuestion,
     updateCategoryQuestion,
     GetSpecialMoment,
+    getUserCategorySpecialMoment,
   } = useActions();
 
   userData = useSelector((state) => state.session);
@@ -122,8 +123,8 @@ const HomeScreen = () => {
       await CategoryList(30);
     if (GetCategoryListresponse.data.StatusCode == "1") {
       // console.log("Category List Response Done");
-      setLoader(false);
     } else {
+      setLoader(false);
       // console.log("Category List Error", GetCategoryListerror);
     }
 
@@ -136,8 +137,9 @@ const HomeScreen = () => {
       //   "User Category Question Response Done  ===>>>",
       //   UserCategoryQuestionResponse
       // );
-      setLoader(false);
     } else {
+      setLoader(false);
+
       // console.log(
       //   "User Category Question Response Error  ===>>>",
       //   GetCategoryListerror
@@ -148,9 +150,24 @@ const HomeScreen = () => {
       await GetSpecialMoment();
     if (specialMomentResponse.data.StatusCode == "1") {
       console.log("special MomentResponse Done");
+    } else {
+      setLoader(false);
+      console.log(" special Moment Error");
+    }
+
+    const {
+      getUserCategorySpecialMomentResponse,
+      getUserCategorySpecialMomentError,
+    } = await getUserCategorySpecialMoment();
+    if (getUserCategorySpecialMomentResponse.data.StatusCode == "1") {
+      console.log("special User Moment Response Done ");
       setLoader(false);
     } else {
-      console.log(" special Moment Error");
+      setLoader(false);
+      console.log(
+        " special User Moment Response Error",
+        getUserCategorySpecialMomentError
+      );
     }
   }, []);
 
@@ -391,7 +408,10 @@ const HomeScreen = () => {
           <View style={CommonStyle.authPage}>
             <View style={CommonStyle.Container}>
               <View style={[CommonStyle.my16, CommonStyle.Row]}>
-                <Image source={demodp} style={CommonStyle.ProfileImage} />
+                <Image
+                  source={{ uri: userData.userProfileImage }}
+                  style={CommonStyle.ProfileImage}
+                />
                 <Text style={[CommonStyle.userName]}>
                   {userData.userFname + " " + userData.userLname}
                 </Text>
