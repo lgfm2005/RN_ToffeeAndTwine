@@ -212,3 +212,8 @@ export const GetSetting = {
   get: async (session) =>
     await api(session, `/rest_api/controller_profile/get_settings`, "get"),
 };
+
+export const SocialAuth = {
+  get: async (session, data) =>
+    await api(session, `/rest_api/controller_user/social_auth`, "post", data),
+};

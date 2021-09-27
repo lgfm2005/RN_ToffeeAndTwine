@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Share,
-  ScrollView,
-  Dimensions,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, Image } from "react-native";
 
 // Lib
 import ImagePicker from "react-native-image-crop-picker";
@@ -33,6 +22,7 @@ import { SimpleInputEditView } from "../../../Components/FormInput";
 import BackToolBar from "../../../Components/BackToolBar";
 import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
+import { ShareAppLink } from "../../../Assets/utils/ShareLink";
 
 const TutorialThird = ({ navigation, route }) => {
   const { tokens } = route.params;
@@ -49,26 +39,26 @@ const TutorialThird = ({ navigation, route }) => {
     }
   };
 
-  const ShareAppLink = async () => {
-    try {
-      const result = await Share.share({
-        title: "App link",
-        message: "Please install this app and stay safe ",
-        url: "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en",
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  // const ShareAppLink = async () => {
+  //   try {
+  //     const result = await Share.share({
+  //       title: "App link",
+  //       message: "Please install this app and stay safe ",
+  //       url: "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en",
+  //     });
+  //     if (result.action === Share.sharedAction) {
+  //       if (result.activityType) {
+  //         // shared with activity type of result.activityType
+  //       } else {
+  //         // shared
+  //       }
+  //     } else if (result.action === Share.dismissedAction) {
+  //       // dismissed
+  //     }
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // };
 
   return (
     <SafeAreaView style={CommonStyle.MainContainer}>

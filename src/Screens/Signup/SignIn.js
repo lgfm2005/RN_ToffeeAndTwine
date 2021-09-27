@@ -38,9 +38,16 @@ import { useActions } from "../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ButtonStyle } from "../../Components/Button/ButtonStyle";
 import { isEmailValid } from "../../utils";
+import {
+  AccessToken,
+  LoginManager,
+  GraphRequest,
+  GraphRequestManager,
+} from "react-native-fbsdk";
 
 const SignIn = ({ navigation }) => {
-  const { Login, CategoryList, getUserCategoryQuestion } = useActions();
+  const { Login, CategoryList, getUserCategoryQuestion, socialAuth } =
+    useActions();
   const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
   // Facebook And Google
@@ -87,6 +94,18 @@ const SignIn = ({ navigation }) => {
     }
   };
 
+  const socialAuthLogin = async (firstName, lastName, email, type) => {
+    const { error, response } = await socialAuth(
+      firstName,
+      lastName,
+      email,
+      type
+    );
+    if (response.data.StatusCode == "1") {
+      const tokens = response.data.Result.Token;
+    }
+  };
+
   const GoogleLogin = async () => {
     // It will prompt google Signin Widget
     try {
@@ -122,11 +141,9 @@ const SignIn = ({ navigation }) => {
   const handleSignIn = async (getEmail, getCreatePassword) => {
     setLoader(true);
     const { error, response } = await Login(getEmail, getCreatePassword, "");
-    debugger;
     if (response.data.StatusCode == "1") {
       const tokens = response.data.Result[0].Token;
       const token = { token: tokens };
-      debugger;
       const { GetCategoryListerror, GetCategoryListresponse } =
         await CategoryList(30, token);
       if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -158,6 +175,54 @@ const SignIn = ({ navigation }) => {
       setInvalidEmailPassword(true);
       console.log("Error", error);
     }
+  };
+
+  const fbSignIn = async () => {
+    LoginManager.logInWithPermissions(["email", "public_profile"]).then(
+      function (result) {
+        console.log("result", result);
+        if (result.isCancelled) {
+          // Toast.show("Login cancelled")
+        } else {
+          AccessToken.getCurrentAccessToken()
+            .then((data) => {
+              console.log(data);
+              // Create a graph request asking for user information with a callback to handle the response.
+              const infoRequest = new GraphRequest(
+                "/me",
+                {
+                  httpMethod: "GET",
+                  version: "v10.0",
+                  parameters: {
+                    fields: {
+                      string:
+                        "id,name,first_name,last_name,email,picture.type(large)",
+                    },
+                  },
+                },
+                (error, result) => {
+                  if (error) {
+                    console.log("error:", error);
+                    Toast.show("Something went wrong!");
+                  } else {
+                    console.log("result:", result);
+                  }
+                }
+              );
+              // Start the graph request.
+              new GraphRequestManager().addRequest(infoRequest).start();
+            })
+            .catch((error) => {
+              console.log("error: ", error);
+              Toast.show("Something went wrong!");
+            });
+        }
+      },
+      function (error) {
+        console.log("Login fail with error: " + error);
+        Toast.show("Something went wrong!");
+      }
+    );
   };
 
   return (
@@ -240,7 +305,10 @@ const SignIn = ({ navigation }) => {
               >
                 <Image source={imgGoogle} style={Styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}} style={Styles.iconbg}>
+              <TouchableOpacity
+                onPress={() => fbSignIn()}
+                style={Styles.iconbg}
+              >
                 <Image source={imgFacebook} style={Styles.icon} />
               </TouchableOpacity>
             </View>

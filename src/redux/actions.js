@@ -44,6 +44,8 @@ export const useActions = () => {
               userIsActive: response.data.Result[0].user_is_active,
               userFname: response.data.Result[0].user_fname,
               userLname: response.data.Result[0].user_lname,
+              defaultSpecialMoment:
+                response.data.Result[0].default_special_moment,
               userOtp: response.data.Result[0].user_otp,
             })
           );
@@ -142,7 +144,13 @@ export const useActions = () => {
       return { response, error };
     },
 
-    updateProfile: async (userFname, userLname, tokens) => {
+    updateProfile: async (
+      userFname,
+      userLname,
+      ImageUrl,
+      DefaultSpecialMoment,
+      tokens
+    ) => {
       var session = sessions;
       if (tokens) {
         session = tokens;
@@ -150,6 +158,9 @@ export const useActions = () => {
       var data = new FormData();
       data.append("FName", userFname);
       data.append("LName", userLname);
+      data.append("Image", ImageUrl);
+      data.append("DefaultSpecialMoment", DefaultSpecialMoment);
+      console.log(":efewjfkehfehfiewfhwef,", DefaultSpecialMoment);
       let response, error;
       try {
         response = await API.UpdateProfile.UpdateProfile(data, session);
@@ -161,6 +172,12 @@ export const useActions = () => {
               userIsActive: tokens ? false : sessions.userIsActive,
               userFname: userFname,
               userLname: userLname,
+              userProfileImage:
+                "data:" +
+                JSON.parse(ImageUrl).mime +
+                ";base64," +
+                JSON.parse(ImageUrl).data,
+              defaultSpecialMoment: sessions.DefaultSpecialMoment,
               userOtp: tokens ? "43223423" : sessions.userOtp,
             })
           );
@@ -453,6 +470,36 @@ export const useActions = () => {
       try {
         response = await API.GetSetting.get(sessions);
         if (response.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+
+    socialAuth: async (userFname, userLname, Email, Type) => {
+      var data = new FormData();
+      data.append("FName", userFname);
+      data.append("LName", userLname);
+      data.append("Email", Email);
+      data.append("Type", Type);
+
+      let response, error;
+      try {
+        response = await API.SocialAuth.get(data, sessions);
+        if (response.data.StatusCode == "1") {
+          dispatch(
+            loginAction({
+              token: response.data.Result.Token,
+              userId: sessions ? "1" : sessions.userId,
+              userIsActive: tokens ? false : sessions.userIsActive,
+              userFname: userFname,
+              userLname: userLname,
+              userOtp: tokens ? "43223423" : sessions.userOtp,
+            })
+          );
+        } else {
+          error = response.data.Message;
         }
       } catch (e) {
         error = e;

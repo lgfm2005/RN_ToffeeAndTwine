@@ -5,6 +5,7 @@ const initialState = {};
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOGIN: {
+      console.log("action", action.payload);
       const {
         token,
         userId,
@@ -12,6 +13,7 @@ export default (state = initialState, action) => {
         userIsActive,
         userFname,
         userLname,
+        defaultSpecialMoment,
         userOtp,
       } = action.payload;
       return {
@@ -21,6 +23,7 @@ export default (state = initialState, action) => {
         userIsActive,
         userFname,
         userLname,
+        defaultSpecialMoment,
         userOtp,
       };
     }

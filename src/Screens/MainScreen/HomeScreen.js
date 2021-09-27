@@ -58,44 +58,6 @@ import { MyWhiteStatusbar } from "../../Components/MyStatusBar/MyWhiteStatusbar"
 import { FONT } from "../../Assets/utils/FONT";
 import { useActions } from "../../redux/actions";
 
-const Data = [
-  {
-    id: 1,
-    Name: AppString.Coffee,
-    Image: imgCoffee,
-  },
-  {
-    id: 2,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-  {
-    id: 3,
-    Name: AppString.Flowers,
-    Image: imgFlowers,
-  },
-  {
-    id: 4,
-    Name: AppString.Laptop,
-    Image: imgLaptop,
-  },
-  {
-    id: 5,
-    Name: AppString.Ring,
-    Image: imgRing,
-  },
-  {
-    id: 6,
-    Name: AppString.Book,
-    Image: imgBook,
-  },
-  {
-    id: 7,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-];
-
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp = [];
 var data = new FormData();

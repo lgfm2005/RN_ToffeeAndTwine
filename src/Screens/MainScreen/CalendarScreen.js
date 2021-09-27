@@ -31,7 +31,7 @@ import {
   imgDesserts,
   imgFlowers,
   imgLaptop,
-  imgRing,
+  imgImport,
   imgBook,
   imgDelete,
   imgWhiteChristmas,
@@ -123,6 +123,11 @@ const CalendarScreen = () => {
   // console.log("specialMoment ===>", specialMoment);
   // CalenderDate
   const [getLoader, setLoader] = useState(false);
+  const [getImage, setImage] = useState("");
+  const [getFirstName, setFirstName] = useState("");
+  const [getSecondName, setSecondName] = useState("");
+  const [getThirdName, setThirdName] = useState("");
+  const [getFourName, setFourName] = useState("");
 
   const [getCalenderDateModal, setCalenderDateModal] = useState(false);
   const [getCalenderDateItem, setCalenderDateItem] = useState([]);
@@ -184,6 +189,22 @@ const CalendarScreen = () => {
     setUserOldSpecialMomentModal(false);
   };
 
+  const ImageChange = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      // includeBase64: true,
+    }).then((image) => {
+      setImage(image.path);
+      console.log("image===>", image);
+    });
+  };
+
+  const EditSubmitData = () => {
+    setEditItemModal(false);
+  };
+
   const DeleteItem = async (DeletedId) => {
     setUserOldSpecialMomentModal(false);
     setLoader(true);
@@ -233,40 +254,40 @@ const CalendarScreen = () => {
 
   const addNewUserSpecialMoment = async () => {
     setUserNewSpecialMomentModal(false);
-    setLoader(true);
-    var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-    setFinalDate(DateSubstring);
+    // setLoader(true);
+    // var DateSubstring =
+    //   date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    // setFinalDate(DateSubstring);
 
-    const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
-      await addCategoryspecialDay(
-        getUserNewSpecialMomenIdItem,
-        getFinaldate,
-        "0"
-      );
-    const {
-      getUserCategorySpecialMomentResponse,
-      getUserCategorySpecialMomentError,
-    } = await getUserCategorySpecialMoment();
+    // const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
+    //   await addCategoryspecialDay(
+    //     getUserNewSpecialMomenIdItem,
+    //     getFinaldate,
+    //     "0"
+    //   );
+    // const {
+    //   getUserCategorySpecialMomentResponse,
+    //   getUserCategorySpecialMomentError,
+    // } = await getUserCategorySpecialMoment();
 
-    if (
-      addCategoryspecialDayResponse.data.StatusCode == "1" &&
-      getUserCategorySpecialMomentResponse.data.StatusCode == "1"
-    ) {
-      getFilterCatgories(getUserCategorySpecialMomentResponse.data.Result);
-      console.log("Add Category Special Moment Done");
-      setLoader(false);
-    } else {
-      setUserNewSpecialMomentModal(true);
-      console.log(
-        "NEW CategorySpecialMoment Error",
-        addCategoryspecialDayError
-      );
-      console.log(
-        "NEW CategorySpecialMoment Error",
-        getUserCategorySpecialMomentError
-      );
-    }
+    // if (
+    //   addCategoryspecialDayResponse.data.StatusCode == "1" &&
+    //   getUserCategorySpecialMomentResponse.data.StatusCode == "1"
+    // ) {
+    //   getFilterCatgories(getUserCategorySpecialMomentResponse.data.Result);
+    //   console.log("Add Category Special Moment Done");
+    //   setLoader(false);
+    // } else {
+    //   setUserNewSpecialMomentModal(true);
+    //   console.log(
+    //     "NEW CategorySpecialMoment Error",
+    //     addCategoryspecialDayError
+    //   );
+    //   console.log(
+    //     "NEW CategorySpecialMoment Error",
+    //     getUserCategorySpecialMomentError
+    //   );
+    // }
   };
 
   // Old Select Categories -- > Edit Item
@@ -593,6 +614,77 @@ const CalendarScreen = () => {
                 isVisible={getUserOldSpecialMomentModal}
                 onBackdropPress={() => CloseItem()}
               >
+                <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <View style={{ width: "80%" }}>
+                      <Text
+                        style={[CommonStyle.txtTitle, { textAlign: "center" }]}
+                      >
+                        {getUserOldSpecialMomenItem}
+                      </Text>
+                    </View>
+                    <View style={{ width: "20%" }}>
+                      <TouchableOpacity
+                        onPress={() => DeleteItem(getUserOldSpecialMomentId)}
+                      >
+                        <Image
+                          source={imgDelete}
+                          style={CommonStyle.imgIconSize}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  <View style={CommonStyle.my16}>
+                    <EditShowSimpleView
+                      TitleName={"Title"}
+                      placeholder={"Title"}
+                    />
+                    <EditShowSimpleView
+                      TitleName={"Date"}
+                      placeholder={getUserOldSpecialMomentDate}
+                    />
+                    <EditShowSimpleView
+                      TitleName={"Link"}
+                      placeholder={"Link"}
+                    />
+                    <EditShowSimpleView
+                      TitleName={"Other Info"}
+                      placeholder={"Other Info"}
+                    />
+                  </View>
+
+                  <View
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
+                    <POPOutLinkButton
+                      buttonName={AppString.Cancel}
+                      onPress={() => CloseItem()}
+                    />
+
+                    <POPLinkButton
+                      buttonName={AppString.Edit}
+                      onPress={() => AddEditItem()}
+                    />
+                  </View>
+                </View>
+              </Modal>
+            ) : null}
+
+            {/* Show Select Moment Date List --- 2. Update new date */}
+            {getEditItemModal == true ? (
+              <Modal
+                testID={"modal"}
+                isVisible={getEditItemModal}
+                onBackdropPress={() => CloseItem()}
+              >
                 <KeyboardAvoidingView
                   behavior="position"
                   keyboardVerticalOffset={keyboardVerticalOffset}
@@ -606,32 +698,55 @@ const CalendarScreen = () => {
                         alignContent: "center",
                       }}
                     >
-                      <View style={{ width: "80%" }}>
-                        <Text
-                          style={[
-                            CommonStyle.txtTitle,
-                            { textAlign: "center" },
-                          ]}
-                        >
-                          {getUserOldSpecialMomenItem}
-                        </Text>
-                      </View>
-                      <View style={{ width: "20%" }}>
-                        <TouchableOpacity
-                          onPress={() => DeleteItem(getUserOldSpecialMomentId)}
-                        >
-                          <Image
-                            source={imgDelete}
-                            style={CommonStyle.imgIconSize}
-                          />
-                        </TouchableOpacity>
+                      <View style={CommonStyle.Row}>
+                        <View style={{ width: "20%" }}>
+                          <TouchableOpacity onPress={() => ImageChange()}>
+                            {getImage != "" ? (
+                              <Image
+                                source={{ uri: getImage }}
+                                style={Styles.popupImage}
+                              />
+                            ) : (
+                              <Image
+                                source={imgImport}
+                                style={Styles.popupImage}
+                              />
+                            )}
+                          </TouchableOpacity>
+                        </View>
+                        <View style={CommonStyle.PopModalWidth60}>
+                          <Text
+                            style={[
+                              CommonStyle.txtTitle,
+                              CommonStyle.p16,
+                              { textAlign: "center" },
+                            ]}
+                          >
+                            {getUserOldSpecialMomenItem}
+                          </Text>
+                        </View>
                       </View>
                     </View>
-
                     <View style={CommonStyle.my16}>
-                      <EditShowSimpleView
+                      <SimpleInputEditView
+                        TitleName={"Title"}
+                        placeholder={"Title"}
+                        onChangeText={(FirstName) => setFirstName(FirstName)}
+                      />
+                      <SimpleInputEditView
                         TitleName={"Date"}
-                        placeholder={getUserOldSpecialMomentDate}
+                        placeholder={"Date"}
+                        onChangeText={(SecondName) => setSecondName(SecondName)}
+                      />
+                      <SimpleInputEditView
+                        TitleName={"Link"}
+                        placeholder={"Link"}
+                        onChangeText={(ThirdName) => setThirdName(ThirdName)}
+                      />
+                      <SimpleInputEditView
+                        TitleName={"Other Info"}
+                        placeholder={"Other Info"}
+                        onChangeText={(FourName) => setFourName(FourName)}
                       />
                     </View>
 
@@ -644,16 +759,15 @@ const CalendarScreen = () => {
                       />
 
                       <POPLinkButton
-                        buttonName={AppString.Edit}
-                        onPress={() => AddEditItem()}
+                        buttonName={AppString.Save}
+                        onPress={() => EditSubmitData()}
                       />
                     </View>
                   </View>
                 </KeyboardAvoidingView>
               </Modal>
             ) : null}
-            {/* Show Select Moment Date List --- 2. Update new date */}
-            {getEditItemModal == true ? (
+            {/* {getEditItemModal == true ? (
               <Modal testID={"modal"} isVisible={getEditItemModal}>
                 <KeyboardAvoidingView
                   behavior="position"
@@ -698,7 +812,7 @@ const CalendarScreen = () => {
                   </View>
                 </KeyboardAvoidingView>
               </Modal>
-            ) : null}
+            ) : null} */}
 
             {/* Show All Select Moment List ---- 1. Select Moment*/}
             {getAddItemShowModal == true ? (
@@ -760,25 +874,63 @@ const CalendarScreen = () => {
                   keyboardVerticalOffset={keyboardVerticalOffset}
                 >
                   <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                    <View style={{ flexDirection: "row" }}>
-                      <View style={{ width: "100%" }}>
-                        <Text
-                          style={[
-                            CommonStyle.txtTitle,
-                            CommonStyle.textUpperCase,
-                            { textAlign: "center", marginTop: 10 },
-                          ]}
-                        >
-                          {getUserNewSpecialMomenItem}
-                        </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        alignContent: "center",
+                      }}
+                    >
+                      <View style={CommonStyle.Row}>
+                        <View style={{ width: "20%" }}>
+                          <TouchableOpacity onPress={() => ImageChange()}>
+                            {getImage != "" ? (
+                              <Image
+                                source={{ uri: getImage }}
+                                style={Styles.popupImage}
+                              />
+                            ) : (
+                              <Image
+                                source={imgImport}
+                                style={Styles.popupImage}
+                              />
+                            )}
+                          </TouchableOpacity>
+                        </View>
+                        <View style={CommonStyle.PopModalWidth60}>
+                          <Text
+                            style={[
+                              CommonStyle.txtTitle,
+                              CommonStyle.p16,
+                              { textAlign: "center" },
+                            ]}
+                          >
+                            {getUserNewSpecialMomenItem}
+                          </Text>
+                        </View>
                       </View>
                     </View>
-
                     <View style={CommonStyle.my16}>
-                      <DatePicker
-                        mode={"date"}
-                        date={date}
-                        onDateChange={setDate}
+                      <SimpleInputEditView
+                        TitleName={"Title"}
+                        placeholder={"Title"}
+                        onChangeText={(FirstName) => setFirstName(FirstName)}
+                      />
+                      <SimpleInputEditView
+                        TitleName={"Date"}
+                        placeholder={"Date"}
+                        onChangeText={(SecondName) => setSecondName(SecondName)}
+                      />
+                      <SimpleInputEditView
+                        TitleName={"Link"}
+                        placeholder={"Link"}
+                        onChangeText={(ThirdName) => setThirdName(ThirdName)}
+                      />
+                      <SimpleInputEditView
+                        TitleName={"Other Info"}
+                        placeholder={"Other Info"}
+                        onChangeText={(FourName) => setFourName(FourName)}
                       />
                     </View>
 
@@ -806,5 +958,13 @@ const CalendarScreen = () => {
     </View>
   );
 };
+
+const Styles = StyleSheet.create({
+  popupImage: {
+    width: 45,
+    height: 45,
+    borderRadius: 40,
+  },
+});
 
 export default CalendarScreen;
