@@ -32,7 +32,7 @@ import {
   imgRing,
   imgBook,
   imgCandy,
-  imgClothes,
+  imgDelete,
   imgJewelry,
   imgShoes,
   imgImport,
@@ -70,6 +70,7 @@ const HomeScreen = () => {
     updateCategoryQuestion,
     GetSpecialMoment,
     getUserCategorySpecialMoment,
+    deleteUserCategoryQuestion,
   } = useActions();
 
   userData = useSelector((state) => state.session);
@@ -157,6 +158,7 @@ const HomeScreen = () => {
   const [getQuestionsData, setQuestionsData] = useState([]);
   const [getShowOldQuestion, setShowOldQuestion] = useState([]);
   const [getUpdateQuestionData, setUpdateQuestionData] = useState([]);
+  const [getIdItem, setIdItem] = useState("");
   const [getLoader, setLoader] = useState(false);
 
   const [getFilterCat, setFilterCat] = useState(categories);
@@ -317,12 +319,13 @@ const HomeScreen = () => {
 
   // Select Item Categories --> Open
   const ShowOldItem = (Name, Image, id, key, questions) => {
-    console.log("Name", Name);
-    console.log("Image", Image);
-    console.log("id", id);
-    console.log("key", key);
+    console.log("ShowOldItem Name", Name);
+    console.log("ShowOldItem Image", Image);
+    console.log("ShowOldItem Id", id);
+    console.log("ShowOldItem key", key);
     setAddNewItemModal(true);
     setAddNewItem(Name);
+    setIdItem(id);
     setShowOldQuestion(questions);
   };
 
@@ -349,6 +352,44 @@ const HomeScreen = () => {
 
     // setEditItemModal(true);
     // setEditItem(getAddNewItem);
+  };
+
+  const DeletedExplore = async () => {
+    setUpdateDataModal(false);
+    setAddItemShowModal(false);
+    setEditItemModal(false);
+    setAddNewItemModal(false);
+    setLoader(true);
+
+    const {
+      deleteUserCategoryQuestionResponse,
+      deleteUserCategoryQuestionError,
+    } = await deleteUserCategoryQuestion(getIdItem);
+    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+      await getUserCategoryQuestion();
+
+    if (
+      deleteUserCategoryQuestionResponse.data.StatusCode == "1" &&
+      UserCategoryQuestionResponse.data.StatusCode == "1"
+    ) {
+      console.log("Add Category Special Moment Done");
+      setUpdateDataModal(false);
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
+      setLoader(false);
+    } else {
+      setUpdateDataModal(false);
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
+      console.log(
+        "deleteUserCategoryQuestion",
+        deleteUserCategoryQuestionError
+      );
+      console.log("UserCategoryQuestionError", UserCategoryQuestionError);
+    }
+    console.log("fewf", getIdItem);
   };
 
   // Payment for upgrade
@@ -639,6 +680,12 @@ const HomeScreen = () => {
                           {getAddNewItem}
                         </Text>
                       </View>
+                      <TouchableOpacity onPress={() => DeletedExplore()}>
+                        <Image
+                          source={imgDelete}
+                          style={CommonStyle.imgIconSize}
+                        />
+                      </TouchableOpacity>
                     </View>
                     <View style={CommonStyle.my16}>
                       {getShowOldQuestion.map((item, index) => {

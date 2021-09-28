@@ -5,7 +5,6 @@ const initialState = {};
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOGIN: {
-      console.log("action", action.payload);
       const {
         token,
         userId,
@@ -16,7 +15,7 @@ export default (state = initialState, action) => {
         userProfileImage,
         defaultSpecialMoment,
       } = action.payload;
-      debugger;
+
       return {
         token,
         userId,

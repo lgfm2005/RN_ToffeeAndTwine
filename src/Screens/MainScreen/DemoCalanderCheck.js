@@ -156,7 +156,6 @@ const CalendarScreen = () => {
   const [getuserSpecialMomentId, setuserSpecialMomentId] = useState("");
   const [getspecialMomentName, setspecialMomentName] = useState("");
   const [getuserSpecialMomentTitle, setuserSpecialMomentTitle] = useState("");
-
   const [getuserSpecialMomentDate, setuserSpecialMomentDate] = useState("");
   const [getspecialMomentLink, setspecialMomentLink] = useState("");
   const [getspecialMomentOtherInfo, setspecialMomentOtherInfo] = useState("");
@@ -170,7 +169,6 @@ const CalendarScreen = () => {
 
   const [getFilterSepCat, setFilterSepCat] = useState(specialMoment);
 
-  const [getPrevData, setPrevData] = useState({});
   useEffect(() => {
     if (userSpecialMoment == "") {
       return;
@@ -197,7 +195,6 @@ const CalendarScreen = () => {
     setUserNewSpecialMomentModal(false);
     setUserOldSpecialMomentModal(false);
     setDateModal(false);
-    setPrevData({});
   };
 
   const ImageSepChange = () => {
@@ -282,18 +279,15 @@ const CalendarScreen = () => {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-    debugger;
+
     if (
       addCategoryspecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      debugger;
-      setPrevData({});
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setLoader(false);
     } else {
-      setLoader(false);
       setUserNewSpecialMomentModal(true);
       console.log(
         "NEW CategorySpecialMoment Error",
@@ -316,9 +310,6 @@ const CalendarScreen = () => {
   const SubmitDate = () => {
     setDateModal(false);
     setUserNewSpecialMomentModal(true);
-    var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-    setFinalSepDate(DateSubstring);
   };
 
   // Old Select Categories -- > Edit Item
@@ -339,7 +330,6 @@ const CalendarScreen = () => {
     specialMomentOtherInfo,
     Imageurl
   ) => {
-    debugger;
     // console.log("userSpecialMomentId", userSpecialMomentId);
     // console.log("specialMomentId", specialMomentId);
     // console.log("specialMomentName", specialMomentName);
@@ -349,14 +339,13 @@ const CalendarScreen = () => {
     // console.log("specialMomentOtherInfo", specialMomentOtherInfo);
     // console.log("Imageurl", Imageurl);
     setUserOldSpecialMomentModal(true);
-    setuserSpecialMomentId(specialMomentId);
+    setuserSpecialMomentId(userSpecialMomentId);
     setspecialMomentName(specialMomentName);
     setuserSpecialMomentTitle(userSpecialMomentTitle);
     setuserSpecialMomentDate(userSpecialMomentDate);
     setImageurl(Imageurl);
     setspecialMomentLink(specialMomentLink);
     setspecialMomentOtherInfo(specialMomentOtherInfo);
-    debugger;
   };
   // oldUserSpecialMoment --> 2.Save (API)
   const updateUserSpecialMoment = async () => {
@@ -965,14 +954,9 @@ const CalendarScreen = () => {
                       <SimpleInputEditView
                         TitleName={"Title"}
                         placeholder={"Title"}
-                        defaultValue={getPrevData.Title}
-                        onChangeText={(Title) => {
-                          setuserSpecialMomentTitle(Title);
-                          setPrevData({
-                            ...getPrevData,
-                            Title: Title,
-                          });
-                        }}
+                        onChangeText={(Title) =>
+                          setuserSpecialMomentTitle(Title)
+                        }
                       />
                       <EditShowBtnSimpleView
                         TitleName={"Date"}
@@ -984,26 +968,14 @@ const CalendarScreen = () => {
                       <SimpleInputEditView
                         TitleName={"Link"}
                         placeholder={"Link"}
-                        defaultValue={getPrevData.Link}
-                        onChangeText={(Link) => {
-                          setspecialMomentLink(Link);
-                          setPrevData({
-                            ...getPrevData,
-                            Link: Link,
-                          });
-                        }}
+                        onChangeText={(Link) => setspecialMomentLink(Link)}
                       />
                       <SimpleInputEditView
                         TitleName={"Other Info"}
                         placeholder={"Other Info"}
-                        defaultValue={getPrevData.OtherInfo}
-                        onChangeText={(OtherInfo) => {
-                          setspecialMomentOtherInfo(OtherInfo);
-                          setPrevData({
-                            ...getPrevData,
-                            OtherInfo: OtherInfo,
-                          });
-                        }}
+                        onChangeText={(OtherInfo) =>
+                          setspecialMomentOtherInfo(OtherInfo)
+                        }
                       />
                     </View>
 

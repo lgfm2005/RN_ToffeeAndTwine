@@ -157,15 +157,15 @@ export const useActions = () => {
       }
 
       var urlImage = "";
-      debugger;
       if (!ImageUrl.length == 0) {
         urlImage =
           "data:" +
           JSON.parse(ImageUrl).mime +
           ";base64," +
           JSON.parse(ImageUrl).data;
+      } else {
+        urlImage = sessions.userProfileImage;
       }
-      debugger;
       var data = new FormData();
       data.append("FName", userFname);
       data.append("LName", userLname);
@@ -175,7 +175,6 @@ export const useActions = () => {
       try {
         response = await API.UpdateProfile.UpdateProfile(data, session);
         if (response.data.StatusCode == "1") {
-          debugger;
           dispatch(
             loginAction({
               token: session.token,
@@ -194,7 +193,6 @@ export const useActions = () => {
       } catch (e) {
         error = e;
       }
-      debugger;
       return { response, error };
     },
     CategoryList: async (LimitRecord, tokens) => {
@@ -233,8 +231,12 @@ export const useActions = () => {
     },
 
     addCategoryspecialDay: async (
-      SpecialDayID,
-      UserSpecialDayValue,
+      SpecialMomentID,
+      UserSpecialMomentTitle,
+      UserSpecialMomentValue,
+      UserSpecialMomentLink,
+      UserSpecialMomentInfo,
+      Image,
       IsFirst,
       tokens
     ) => {
@@ -243,8 +245,12 @@ export const useActions = () => {
         session = tokens;
       }
       var data = new FormData();
-      data.append("SpecialMomentID", SpecialDayID);
-      data.append("UserSpecialMomentValue", UserSpecialDayValue);
+      data.append("SpecialMomentID", SpecialMomentID);
+      data.append("UserSpecialMomentTitle", UserSpecialMomentTitle);
+      data.append("UserSpecialMomentValue", UserSpecialMomentValue);
+      data.append("UserSpecialMomentLink", UserSpecialMomentLink);
+      data.append("UserSpecialMomentInfo", UserSpecialMomentInfo);
+      data.append("Image", Image);
       data.append("IsFirst", IsFirst);
 
       let addCategoryspecialDayResponse, addCategoryspecialDayError;
@@ -292,21 +298,26 @@ export const useActions = () => {
       return { addCategoryQuestionResponse, addCategoryQuestionError };
     },
 
-    deleteUserCategoryQuestion: async (UserQuestionID) => {
+    deleteUserCategoryQuestion: async (CategoryID) => {
       var data = new FormData();
-      data.append("UserQuestionID", UserQuestionID);
+      data.append("CategoryID", CategoryID);
 
-      let response, error;
+      let deleteUserCategoryQuestionResponse, deleteUserCategoryQuestionError;
       try {
-        response = await API.DeleteUserCategoryQuestion.get(sessions, data);
-        if (response.data.StatusCode == "1") {
+        deleteUserCategoryQuestionResponse =
+          await API.DeleteUserCategoryQuestion.get(sessions, data);
+        if (deleteUserCategoryQuestionResponse.data.StatusCode == "1") {
         } else {
-          error = response.data.Message;
+          deleteUserCategoryQuestionError =
+            deleteUserCategoryQuestionResponse.data.Message;
         }
       } catch (e) {
-        error = e;
+        deleteUserCategoryQuestionError = e;
       }
-      return { response, error };
+      return {
+        deleteUserCategoryQuestionResponse,
+        deleteUserCategoryQuestionError,
+      };
     },
 
     deleteUserCategorySpecialDay: async (UserSpecialMomentID) => {

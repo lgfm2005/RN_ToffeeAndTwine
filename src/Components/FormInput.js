@@ -100,6 +100,7 @@ export const EditShowSimpleView = ({
   TitleName,
   buttonName,
   textChange,
+  onPress,
   ...props
 }) => {
   return (
@@ -113,8 +114,29 @@ export const EditShowSimpleView = ({
         placeholderTextColor={COLORS.PrimaryLight}
         selectionColor={COLORS.Primary}
         editable={false}
+        onPress={onPress}
         {...props}
       />
+    </View>
+  );
+};
+export const EditShowBtnSimpleView = ({
+  TitleName,
+  buttonName,
+  placeholder,
+  onPress,
+  ...props
+}) => {
+  return (
+    <View style={[CommonStyle.formSimpletxtEditView]}>
+      <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
+        {TitleName}
+      </Text>
+      <TouchableOpacity onPress={onPress}>
+        <View style={{ paddingLeft: 16 }}>
+          <Text style={{ color: COLORS.PrimaryLight }}>{placeholder}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -133,7 +133,7 @@ const EditProfile = ({ navigation }) => {
       getImageShow,
       UpdateDefaultSpecialMomentShow
     );
-    debugger;
+
     if (response.data.StatusCode == "1") {
       // console.log("response===>", response.data);
       setLoader(false);
