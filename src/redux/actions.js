@@ -47,6 +47,7 @@ export const useActions = () => {
               defaultSpecialMoment:
                 response.data.Result[0].default_special_moment,
               userOtp: response.data.Result[0].user_otp,
+              isAutoLogin: true,
             })
           );
         } else {
@@ -61,7 +62,6 @@ export const useActions = () => {
 
     // Logout
     Logout: async () => {
-      dispatch(loginValidAction("false"));
       dispatch(logoutAction());
     },
 
@@ -82,6 +82,9 @@ export const useActions = () => {
               userFname: "",
               userLname: "",
               userOtp: "",
+              userProfileImage: "",
+              defaultSpecialMoment: "",
+              isAutoLogin: false,
             })
           );
         }
@@ -185,6 +188,7 @@ export const useActions = () => {
               userOtp: tokens ? "43223423" : sessions.userOtp,
               userProfileImage: urlImage,
               defaultSpecialMoment: DefaultSpecialMoment,
+              isAutoLogin: true,
             })
           );
         } else {
@@ -209,7 +213,8 @@ export const useActions = () => {
           session
         );
         if (GetCategoryListresponse.data.StatusCode == "1") {
-          dispatch(categoriesAction(GetCategoryListresponse.data.Result));
+          var categoryData = GetCategoryListresponse.data.Result;
+          dispatch(categoriesAction(categoryData));
         }
       } catch (e) {
         GetCategoryListerror = e;
@@ -217,10 +222,14 @@ export const useActions = () => {
       return { GetCategoryListresponse, GetCategoryListerror };
     },
 
-    GetSpecialMoment: async () => {
+    GetSpecialMoment: async (token) => {
+      var session = sessions;
+      if (token) {
+        session = token;
+      }
       let specialMomentResponse, specialMomentError;
       try {
-        specialMomentResponse = await API.GetSpecialMoment.get(sessions);
+        specialMomentResponse = await API.GetSpecialMoment.get(session);
         if (specialMomentResponse.data.StatusCode == "1") {
           dispatch(SpecialMoment(specialMomentResponse.data.Result));
         }
@@ -506,23 +515,28 @@ export const useActions = () => {
 
     socialAuth: async (userFname, userLname, Email, Type) => {
       var data = new FormData();
-      data.append("FName", userFname);
-      data.append("LName", userLname);
+      data.append("Fname", userFname);
+      data.append("Lname", userLname);
       data.append("Email", Email);
       data.append("Type", Type);
 
       let response, error;
       try {
-        response = await API.SocialAuth.get(data, sessions);
+        response = await API.SocialAuth.get(sessions, data);
         if (response.data.StatusCode == "1") {
+          var token = response.data.Result.Token;
           dispatch(
             loginAction({
-              token: response.data.Result.Token,
-              userId: sessions ? "1" : sessions.userId,
-              userIsActive: tokens ? false : sessions.userIsActive,
+              token: token,
+              userId: "1",
+              userIsActive: "",
               userFname: userFname,
               userLname: userLname,
-              userOtp: tokens ? "43223423" : sessions.userOtp,
+              userOtp: "43223423",
+              defaultSpecialMoment: "",
+              userProfileImage: "",
+              isAutoLogin:
+                response.data.Result.IsRegistered == "1" ? true : false,
             })
           );
         } else {

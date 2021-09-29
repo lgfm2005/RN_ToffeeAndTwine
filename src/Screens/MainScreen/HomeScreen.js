@@ -73,7 +73,9 @@ const HomeScreen = () => {
     deleteUserCategoryQuestion,
   } = useActions();
 
-  userData = useSelector((state) => state.session);
+  var userData = useSelector((state) => state.session);
+  const session = useSelector((state) => state.session);
+
   const categories = useSelector((state) => state.categories);
   const userCategoryQuestion = useSelector(
     (state) => state.UserCategoryQuestion
@@ -81,7 +83,7 @@ const HomeScreen = () => {
 
   useEffect(async () => {
     setLoader(true);
-
+    console.log("session", session, userData);
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(30);
     if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -165,11 +167,13 @@ const HomeScreen = () => {
 
   const getFilterCatgories = (data) => {
     var dataCategory = categories;
-    data.map((items, indexs) => {
-      dataCategory = dataCategory.filter((item) => {
-        return item.category_id !== items.category_id;
+    if (data.length > 0) {
+      data.map((items, indexs) => {
+        dataCategory = dataCategory.filter((item) => {
+          return item.category_id !== items.category_id;
+        });
       });
-    });
+    }
     setFilterCat(dataCategory);
     // console.log(getFilterCat);
   };
@@ -450,29 +454,30 @@ const HomeScreen = () => {
                     { justifyContent: "flex-start" },
                   ]}
                 >
-                  {userCategoryQuestion.map((item, index) => {
-                    return (
-                      <ExploreShareList
-                        ImageUrl={imgBook}
-                        ExploreName={item.category_name}
-                        Id={item.category_id}
-                        index={index}
-                        key={index}
-                        DataLength={userCategoryQuestion.length}
-                        ShowBtn={false}
-                        onPress={() =>
-                          ShowOldItem(
-                            item.category_name,
-                            item.Image,
-                            item.category_id,
-                            index,
-                            item.questions
-                          )
-                        }
-                        AddNewOnPress={() => AddItemShow(index)}
-                      />
-                    );
-                  })}
+                  {userCategoryQuestion.length > 0 &&
+                    userCategoryQuestion.map((item, index) => {
+                      return (
+                        <ExploreShareList
+                          ImageUrl={imgBook}
+                          ExploreName={item.category_name}
+                          Id={item.category_id}
+                          index={index}
+                          key={index}
+                          DataLength={userCategoryQuestion.length}
+                          ShowBtn={false}
+                          onPress={() =>
+                            ShowOldItem(
+                              item.category_name,
+                              item.Image,
+                              item.category_id,
+                              index,
+                              item.questions
+                            )
+                          }
+                          AddNewOnPress={() => AddItemShow(index)}
+                        />
+                      );
+                    })}
                   <ExploreShareList
                     ShowBtn={true}
                     key={1}
@@ -512,29 +517,30 @@ const HomeScreen = () => {
                   { justifyContent: "flex-start" },
                 ]}
               >
-                {getFilterCat.map((item, index) => (
-                  <UpgradeCategoriesList
-                    ImageUrl={imgBook}
-                    ExploreName={item.category_name}
-                    Id={item.category_id}
-                    index={index}
-                    key={index}
-                    DataLength={item.category_id}
-                    onPress={() => {
-                      userCategoryQuestion.length != 5
-                        ? SelectCategoriesItem(
-                            item.category_name,
-                            item.Image,
-                            item.category_id,
-                            item.questions,
-                            index
-                          )
-                        : upgradeItem();
-                    }}
-                    // onPress={() => upgradeItem()}
-                    // AddNewOnPress={() => upgradeItem()}
-                  />
-                ))}
+                {getFilterCat.length > 0 &&
+                  getFilterCat.map((item, index) => (
+                    <UpgradeCategoriesList
+                      ImageUrl={imgBook}
+                      ExploreName={item.category_name}
+                      Id={item.category_id}
+                      index={index}
+                      key={index}
+                      DataLength={item.category_id}
+                      onPress={() => {
+                        userCategoryQuestion.length != 5
+                          ? SelectCategoriesItem(
+                              item.category_name,
+                              item.Image,
+                              item.category_id,
+                              item.questions,
+                              index
+                            )
+                          : upgradeItem();
+                      }}
+                      // onPress={() => upgradeItem()}
+                      // AddNewOnPress={() => upgradeItem()}
+                    />
+                  ))}
               </ScrollView>
             </View>
 
@@ -562,25 +568,26 @@ const HomeScreen = () => {
                           MainScreenStyle.scrollItemStyle,
                         ]}
                       >
-                        {getFilterCat.map((item, index) => (
-                          <SelectCategoriesList
-                            ImageUrl={imgBook}
-                            ExploreName={item.category_name}
-                            Id={item.category_id}
-                            index={index}
-                            key={index}
-                            // DataLength={Data.length}
-                            onPress={() =>
-                              SelectCategoriesItem(
-                                item.category_name,
-                                item.Image,
-                                item.category_id,
-                                item.questions,
-                                index
-                              )
-                            }
-                          />
-                        ))}
+                        {getFilterCat.length > 0 &&
+                          getFilterCat.map((item, index) => (
+                            <SelectCategoriesList
+                              ImageUrl={imgBook}
+                              ExploreName={item.category_name}
+                              Id={item.category_id}
+                              index={index}
+                              key={index}
+                              // DataLength={Data.length}
+                              onPress={() =>
+                                SelectCategoriesItem(
+                                  item.category_name,
+                                  item.Image,
+                                  item.category_id,
+                                  item.questions,
+                                  index
+                                )
+                              }
+                            />
+                          ))}
                       </ScrollView>
                     </View>
                   </View>
@@ -630,22 +637,23 @@ const HomeScreen = () => {
                     </View>
 
                     <View style={CommonStyle.my16}>
-                      {getShowOldQuestion.map((item, key) => {
-                        return (
-                          <SimpleInputEditView
-                            TitleName={item.category_question}
-                            placeholder={item.question_value}
-                            placeholderTextColor={COLORS.Primary}
-                            onChangeText={(value) =>
-                              UpdateQuestionData(
-                                item.user_category_question_id,
-                                value,
-                                key
-                              )
-                            }
-                          />
-                        );
-                      })}
+                      {getShowOldQuestion.length > 0 &&
+                        getShowOldQuestion.map((item, key) => {
+                          return (
+                            <SimpleInputEditView
+                              TitleName={item.category_question}
+                              placeholder={item.question_value}
+                              placeholderTextColor={COLORS.Primary}
+                              onChangeText={(value) =>
+                                UpdateQuestionData(
+                                  item.user_category_question_id,
+                                  value,
+                                  key
+                                )
+                              }
+                            />
+                          );
+                        })}
                     </View>
                     <View
                       style={{ flexDirection: "row", justifyContent: "center" }}
@@ -713,15 +721,16 @@ const HomeScreen = () => {
                       </TouchableOpacity>
                     </View>
                     <View style={CommonStyle.my16}>
-                      {getShowOldQuestion.map((item, index) => {
-                        return (
-                          <EditShowSimpleView
-                            TitleName={item.category_question}
-                            buttonName={item.question_value}
-                            placeholderTextColor={COLORS.Primary}
-                          />
-                        );
-                      })}
+                      {getShowOldQuestion.length > 0 &&
+                        getShowOldQuestion.map((item, index) => {
+                          return (
+                            <EditShowSimpleView
+                              TitleName={item.category_question}
+                              buttonName={item.question_value}
+                              placeholderTextColor={COLORS.Primary}
+                            />
+                          );
+                        })}
                     </View>
 
                     <View
@@ -784,23 +793,24 @@ const HomeScreen = () => {
                     </View>
 
                     <View style={CommonStyle.my16}>
-                      {getQuestions.map((item, key) => {
-                        return (
-                          <SimpleInputEditView
-                            TitleName={item.category_question}
-                            placeholder={item.category_placeholder}
-                            placeholderTextColor={COLORS.Primary}
-                            onChangeText={(value) =>
-                              HandelQuestionData(
-                                item.category_id,
-                                item.category_question_id,
-                                value,
-                                key
-                              )
-                            }
-                          />
-                        );
-                      })}
+                      {getQuestions.length > 0 &&
+                        getQuestions.map((item, key) => {
+                          return (
+                            <SimpleInputEditView
+                              TitleName={item.category_question}
+                              placeholder={item.category_placeholder}
+                              placeholderTextColor={COLORS.Primary}
+                              onChangeText={(value) =>
+                                HandelQuestionData(
+                                  item.category_id,
+                                  item.category_question_id,
+                                  value,
+                                  key
+                                )
+                              }
+                            />
+                          );
+                        })}
                     </View>
                     <View
                       style={{ flexDirection: "row", justifyContent: "center" }}

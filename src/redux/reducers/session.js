@@ -14,8 +14,8 @@ export default (state = initialState, action) => {
         userOtp,
         userProfileImage,
         defaultSpecialMoment,
+        isAutoLogin,
       } = action.payload;
-
       return {
         token,
         userId,
@@ -25,6 +25,7 @@ export default (state = initialState, action) => {
         userOtp,
         userProfileImage,
         defaultSpecialMoment,
+        isAutoLogin,
       };
     }
     case LOGOUT: {

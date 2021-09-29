@@ -8,8 +8,10 @@ import { BackToolbar } from "../../Components/BackToolbar/BackToolbar";
 import { MyWhiteStatusbar } from "../../Components/MyStatusBar/MyWhiteStatusbar";
 import { Switch } from "react-native-paper";
 import { COLORS } from "../../Assets/utils/COLORS";
+import { useActions } from "../../redux/actions";
 
 const SettingScreen = ({ navigation }) => {
+  const { Logout } = useActions();
   const [getGiftingSwitch, setGiftingSwitch] = useState(false);
   const [getSpecialMomentsSwitch, setSpecialMomentsSwitch] = useState(false);
 
@@ -219,7 +221,10 @@ const SettingScreen = ({ navigation }) => {
               {AppString.Deleteaccount}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={{ paddingBottom: 16 }}>
+          <TouchableOpacity
+            onPress={() => Logout()}
+            style={{ paddingBottom: 16 }}
+          >
             <View style={CommonStyle.RowSpace}>
               <Text style={[CommonStyle.txtTitle, { color: COLORS.Primary }]}>
                 {AppString.Logout}

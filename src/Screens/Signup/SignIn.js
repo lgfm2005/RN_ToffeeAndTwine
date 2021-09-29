@@ -46,8 +46,13 @@ import {
 } from "react-native-fbsdk";
 
 const SignIn = ({ navigation }) => {
-  const { Login, CategoryList, getUserCategoryQuestion, socialAuth } =
-    useActions();
+  const {
+    Login,
+    CategoryList,
+    getUserCategoryQuestion,
+    socialAuth,
+    GetSpecialMoment,
+  } = useActions();
   const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
   // Facebook And Google
@@ -64,7 +69,7 @@ const SignIn = ({ navigation }) => {
     GoogleSignin.configure({
       webClientId: AppString.webClientId,
     });
-    SignedIn();
+    // SignedIn();
   }, []);
 
   const SignedIn = async () => {
@@ -82,7 +87,7 @@ const SignIn = ({ navigation }) => {
       let info = await GoogleSignin.signInSilently();
       console.log("User Info --> ", info);
       setUserInfo(info);
-      navigation.navigate("Navigation");
+      // navigation.navigate("Navigation");
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_REQUIRED) {
         alert("User has not signed in yet");
@@ -103,6 +108,48 @@ const SignIn = ({ navigation }) => {
     );
     if (response.data.StatusCode == "1") {
       const tokens = response.data.Result.Token;
+      const isRegistered = response.data.Result.IsRegistered;
+      if (isRegistered == "1") {
+        const token = { token: tokens };
+        const { GetCategoryListerror, GetCategoryListresponse } =
+          await CategoryList(30, token);
+        if (GetCategoryListresponse.data.StatusCode == "1") {
+          console.log("Category Question Response Done");
+        } else {
+          console.log(
+            "User Category Question Response Error  ===>>>",
+            GetCategoryListerror
+          );
+        }
+
+        const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+          await getUserCategoryQuestion(token);
+        if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+          console.log("User Category Question Response Done");
+        } else {
+          console.log(
+            "User Category Question Response Error  ===>>>",
+            GetCategoryListerror
+          );
+        }
+        setLoader(false);
+        if (response.data.StatusCode == "1") {
+          navigation.navigate("Navigation");
+        }
+      } else if (isRegistered == "0") {
+        const token = { token: tokens };
+
+        const { specialMomentResponse, specialMomentError } =
+          await GetSpecialMoment(token);
+        if (response.data.StatusCode == "1") {
+          if (specialMomentResponse.data.StatusCode == "1") {
+            navigation.navigate("TutorialFirst", {
+              listGetSpecialDay: specialMomentResponse.data.Result,
+              token: tokens,
+            });
+          }
+        }
+      }
     }
   };
 
@@ -115,7 +162,14 @@ const SignIn = ({ navigation }) => {
         showPlayServicesUpdateDialog: true,
       });
       const userInfo = await GoogleSignin.signIn();
-      console.log("User Info --> ", userInfo);
+      socialAuthLogin(
+        userInfo.user.name,
+        userInfo.user.familyName,
+        userInfo.user.email,
+        "G"
+      );
+
+      console.log("User Info signIn--> ", userInfo.user);
       setUserInfo(userInfo);
     } catch (error) {
       console.log("Message", JSON.stringify(error));
@@ -205,6 +259,12 @@ const SignIn = ({ navigation }) => {
                     console.log("error:", error);
                     Toast.show("Something went wrong!");
                   } else {
+                    socialAuthLogin(
+                      result.first_name,
+                      result.last_name,
+                      result.email,
+                      "F"
+                    );
                     console.log("result:", result);
                   }
                 }
@@ -287,10 +347,10 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                onPress={() => handleLogin(getEmail, getCreatePassword)}
-                // onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
-                btncheck={isvalidForm()}
-                btnabled={isvalidForm()}
+                // onPress={() => handleLogin(getEmail, getCreatePassword)}
+                onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
+                // btncheck={isvalidForm()}
+                // btnabled={isvalidForm()}
               />
             </View>
 

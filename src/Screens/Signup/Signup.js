@@ -40,9 +40,21 @@ import { isEmailValid } from "../../utils";
 import Validation from "../../utils/validation";
 import { showMessage } from "react-native-flash-message";
 import { isEmail } from "../../Components/EmailCheck";
+import {
+  AccessToken,
+  LoginManager,
+  GraphRequest,
+  GraphRequestManager,
+} from "react-native-fbsdk";
 
 const Signup = ({ navigation }) => {
-  const { signUp, GetSpecialMoment } = useActions();
+  const {
+    signUp,
+    CategoryList,
+    getUserCategoryQuestion,
+    socialAuth,
+    GetSpecialMoment,
+  } = useActions();
 
   const keyboardVerticalOffset = Platform.OS === "ios" ? 1 : 0;
 
@@ -75,8 +87,62 @@ const Signup = ({ navigation }) => {
     GoogleSignin.configure({
       webClientId: AppString.webClientId,
     });
-    SignedIn();
+    // SignedIn();
   }, []);
+
+  const socialAuthLogin = async (firstName, lastName, email, type) => {
+    const { error, response } = await socialAuth(
+      firstName,
+      lastName,
+      email,
+      type
+    );
+    if (response.data.StatusCode == "1") {
+      const tokens = response.data.Result.Token;
+      const isRegistered = response.data.Result.IsRegistered;
+      if (isRegistered == "1") {
+        const token = { token: tokens };
+        const { GetCategoryListerror, GetCategoryListresponse } =
+          await CategoryList(30, token);
+        if (GetCategoryListresponse.data.StatusCode == "1") {
+          console.log("Category Question Response Done");
+        } else {
+          console.log(
+            "User Category Question Response Error  ===>>>",
+            GetCategoryListerror
+          );
+        }
+
+        const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+          await getUserCategoryQuestion(token);
+        if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+          console.log("User Category Question Response Done");
+        } else {
+          console.log(
+            "User Category Question Response Error  ===>>>",
+            GetCategoryListerror
+          );
+        }
+        setLoader(false);
+        if (response.data.StatusCode == "1") {
+          navigation.navigate("Navigation");
+        }
+      } else if (isRegistered == "0") {
+        const token = { token: tokens };
+
+        const { specialMomentResponse, specialMomentError } =
+          await GetSpecialMoment(token);
+        if (response.data.StatusCode == "1") {
+          if (specialMomentResponse.data.StatusCode == "1") {
+            navigation.navigate("TutorialFirst", {
+              listGetSpecialDay: specialMomentResponse.data.Result,
+              token: tokens,
+            });
+          }
+        }
+      }
+    }
+  };
 
   const SignedIn = async () => {
     const isSignedIn = await GoogleSignin.isSignedIn();
@@ -117,9 +183,16 @@ const Signup = ({ navigation }) => {
         showPlayServicesUpdateDialog: true,
       });
       const userInfo = await GoogleSignin.signIn();
-      console.log("User Info --> ", userInfo);
+      console.log("User Info Signup--> ", userInfo.user);
+      socialAuthLogin(
+        userInfo.user.name,
+        userInfo.user.familyName,
+        userInfo.user.email,
+        "G"
+      );
+
       setUserInfo(userInfo);
-      navigation.navigate("HomeScreen");
+      // navigation.navigate("HomeScreen");
     } catch (error) {
       console.log("Message", JSON.stringify(error));
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -132,6 +205,60 @@ const Signup = ({ navigation }) => {
         alert(error.message);
       }
     }
+  };
+
+  const fbSignIn = async () => {
+    LoginManager.logInWithPermissions(["email", "public_profile"]).then(
+      function (result) {
+        console.log("result", result);
+        if (result.isCancelled) {
+          // Toast.show("Login cancelled")
+        } else {
+          AccessToken.getCurrentAccessToken()
+            .then((data) => {
+              console.log(data);
+              // Create a graph request asking for user information with a callback to handle the response.
+              const infoRequest = new GraphRequest(
+                "/me",
+                {
+                  httpMethod: "GET",
+                  version: "v10.0",
+                  parameters: {
+                    fields: {
+                      string:
+                        "id,name,first_name,last_name,email,picture.type(large)",
+                    },
+                  },
+                },
+                (error, result) => {
+                  if (error) {
+                    console.log("error:", error);
+                    Toast.show("Something went wrong!");
+                  } else {
+                    console.log("result:", result);
+                    socialAuthLogin(
+                      result.first_name,
+                      result.last_name,
+                      result.email,
+                      "F"
+                    );
+                  }
+                }
+              );
+              // Start the graph request.
+              new GraphRequestManager().addRequest(infoRequest).start();
+            })
+            .catch((error) => {
+              console.log("error: ", error);
+              Toast.show("Something went wrong!");
+            });
+        }
+      },
+      function (error) {
+        console.log("Login fail with error: " + error);
+        Toast.show("Something went wrong!");
+      }
+    );
   };
 
   const isvalidForm = () => {
@@ -277,7 +404,10 @@ const Signup = ({ navigation }) => {
               >
                 <Image source={imgGoogle} style={Styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}} style={Styles.iconbg}>
+              <TouchableOpacity
+                onPress={() => fbSignIn()}
+                style={Styles.iconbg}
+              >
                 <Image source={imgFacebook} style={Styles.icon} />
               </TouchableOpacity>
             </View>

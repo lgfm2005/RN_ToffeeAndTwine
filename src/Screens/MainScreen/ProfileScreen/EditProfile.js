@@ -73,8 +73,12 @@ const EditProfile = ({ navigation }) => {
       const DefultUserSpecialMoment = UserSpecialMoment.filter(
         (item) => item.special_moment_id == user.defaultSpecialMoment
       );
-      UpdateDefaultSpecialMoment =
-        DefultUserSpecialMoment[0]["special_moment_name"];
+      if (DefultUserSpecialMoment.length > 0) {
+        UpdateDefaultSpecialMoment =
+          DefultUserSpecialMoment[0]["special_moment_name"];
+      } else {
+        UpdateDefaultSpecialMoment = "";
+      }
     }
     // (item) => item.special_moment_id == user.defaultSpecialMoment
     // )[0]["special_moment_name"]

@@ -33,8 +33,17 @@ import {
   statusCodes,
 } from "react-native-google-signin";
 
+import {
+  AccessToken,
+  LoginManager,
+  GraphRequest,
+  GraphRequestManager,
+} from "react-native-fbsdk";
+
 import Spinner from "react-native-loading-spinner-overlay";
 import OneSignal from "react-native-onesignal";
+
+import { useActions } from "../redux/actions";
 
 const MainScreen = ({ navigation }) => {
   if (Platform.OS === "ios") {
@@ -45,11 +54,18 @@ const MainScreen = ({ navigation }) => {
   const [gettingLoginStatus, setGettingLoginStatus] = useState(true);
   const [getLoader, setLoader] = useState(false);
 
+  const {
+    CategoryList,
+    getUserCategoryQuestion,
+    socialAuth,
+    GetSpecialMoment,
+  } = useActions();
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: AppString.webClientId,
     });
-    SignedIn();
+    // SignedIn();
   }, []);
 
   const onOpened = async (openResult, accountDetails) => {
@@ -97,6 +113,119 @@ const MainScreen = ({ navigation }) => {
     setGettingLoginStatus(false);
   };
 
+  const socialAuthLogin = async (firstName, lastName, email, type) => {
+    const { error, response } = await socialAuth(
+      firstName,
+      lastName,
+      email,
+      type
+    );
+    if (response.data.StatusCode == "1") {
+      const tokens = response.data.Result.Token;
+      const isRegistered = response.data.Result.IsRegistered;
+      if (isRegistered == "1") {
+        const token = { token: tokens };
+        const { GetCategoryListerror, GetCategoryListresponse } =
+          await CategoryList(30, token);
+        if (GetCategoryListresponse.data.StatusCode == "1") {
+          console.log("Category Question Response Done");
+        } else {
+          console.log(
+            "User Category Question Response Error  ===>>>",
+            GetCategoryListerror
+          );
+        }
+
+        const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+          await getUserCategoryQuestion(token);
+        if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+          console.log("User Category Question Response Done");
+        } else {
+          console.log(
+            "User Category Question Response Error  ===>>>",
+            GetCategoryListerror
+          );
+        }
+        if (response.data.StatusCode == "1") {
+          setTimeout(() => {
+            setLoader(false);
+
+            navigation.navigate("Navigation");
+          }, 1000);
+        } else {
+          setLoader(false);
+        }
+      } else if (isRegistered == "0") {
+        const token = { token: tokens };
+
+        const { specialMomentResponse, specialMomentError } =
+          await GetSpecialMoment(token);
+        if (response.data.StatusCode == "1") {
+          if (specialMomentResponse.data.StatusCode == "1") {
+            navigation.navigate("TutorialFirst", {
+              listGetSpecialDay: specialMomentResponse.data.Result,
+              token: tokens,
+            });
+          }
+        }
+      }
+    }
+  };
+
+  const fbSignIn = async () => {
+    LoginManager.logInWithPermissions(["email", "public_profile"]).then(
+      function (result) {
+        console.log("result", result);
+        if (result.isCancelled) {
+          // Toast.show("Login cancelled")
+        } else {
+          AccessToken.getCurrentAccessToken()
+            .then((data) => {
+              console.log(data);
+              // Create a graph request asking for user information with a callback to handle the response.
+              const infoRequest = new GraphRequest(
+                "/me",
+                {
+                  httpMethod: "GET",
+                  version: "v10.0",
+                  parameters: {
+                    fields: {
+                      string:
+                        "id,name,first_name,last_name,email,picture.type(large)",
+                    },
+                  },
+                },
+                (error, result) => {
+                  if (error) {
+                    console.log("error:", error);
+                    Toast.show("Something went wrong!");
+                  } else {
+                    socialAuthLogin(
+                      result.first_name,
+                      result.last_name,
+                      result.email,
+                      "F"
+                    );
+                    console.log("result111:", result);
+                  }
+                }
+              );
+              // Start the graph request.
+              new GraphRequestManager().addRequest(infoRequest).start();
+            })
+            .catch((error) => {
+              console.log("error: ", error);
+              Toast.show("Something went wrong!");
+            });
+        }
+      },
+      function (error) {
+        console.log("Login fail with error: " + error);
+        Toast.show("Something went wrong!");
+      }
+    );
+  };
+
   const getCurrentUserInfo = async () => {
     try {
       let info = await GoogleSignin.signInSilently();
@@ -122,9 +251,15 @@ const MainScreen = ({ navigation }) => {
         showPlayServicesUpdateDialog: true,
       });
       const userInfo = await GoogleSignin.signIn();
-      console.log("User Info --> ", userInfo);
-      setUserInfo(userInfo);
-      navigation.navigate("Navigation");
+      console.log("User Info Main --> ", userInfo.user);
+      socialAuthLogin(
+        userInfo.user.name,
+        userInfo.user.familyName,
+        userInfo.user.email,
+        "G"
+      );
+      setUserInfo(userInfo.user);
+      // navigation.navigate("Navigation");
     } catch (error) {
       console.log("Message", JSON.stringify(error));
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -252,7 +387,10 @@ const MainScreen = ({ navigation }) => {
               >
                 <Image source={imgGoogle} style={Styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}} style={Styles.iconbg}>
+              <TouchableOpacity
+                onPress={() => fbSignIn()}
+                style={Styles.iconbg}
+              >
                 <Image source={imgFacebook} style={Styles.icon} />
               </TouchableOpacity>
             </View>

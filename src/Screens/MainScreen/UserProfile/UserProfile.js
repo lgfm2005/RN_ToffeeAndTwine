@@ -238,17 +238,18 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {Data.map((item, index) => (
-                  <CalendarList
-                    ImageUrl={item.Image}
-                    ExploreName={item.Name}
-                    Id={item.id}
-                    index={index}
-                    key={index}
-                    DataLength={Data.length}
-                    onPress={() => FavoriteThings(item.Name)}
-                  />
-                ))}
+                {Data.length > 0 &&
+                  Data.map((item, index) => (
+                    <CalendarList
+                      ImageUrl={item.Image}
+                      ExploreName={item.Name}
+                      Id={item.id}
+                      index={index}
+                      key={index}
+                      DataLength={Data.length}
+                      onPress={() => FavoriteThings(item.Name)}
+                    />
+                  ))}
               </ScrollView>
             </View>
 
@@ -262,17 +263,18 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {Data.map((item, index) => (
-                  <CalendarList
-                    ImageUrl={item.Image}
-                    ExploreName={item.Name}
-                    Id={item.id}
-                    index={index}
-                    key={index}
-                    DataLength={Data.length}
-                    // onPress={() => FavoriteThings(item.Name)}
-                  />
-                ))}
+                {Data.length > 0 &&
+                  Data.map((item, index) => (
+                    <CalendarList
+                      ImageUrl={item.Image}
+                      ExploreName={item.Name}
+                      Id={item.id}
+                      index={index}
+                      key={index}
+                      DataLength={Data.length}
+                      // onPress={() => FavoriteThings(item.Name)}
+                    />
+                  ))}
               </ScrollView>
             </View>
 

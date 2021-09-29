@@ -188,16 +188,17 @@ const TutorialSecond = ({ navigation, props }) => {
                   CommonStyle.p8,
                 ]}
               >
-                {Data.map((item, index) => (
-                  <UpgradeCategoriesList
-                    ImageUrl={item.Image}
-                    ExploreName={item.Name}
-                    Id={item.id}
-                    index={index}
-                    key={index}
-                    onPress={() => popUp(item.Name)}
-                  />
-                ))}
+                {Data.length > 0 &&
+                  Data.map((item, index) => (
+                    <UpgradeCategoriesList
+                      ImageUrl={item.Image}
+                      ExploreName={item.Name}
+                      Id={item.id}
+                      index={index}
+                      key={index}
+                      onPress={() => popUp(item.Name)}
+                    />
+                  ))}
               </ScrollView>
             </View>
 

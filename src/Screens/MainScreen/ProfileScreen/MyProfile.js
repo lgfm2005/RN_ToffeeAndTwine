@@ -127,7 +127,6 @@ const MyProfile = ({ navigation }) => {
   const userCategoryQuestion = useSelector(
     (state) => state.UserCategoryQuestion
   );
-
   // Payment for upgrade
   const [getupgradeItemModal, setupgradeItemModal] = useState(false);
 
@@ -209,11 +208,13 @@ const MyProfile = ({ navigation }) => {
 
   const getFilterCatgories = (data) => {
     var dataCategory = categories;
-    data.map((items, indexs) => {
-      dataCategory = dataCategory.filter((item) => {
-        return item.category_id !== items.category_id;
+    if (data.length > 0) {
+      data.map((items, indexs) => {
+        dataCategory = dataCategory.filter((item) => {
+          return item.category_id !== items.category_id;
+        });
       });
-    });
+    }
     setFilterCat(dataCategory);
     // console.log(getFilterCat);
   };
@@ -322,12 +323,10 @@ const MyProfile = ({ navigation }) => {
 
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-    debugger;
     if (
       updateCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
-      debugger;
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       // setAddNewFreshItemModal(false);
       setUpdateDataModal(false);
@@ -439,11 +438,13 @@ const MyProfile = ({ navigation }) => {
   // Special Moment Day
   const getFilterSepCatgories = (data) => {
     var dataCategory = specialMoment;
-    data.map((items, indexs) => {
-      dataCategory = dataCategory.filter((item) => {
-        return item.special_moment_id !== items.special_moment_id;
+    if (data.length > 0) {
+      data.map((items, indexs) => {
+        dataCategory = dataCategory.filter((item) => {
+          return item.special_moment_id !== items.special_moment_id;
+        });
       });
-    });
+    }
     setFilterSepCat(dataCategory);
     // console.log(getFilterSepCat);
   };
@@ -857,29 +858,30 @@ const MyProfile = ({ navigation }) => {
                     { justifyContent: "flex-start" },
                   ]}
                 >
-                  {userCategoryQuestion.map((item, index) => {
-                    return (
-                      <CalendarList
-                        ImageUrl={imgBook}
-                        ExploreName={item.category_name}
-                        Id={item.category_id}
-                        index={index}
-                        key={index}
-                        DataLength={userCategoryQuestion.length}
-                        ShowBtn={false}
-                        onPress={() =>
-                          ShowOldItem(
-                            item.category_name,
-                            item.Image,
-                            item.category_id,
-                            index,
-                            item.questions
-                          )
-                        }
-                        AddNewOnPress={() => AddItemShow(index)}
-                      />
-                    );
-                  })}
+                  {userCategoryQuestion.length > 0 &&
+                    userCategoryQuestion.map((item, index) => {
+                      return (
+                        <CalendarList
+                          ImageUrl={imgBook}
+                          ExploreName={item.category_name}
+                          Id={item.category_id}
+                          index={index}
+                          key={index}
+                          DataLength={userCategoryQuestion.length}
+                          ShowBtn={false}
+                          onPress={() =>
+                            ShowOldItem(
+                              item.category_name,
+                              item.Image,
+                              item.category_id,
+                              index,
+                              item.questions
+                            )
+                          }
+                          AddNewOnPress={() => AddItemShow(index)}
+                        />
+                      );
+                    })}
                   <CalendarList
                     ShowBtn={true}
                     key={1}
@@ -909,7 +911,8 @@ const MyProfile = ({ navigation }) => {
                   ]}
                 >
                   {userSpecialMoment != ""
-                    ? userSpecialMoment.map((item, index) => (
+                    ? userSpecialMoment.length > 0 &&
+                      userSpecialMoment.map((item, index) => (
                         <CalendarList
                           ImageUrl={imgWhiteBirthday}
                           ExploreName={item.special_moment_name}
@@ -969,25 +972,26 @@ const MyProfile = ({ navigation }) => {
                     <ScrollView
                       contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
                     >
-                      {getFilterCat.map((item, index) => (
-                        <SelectCategoriesList
-                          ImageUrl={imgBook}
-                          ExploreName={item.category_name}
-                          Id={item.category_id}
-                          index={index}
-                          key={index}
-                          // DataLength={Data.length}
-                          onPress={() =>
-                            SelectCategoriesItem(
-                              item.category_name,
-                              item.Image,
-                              item.category_id,
-                              item.questions,
-                              index
-                            )
-                          }
-                        />
-                      ))}
+                      {getFilterCat.length > 0 &&
+                        getFilterCat.map((item, index) => (
+                          <SelectCategoriesList
+                            ImageUrl={imgBook}
+                            ExploreName={item.category_name}
+                            Id={item.category_id}
+                            index={index}
+                            key={index}
+                            // DataLength={Data.length}
+                            onPress={() =>
+                              SelectCategoriesItem(
+                                item.category_name,
+                                item.Image,
+                                item.category_id,
+                                item.questions,
+                                index
+                              )
+                            }
+                          />
+                        ))}
                     </ScrollView>
                   </View>
                 </View>
@@ -1040,15 +1044,16 @@ const MyProfile = ({ navigation }) => {
                     </View>
                   </View>
                   <View style={CommonStyle.my16}>
-                    {getShowOldQuestion.map((item, index) => {
-                      return (
-                        <EditShowSimpleView
-                          TitleName={item.category_question}
-                          buttonName={item.question_value}
-                          placeholderTextColor={COLORS.Primary}
-                        />
-                      );
-                    })}
+                    {getShowOldQuestion.length > 0 &&
+                      getShowOldQuestion.map((item, index) => {
+                        return (
+                          <EditShowSimpleView
+                            TitleName={item.category_question}
+                            buttonName={item.question_value}
+                            placeholderTextColor={COLORS.Primary}
+                          />
+                        );
+                      })}
                   </View>
 
                   <View
@@ -1107,22 +1112,23 @@ const MyProfile = ({ navigation }) => {
                   </View>
 
                   <View style={CommonStyle.my16}>
-                    {getShowOldQuestion.map((item, key) => {
-                      return (
-                        <SimpleInputEditView
-                          TitleName={item.category_question}
-                          buttonName={item.question_value}
-                          placeholderTextColor={COLORS.Primary}
-                          onChangeText={(value) =>
-                            UpdateQuestionData(
-                              item.user_category_question_id,
-                              value,
-                              key
-                            )
-                          }
-                        />
-                      );
-                    })}
+                    {getShowOldQuestion.length > 0 &&
+                      getShowOldQuestion.map((item, key) => {
+                        return (
+                          <SimpleInputEditView
+                            TitleName={item.category_question}
+                            buttonName={item.question_value}
+                            placeholderTextColor={COLORS.Primary}
+                            onChangeText={(value) =>
+                              UpdateQuestionData(
+                                item.user_category_question_id,
+                                value,
+                                key
+                              )
+                            }
+                          />
+                        );
+                      })}
                   </View>
                   <View
                     style={{ flexDirection: "row", justifyContent: "center" }}
@@ -1181,22 +1187,23 @@ const MyProfile = ({ navigation }) => {
                   </View>
 
                   <View style={CommonStyle.my16}>
-                    {getQuestions.map((item, key) => {
-                      return (
-                        <SimpleInputEditView
-                          TitleName={item.category_question}
-                          placeholder={item.category_placeholder}
-                          onChangeText={(value) =>
-                            HandelQuestionData(
-                              item.category_id,
-                              item.category_question_id,
-                              value,
-                              key
-                            )
-                          }
-                        />
-                      );
-                    })}
+                    {getQuestions.length > 0 &&
+                      getQuestions.map((item, key) => {
+                        return (
+                          <SimpleInputEditView
+                            TitleName={item.category_question}
+                            placeholder={item.category_placeholder}
+                            onChangeText={(value) =>
+                              HandelQuestionData(
+                                item.category_id,
+                                item.category_question_id,
+                                value,
+                                key
+                              )
+                            }
+                          />
+                        );
+                      })}
 
                     {/* <SimpleInputEditView
                         TitleName={getQuestions[0].category_question}
@@ -1545,23 +1552,24 @@ const MyProfile = ({ navigation }) => {
                     <ScrollView
                       contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
                     >
-                      {getFilterSepCat.map((item, index) => (
-                        <SelectCategoriesList
-                          ImageUrl={imgWhiteBirthday}
-                          ExploreName={item.special_moment_name}
-                          Id={item.special_moment_id}
-                          index={index}
-                          key={index}
-                          DataLength={specialMoment.length}
-                          style={{ width: "23%" }}
-                          onPress={() => {
-                            SelectMoment(
-                              item.special_moment_name,
-                              item.special_moment_id
-                            );
-                          }}
-                        />
-                      ))}
+                      {getFilterSepCat.length > 0 &&
+                        getFilterSepCat.map((item, index) => (
+                          <SelectCategoriesList
+                            ImageUrl={imgWhiteBirthday}
+                            ExploreName={item.special_moment_name}
+                            Id={item.special_moment_id}
+                            index={index}
+                            key={index}
+                            DataLength={specialMoment.length}
+                            style={{ width: "23%" }}
+                            onPress={() => {
+                              SelectMoment(
+                                item.special_moment_name,
+                                item.special_moment_id
+                              );
+                            }}
+                          />
+                        ))}
                     </ScrollView>
                   </View>
                 </View>
