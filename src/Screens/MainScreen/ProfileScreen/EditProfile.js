@@ -49,6 +49,8 @@ const EditProfile = ({ navigation }) => {
 
   const { updateProfile } = useActions();
 
+  const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
+
   const [getHighlightMomentModel, setHighlightMomentModel] = useState(false);
   const [getHighlightMoment, setHighlightMoment] = useState("");
   const [getHighlightMomentId, setHighlightMomentId] = useState("");

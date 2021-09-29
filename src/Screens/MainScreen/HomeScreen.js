@@ -243,6 +243,7 @@ const HomeScreen = () => {
       addCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
+      getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
@@ -273,13 +274,13 @@ const HomeScreen = () => {
   };
   // Submit Update Data Categories Question
   const SubmitUpdateQuestionData = async () => {
-    setUpdateDataModal(true);
+    setUpdateDataModal(false);
     setAddItemShowModal(false);
     setEditItemModal(false);
     setAddNewItemModal(false);
     setLoader(true);
 
-    console.log("getUpdateQuestionData", getUpdateQuestionData);
+    console.log("get  UpdateQuestionData", getUpdateQuestionData);
     getUpdateQuestionData.map((item) => {
       data.append("UserCategoryQuestionID[]", item.categoryQuestionId);
       data.append("CategoryQuestionValue[]", item.value);
@@ -295,7 +296,9 @@ const HomeScreen = () => {
       updateCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
+      getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       // setAddNewFreshItemModal(false);
+      setLoader(false);
       setUpdateDataModal(false);
       setAddItemShowModal(false);
       setEditItemModal(false);
@@ -307,14 +310,17 @@ const HomeScreen = () => {
       // );
       // console.log("Question Response ==>>>", updateCategoryQuestionResponse);
     } else {
-      setUpdateDataModal(true);
+      setLoader(false);
+      setUpdateDataModal(false);
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
       // console.log("Question Error ==>>>", updateCategoryQuestionError);
       // console.log(
       //   "User Category Question Response Error  ===>>>",
       //   GetCategoryListerror
       // );
     }
-    setLoader(false);
   };
 
   // Select Item Categories --> Open
@@ -372,6 +378,7 @@ const HomeScreen = () => {
       deleteUserCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
+      getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setUpdateDataModal(false);
       setAddItemShowModal(false);
@@ -469,7 +476,11 @@ const HomeScreen = () => {
                   <ExploreShareList
                     ShowBtn={true}
                     key={1}
-                    AddNewOnPress={() => AddItemShow(0)}
+                    AddNewOnPress={() => {
+                      userCategoryQuestion.length != 5
+                        ? AddItemShow(0)
+                        : upgradeItem();
+                    }}
                   />
                 </ScrollView>
               </View>
@@ -509,7 +520,18 @@ const HomeScreen = () => {
                     index={index}
                     key={index}
                     DataLength={item.category_id}
-                    onPress={() => upgradeItem()}
+                    onPress={() => {
+                      userCategoryQuestion.length != 5
+                        ? SelectCategoriesItem(
+                            item.category_name,
+                            item.Image,
+                            item.category_id,
+                            item.questions,
+                            index
+                          )
+                        : upgradeItem();
+                    }}
+                    // onPress={() => upgradeItem()}
                     // AddNewOnPress={() => upgradeItem()}
                   />
                 ))}
@@ -594,7 +616,7 @@ const HomeScreen = () => {
                           )}
                         </TouchableOpacity>
                       </View>
-                      <View style={CommonStyle.PopModalWidth60}>
+                      <View style={{ width: "60%" }}>
                         <Text
                           style={[
                             CommonStyle.txtTitle,
@@ -604,6 +626,7 @@ const HomeScreen = () => {
                           {getUpdateDataItem}
                         </Text>
                       </View>
+                      <View style={{ width: "20%" }}></View>
                     </View>
 
                     <View style={CommonStyle.my16}>
@@ -611,7 +634,8 @@ const HomeScreen = () => {
                         return (
                           <SimpleInputEditView
                             TitleName={item.category_question}
-                            buttonName={item.category_placeholder}
+                            placeholder={item.question_value}
+                            placeholderTextColor={COLORS.Primary}
                             onChangeText={(value) =>
                               UpdateQuestionData(
                                 item.user_category_question_id,
@@ -669,7 +693,7 @@ const HomeScreen = () => {
                           )}
                         </TouchableOpacity>
                       </View>
-                      <View style={CommonStyle.PopModalWidth60}>
+                      <View style={{ width: "60%" }}>
                         <Text
                           style={[
                             CommonStyle.txtTitle,
@@ -679,6 +703,7 @@ const HomeScreen = () => {
                         >
                           {getAddNewItem}
                         </Text>
+                        <View style={{ width: "20%" }}></View>
                       </View>
                       <TouchableOpacity onPress={() => DeletedExplore()}>
                         <Image
@@ -693,6 +718,7 @@ const HomeScreen = () => {
                           <EditShowSimpleView
                             TitleName={item.category_question}
                             buttonName={item.question_value}
+                            placeholderTextColor={COLORS.Primary}
                           />
                         );
                       })}
@@ -743,11 +769,18 @@ const HomeScreen = () => {
                           )}
                         </TouchableOpacity>
                       </View>
-                      <View style={CommonStyle.PopModalWidth60}>
+                      <View
+                        style={{
+                          width: "60%",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
                         <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
                           {getAddNewItem}
                         </Text>
                       </View>
+                      <View style={{ width: "20%" }}></View>
                     </View>
 
                     <View style={CommonStyle.my16}>
@@ -756,6 +789,7 @@ const HomeScreen = () => {
                           <SimpleInputEditView
                             TitleName={item.category_question}
                             placeholder={item.category_placeholder}
+                            placeholderTextColor={COLORS.Primary}
                             onChangeText={(value) =>
                               HandelQuestionData(
                                 item.category_id,
@@ -767,27 +801,6 @@ const HomeScreen = () => {
                           />
                         );
                       })}
-
-                      {/* <SimpleInputEditView
-                        TitleName={getQuestions[0].category_question}
-                        placeholder={getQuestions[0].category_placeholder}
-                        onChangeText={(FirstName) => setFirstName(FirstName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={getQuestions[1].category_question}
-                        placeholder={getQuestions[1].category_placeholder}
-                        onChangeText={(SecondName) => setSecondName(SecondName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={getQuestions[2].category_question}
-                        placeholder={getQuestions[2].category_placeholder}
-                        onChangeText={(ThirdName) => setThirdName(ThirdName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={getQuestions[3].category_question}
-                        placeholder={getQuestions[3].category_placeholder}
-                        onChangeText={(FourName) => setFourName(FourName)}
-                      /> */}
                     </View>
                     <View
                       style={{ flexDirection: "row", justifyContent: "center" }}

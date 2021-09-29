@@ -554,7 +554,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.toffeeTwine.apps;
 				PRODUCT_NAME = toffeetwine;
-				PROVISIONING_PROFILE_SPECIFIER = ToffeeTwineDevProfile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "toffeetwine-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

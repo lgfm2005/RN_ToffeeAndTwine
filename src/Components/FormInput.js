@@ -134,7 +134,7 @@ export const EditShowBtnSimpleView = ({
       </Text>
       <TouchableOpacity onPress={onPress}>
         <View style={{ paddingLeft: 16 }}>
-          <Text style={{ color: COLORS.PrimaryLight }}>{placeholder}</Text>
+          <Text style={{ color: COLORS.Primary }}>{placeholder}</Text>
         </View>
       </TouchableOpacity>
     </View>
