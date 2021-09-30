@@ -347,17 +347,19 @@ export const useActions = () => {
       };
     },
 
-    addCategoryQuestion: async (tokens, data) => {
+    addCategoryQuestion: async (tokens, getQuestionsData) => {
       var session = sessions;
       if (tokens) {
         session = tokens;
       }
-      console.log("Data", data);
-      console.log("tokens", tokens);
-      // var data = new FormData();
-      // data.append("CategoryID[]", CategoryID);
-      // data.append("CategoryQuestionID[]", CategoryQuestionID);
-      // data.append("CategoryQuestionValue[]", CategoryQuestionValue);
+
+      var data = new FormData();
+      getQuestionsData.map((item) => {
+        data.append("IsFirst", 1);
+        data.append("CategoryID[]", item.categoryId);
+        data.append("CategoryQuestionID[]", item.categoryQuestionId);
+        data.append("CategoryQuestionValue[]", item.value);
+      });
 
       let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
@@ -375,14 +377,16 @@ export const useActions = () => {
       return { addCategoryQuestionResponse, addCategoryQuestionError };
     },
 
-    updateCategoryQuestion: async (tokens, data) => {
+    updateCategoryQuestion: async (tokens, getUpdateQuestionData) => {
       var session = sessions;
       if (tokens) {
         session = tokens;
       }
-      // var data = new FormData();
-      // data.append("UserCategoryQuestionID[]", UserCategoryQuestionID);
-      // data.append("CategoryQuestionValue[]", CategoryQuestionValue);
+      var data = new FormData();
+      getUpdateQuestionData.map((item) => {
+        data.append("UserCategoryQuestionID[]", item.categoryQuestionId);
+        data.append("CategoryQuestionValue[]", item.value);
+      });
 
       let updateCategoryQuestionResponse, updateCategoryQuestionError;
       try {

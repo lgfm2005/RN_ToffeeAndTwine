@@ -327,13 +327,9 @@ const MyProfile = ({ navigation }) => {
     setAddNewItemModal(false);
 
     console.log("getUpdateQuestionData", getUpdateQuestionData);
-    getUpdateQuestionData.map((item) => {
-      data.append("UserCategoryQuestionID[]", item.categoryQuestionId);
-      data.append("CategoryQuestionValue[]", item.value);
-    });
     // API
     const { updateCategoryQuestionResponse, updateCategoryQuestionError } =
-      await updateCategoryQuestion(userData.token, data);
+      await updateCategoryQuestion(userData, getUpdateQuestionData);
 
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
@@ -371,16 +367,9 @@ const MyProfile = ({ navigation }) => {
     setAddNewItemModal(false);
     setLoader(true);
 
-    getQuestionsData.map((item) => {
-      data.append("IsFirst", 1);
-      data.append("CategoryID[]", item.categoryId);
-      data.append("CategoryQuestionID[]", item.categoryQuestionId);
-      data.append("CategoryQuestionValue[]", item.value);
-    });
-
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData.token, data);
+      await addCategoryQuestion(userData, getQuestionsData);
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
 
