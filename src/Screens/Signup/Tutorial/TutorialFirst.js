@@ -98,21 +98,36 @@ const TutorialFirst = ({ navigation, props, route }) => {
   };
 
   const SubmitData = async () => {
-    setLoader(true);
+    setLoader(false);
     const tokens = { token: token };
+    console.log("TutorialFirst tokens ========>", tokens);
+    // console.log("tokens ========>", gfegfegfegr);
+
     const { error, response } = await updateProfile(
       getFirstName,
       getLastName,
+      "",
+      "",
       tokens
     );
-
     const { addCategoryspecialDayerror, addCategoryspecialDayResponse } =
-      await addCategoryspecialDay(getRadioId, getFinaldate, "1", tokens);
-
+      await addCategoryspecialDay(
+        getRadioId,
+        "",
+        getFinaldate,
+        "",
+        "",
+        "",
+        "1",
+        tokens
+      );
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(10, tokens);
     var listOfCategory = [];
-    if (GetCategoryListresponse.data.StatusCode == "1") {
+    if (
+      GetCategoryListresponse.data.StatusCode == "1" &&
+      addCategoryspecialDayResponse.data.StatusCode == "1"
+    ) {
       var listOfCategorys = GetCategoryListresponse.data.Result;
       listOfCategorys.map((item, index) => {
         var items = {

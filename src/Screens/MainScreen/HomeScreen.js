@@ -25,7 +25,7 @@ import { AppString } from "../../Assets/utils/AppString";
 import {
   demodp,
   imgExploreaNShare,
-  imgCoffee,
+  imgPlaceHolder,
   imgDesserts,
   imgFlowers,
   imgLaptop,
@@ -59,7 +59,8 @@ import { FONT } from "../../Assets/utils/FONT";
 import { useActions } from "../../redux/actions";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
-var temp = [];
+var temp,
+  temp2 = [];
 var data = new FormData();
 var items, list, userData;
 const HomeScreen = () => {
@@ -202,6 +203,7 @@ const HomeScreen = () => {
 
   // All categories Select show (Show All Item)
   const AddItemShow = () => {
+    temp = [];
     console.log("All categories Select show (Show All Item)");
     setAddItemShowModal(true);
   };
@@ -214,6 +216,12 @@ const HomeScreen = () => {
 
     // setAddNewFreshItemModal(true)
     AddNewFreshItem(Name, Image, id, questions);
+  };
+
+  const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
+    temp2[key] = { categoryId, categoryQuestionId, value, key };
+    console.log(",temp2temp2temp2temp2temp2temp2temp2temp2temp2", temp2);
+    temp = temp2;
   };
 
   // Add New Categories Question
@@ -230,16 +238,9 @@ const HomeScreen = () => {
     setAddNewItemModal(false);
     setLoader(true);
 
-    getQuestionsData.map((item) => {
-      data.append("IsFirst", 1);
-      data.append("CategoryID[]", item.categoryId);
-      data.append("CategoryQuestionID[]", item.categoryQuestionId);
-      data.append("CategoryQuestionValue[]", item.value);
-    });
-
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData.token, data);
+      await addCategoryQuestion(userData, getQuestionsData);
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
 
@@ -272,9 +273,15 @@ const HomeScreen = () => {
   };
 
   // Update Categories Question
+  const UpdateQuestionData2 = (categoryQuestionId, value, key) => {
+    temp2[key] = { categoryQuestionId, value };
+    temp = temp2;
+    // temp = [];
+  };
   const UpdateQuestionData = (categoryQuestionId, value, key) => {
     temp[key] = { categoryQuestionId, value };
     setUpdateQuestionData(temp);
+    // temp = [];
   };
   // Submit Update Data Categories Question
   const SubmitUpdateQuestionData = async () => {
@@ -284,14 +291,9 @@ const HomeScreen = () => {
     setAddNewItemModal(false);
     setLoader(true);
 
-    console.log("get  UpdateQuestionData", getUpdateQuestionData);
-    getUpdateQuestionData.map((item) => {
-      data.append("UserCategoryQuestionID[]", item.categoryQuestionId);
-      data.append("CategoryQuestionValue[]", item.value);
-    });
     // API
     const { updateCategoryQuestionResponse, updateCategoryQuestionError } =
-      await updateCategoryQuestion(userData.token, data);
+      await updateCategoryQuestion(userData, getUpdateQuestionData);
 
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
@@ -329,6 +331,7 @@ const HomeScreen = () => {
 
   // Select Item Categories --> Open
   const ShowOldItem = (Name, Image, id, key, questions) => {
+    temp = [];
     console.log("ShowOldItem Name", Name);
     console.log("ShowOldItem Image", Image);
     console.log("ShowOldItem Id", id);
@@ -356,6 +359,7 @@ const HomeScreen = () => {
 
   // Old Select Categories -- > Edit Item
   const AddEditItem = (getAddNewItem) => {
+    temp = [];
     setAddNewItemModal(false);
     setUpdateDataModal(true);
     setUpdateDataItem(getAddNewItem);
@@ -422,7 +426,11 @@ const HomeScreen = () => {
             <View style={CommonStyle.Container}>
               <View style={[CommonStyle.my16, CommonStyle.Row]}>
                 <Image
-                  source={{ uri: userData.userProfileImage }}
+                  source={
+                    userData.userProfileImage == ""
+                      ? { uri: userData.userProfileImage }
+                      : imgPlaceHolder
+                  }
                   style={CommonStyle.ProfileImage}
                 />
                 <Text style={[CommonStyle.userName]}>
@@ -474,7 +482,7 @@ const HomeScreen = () => {
                               item.questions
                             )
                           }
-                          AddNewOnPress={() => AddItemShow(index)}
+                          // AddNewOnPress={() => AddItemShow(index)}
                         />
                       );
                     })}
@@ -639,6 +647,11 @@ const HomeScreen = () => {
                     <View style={CommonStyle.my16}>
                       {getShowOldQuestion.length > 0 &&
                         getShowOldQuestion.map((item, key) => {
+                          UpdateQuestionData2(
+                            item.user_category_question_id,
+                            item.question_value,
+                            key
+                          );
                           return (
                             <SimpleInputEditView
                               TitleName={item.category_question}
@@ -795,6 +808,12 @@ const HomeScreen = () => {
                     <View style={CommonStyle.my16}>
                       {getQuestions.length > 0 &&
                         getQuestions.map((item, key) => {
+                          setSecondTemp(
+                            item.category_id,
+                            item.category_question_id,
+                            "",
+                            key
+                          );
                           return (
                             <SimpleInputEditView
                               TitleName={item.category_question}

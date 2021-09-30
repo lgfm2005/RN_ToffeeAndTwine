@@ -201,6 +201,7 @@ const CalendarScreen = () => {
   };
 
   // Close All Item
+
   const CloseSepItem = () => {
     setAddItemShowSepModal(false);
     setEditItemSepModal(false);
@@ -512,7 +513,8 @@ const CalendarScreen = () => {
                 ]}
               >
                 {userSpecialMoment != ""
-                  ? userSpecialMoment.length > 0 &&
+                  ? // ? userSpecialMoment.map((item, index) => (
+                    userSpecialMoment.length > 0 &&
                     userSpecialMoment.map((item, index) => (
                       <CalendarList
                         ImageUrl={imgWhiteBirthday}

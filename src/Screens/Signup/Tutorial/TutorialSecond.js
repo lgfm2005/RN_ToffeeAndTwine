@@ -41,7 +41,8 @@ import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
-var temp = [];
+var temp,
+  temp2 = [];
 var data = new FormData();
 var items, list;
 const TutorialSecond = ({ navigation, props, route }) => {
@@ -114,6 +115,11 @@ const TutorialSecond = ({ navigation, props, route }) => {
     setModalVisible(false);
   };
 
+  const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
+    temp2[key] = { categoryId, categoryQuestionId, value, key };
+    console.log(",temp2temp2temp2temp2temp2temp2temp2temp2temp2", temp2);
+    temp = temp2;
+  };
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
     temp[key] = { categoryId, categoryQuestionId, value, key };
     setQuestionsData(temp);
@@ -239,6 +245,12 @@ const TutorialSecond = ({ navigation, props, route }) => {
 
                     <View style={CommonStyle.my16}>
                       {getQuestions.map((item, key) => {
+                        setSecondTemp(
+                          item.category_id,
+                          item.category_question_id,
+                          "",
+                          key
+                        );
                         return (
                           <SimpleInputEditView
                             key={key}

@@ -178,12 +178,16 @@ const CalendarScreen = () => {
 
   const getFilterSepCatgories = (data) => {
     var dataCategory = specialMoment;
+    // data.map((items, indexs) => {
+    //   dataCategory = dataCategory.filter((item) => {
+    //     return item.special_moment_id !== items.special_moment_id;
     if (data.length > 0) {
       data.map((items, indexs) => {
         dataCategory = dataCategory.filter((item) => {
           return item.special_moment_id !== items.special_moment_id;
         });
       });
+      // });
     }
     setFilterSepCat(dataCategory);
     // console.log(getFilterSepCat);
@@ -464,7 +468,8 @@ const CalendarScreen = () => {
                 ]}
               >
                 {userSpecialMoment != ""
-                  ? userSpecialMoment.length > 0 &&
+                  ? // ? userSpecialMoment.map((item, index) => (
+                    userSpecialMoment.length > 0 &&
                     userSpecialMoment.map((item, index) => (
                       <CalendarList
                         ImageUrl={imgWhiteBirthday}
@@ -884,6 +889,23 @@ const CalendarScreen = () => {
                           MainScreenStyle.scrollItemStyle,
                         ]}
                       >
+                        {/* {getFilterSepCat.map((item, index) => (
+                          <SelectCategoriesList
+                            ImageUrl={imgWhiteBirthday}
+                            ExploreName={item.special_moment_name}
+                            Id={item.special_moment_id}
+                            index={index}
+                            key={index}
+                            DataLength={specialMoment.length}
+                            style={{ width: "23%" }}
+                            onPress={() => {
+                              SelectMoment(
+                                item.special_moment_name,
+                                item.special_moment_id
+                              );
+                            }}
+                          />
+                        ))} */}
                         {getFilterSepCat.length > 0 &&
                           getFilterSepCat.map((item, index) => (
                             <SelectCategoriesList

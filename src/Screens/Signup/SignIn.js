@@ -347,10 +347,10 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                // onPress={() => handleLogin(getEmail, getCreatePassword)}
-                onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
-                // btncheck={isvalidForm()}
-                // btnabled={isvalidForm()}
+                onPress={() => handleSignIn(getEmail, getCreatePassword)}
+                // onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
+                btncheck={isvalidForm()}
+                btnabled={isvalidForm()}
               />
             </View>
 

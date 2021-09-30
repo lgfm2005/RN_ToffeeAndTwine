@@ -104,7 +104,8 @@ const Data = [
 ];
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
-var temp = [];
+var temp,
+  temp2 = [];
 var data = new FormData();
 const MyProfile = ({ navigation }) => {
   const {
@@ -242,6 +243,7 @@ const MyProfile = ({ navigation }) => {
 
   // Select Item Categories --> Open
   const ShowOldItem = (Name, Image, id, key, questions) => {
+    temp = [];
     console.log("ShowOldItem Name", Name);
     console.log("ShowOldItem Image", Image);
     console.log("ShowOldItem id", id);
@@ -283,23 +285,35 @@ const MyProfile = ({ navigation }) => {
     setQuestions(questions);
   };
 
+  const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
+    temp2[key] = { categoryId, categoryQuestionId, value, key };
+    console.log(",temp2temp2temp2temp2temp2temp2temp2temp2temp2", temp2);
+    temp = temp2;
+  };
   // Add New Categories Question
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
     temp[key] = { categoryId, categoryQuestionId, value, key };
+    console.log(",fewrjfgkewfhewfhefewlfhewfjklewfbhewkjfewbf", temp);
     setQuestionsData(temp);
   };
 
   // Old Select Categories -- > Edit Item
   const AddEditItem = (getAddNewItem) => {
+    temp = [];
     setAddNewItemModal(false);
     setUpdateDataModal(true);
     setUpdateDataItem(getAddNewItem);
-
     // setEditItemModal(true);
     // setEditItem(getAddNewItem);
   };
 
   // Update Categories Question
+  // Update Categories Question
+  const UpdateQuestionData2 = (categoryQuestionId, value, key) => {
+    temp2[key] = { categoryQuestionId, value };
+    temp = temp2;
+    // temp = [];
+  };
   const UpdateQuestionData = (categoryQuestionId, value, key) => {
     temp[key] = { categoryQuestionId, value };
     setUpdateQuestionData(temp);
@@ -313,13 +327,9 @@ const MyProfile = ({ navigation }) => {
     setAddNewItemModal(false);
 
     console.log("getUpdateQuestionData", getUpdateQuestionData);
-    getUpdateQuestionData.map((item) => {
-      data.append("UserCategoryQuestionID[]", item.categoryQuestionId);
-      data.append("CategoryQuestionValue[]", item.value);
-    });
     // API
     const { updateCategoryQuestionResponse, updateCategoryQuestionError } =
-      await updateCategoryQuestion(userData.token, data);
+      await updateCategoryQuestion(userData, getUpdateQuestionData);
 
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
@@ -357,16 +367,9 @@ const MyProfile = ({ navigation }) => {
     setAddNewItemModal(false);
     setLoader(true);
 
-    getQuestionsData.map((item) => {
-      data.append("IsFirst", 1);
-      data.append("CategoryID[]", item.categoryId);
-      data.append("CategoryQuestionID[]", item.categoryQuestionId);
-      data.append("CategoryQuestionValue[]", item.value);
-    });
-
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData.token, data);
+      await addCategoryQuestion(userData, getQuestionsData);
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
 
@@ -625,7 +628,7 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
-      setUserNewSpecialMomentModal(true);
+      setUserNewSpecialMomentModal(false);
       console.log(
         "NEW CategorySpecialMoment Error",
         addCategoryspecialDayError
@@ -1189,6 +1192,12 @@ const MyProfile = ({ navigation }) => {
                   <View style={CommonStyle.my16}>
                     {getQuestions.length > 0 &&
                       getQuestions.map((item, key) => {
+                        setSecondTemp(
+                          item.category_id,
+                          item.category_question_id,
+                          "",
+                          key
+                        );
                         return (
                           <SimpleInputEditView
                             TitleName={item.category_question}
