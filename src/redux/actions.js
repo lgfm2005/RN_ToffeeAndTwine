@@ -217,10 +217,14 @@ export const useActions = () => {
       return { GetCategoryListresponse, GetCategoryListerror };
     },
 
-    GetSpecialMoment: async () => {
+    GetSpecialMoment: async (tokens) => {
+      var session = sessions;
+      if (tokens) {
+        session = tokens;
+      }
       let specialMomentResponse, specialMomentError;
       try {
-        specialMomentResponse = await API.GetSpecialMoment.get(sessions);
+        specialMomentResponse = await API.GetSpecialMoment.get(session);
         if (specialMomentResponse.data.StatusCode == "1") {
           dispatch(SpecialMoment(specialMomentResponse.data.Result));
         }
@@ -441,12 +445,20 @@ export const useActions = () => {
     },
 
     updateCategorySpecialMoment: async (
-      UserSpecialMomentID,
-      UserSpecialMomentValue
+      SpecialMomentID,
+      UserSpecialMomentTitle,
+      UserSpecialMomentValue,
+      UserSpecialMomentLink,
+      UserSpecialMomentInfo,
+      Image
     ) => {
       var data = new FormData();
-      data.append("UserSpecialMomentID", UserSpecialMomentID);
+      data.append("UserSpecialMomentID", SpecialMomentID);
+      data.append("UserSpecialMomentTitle", UserSpecialMomentTitle);
       data.append("UserSpecialMomentValue", UserSpecialMomentValue);
+      data.append("UserSpecialMomentLink", UserSpecialMomentLink);
+      data.append("UserSpecialMomentInfo", UserSpecialMomentInfo);
+      data.append("Image", Image);
 
       let updateCategorySpecialMomentResponse, updateCategorySpecialMomentError;
       try {

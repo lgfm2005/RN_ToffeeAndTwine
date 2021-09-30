@@ -18,7 +18,6 @@ import Modal from "react-native-modal";
 // Asset
 import { imgbirthdayCakeGary } from "../../../Assets/utils/Image";
 import CommonStyle from "../../../Assets/Style/CommonStyle";
-import { ToolbarMain } from "../../../Components/ToolbarMain/ToolbarMain";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import {
   FilledButton,
@@ -48,9 +47,6 @@ import {
 } from "../../../Assets/utils/Image";
 import { MainScreenStyle } from "../MainScreenStyle";
 import { CalendarList } from "../../../Components/AllListVIew/CalendarList";
-import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
-import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
-import { ProfileToolBar } from "../../../Components/ProfileToolBar/ProfileToolBar";
 import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
 import { EditShowSimpleView } from "../../../Components/FormInput";
 
@@ -238,17 +234,18 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {Data.map((item, index) => (
-                  <CalendarList
-                    ImageUrl={item.Image}
-                    ExploreName={item.Name}
-                    Id={item.id}
-                    index={index}
-                    key={index}
-                    DataLength={Data.length}
-                    onPress={() => FavoriteThings(item.Name)}
-                  />
-                ))}
+                {Data.length > 0 &&
+                  Data.map((item, index) => (
+                    <CalendarList
+                      ImageUrl={item.Image}
+                      ExploreName={item.Name}
+                      Id={item.id}
+                      index={index}
+                      key={index}
+                      DataLength={Data.length}
+                      onPress={() => FavoriteThings(item.Name)}
+                    />
+                  ))}
               </ScrollView>
             </View>
 
@@ -262,17 +259,18 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {Data.map((item, index) => (
-                  <CalendarList
-                    ImageUrl={item.Image}
-                    ExploreName={item.Name}
-                    Id={item.id}
-                    index={index}
-                    key={index}
-                    DataLength={Data.length}
-                    // onPress={() => FavoriteThings(item.Name)}
-                  />
-                ))}
+                {Data.length > 0 &&
+                  Data.map((item, index) => (
+                    <CalendarList
+                      ImageUrl={item.Image}
+                      ExploreName={item.Name}
+                      Id={item.id}
+                      index={index}
+                      key={index}
+                      DataLength={Data.length}
+                      // onPress={() => FavoriteThings(item.Name)}
+                    />
+                  ))}
               </ScrollView>
             </View>
 

@@ -14,7 +14,7 @@ export default function RadioButtonContainer({ values, onPress }) {
   const _renderRadioButtons = () => {
     return (values || []).map((listItem, idx) => {
       let isChecked = currentSelectedItem === idx ? true : false;
-      return (
+      return idx < 4 ? (
         <RadioButton
           key={idx}
           onRadioButtonPress={() => _onPress(idx, listItem.special_moment_id)}
@@ -22,7 +22,7 @@ export default function RadioButtonContainer({ values, onPress }) {
           isChecked={isChecked}
           text={listItem.special_moment_name}
         />
-      );
+      ) : null;
     });
   };
   return (
