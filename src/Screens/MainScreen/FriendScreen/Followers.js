@@ -6,20 +6,13 @@ import {
   View,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Alert,
 } from "react-native";
 
 // Lib
 import Spinner from "react-native-loading-spinner-overlay";
 
 // Asset
-import CommonStyle, {
-  fontsize10,
-  fontsize12,
-} from "../../../Assets/Style/CommonStyle";
+import CommonStyle, { fontsize12 } from "../../../Assets/Style/CommonStyle";
 import { demodp, imgPlaceHolder } from "../../../Assets/utils/Image";
 import { AppString, Remove } from "../../../Assets/utils/AppString";
 import { FilledButton, POPLinkButton } from "../../../Components/Button/Button";
@@ -28,29 +21,6 @@ import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
-
-const Data = [
-  {
-    id: 1,
-    Name: "Gregory Thomson",
-    Image: demodp,
-  },
-  {
-    id: 2,
-    Name: "Gregory Thomson",
-    Image: demodp,
-  },
-  {
-    id: 3,
-    Name: "Gregory Thomson",
-    Image: demodp,
-  },
-  {
-    id: 4,
-    Name: "Gregory Thomson",
-    Image: demodp,
-  },
-];
 
 const Followers = ({ navigation }) => {
   const { getUserFollowerList, RemoveFollowerFriend } = useActions();
@@ -91,14 +61,16 @@ const Followers = ({ navigation }) => {
       setLoader(false);
     }
   };
-  const selectFriend = (Id, Name) => {
-    console.log("RemoveFriend", Id, Name);
-    navigation.navigate("FriendFollowersList");
+  const selectFriend = (item) => {
+    console.log("selectFriend", item);
+    navigation.navigate("FriendFollowersList", {
+      userID: item.follower_user_id,
+    });
   };
 
   const RenderItem = (Data, index) => {
     return (
-      <TouchableOpacity onPress={() => selectFriend()}>
+      <TouchableOpacity onPress={() => selectFriend(Data.item)}>
         <View style={[FriendScreenStyle.FollowerListBg, CommonStyle.mb16]}>
           <View style={FriendScreenStyle.followerTxtIcon}>
             <Image

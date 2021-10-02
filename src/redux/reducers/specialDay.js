@@ -1,4 +1,4 @@
-import { GET_SPECIAL_DAY } from "../types";
+import { GET_SPECIAL_DAY, LOGOUT } from "../types";
 
 const initialState = {};
 
@@ -8,9 +8,9 @@ export default (state = initialState, action) => {
       return action.payload;
     }
 
-    // case LOGOUT: {
-    //   return initialState;
-    // }
+    case LOGOUT: {
+      return initialState;
+    }
 
     default:
       return state;

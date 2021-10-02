@@ -51,8 +51,10 @@ const TutorialFirst = ({ navigation, props, route }) => {
   const [getLoader, setLoader] = useState(false);
 
   const [getValidationCheck, setValidationCheck] = useState("");
+  const [isText, setIsText] = useState(undefined);
+
   const [isModalVisible, setModalVisible] = useState(false);
-  const [getFinaldate, setFinalDate] = useState();
+  const [getFinaldate, setFinalDate] = useState("");
   const [date, setDate] = useState(new Date());
 
   const onRadioButtonPress = (idx, momentId) => {
@@ -61,12 +63,25 @@ const TutorialFirst = ({ navigation, props, route }) => {
     setModalVisible(true);
   };
 
-  const CloseDatePicker = () => {
+  const CloseDatePicker = async () => {
+    await setFinalDate("");
+    if (getFirstName == "" || getLastName == "") {
+      var data = getValidationCheck == "" ? "undefined" : "";
+      setValidationCheck(data);
+      setModalVisible(false);
+      setIsText(false);
+    } else {
+      var data = getValidationCheck == "" ? "undefined" : "";
+      setValidationCheck(data);
+      setModalVisible(false);
+      setIsText(false);
+    }
     setModalVisible(false);
   };
   const SaveDatePicker = async () => {
     setModalVisible(false);
     setValidationCheck("GetAllData");
+    setIsText(false);
     if (getFirstName == "" || getLastName == "") {
       setValidationCheck("");
     }
@@ -80,21 +95,36 @@ const TutorialFirst = ({ navigation, props, route }) => {
   };
 
   const onSetFirstname = (name) => {
-    if (name == "" || getLastName == "") {
+    if (
+      name == "" ||
+      getLastName == "" ||
+      getFinaldate == "" ||
+      getFinaldate == "undefined"
+    ) {
       setValidationCheck("");
+      setIsText(true);
     } else {
       setValidationCheck("GetAllData");
     }
     setFirstName(name);
+    setModalVisible(false);
   };
 
   const onSetLastname = (name) => {
-    if (name == "" || getFirstName == "") {
+    if (
+      name == "" ||
+      getFirstName == "" ||
+      getFinaldate == "" ||
+      getFinaldate == "undefined"
+    ) {
       setValidationCheck("");
+      setIsText(true);
+      setModalVisible(false);
     } else {
       setValidationCheck("GetAllData");
     }
     setLastName(name);
+    setModalVisible(false);
   };
 
   const SubmitData = async () => {
@@ -225,6 +255,8 @@ const TutorialFirst = ({ navigation, props, route }) => {
                       <RadioButtonContainer
                         values={listGetSpecialDay}
                         onPress={onRadioButtonPress}
+                        isValid={getValidationCheck}
+                        isText={isText}
                       />
                     </View>
                   </View>
@@ -238,7 +270,11 @@ const TutorialFirst = ({ navigation, props, route }) => {
                       <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
                         <View style={TutorialStyle.popView}>
                           <Image
-                            source={imgBirthdayCake}
+                            source={
+                              getRadioId == 1
+                                ? imgBirthdayCake
+                                : imgBirthdayCake
+                            }
                             style={TutorialStyle.popimg}
                           />
                         </View>
@@ -250,7 +286,13 @@ const TutorialFirst = ({ navigation, props, route }) => {
                               { fontFamily: FONT.Gilroy },
                             ]}
                           >
-                            {AppString.Pleasebirthdaycontinue}
+                            {getRadioId == 1
+                              ? AppString.Pleasebirthdaycontinue
+                              : getRadioId == 2
+                              ? AppString.Pleaseanniversarycontinue
+                              : getRadioId == 3
+                              ? AppString.Pleasegraduationcontinue
+                              : AppString.Pleasechristmascontinue}
                           </Text>
                         </View>
 
@@ -304,13 +346,17 @@ const TutorialFirst = ({ navigation, props, route }) => {
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
               onPress={() => SubmitData()}
-              disabled={getValidationCheck != "" ? false : true}
+              disabled={
+                getValidationCheck == "" || getValidationCheck == "undefined"
+                  ? true
+                  : false
+              }
             >
               <View
                 style={[
-                  getValidationCheck != ""
-                    ? TutorialStyle.SilderbgImg
-                    : TutorialStyle.GraySilderbgImg,
+                  getValidationCheck == "" || getValidationCheck == "undefined"
+                    ? TutorialStyle.GraySilderbgImg
+                    : TutorialStyle.SilderbgImg,
                 ]}
               >
                 <Image
