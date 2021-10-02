@@ -594,6 +594,39 @@ export const useActions = () => {
       return { userFollowerListResponse, userFollowerListError };
     },
 
+    getUserFollowingList: async () => {
+      let UserFollowingListResponse, UserFollowingListError;
+      try {
+        UserFollowingListResponse = await API.getFollowingList.get(sessions);
+        if (UserFollowingListResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        UserFollowingListError = e;
+      }
+      return { UserFollowingListResponse, UserFollowingListError };
+    },
+
+    getUnfollowFriendList: async (FriendUserID) => {
+      debugger;
+      let UnfollowFriendListResponse, UnfollowFriendListError;
+      try {
+        var data = new FormData();
+        data.append("FriendUserID", FriendUserID);
+        debugger;
+        UnfollowFriendListResponse = await API.getunfollowFriend.get(
+          sessions,
+          data
+        );
+        if (UnfollowFriendListResponse.data.StatusCode == "1") {
+          debugger;
+        }
+      } catch (e) {
+        UnfollowFriendListError = e;
+        debugger;
+      }
+      return { UnfollowFriendListResponse, UnfollowFriendListError };
+    },
+
     RemoveFollowerFriend: async (FriendUserID) => {
       let RemoveFriendResponse, RemoveFriendError;
       try {
@@ -611,6 +644,22 @@ export const useActions = () => {
         RemoveFriendError = e;
       }
       return { RemoveFriendResponse, RemoveFriendError };
+    },
+
+    SearchUser: async (SearchName) => {
+      let SearchUserResponse, SearchUserError;
+      try {
+        var data = new FormData();
+        data.append("SearchKey", SearchName);
+        debugger;
+        SearchUserResponse = await API.SearchUser.get(sessions, data);
+        debugger;
+        if (SearchUserResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        SearchUserError = e;
+      }
+      return { SearchUserResponse, SearchUserError };
     },
 
     //

@@ -236,6 +236,27 @@ export const getFollowerList = {
       "get"
     ),
 };
+export const getFollowingList = {
+  get: async (session) =>
+    await api(
+      session,
+      `/rest_api/controller_friend/get_user_following_list`,
+      "get"
+    ),
+};
+export const getunfollowFriend = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_friend/unfollow_friend`,
+      "post",
+      data
+    ),
+};
+export const getSearchUser = {
+  get: async (session, data) =>
+    await api(session, `/rest_api/controller_user/search_user`, "post", data),
+};
 
 export const RemoveFollowerFriend = {
   get: async (session, data) =>
@@ -245,4 +266,9 @@ export const RemoveFollowerFriend = {
       "post",
       data
     ),
+};
+
+export const SearchUser = {
+  get: async (session, data) =>
+    await api(session, `/rest_api/controller_user/search_user`, "post", data),
 };
