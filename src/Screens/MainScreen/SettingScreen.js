@@ -222,7 +222,9 @@ const SettingScreen = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => Logout()}
+            onPress={() => {
+              Logout(), navigation.navigate("MainScreen");
+            }}
             style={{ paddingBottom: 16 }}
           >
             <View style={CommonStyle.RowSpace}>

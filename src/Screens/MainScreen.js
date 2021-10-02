@@ -44,12 +44,13 @@ import Spinner from "react-native-loading-spinner-overlay";
 import OneSignal from "react-native-onesignal";
 
 import { useActions } from "../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 const MainScreen = ({ navigation }) => {
   if (Platform.OS === "ios") {
     KeyboardManager.setToolbarPreviousNextButtonEnable(true);
   }
-
+  const sessions = useSelector((state) => state.session);
   const [userInfo, setUserInfo] = useState(null);
   const [gettingLoginStatus, setGettingLoginStatus] = useState(true);
   const [getLoader, setLoader] = useState(false);
@@ -65,6 +66,10 @@ const MainScreen = ({ navigation }) => {
     GoogleSignin.configure({
       webClientId: AppString.webClientId,
     });
+    var token = sessions.isAutoLogin ? true : false;
+    if (token) {
+      navigation.navigate("Navigation");
+    }
     // SignedIn();
   }, []);
 

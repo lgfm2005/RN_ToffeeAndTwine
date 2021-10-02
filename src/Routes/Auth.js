@@ -24,7 +24,7 @@ const Stack = createStackNavigator();
 import { useDispatch, useSelector } from "react-redux";
 
 const Auth = () => {
-  const sessions = useSelector((state) => state.session);
+  // const sessions = useSelector((state) => state.session);
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator

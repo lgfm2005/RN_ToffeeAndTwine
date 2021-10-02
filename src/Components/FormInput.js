@@ -26,6 +26,7 @@ export const FormInput = ({
       onChangeText={textChange}
       placeholderTextColor={COLORS.PrimaryLight}
       selectionColor={COLORS.Primary}
+      autoCorrect={false}
       {...props}
     />
   );

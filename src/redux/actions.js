@@ -84,7 +84,7 @@ export const useActions = () => {
               userOtp: "",
               userProfileImage: "",
               defaultSpecialMoment: "",
-              isAutoLogin: false,
+              isAutoLogin: true,
             })
           );
         }
@@ -279,34 +279,6 @@ export const useActions = () => {
       return { addCategoryspecialDayResponse, addCategoryspecialDayError };
     },
 
-    addCategoryQuestion: async (tokens, data) => {
-      var session = sessions;
-      if (tokens) {
-        session = tokens;
-      }
-      console.log("Data", data);
-      console.log("tokens", tokens);
-      // var data = new FormData();
-      // data.append("CategoryID[]", CategoryID);
-      // data.append("CategoryQuestionID[]", CategoryQuestionID);
-      // data.append("CategoryQuestionValue[]", CategoryQuestionValue);
-
-      let addCategoryQuestionResponse, addCategoryQuestionError;
-      try {
-        addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
-          sessions,
-          data
-        );
-        if (addCategoryQuestionResponse.data.StatusCode == "1") {
-        } else {
-          addCategoryQuestionError = addCategoryQuestionResponse.data.Message;
-        }
-      } catch (e) {
-        addCategoryQuestionError = e;
-      }
-      return { addCategoryQuestionResponse, addCategoryQuestionError };
-    },
-
     deleteUserCategoryQuestion: async (CategoryID) => {
       var data = new FormData();
       data.append("CategoryID", CategoryID);
@@ -368,6 +340,7 @@ export const useActions = () => {
           data.append("CategoryQuestionValue[]", item.value);
         }
       });
+      debugger;
       let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
         addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
