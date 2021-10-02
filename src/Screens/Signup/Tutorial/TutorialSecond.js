@@ -116,19 +116,28 @@ const TutorialSecond = ({ navigation, props, route }) => {
   };
 
   const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
-    temp2[key] = { categoryId, categoryQuestionId, value, key };
+    temp2[key] = {
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
+      value,
+      key,
+    };
     console.log(",temp2temp2temp2temp2temp2temp2temp2temp2temp2", temp2);
     temp = temp2;
   };
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
-    temp[key] = { categoryId, categoryQuestionId, value, key };
+    temp[key] = {
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
+      value,
+      key,
+    };
     setQuestionsData(temp);
   };
 
   const SubmitData = async () => {
     setModalVisible(false);
     setLoader(true);
-
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
       await addCategoryQuestion(tokens, 1, getQuestionsData);
@@ -143,7 +152,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
 
       console.log("Question Response ==>>>", addCategoryQuestionResponse);
     } else {
-      setModalVisible(true);
+      setModalVisible(false);
       console.log("Question Error ==>>>", addCategoryQuestionError);
     }
     setLoader(false);
