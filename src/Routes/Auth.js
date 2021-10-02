@@ -28,15 +28,12 @@ const Auth = () => {
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator
-        initialRouteName={sessions ? "Navigation" : "MainScreen"}
+        initialRouteName={"MainScreen"}
         screenOptions={{ headerShown: false }}
       >
         {/* <Stack.Screen name="Slider" component={Slider} /> */}
 
-        <Stack.Screen
-          name={sessions.isAutoLogin ? "Navigation" : "MainScreen"}
-          component={sessions.isAutoLogin ? Navigation : MainScreen}
-        />
+        <Stack.Screen name="MainScreen" component={MainScreen} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="TutorialFirst" component={TutorialFirst} />
@@ -44,7 +41,9 @@ const Auth = () => {
         <Stack.Screen name="TutorialThird" component={TutorialThird} />
         <Stack.Screen name="SetPassword" component={SetPassword} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="Navigation" component={Navigation} />
       </Stack.Navigator>
+
       <FlashMessage
         autoHide={true}
         position="top"

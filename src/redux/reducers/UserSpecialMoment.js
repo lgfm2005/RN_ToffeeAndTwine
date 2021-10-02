@@ -1,14 +1,12 @@
 import { USERSPECIALMOMENT } from "../types";
 
-const initialState = [{}];
+const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case USERSPECIALMOMENT: {
-      debugger;
       return action.payload;
     }
-
     // case LOGOUT: {
     //   return initialState;
     // }

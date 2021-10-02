@@ -10,6 +10,7 @@ import {
   Platform,
   ScrollView,
   Keyboard,
+  Alert,
 } from "react-native";
 // Lib
 import {
@@ -315,8 +316,9 @@ const Signup = ({ navigation }) => {
       } else {
         setInvalidEmailPassword(true);
       }
+    } else {
+      Alert.alert(signUpresponse.data.Message);
     }
-
     setLoader(false);
   };
 

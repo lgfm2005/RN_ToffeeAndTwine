@@ -217,3 +217,32 @@ export const SocialAuth = {
   get: async (session, data) =>
     await api(session, `/rest_api/controller_user/social_auth`, "post", data),
 };
+
+// Raj
+export const GetProfile = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_profile/get_profile`,
+      "post",
+      data
+    ),
+};
+export const getFollowerList = {
+  get: async (session) =>
+    await api(
+      session,
+      `/rest_api/controller_friend/get_user_follower_list`,
+      "get"
+    ),
+};
+
+export const RemoveFollowerFriend = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_friend/remove_follower_friend`,
+      "post",
+      data
+    ),
+};

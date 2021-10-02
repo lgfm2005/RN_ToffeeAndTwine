@@ -30,7 +30,7 @@ import {
   imgCoffee,
   imgDesserts,
   imgFlowers,
-  imgLaptop,
+  imgPlaceHolder,
   imgImport,
   imgBook,
   imgDelete,
@@ -245,6 +245,7 @@ const CalendarScreen = () => {
       deleteUserCategorySpecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
+      getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setUserOldSpecialMomentModal(false);
       setLoader(false);
@@ -479,7 +480,11 @@ const CalendarScreen = () => {
             <View style={[CommonStyle.Container]}>
               <View style={[CommonStyle.my16, CommonStyle.Row]}>
                 <Image
-                  source={{ uri: userData.userProfileImage }}
+                  source={
+                    userData.userProfileImage == ""
+                      ? { uri: userData.userProfileImage }
+                      : imgPlaceHolder
+                  }
                   style={CommonStyle.ProfileImage}
                 />
                 <Text style={CommonStyle.userName}>

@@ -15,7 +15,7 @@ import { AppString } from "../../../Assets/utils/AppString";
 import { imgInvite } from "../../../Assets/utils/Image";
 import { FilledButton, POPLinkButton } from "../../../Components/Button/Button";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
-
+import { ShareAppLink } from "../../../Assets/utils/ShareLink";
 // Asset
 
 const Invite = ({ navigation }) => {
@@ -29,7 +29,11 @@ const Invite = ({ navigation }) => {
         </Text>
 
         <View style={CommonStyle.centerRow}>
-          <POPLinkButton buttonName={AppString.Invite} onPress={() => {}} />
+          {/* ShareAppLink */}
+          <POPLinkButton
+            buttonName={AppString.Invite}
+            onPress={() => ShareAppLink()}
+          />
         </View>
       </View>
     </View>

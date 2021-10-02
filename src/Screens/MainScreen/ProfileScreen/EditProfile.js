@@ -80,8 +80,6 @@ const EditProfile = ({ navigation }) => {
         UpdateDefaultSpecialMoment = "";
       }
     }
-    // (item) => item.special_moment_id == user.defaultSpecialMoment
-    // )[0]["special_moment_name"]
     setHighlightMoment(UpdateDefaultSpecialMoment);
   }, [user, UserSpecialMoment]);
 

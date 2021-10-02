@@ -9,20 +9,25 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
 } from "react-native";
+
+// Lib
+import Spinner from "react-native-loading-spinner-overlay";
 
 // Asset
 import CommonStyle, {
   fontsize10,
   fontsize12,
 } from "../../../Assets/Style/CommonStyle";
-import { demodp } from "../../../Assets/utils/Image";
+import { demodp, imgPlaceHolder } from "../../../Assets/utils/Image";
 import { AppString, Remove } from "../../../Assets/utils/AppString";
-import { FilledButton } from "../../../Components/Button/Button";
+import { FilledButton, POPLinkButton } from "../../../Components/Button/Button";
 import { FriendScreenStyle } from "./FriendScreenStyle";
 import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
+import { useActions } from "../../../redux/actions";
 
 const Data = [
   {
@@ -48,27 +53,73 @@ const Data = [
 ];
 
 const Followers = ({ navigation }) => {
-  const RemoveFriend = (Id, Name) => {
-    console.log("RemoveFriend", Id, Name);
-    // navigation.navigate('FriendFollowersList');
+  const { getUserFollowerList, RemoveFollowerFriend } = useActions();
+
+  const [getLoader, setLoader] = useState(false);
+  const [getUserFollower, setUserFollower] = useState("");
+
+  useEffect(async () => {
+    setLoader(true);
+    const { userFollowerListResponse, userFollowerListError } =
+      await getUserFollowerList();
+    if (userFollowerListResponse.data.StatusCode == "1") {
+      setUserFollower(userFollowerListResponse.data.Result);
+      setLoader(false);
+    } else {
+      setLoader(false);
+      console.log("user Follower List Error", userFollowerListError);
+    }
+  }, []);
+
+  const RemoveFriend = async (Id) => {
+    console.log("Remove Friend  ====>>>>", Id);
+
+    setLoader(true);
+    const { RemoveFriendResponse, RemoveFriendError } =
+      await RemoveFollowerFriend(Id);
+    const { userFollowerListResponse, userFollowerListError } =
+      await getUserFollowerList();
+    debugger;
+    if (
+      RemoveFriendResponse.data.StatusCode == "1" &&
+      userFollowerListResponse.data.StatusCode == "1"
+    ) {
+      debugger;
+      setUserFollower(userFollowerListResponse.data.Result);
+      setLoader(false);
+    } else {
+      debugger;
+      console.log("Remove Friend Error", RemoveFriendError);
+      console.log("user Follower List Error", userFollowerListError);
+      setLoader(false);
+    }
   };
   const selectFriend = (Id, Name) => {
     console.log("RemoveFriend", Id, Name);
     navigation.navigate("FriendFollowersList");
   };
 
-  const RenderItem = (item, index) => {
+  const RenderItem = (Data, index) => {
     return (
       <TouchableOpacity onPress={() => selectFriend()}>
         <View style={[FriendScreenStyle.FollowerListBg, CommonStyle.mb16]}>
           <View style={FriendScreenStyle.followerTxtIcon}>
-            <Image source={item.Image} style={CommonStyle.showProfileImage} />
-            <Text style={CommonStyle.txtFrienduserName}>{item.Name}</Text>
+            <Image
+              source={
+                Data.item.user_profile_image == ""
+                  ? { uri: Data.item.user_profile_image }
+                  : imgPlaceHolder
+              }
+              style={CommonStyle.showProfileImage}
+            />
+            <Text style={CommonStyle.txtFrienduserName}>
+              {Data.item.user_fname + " " + Data.item.user_lname}
+            </Text>
           </View>
           <View style={FriendScreenStyle.btnBg}>
-            <FilledButton
+            <POPLinkButton
               buttonName={AppString.Remove}
-              onPress={() => RemoveFriend(item.id, item.Name)}
+              onPress={() => RemoveFriend(Data.item.follower_user_id)}
               styleBtn={Smallbtn}
               fontStyle={fontsize12}
             />
@@ -81,15 +132,18 @@ const Followers = ({ navigation }) => {
   return (
     <View>
       <MyWhiteStatusbar />
-      <View Style={[CommonStyle.Container, CommonStyle.pt16]}>
-        <View style={FriendScreenStyle.backgroundColor}>
-          <FlatList
-            data={Data}
-            renderItem={({ item, index }) => RenderItem(item, index)}
-            keyExtractor={(item) => item.id}
-          />
+      <SafeAreaView>
+        <View Style={[CommonStyle.Container, CommonStyle.pt16]}>
+          <View style={FriendScreenStyle.backgroundColor}>
+            <FlatList
+              data={getUserFollower}
+              renderItem={(Data, index) => RenderItem(Data, index)}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
+      <Spinner visible={getLoader} />
     </View>
   );
 };

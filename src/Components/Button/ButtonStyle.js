@@ -15,7 +15,7 @@ export const BaseButton = {
   borderWidth: 1,
   justifyContent: "center",
   alignItems: "center",
-  // ...CommonStyle.mb32
+  // ...CommonStyle.mb32,
   marginBottom: 12,
 };
 

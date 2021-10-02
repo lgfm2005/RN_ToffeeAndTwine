@@ -84,7 +84,6 @@ const HomeScreen = () => {
 
   useEffect(async () => {
     setLoader(true);
-    console.log("session", session, userData);
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(30);
     if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -213,25 +212,50 @@ const HomeScreen = () => {
     console.log(" Select categories ===>>>", Name, Image, id, questions);
     setAddItemShowModal(false);
     // console.log("Key  ===>", key);
-
     // setAddNewFreshItemModal(true)
     AddNewFreshItem(Name, Image, id, questions);
   };
 
   const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
-    temp2[key] = { categoryId, categoryQuestionId, value, key };
-    console.log(",temp2temp2temp2temp2temp2temp2temp2temp2temp2", temp2);
+    temp2[key] = {
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
+      value,
+      key,
+    };
     temp = temp2;
   };
 
   // Add New Categories Question
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
-    temp[key] = { categoryId, categoryQuestionId, value, key };
+    temp[key] = {
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
+      value,
+      key,
+    };
     setQuestionsData(temp);
+  };
+
+  // Add --> Select Categories --> New Item
+  const AddNewFreshItem = (Name, Image, id, questions) => {
+    console.log(
+      "Select Categories --> New Item ===>>>",
+      Name,
+      Image,
+      id,
+      questions
+    );
+    setAddNewItemModal(false);
+    setEditItemModal(true);
+    setAddNewItem(Name);
+    setQuestions(questions);
+    setQuestionsData(questions);
   };
 
   // Submit Add New Categories Question
   const SaveItem = async () => {
+    setQuestionsData(temp);
     setUpdateDataModal(false);
     setAddItemShowModal(false);
     setEditItemModal(false);
@@ -240,10 +264,9 @@ const HomeScreen = () => {
 
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData, getQuestionsData);
+      await addCategoryQuestion(userData, 0, getQuestionsData);
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-
     if (
       addCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
@@ -260,14 +283,14 @@ const HomeScreen = () => {
       // console.log("Question Response ==>>>", addCategoryQuestionResponse);
     } else {
       // setAddNewFreshItemModal(true);
-      setAddItemShowModal(true);
-      setEditItemModal(true);
-      setAddNewItemModal(true);
-      // console.log("Question Error ==>>>", addCategoryQuestionError);
-      // console.log(
-      //   "User Category Question Response Error  ===>>>",
-      //   UserCategoryQuestionError
-      // );
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
+      console.log("Question Error ==>>>", addCategoryQuestionError);
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        UserCategoryQuestionError
+      );
     }
     setLoader(false);
   };
@@ -342,21 +365,6 @@ const HomeScreen = () => {
     setShowOldQuestion(questions);
   };
 
-  // Add --> Select Categories --> New Item
-  const AddNewFreshItem = (Name, Image, id, questions) => {
-    console.log(
-      "Select Categories --> New Item ===>>>",
-      Name,
-      Image,
-      id,
-      questions
-    );
-    setAddNewItemModal(false);
-    setEditItemModal(true);
-    setAddNewItem(Name);
-    setQuestions(questions);
-  };
-
   // Old Select Categories -- > Edit Item
   const AddEditItem = (getAddNewItem) => {
     temp = [];
@@ -427,7 +435,7 @@ const HomeScreen = () => {
               <View style={[CommonStyle.my16, CommonStyle.Row]}>
                 <Image
                   source={
-                    userData.userProfileImage == ""
+                    userData.userProfileImage != ""
                       ? { uri: userData.userProfileImage }
                       : imgPlaceHolder
                   }

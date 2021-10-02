@@ -98,7 +98,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
   };
 
   const SubmitData = async () => {
-    setLoader(false);
+    setLoader(true);
     const tokens = { token: token };
     console.log("TutorialFirst tokens ========>", tokens);
     // console.log("tokens ========>", gfegfegfegr);
@@ -143,11 +143,11 @@ const TutorialFirst = ({ navigation, props, route }) => {
 
     setLoader(true);
     if (response.data.StatusCode == "1") {
-      setLoader(false);
       navigation.navigate("TutorialSecond", {
         categoryList: listOfCategory,
         tokens: tokens,
       });
+      setLoader(false);
     }
   };
 

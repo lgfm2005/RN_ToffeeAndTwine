@@ -352,20 +352,22 @@ export const useActions = () => {
       };
     },
 
-    addCategoryQuestion: async (tokens, getQuestionsData) => {
+    addCategoryQuestion: async (tokens, IsFirst, getQuestionsData) => {
       var session = sessions;
       if (tokens) {
         session = tokens;
       }
-
       var data = new FormData();
       getQuestionsData.map((item) => {
-        data.append("IsFirst", 1);
-        data.append("CategoryID[]", item.categoryId);
-        data.append("CategoryQuestionID[]", item.categoryQuestionId);
-        data.append("CategoryQuestionValue[]", item.value);
+        data.append("IsFirst", IsFirst);
+        data.append("CategoryID[]", item.category_id);
+        data.append("CategoryQuestionID[]", item.category_question_id);
+        if (item.value == undefined) {
+          data.append("CategoryQuestionValue[]", item.category_placeholder);
+        } else {
+          data.append("CategoryQuestionValue[]", item.value);
+        }
       });
-
       let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
         addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
@@ -441,7 +443,6 @@ export const useActions = () => {
         UserCategoryQuestionResponse = await API.GetUserCategoryQuestion.get(
           session
         );
-
         if (UserCategoryQuestionResponse.data.StatusCode == "1") {
           dispatch(
             userCategoryQuestion(UserCategoryQuestionResponse.data.Result)
@@ -551,5 +552,67 @@ export const useActions = () => {
       }
       return { response, error };
     },
+
+    // Raj
+
+    getProfile: async () => {
+      let profileResponse, profileError;
+      try {
+        profileResponse = await API.GetProfile.get(sessions);
+        if (profileResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        profileError = e;
+      }
+      return { profileResponse, profileError };
+    },
+
+    getUserProfile: async (UserID) => {
+      let userProfileResponse, userProfileError;
+      try {
+        var data = new FormData();
+        data.append("UserID", UserID);
+
+        userProfileResponse = await API.GetProfile.get(sessions);
+        if (userProfileResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        userProfileError = e;
+      }
+      return { userProfileResponse, userProfileError };
+    },
+
+    getUserFollowerList: async () => {
+      let userFollowerListResponse, userFollowerListError;
+      try {
+        userFollowerListResponse = await API.getFollowerList.get(sessions);
+        if (userFollowerListResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        userFollowerListError = e;
+      }
+      return { userFollowerListResponse, userFollowerListError };
+    },
+
+    RemoveFollowerFriend: async (FriendUserID) => {
+      let RemoveFriendResponse, RemoveFriendError;
+      try {
+        var data = new FormData();
+        data.append("FriendUserID", FriendUserID);
+        debugger;
+        RemoveFriendResponse = await API.RemoveFollowerFriend.get(
+          sessions,
+          data
+        );
+        debugger;
+        if (RemoveFriendResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        RemoveFriendError = e;
+      }
+      return { RemoveFriendResponse, RemoveFriendError };
+    },
+
+    //
   };
 };

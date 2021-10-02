@@ -34,12 +34,13 @@ import {
   POPLinkButton,
   POPOutLinkButton,
 } from "../../../Components/Button/Button";
-import { Mediumbtn } from "../../../Components/Button/ButtonStyle";
+import { Mediumbtn, Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { AppString } from "../../../Assets/utils/AppString";
 import { ProfileScreenStyle } from "./ProfileScreenStyle";
 import {
   imgWhiteShare,
   imgBackleftWhite,
+  imgPlaceHolder,
   imgWhiteBirthday,
   imgProfileBackground,
   imgCoffee,
@@ -106,7 +107,6 @@ const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
 var temp,
   temp2 = [];
-var data = new FormData();
 const MyProfile = ({ navigation }) => {
   const {
     addCategoryQuestion,
@@ -120,6 +120,7 @@ const MyProfile = ({ navigation }) => {
     addCategoryspecialDay,
   } = useActions();
 
+  const user = useSelector((state) => state.session);
   const userData = useSelector((state) => state.session);
   const specialMoment = useSelector((state) => state.specialMoment);
   const userSpecialMoment = useSelector((state) => state.UserSpecialMoment);
@@ -197,6 +198,7 @@ const MyProfile = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
 
   const [getFilterSepCat, setFilterSepCat] = useState(specialMoment);
+  const [getDefaultSpecialMometData, setDefaultSpecialMometData] = useState({});
 
   const [getPrevData, setPrevData] = useState({});
   useEffect(() => {
@@ -205,6 +207,11 @@ const MyProfile = ({ navigation }) => {
     }
     getFilterSepCatgories(userSpecialMoment);
     getFilterCatgories(userCategoryQuestion);
+
+    const defaultSpecialMometData = userSpecialMoment.filter((item) => {
+      item.special_moment_id == user.defaultSpecialMoment;
+    });
+    setDefaultSpecialMometData(defaultSpecialMometData);
   }, []);
 
   const getFilterCatgories = (data) => {
@@ -283,16 +290,27 @@ const MyProfile = ({ navigation }) => {
     setEditItemModal(true);
     setAddNewItem(Name);
     setQuestions(questions);
+    setQuestionsData(questions);
   };
 
   const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
-    temp2[key] = { categoryId, categoryQuestionId, value, key };
+    temp2[key] = {
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
+      value,
+      key,
+    };
     console.log(",temp2temp2temp2temp2temp2temp2temp2temp2temp2", temp2);
     temp = temp2;
   };
   // Add New Categories Question
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
-    temp[key] = { categoryId, categoryQuestionId, value, key };
+    temp[key] = {
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
+      value,
+      key,
+    };
     console.log(",fewrjfgkewfhewfhefewlfhewfjklewfbhewkjfewbf", temp);
     setQuestionsData(temp);
   };
@@ -307,7 +325,6 @@ const MyProfile = ({ navigation }) => {
     // setEditItem(getAddNewItem);
   };
 
-  // Update Categories Question
   // Update Categories Question
   const UpdateQuestionData2 = (categoryQuestionId, value, key) => {
     temp2[key] = { categoryQuestionId, value };
@@ -369,7 +386,7 @@ const MyProfile = ({ navigation }) => {
 
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData, getQuestionsData);
+      await addCategoryQuestion(userData, 0, getQuestionsData);
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
 
@@ -491,22 +508,22 @@ const MyProfile = ({ navigation }) => {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-
     if (
       deleteUserCategorySpecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
+      getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setUserOldSpecialMomentModal(false);
       setLoader(false);
     } else {
-      setUserOldSpecialMomentModal(true);
+      setUserOldSpecialMomentModal(false);
       console.log(
-        "NEW CategorySpecialMoment Error",
+        "NEW deleteUserCategorySpecialDay Error",
         deleteUserCategorySpecialDayError
       );
       console.log(
-        "NEW CategorySpecialMoment Error",
+        "NEW getUserCategorySpecialMoment Error",
         getUserCategorySpecialMomentError
       );
     }
@@ -630,11 +647,11 @@ const MyProfile = ({ navigation }) => {
       setImageurl("");
       setUserNewSpecialMomentModal(false);
       console.log(
-        "NEW CategorySpecialMoment Error",
+        "NEW addCategoryspecialDayError Error",
         addCategoryspecialDayError
       );
       console.log(
-        "NEW CategorySpecialMoment Error",
+        "NEW getUserCategorySpecialMomentError Error",
         getUserCategorySpecialMomentError
       );
     }
@@ -746,7 +763,11 @@ const MyProfile = ({ navigation }) => {
           <View style={CommonStyle.authPage}>
             <View style={CommonStyle.imgmask}>
               <ImageBackground
-                source={{ uri: userData.userProfileImage }}
+                source={
+                  userData.userProfileImage != ""
+                    ? { uri: userData.userProfileImage }
+                    : imgPlaceHolder
+                }
                 style={CommonStyle.imgProfileBackground}
               ></ImageBackground>
               <Image
@@ -763,19 +784,26 @@ const MyProfile = ({ navigation }) => {
                       {userData.userFname + " " + userData.userLname}
                     </Text>
                     <View style={CommonStyle.alignItemsBaseLine}>
-                      <Image
-                        source={imgbirthdayCakeGary}
-                        style={CommonStyle.imgIconSize}
-                      />
-                      <Text
-                        style={[
-                          CommonStyle.txtContent,
-                          { color: COLORS.PrimaryLight },
-                        ]}
-                      >
-                        {" "}
-                        Birthday: April, 14th
-                      </Text>
+                      {getDefaultSpecialMometData.length > 0 &&
+                      getDefaultSpecialMometData.user_special_moment_date ==
+                        0 ? (
+                        <>
+                          <Image
+                            source={imgbirthdayCakeGary}
+                            style={CommonStyle.imgIconSize}
+                          />
+                          <Text
+                            style={[
+                              CommonStyle.txtContent,
+                              { color: COLORS.PrimaryLight },
+                            ]}
+                          >
+                            {
+                              getDefaultSpecialMometData.user_special_moment_date
+                            }
+                          </Text>
+                        </>
+                      ) : null}
                     </View>
                   </View>
                   <POPLinkButton
@@ -794,7 +822,9 @@ const MyProfile = ({ navigation }) => {
                       { fontFamily: FONT.NotoSans },
                     ]}
                   >
-                    {userSpecialMoment.length}
+                    {userSpecialMoment.length == undefined
+                      ? "0"
+                      : userSpecialMoment.length}
                   </Text>
                   <Text
                     style={[
@@ -1117,6 +1147,11 @@ const MyProfile = ({ navigation }) => {
                   <View style={CommonStyle.my16}>
                     {getShowOldQuestion.length > 0 &&
                       getShowOldQuestion.map((item, key) => {
+                        UpdateQuestionData2(
+                          item.user_category_question_id,
+                          item.question_value,
+                          key
+                        );
                         return (
                           <SimpleInputEditView
                             TitleName={item.category_question}
@@ -1202,6 +1237,7 @@ const MyProfile = ({ navigation }) => {
                           <SimpleInputEditView
                             TitleName={item.category_question}
                             placeholder={item.category_placeholder}
+                            placeholderTextColor={COLORS.Primary}
                             onChangeText={(value) =>
                               HandelQuestionData(
                                 item.category_id,

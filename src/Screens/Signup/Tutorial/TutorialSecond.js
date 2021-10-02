@@ -129,16 +129,9 @@ const TutorialSecond = ({ navigation, props, route }) => {
     setModalVisible(false);
     setLoader(true);
 
-    getQuestionsData.map((item) => {
-      data.append("IsFirst", 0);
-      data.append("CategoryID[]", item.categoryId);
-      data.append("CategoryQuestionID[]", item.categoryQuestionId);
-      data.append("CategoryQuestionValue[]", item.value);
-    });
-
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(tokens, data);
+      await addCategoryQuestion(tokens, 1, getQuestionsData);
     if (addCategoryQuestionResponse.data.StatusCode == "1") {
       setModalVisible(false);
 

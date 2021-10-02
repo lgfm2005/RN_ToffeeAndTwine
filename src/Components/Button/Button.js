@@ -49,11 +49,11 @@ export const OutLinedButton = ({ buttonName, onPress, ...props }) => {
   );
 };
 
-export const POPLinkButton = ({ buttonName, onPress, ...props }) => {
+export const POPLinkButton = ({ buttonName, onPress, styleBtn, ...props }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View>
-        <View style={ButtonStyle.popFilledButtonStyle}>
+        <View style={[ButtonStyle.popFilledButtonStyle, styleBtn]}>
           <Text style={ButtonStyle.popFilledButtonText}>{buttonName}</Text>
         </View>
       </View>

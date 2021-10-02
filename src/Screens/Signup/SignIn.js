@@ -224,7 +224,26 @@ const SignIn = ({ navigation }) => {
 
     setLoader(false);
     if (response.data.StatusCode == "1") {
-      navigation.navigate("Navigation");
+      if (
+        !response.data.Result[0].user_fname &&
+        !response.data.Result[0].user_lname
+      ) {
+        var tokens = response.data.Result[0].Token;
+
+        const { specialMomentResponse, specialMomentError } =
+          await GetSpecialMoment({
+            token: tokens,
+          });
+
+        if (specialMomentResponse.data.StatusCode == "1") {
+          navigation.navigate("TutorialFirst", {
+            listGetSpecialDay: specialMomentResponse.data.Result,
+            token: tokens,
+          });
+        }
+      } else {
+        navigation.navigate("Navigation");
+      }
     } else {
       setInvalidEmailPassword(true);
       console.log("Error", error);
@@ -292,21 +311,17 @@ const SignIn = ({ navigation }) => {
         alwaysBounceVertical={false}
         // contentContainerStyle={CommonStyle.height}
       >
-        <KeyboardAvoidingView
-          behavior="height"
-          keyboardVerticalOffset={keyboardVerticalOffset}
-        >
-          <View style={[CommonStyle.Container, CommonStyle.authPage]}>
-            <View style={CommonStyle.my32}>
-              <Image
-                source={imgToffeeTwineLogo}
-                style={CommonStyle.logoImage}
-              />
-              <Text style={CommonStyle.giftThoughtfully}>
-                {AppString.GiftThoughtfully}
-              </Text>
-            </View>
-
+        <View style={[CommonStyle.Container, CommonStyle.authPage]}>
+          <View style={CommonStyle.my32}>
+            <Image source={imgToffeeTwineLogo} style={CommonStyle.logoImage} />
+            <Text style={CommonStyle.giftThoughtfully}>
+              {AppString.GiftThoughtfully}
+            </Text>
+          </View>
+          <KeyboardAvoidingView
+            behavior="height"
+            keyboardVerticalOffset={keyboardVerticalOffset}
+          >
             <View style={CommonStyle.formGroup}>
               <Text style={CommonStyle.formLabel}>
                 {AppString.EmailAddress}
@@ -349,40 +364,37 @@ const SignIn = ({ navigation }) => {
                 buttonName={AppString.Signin}
                 onPress={() => handleSignIn(getEmail, getCreatePassword)}
                 // onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
+                // onPress={() => handleSignIn("uss.jignesh@gmail.com", "12345")}
                 btncheck={isvalidForm()}
                 btnabled={isvalidForm()}
               />
             </View>
-
-            <View style={CommonStyle.mb32}>
-              <OrLine LineName={"OR"} />
-            </View>
-
-            <View style={[CommonStyle.mb32, CommonStyle.googleFb]}>
-              <TouchableOpacity
-                onPress={() => GoogleLogin()}
-                style={Styles.iconbg}
-              >
-                <Image source={imgGoogle} style={Styles.icon} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => fbSignIn()}
-                style={Styles.iconbg}
-              >
-                <Image source={imgFacebook} style={Styles.icon} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={[Styles.bgbottomicon]}>
-              <Text style={{ color: COLORS.gray }}>
-                {AppString.Alreadyhaveanaccount}
-              </Text>
-              <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-                <Text style={{ color: COLORS.black }}>{AppString.Signup}</Text>
-              </TouchableOpacity>
-            </View>
+          </KeyboardAvoidingView>
+          <View style={CommonStyle.mb32}>
+            <OrLine LineName={"OR"} />
           </View>
-        </KeyboardAvoidingView>
+
+          <View style={[CommonStyle.mb32, CommonStyle.googleFb]}>
+            <TouchableOpacity
+              onPress={() => GoogleLogin()}
+              style={Styles.iconbg}
+            >
+              <Image source={imgGoogle} style={Styles.icon} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => fbSignIn()} style={Styles.iconbg}>
+              <Image source={imgFacebook} style={Styles.icon} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={[Styles.bgbottomicon]}>
+            <Text style={{ color: COLORS.gray }}>
+              {AppString.Alreadyhaveanaccount}
+            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+              <Text style={{ color: COLORS.black }}>{AppString.Signup}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </ScrollView>
       <Spinner visible={getLoader} />
     </SafeAreaView>
