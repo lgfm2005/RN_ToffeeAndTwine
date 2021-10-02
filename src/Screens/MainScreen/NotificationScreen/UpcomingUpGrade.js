@@ -12,6 +12,7 @@ import {
   Modal,
   ScrollView,
 } from "react-native";
+import Purchases from "react-native-purchases";
 
 // Lib
 // import Modal from 'react-native-modal';
@@ -29,9 +30,43 @@ const UpcomingUpGrade = ({ navigation }) => {
     setUpgradeModel(false);
     navigation.navigate("UpcomingMoments");
   };
+  const handleSubmitPayment = async () => {
+    // setLoading(true);
+    // HapticFeedback.trigger("impactLight");
+    try {
+      const offerings = await Purchases.getOfferings();
+      console.log("offerings:", offerings);
+      const monthlyPackage = offerings.current.monthly;
+      const { purchaserInfo } = await Purchases.purchasePackage(monthlyPackage);
+      const { latestExpirationDate } = purchaserInfo;
+      console.log("latestExpirationDate:", latestExpirationDate, purchaserInfo);
+      // const { error } = await SendReceipt(latestExpirationDate, purchaserInfo);
+      // if (error)
+      //   throw new Error(
+      //     error?.response?.data?.error || error.message || "Unkown error."
+      //   );
+      // await UserProfile(userId);
+      // onClose?.();
+    } catch (e) {
+      console.log("Error:", e);
+      // setLoading(false);
+      // if (e.userCancelled) return;
+      // setError(
+      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
+      // );
+      // setErrorDetails(e.message);
+      // HapticFeedback.trigger("impactHeavy");
+    }
+  };
   const UpGradePayment = () => {
     setUpgradeModel(true);
+    handleSubmitPayment();
   };
+
+  useEffect(() => {
+    Purchases.setDebugLogsEnabled(true);
+    Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
+  }, []);
 
   return (
     <View style={CommonStyle.BgColorWhite}>
@@ -39,6 +74,7 @@ const UpcomingUpGrade = ({ navigation }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         style={[CommonStyle.BgColorWhite, { height: "100%" }]}
+        contentContainerStyle={{ bottom: 45 }}
       >
         <Image source={imgInvite} style={[CommonStyle.imgGiftTutorial]} />
         <View style={[CommonStyle.Container, CommonStyle.BgColorWhite]}>
