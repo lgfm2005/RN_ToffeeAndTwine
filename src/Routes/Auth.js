@@ -29,7 +29,7 @@ const Auth = () => {
     <NavigationContainer independent={true}>
       <Stack.Navigator
         initialRouteName={"MainScreen"}
-        screenOptions={{ headerShown: false }}
+        screenOptions={{ headerShown: false, gestureEnabled: false }}
       >
         {/* <Stack.Screen name="Slider" component={Slider} /> */}
 

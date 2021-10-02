@@ -79,16 +79,13 @@ const Followers = ({ navigation }) => {
       await RemoveFollowerFriend(Id);
     const { userFollowerListResponse, userFollowerListError } =
       await getUserFollowerList();
-    debugger;
     if (
       RemoveFriendResponse.data.StatusCode == "1" &&
       userFollowerListResponse.data.StatusCode == "1"
     ) {
-      debugger;
       setUserFollower(userFollowerListResponse.data.Result);
       setLoader(false);
     } else {
-      debugger;
       console.log("Remove Friend Error", RemoveFriendError);
       console.log("user Follower List Error", userFollowerListError);
       setLoader(false);

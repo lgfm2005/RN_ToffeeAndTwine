@@ -51,9 +51,11 @@ const Data = [
 ];
 
 const Search = ({ navigation }) => {
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const onChangeSearch = (query) => setSearchQuery(query);
+  const onChangeSearch = (query) => {
+    setSearchQuery(query);
+  };
 
   const RemoveFriend = (Id, Name) => {
     console.log("RemoveFriend", Id, Name);
@@ -92,7 +94,7 @@ const Search = ({ navigation }) => {
         <View>
           <SearchBar
             placeholder="Search"
-            onChangeText={onChangeSearch}
+            onChangeText={(text) => onChangeSearch(text)}
             value={searchQuery}
             platform="ios"
             onCancel={() => navigation.navigate("NavFriendScreen")}
