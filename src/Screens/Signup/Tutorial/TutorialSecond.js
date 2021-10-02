@@ -43,7 +43,6 @@ import { useActions } from "../../../redux/actions";
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 var temp,
   temp2 = [];
-var data = new FormData();
 var items, list;
 const TutorialSecond = ({ navigation, props, route }) => {
   const { addCategoryQuestion, CategoryList } = useActions();
@@ -117,22 +116,26 @@ const TutorialSecond = ({ navigation, props, route }) => {
 
   const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
     temp2[key] = {
-      category_id: categoryId,
-      category_question_id: categoryQuestionId,
+      categoryId,
+      categoryQuestionId,
       value,
       key,
     };
-    console.log(",temp2temp2temp2temp2temp2temp2temp2temp2temp2", temp2);
+    debugger;
     temp = temp2;
+    debugger;
   };
+
+  // Add New Categories Question
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
     temp[key] = {
-      category_id: categoryId,
-      category_question_id: categoryQuestionId,
+      categoryId,
+      categoryQuestionId,
       value,
       key,
     };
     setQuestionsData(temp);
+    debugger;
   };
 
   const SubmitData = async () => {
@@ -141,9 +144,10 @@ const TutorialSecond = ({ navigation, props, route }) => {
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
       await addCategoryQuestion(tokens, 1, getQuestionsData);
+    debugger;
     if (addCategoryQuestionResponse.data.StatusCode == "1") {
+      debugger;
       setModalVisible(false);
-
       // List Icon COLOR Change
       list = getlistOfCategory;
       items = list[getIndexIcon];
@@ -246,29 +250,30 @@ const TutorialSecond = ({ navigation, props, route }) => {
                     </View>
 
                     <View style={CommonStyle.my16}>
-                      {getQuestions.map((item, key) => {
-                        setSecondTemp(
-                          item.category_id,
-                          item.category_question_id,
-                          "",
-                          key
-                        );
-                        return (
-                          <SimpleInputEditView
-                            key={key}
-                            TitleName={item.category_question}
-                            placeholder={item.category_placeholder}
-                            onChangeText={(value) =>
-                              HandelQuestionData(
-                                item.category_id,
-                                item.category_question_id,
-                                value,
-                                key
-                              )
-                            }
-                          />
-                        );
-                      })}
+                      {getQuestions.length > 0 &&
+                        getQuestions.map((item, key) => {
+                          setSecondTemp(
+                            item.category_id,
+                            item.category_question_id,
+                            "",
+                            key
+                          );
+                          return (
+                            <SimpleInputEditView
+                              TitleName={item.category_question}
+                              placeholder={item.category_placeholder}
+                              placeholderTextColor={COLORS.Primary}
+                              onChangeText={(value) =>
+                                HandelQuestionData(
+                                  item.category_id,
+                                  item.category_question_id,
+                                  value,
+                                  key
+                                )
+                              }
+                            />
+                          );
+                        })}
                     </View>
 
                     <View style={CommonStyle.Row}>

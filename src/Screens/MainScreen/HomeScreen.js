@@ -62,7 +62,6 @@ import Purchases from "react-native-purchases";
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp,
   temp2 = [];
-var data = new FormData();
 var items, list, userData;
 const HomeScreen = () => {
   const {
@@ -463,6 +462,7 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           style={[CommonStyle.BgColorWhite]}
+          keyboardShouldPersistTaps={"always"}
         >
           <View style={CommonStyle.authPage}>
             <View style={CommonStyle.Container}>
@@ -498,6 +498,7 @@ const HomeScreen = () => {
               />
               <View style={{ paddingHorizontal: 15 }}>
                 <ScrollView
+                  keyboardShouldPersistTaps={"always"}
                   contentContainerStyle={[
                     MainScreenStyle.scrollItemStyle,
                     CommonStyle.p8,
@@ -561,6 +562,7 @@ const HomeScreen = () => {
               }}
             >
               <ScrollView
+                keyboardShouldPersistTaps={"always"}
                 contentContainerStyle={[
                   MainScreenStyle.scrollItemStyle,
                   CommonStyle.p8,
@@ -614,6 +616,7 @@ const HomeScreen = () => {
                     </Text>
                     <View>
                       <ScrollView
+                        keyboardShouldPersistTaps={"always"}
                         contentContainerStyle={[
                           MainScreenStyle.scrollItemStyle,
                         ]}

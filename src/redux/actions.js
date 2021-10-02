@@ -340,7 +340,7 @@ export const useActions = () => {
           data.append("CategoryQuestionValue[]", item.value);
         }
       });
-      debugger;
+
       let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
         addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
@@ -580,22 +580,18 @@ export const useActions = () => {
     },
 
     getUnfollowFriendList: async (FriendUserID) => {
-      debugger;
       let UnfollowFriendListResponse, UnfollowFriendListError;
       try {
         var data = new FormData();
         data.append("FriendUserID", FriendUserID);
-        debugger;
         UnfollowFriendListResponse = await API.getunfollowFriend.get(
           sessions,
           data
         );
         if (UnfollowFriendListResponse.data.StatusCode == "1") {
-          debugger;
         }
       } catch (e) {
         UnfollowFriendListError = e;
-        debugger;
       }
       return { UnfollowFriendListResponse, UnfollowFriendListError };
     },
@@ -605,12 +601,10 @@ export const useActions = () => {
       try {
         var data = new FormData();
         data.append("FriendUserID", FriendUserID);
-        debugger;
         RemoveFriendResponse = await API.RemoveFollowerFriend.get(
           sessions,
           data
         );
-        debugger;
         if (RemoveFriendResponse.data.StatusCode == "1") {
         }
       } catch (e) {
@@ -624,9 +618,7 @@ export const useActions = () => {
       try {
         var data = new FormData();
         data.append("SearchKey", SearchName);
-        debugger;
         SearchUserResponse = await API.SearchUser.get(sessions, data);
-        debugger;
         if (SearchUserResponse.data.StatusCode == "1") {
         }
       } catch (e) {

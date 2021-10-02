@@ -14,51 +14,46 @@ import {
 // Lib
 // import {Searchbar} from 'react-native-paper';
 import { SearchBar } from "react-native-elements";
+import Spinner from "react-native-loading-spinner-overlay";
 // Asset
 import CommonStyle, {
   fontsize10,
   fontsize12,
 } from "../../../Assets/Style/CommonStyle";
-import { demodp } from "../../../Assets/utils/Image";
+import { demodp, imgPlaceHolder } from "../../../Assets/utils/Image";
 import { AppString, Remove } from "../../../Assets/utils/AppString";
 import { FilledButton } from "../../../Components/Button/Button";
 import { SearchBarStyle } from "./SearchBarStyle";
 import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { COLORS } from "../../../Assets/utils/COLORS";
-
-const Data = [
-  {
-    id: 1,
-    Name: "Gregory Thomson",
-    Image: demodp,
-  },
-  {
-    id: 2,
-    Name: "Gregory Thomson",
-    Image: demodp,
-  },
-  {
-    id: 3,
-    Name: "Gregory Thomson",
-    Image: demodp,
-  },
-  {
-    id: 4,
-    Name: "Gregory Thomson",
-    Image: demodp,
-  },
-];
+import { useActions } from "../../../redux/actions";
 
 const Search = ({ navigation }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const { SearchUser } = useActions();
 
-  const onChangeSearch = (query) => {
+  const [getSearchQuery, setSearchQuery] = useState("");
+  const [getSearchData, setSearchData] = useState([]);
+  const [getLoader, setLoader] = useState(false);
+
+  const onChangeSearch = async (query) => {
     setSearchQuery(query);
-  };
-
-  const RemoveFriend = (Id, Name) => {
-    console.log("RemoveFriend", Id, Name);
+    console.log("Remove Friend  ====>>>>", query);
+    if (query.length > 2) {
+      // setLoader(true);
+      const { SearchUserResponse, SearchUserError } = await SearchUser(query);
+      if (SearchUserResponse.data.StatusCode == "1") {
+        setSearchData(SearchUserResponse.data.Result);
+        console.log(
+          "Search Data Response ===>",
+          typeof SearchUserResponse.data.Result
+        );
+        // setLoader(false);
+      } else {
+        // setLoader(false);
+        console.log("Search Data Error ===>", SearchUserError);
+      }
+    }
   };
 
   const OpenUserProfile = (userName) => {
@@ -66,21 +61,23 @@ const Search = ({ navigation }) => {
     navigation.navigate("UserProfile", { userName: userName });
   };
 
-  const RenderItem = (item, index) => {
+  const RenderItem = (Data, index) => {
     return (
-      <TouchableOpacity onPress={() => OpenUserProfile(item.Name)}>
+      <TouchableOpacity onPress={() => OpenUserProfile(Data.item.user_id)}>
+        {/* <TouchableOpacity onPress={() => {}}> */}
         <View style={[SearchBarStyle.FollowerListBg, CommonStyle.mb16]}>
           <View style={SearchBarStyle.followerTxtIcon}>
-            <Image source={item.Image} style={CommonStyle.showProfileImage} />
-            <Text style={CommonStyle.txtFrienduserName}>{item.Name}</Text>
-          </View>
-          <View style={SearchBarStyle.btnBg}>
-            <FilledButton
-              buttonName={AppString.Remove}
-              onPress={() => RemoveFriend(item.id, item.Name)}
-              styleBtn={Smallbtn}
-              fontStyle={fontsize12}
+            <Image
+              source={
+                Data.item.user_profile_image == ""
+                  ? { uri: Data.item.user_profile_image }
+                  : imgPlaceHolder
+              }
+              style={CommonStyle.showProfileImage}
             />
+            <Text style={CommonStyle.txtFrienduserName}>
+              {Data.item.user_fname + " " + Data.item.user_lname}
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -95,7 +92,7 @@ const Search = ({ navigation }) => {
           <SearchBar
             placeholder="Search"
             onChangeText={(text) => onChangeSearch(text)}
-            value={searchQuery}
+            value={getSearchQuery}
             platform="ios"
             onCancel={() => navigation.navigate("NavFriendScreen")}
             containerStyle={{
@@ -112,13 +109,26 @@ const Search = ({ navigation }) => {
         </View>
 
         <View style={SearchBarStyle.backgroundColor}>
-          <FlatList
-            data={Data}
-            renderItem={({ item, index }) => RenderItem(item, index)}
-            keyExtractor={(item) => item.id}
-          />
+          {getSearchData == "" ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text>No Data Found !!</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={getSearchData}
+              renderItem={(Data) => RenderItem(Data)}
+              keyExtractor={(item) => item.id}
+            />
+          )}
         </View>
       </View>
+      <Spinner visible={getLoader} />
     </SafeAreaView>
   );
 };

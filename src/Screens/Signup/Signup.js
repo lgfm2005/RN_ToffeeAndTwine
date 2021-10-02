@@ -327,6 +327,7 @@ const Signup = ({ navigation }) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
+        keyboardShouldPersistTaps={"always"}
         // contentContainerStyle={CommonStyle.height}
       >
         <View

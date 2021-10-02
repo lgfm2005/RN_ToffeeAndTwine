@@ -307,6 +307,7 @@ const SignIn = ({ navigation }) => {
   return (
     <SafeAreaView style={[CommonStyle.MainContainer]}>
       <ScrollView
+        keyboardShouldPersistTaps={"always"}
         showsVerticalScrollIndicator={false}
         alwaysBounceVertical={false}
         // contentContainerStyle={CommonStyle.height}
@@ -362,6 +363,7 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
+                // onPress={() => handleSignIn(getEmail, getCreatePassword)}
                 // onPress={() => handleSignIn(getEmail, getCreatePassword)}
                 onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
                 // onPress={() => handleSignIn("uss.jignesh@gmail.com", "12345")}
