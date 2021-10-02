@@ -1,4 +1,4 @@
-import { USERSPECIALMOMENT } from "../types";
+import { USERSPECIALMOMENT, LOGOUT } from "../types";
 
 const initialState = {};
 
@@ -7,9 +7,10 @@ export default (state = initialState, action) => {
     case USERSPECIALMOMENT: {
       return action.payload;
     }
-    // case LOGOUT: {
-    //   return initialState;
-    // }
+
+    case LOGOUT: {
+      return initialState;
+    }
 
     default:
       return state;

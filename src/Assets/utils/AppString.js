@@ -27,6 +27,12 @@ export const AppString = {
   Graduation: "Graduation",
   Christmas: "Christmas",
   Pleasebirthdaycontinue: "Please enter your birthday and  save to continue.",
+  Pleaseanniversarycontinue:
+    "Please enter your anniversary and  save to continue.",
+  Pleasegraduationcontinue:
+    "Please enter your graduation and  save to continue.",
+  Pleasechristmascontinue: "Please enter your christmas and  save to continue.",
+
   FriendSpecialMoments: "My Friend's Special Moments",
   Save: "SAVE",
   Edit: "Edit",

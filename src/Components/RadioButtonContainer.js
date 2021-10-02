@@ -3,13 +3,25 @@ import { View, Text } from "react-native";
 import RadioButton from "../Components/RadioButton";
 import TutorialStyle from "../Screens/Signup/Tutorial/TutorialStyle";
 
-export default function RadioButtonContainer({ values, onPress }) {
+export default function RadioButtonContainer({
+  values,
+  onPress,
+  isValid,
+  isText,
+}) {
   const [currentSelectedItem, setCurrentSelectedItem] = useState(null);
-
   const _onPress = (idx, momentId) => {
     onPress(idx, momentId);
     setCurrentSelectedItem(idx, momentId);
   };
+
+  useEffect(() => {
+    if (isText == false) {
+      if (isValid == "" || isValid == "undefined") {
+        setCurrentSelectedItem(null);
+      }
+    }
+  }, [isValid, isText]);
 
   const _renderRadioButtons = () => {
     return (values || []).map((listItem, idx) => {

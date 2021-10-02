@@ -528,15 +528,20 @@ export const useActions = () => {
 
     // Raj
 
-    getProfile: async () => {
+    getProfile: async (UserID) => {
+      var data = new FormData();
+      if (UserID) {
+        data.append("UserID", UserID);
+      }
       let profileResponse, profileError;
       try {
-        profileResponse = await API.GetProfile.get(sessions);
+        profileResponse = await API.GetProfile.get(sessions, data);
         if (profileResponse.data.StatusCode == "1") {
         }
       } catch (e) {
         profileError = e;
       }
+      debugger;
       return { profileResponse, profileError };
     },
 

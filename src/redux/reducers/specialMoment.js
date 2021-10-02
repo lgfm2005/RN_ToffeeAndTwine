@@ -1,4 +1,4 @@
-import { SPECIALMOMENT } from "../types";
+import { SPECIALMOMENT, LOGOUT } from "../types";
 
 const initialState = [{}];
 
@@ -8,9 +8,9 @@ export default (state = initialState, action) => {
       return action.payload;
     }
 
-    // case LOGOUT: {
-    //   return initialState;
-    // }
+    case LOGOUT: {
+      return initialState;
+    }
 
     default:
       return state;

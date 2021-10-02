@@ -166,6 +166,7 @@ const HomeScreen = () => {
   const [getUpdateQuestionData, setUpdateQuestionData] = useState([]);
   const [getIdItem, setIdItem] = useState("");
   const [getLoader, setLoader] = useState(false);
+  const [getId, seGetId] = useState("0");
 
   const [getFilterCat, setFilterCat] = useState(categories);
 
@@ -336,7 +337,13 @@ const HomeScreen = () => {
   };
   const UpdateQuestionData = (categoryQuestionId, value, key) => {
     temp[key] = { categoryQuestionId, value };
+    var getIds = getId == "0" ? "1" : "0";
+    var dataList = getShowOldQuestion;
+    dataList[key].question_value = value;
+    setShowOldQuestion(dataList);
+    seGetId(getIds);
     setUpdateQuestionData(temp);
+
     // temp = [];
   };
   // Submit Update Data Categories Question
@@ -392,10 +399,16 @@ const HomeScreen = () => {
     console.log("ShowOldItem Image", Image);
     console.log("ShowOldItem Id", id);
     console.log("ShowOldItem key", key);
-    setAddNewItemModal(true);
-    setAddNewItem(Name);
-    setIdItem(id);
-    setShowOldQuestion(questions);
+    var questionList = userCategoryQuestion[key];
+    console.log("SquestionList", questionList);
+
+    setShowOldQuestion([]);
+    setTimeout(() => {
+      setShowOldQuestion(questions);
+      setAddNewItemModal(true);
+      setAddNewItem(Name);
+      setIdItem(id);
+    }, 1000);
   };
 
   // Old Select Categories -- > Edit Item
@@ -614,7 +627,7 @@ const HomeScreen = () => {
                     >
                       {AppString.SelectCategories}
                     </Text>
-                    <View>
+                    <View key={getId}>
                       <ScrollView
                         keyboardShouldPersistTaps={"always"}
                         contentContainerStyle={[
@@ -700,15 +713,17 @@ const HomeScreen = () => {
                           return (
                             <SimpleInputEditView
                               TitleName={item.category_question}
-                              placeholder={item.question_value}
+                              placeholder={item.category_placeholder}
+                              value={item.question_value}
                               placeholderTextColor={COLORS.Primary}
-                              onChangeText={(value) =>
+                              onChangeText={(value) => {
+                                console.log("valuevaluevalue", value);
                                 UpdateQuestionData(
                                   item.user_category_question_id,
                                   value,
                                   key
-                                )
-                              }
+                                );
+                              }}
                             />
                           );
                         })}

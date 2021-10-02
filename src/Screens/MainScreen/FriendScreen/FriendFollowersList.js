@@ -54,6 +54,7 @@ import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
 import { EditShowSimpleView } from "../../../Components/FormInput";
 import { FriendScreenStyle } from "./FriendScreenStyle";
 import { FONT } from "../../../Assets/utils/FONT";
+import { useActions } from "../../../redux/actions";
 
 const Data = [
   {
@@ -82,12 +83,16 @@ const SprecialMOmentsData = [
 ];
 
 const FriendFollowersList = ({ route, navigation }) => {
-  // const {userName} = route.params;
-
+  const { userID } = route.params;
+  const { getProfile } = useActions();
   const [getUserBlockModal, setUserBlockModal] = useState(false);
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
   const [getNotificationSendModal, setNotificationSendModal] = useState(false);
   const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
+  const [getMomentsCount, setMomentsCount] = useState(0);
+  const [getFollowerCount, setFollowerCount] = useState(0);
+  const [getFollowingCount, setFollowingCount] = useState(0);
+  const [getUserName, setUserName] = useState("");
 
   const [getAddNewItem, setAddNewItem] = useState(false);
 
@@ -115,6 +120,26 @@ const FriendFollowersList = ({ route, navigation }) => {
     setNotificationSendModal(false),
     setAwesomeShowModal(true),
   ];
+
+  const getProfiles = async () => {
+    const { profileResponse, profileError } = await getProfile(userID);
+    debugger;
+    if (profileResponse.data.StatusCode) {
+      setFollowerCount(profileResponse.data.Result[0].follower_count);
+      setFollowingCount(profileResponse.data.Result[0].following_count);
+      setMomentsCount(
+        profileResponse.data.Result[0].user_details[0].default_special_moment
+      );
+      var name =
+        profileResponse.data.Result[0].user_details[0].user_fname +
+        " " +
+        profileResponse.data.Result[0].user_details[0].user_lname;
+      setUserName(name);
+    }
+  };
+  useEffect(() => {
+    getProfiles();
+  }, []);
 
   return (
     <View style={CommonStyle.BgColorWhite}>
@@ -150,7 +175,7 @@ const FriendFollowersList = ({ route, navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity onPress={() => UserBlock()}>
               <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
-                Gregory Thomson
+                {getUserName}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => UserBlock()}>
@@ -182,9 +207,7 @@ const FriendFollowersList = ({ route, navigation }) => {
             <View style={[CommonStyle.my16, CommonStyle.Row]}>
               <View style={FriendScreenStyle.NameAndEditbg}>
                 <View>
-                  <Text style={FriendScreenStyle.userName}>
-                    Gregory Thomson
-                  </Text>
+                  <Text style={FriendScreenStyle.userName}>{getUserName}</Text>
                   {/* <Text style={FriendScreenStyle.userName}>{userName}</Text> */}
                   <View style={CommonStyle.alignItemsBaseLine}>
                     <Image
@@ -215,7 +238,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
-                  1
+                  {getMomentsCount}
                 </Text>
                 <Text
                   style={[
@@ -230,7 +253,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
-                  10k
+                  {getFollowerCount}
                 </Text>
                 <Text
                   style={[
@@ -245,7 +268,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
-                  920
+                  {getFollowingCount}
                 </Text>
                 <Text
                   style={[

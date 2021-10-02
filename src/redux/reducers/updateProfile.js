@@ -1,4 +1,4 @@
-import { UPDATE_PROFILE } from "../types";
+import { UPDATE_PROFILE, LOGOUT } from "../types";
 
 const initialState = {};
 
