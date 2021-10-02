@@ -65,6 +65,7 @@ import {
   EditShowSimpleView,
   SimpleInputEditView,
 } from "../../../Components/FormInput";
+import Purchases from "react-native-purchases";
 
 const Data = [
   {
@@ -718,6 +719,40 @@ const MyProfile = ({ navigation }) => {
   const upgradeItem = () => {
     setupgradeItemModal(true);
   };
+
+  const handleSubmitPayment = async () => {
+    // setLoading(true);
+    // HapticFeedback.trigger("impactLight");
+    try {
+      const offerings = await Purchases.getOfferings();
+      console.log("offerings:", offerings);
+      const monthlyPackage = offerings.current.monthly;
+      const { purchaserInfo } = await Purchases.purchasePackage(monthlyPackage);
+      const { latestExpirationDate } = purchaserInfo;
+      console.log("latestExpirationDate:", latestExpirationDate, purchaserInfo);
+      // const { error } = await SendReceipt(latestExpirationDate, purchaserInfo);
+      // if (error)
+      //   throw new Error(
+      //     error?.response?.data?.error || error.message || "Unkown error."
+      //   );
+      // await UserProfile(userId);
+      // onClose?.();
+    } catch (e) {
+      console.log("Error:", e);
+      // setLoading(false);
+      // if (e.userCancelled) return;
+      // setError(
+      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
+      // );
+      // setErrorDetails(e.message);
+      // HapticFeedback.trigger("impactHeavy");
+    }
+  };
+
+  useEffect(() => {
+    Purchases.setDebugLogsEnabled(true);
+    Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
+  }, []);
 
   return (
     <View style={[CommonStyle.BgColorWhite, CommonStyle.mb10]}>
