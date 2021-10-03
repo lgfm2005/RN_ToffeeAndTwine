@@ -84,7 +84,7 @@ export const useActions = () => {
               userOtp: "",
               userProfileImage: "",
               defaultSpecialMoment: "",
-              isAutoLogin: true,
+              isAutoLogin: false,
             })
           );
         }
@@ -343,7 +343,6 @@ export const useActions = () => {
           data.append("CategoryQuestionValue[]", item.value);
         }
       });
-
       let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
         addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
@@ -632,6 +631,19 @@ export const useActions = () => {
         SearchUserError = e;
       }
       return { SearchUserResponse, SearchUserError };
+    },
+
+    getFriendCategorySpecialMoment: async () => {
+      let friendCategorySpeciaResponse, friendCategorySpeciaError;
+      try {
+        friendCategorySpeciaResponse =
+          await API.GetFriendCategorySpecialMoment.get(sessions);
+        if (friendCategorySpeciaResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        friendCategorySpeciaError = e;
+      }
+      return { friendCategorySpeciaResponse, friendCategorySpeciaError };
     },
 
     //
