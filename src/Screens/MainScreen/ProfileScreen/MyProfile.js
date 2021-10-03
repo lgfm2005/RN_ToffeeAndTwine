@@ -202,17 +202,20 @@ const MyProfile = ({ navigation }) => {
   const [getDefaultSpecialMometData, setDefaultSpecialMometData] = useState({});
 
   const [getPrevData, setPrevData] = useState({});
+  const [getId, seGetId] = useState("0");
+
   useEffect(() => {
-    if (userSpecialMoment == "") {
-      return;
+    if (!userSpecialMoment) {
+      debugger;
+      const defaultSpecialMometData = userSpecialMoment.filter((item) => {
+        item.special_moment_id == user.defaultSpecialMoment;
+      });
+      debugger;
+      setDefaultSpecialMometData(defaultSpecialMometData);
+      debugger;
     }
     getFilterSepCatgories(userSpecialMoment);
     getFilterCatgories(userCategoryQuestion);
-
-    const defaultSpecialMometData = userSpecialMoment.filter((item) => {
-      item.special_moment_id == user.defaultSpecialMoment;
-    });
-    setDefaultSpecialMometData(defaultSpecialMometData);
   }, []);
 
   const getFilterCatgories = (data) => {
@@ -301,9 +304,9 @@ const MyProfile = ({ navigation }) => {
       value,
       key,
     };
-    console.log(",temp2temp2temp2temp2temp2temp2temp2temp2temp2", temp2);
     temp = temp2;
   };
+
   // Add New Categories Question
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
     temp[key] = {
@@ -312,7 +315,6 @@ const MyProfile = ({ navigation }) => {
       value,
       key,
     };
-    console.log(",fewrjfgkewfhewfhefewlfhewfjklewfbhewkjfewbf", temp);
     setQuestionsData(temp);
   };
 
@@ -334,7 +336,14 @@ const MyProfile = ({ navigation }) => {
   };
   const UpdateQuestionData = (categoryQuestionId, value, key) => {
     temp[key] = { categoryQuestionId, value };
+    var getIds = getId == "0" ? "1" : "0";
+    var dataList = getShowOldQuestion;
+    dataList[key].question_value = value;
+    setShowOldQuestion(dataList);
+    seGetId(getIds);
     setUpdateQuestionData(temp);
+
+    // temp = [];
   };
   // Submit Update Data Categories Question
   const SubmitUpdateQuestionData = async () => {
@@ -368,11 +377,12 @@ const MyProfile = ({ navigation }) => {
       // );
       // console.log("Question Response ==>>>", updateCategoryQuestionResponse);
     } else {
-      setUpdateDataModal(true);
+      setUpdateDataModal(false);
+      getFilterCatgories("");
       console.log("Question Error ==>>>", updateCategoryQuestionError);
       console.log(
         "User Category Question Response Error  ===>>>",
-        GetCategoryListerror
+        UserCategoryQuestionError
       );
     }
     // setLoader(false);
@@ -505,28 +515,35 @@ const MyProfile = ({ navigation }) => {
       deleteUserCategorySpecialDayResponse,
       deleteUserCategorySpecialDayError,
     } = await deleteUserCategorySpecialDay(DeletedId);
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
+    debugger;
     if (
       deleteUserCategorySpecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
+      debugger;
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setUserOldSpecialMomentModal(false);
       setLoader(false);
+      debugger;
     } else {
+      setLoader(false);
       setUserOldSpecialMomentModal(false);
       console.log(
         "NEW deleteUserCategorySpecialDay Error",
         deleteUserCategorySpecialDayError
       );
+      debugger;
       console.log(
         "NEW getUserCategorySpecialMoment Error",
         getUserCategorySpecialMomentError
       );
+      debugger;
     }
   };
 
@@ -755,537 +772,524 @@ const MyProfile = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={[CommonStyle.BgColorWhite, CommonStyle.mb10]}>
-      <SafeAreaView>
-        <View
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            left: 0,
-            zIndex: 1,
-          }}
+    <View style={[CommonStyle.BgColorWhite]}>
+      <MyBlackStatusbar />
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          left: 0,
+          zIndex: 1,
+        }}
+      >
+        <LinearGradient
+          colors={[
+            "rgba(0,0,0,1)",
+            "rgba(0,0,0,0.8)",
+            "rgba(0,0,0,0.6)",
+            "rgba(0,0,0,0.4)",
+            "rgba(0,0,0,0.0)",
+          ]}
         >
-          <LinearGradient
-            colors={[
-              "rgba(0,0,0,1)",
-              "rgba(0,0,0,0.8)",
-              "rgba(0,0,0,0.6)",
-              "rgba(0,0,0,0.4)",
-              "rgba(0,0,0,0.0)",
-            ]}
+          <View
+            style={[CommonStyle.ProfileToolbarbg, { alignItems: "center" }]}
           >
-            <View
-              style={[CommonStyle.ProfileToolbarbg, { alignItems: "center" }]}
-            >
-              <TouchableOpacity>
-                <Image source={{}} style={{}} />
-              </TouchableOpacity>
-              <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
-                MyProfile
-              </Text>
-              <TouchableOpacity onPress={() => ShareAppLink()}>
-                <Image source={imgWhiteShare} style={CommonStyle.imgIconSize} />
-              </TouchableOpacity>
-            </View>
-          </LinearGradient>
-        </View>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          bounces={false}
-        >
-          <View style={CommonStyle.authPage}>
-            <View style={CommonStyle.imgmask}>
-              <ImageBackground
-                source={
-                  userData.userProfileImage != ""
-                    ? { uri: userData.userProfileImage }
-                    : imgPlaceHolder
-                }
-                style={CommonStyle.imgProfileBackground}
-              ></ImageBackground>
-              <Image
-                source={imgProfileBackground}
-                style={CommonStyle.imgmaskbg}
-              />
-            </View>
+            <TouchableOpacity>
+              <Image source={{}} style={{}} />
+            </TouchableOpacity>
+            <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
+              {/* My Profile */}
+            </Text>
+            <TouchableOpacity onPress={() => ShareAppLink()}>
+              <Image source={imgWhiteShare} style={CommonStyle.imgIconSize} />
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
+      </View>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
+        <View style={CommonStyle.authPage}>
+          <View style={CommonStyle.imgmask}>
+            <ImageBackground
+              source={
+                userData.userProfileImage != ""
+                  ? { uri: userData.userProfileImage }
+                  : imgPlaceHolder
+              }
+              style={CommonStyle.imgProfileBackground}
+            ></ImageBackground>
+            <Image
+              source={imgProfileBackground}
+              style={CommonStyle.imgmaskbg}
+            />
+          </View>
 
-            <View style={[CommonStyle.Container]}>
-              <View style={[CommonStyle.my16, CommonStyle.Row]}>
-                <View style={ProfileScreenStyle.NameAndEditbg}>
-                  <View>
-                    <Text style={ProfileScreenStyle.userName}>
-                      {userData.userFname + " " + userData.userLname}
-                    </Text>
-                    <View style={CommonStyle.alignItemsBaseLine}>
-                      {getDefaultSpecialMometData.length > 0 &&
-                      getDefaultSpecialMometData.user_special_moment_date ==
-                        0 ? (
-                        <>
-                          <Image
-                            source={imgbirthdayCakeGary}
-                            style={CommonStyle.imgIconSize}
-                          />
-                          <Text
-                            style={[
-                              CommonStyle.txtContent,
-                              { color: COLORS.PrimaryLight },
-                            ]}
-                          >
-                            {
-                              getDefaultSpecialMometData.user_special_moment_date
-                            }
-                          </Text>
-                        </>
-                      ) : null}
-                    </View>
+          <View style={[CommonStyle.Container]}>
+            <View style={[CommonStyle.my16, CommonStyle.Row]}>
+              <View style={ProfileScreenStyle.NameAndEditbg}>
+                <View>
+                  <Text style={ProfileScreenStyle.userName}>
+                    {userData.userFname + " " + userData.userLname}
+                  </Text>
+                  <View style={CommonStyle.alignItemsBaseLine}>
+                    {getDefaultSpecialMometData.length > 0 &&
+                    getDefaultSpecialMometData.user_special_moment_date == 0 ? (
+                      <>
+                        <Image
+                          source={imgbirthdayCakeGary}
+                          style={CommonStyle.imgIconSize}
+                        />
+                        <Text
+                          style={[
+                            CommonStyle.txtContent,
+                            { color: COLORS.PrimaryLight },
+                          ]}
+                        >
+                          {getDefaultSpecialMometData.user_special_moment_date}
+                        </Text>
+                      </>
+                    ) : null}
                   </View>
-                  <POPLinkButton
-                    buttonName={AppString.Edit}
-                    styleBtn={Mediumbtn}
-                    onPress={() => navigation.navigate("EditProfile")}
-                  />
                 </View>
+                <POPLinkButton
+                  buttonName={AppString.Edit}
+                  styleBtn={Mediumbtn}
+                  onPress={() => navigation.navigate("EditProfile")}
+                />
               </View>
+            </View>
 
-              <View style={[ProfileScreenStyle.MomentStatus]}>
-                <View>
-                  <Text
-                    style={[
-                      CommonStyle.txtTitle,
-                      { fontFamily: FONT.NotoSans },
-                    ]}
-                  >
-                    {userSpecialMoment.length == undefined
-                      ? "0"
-                      : userSpecialMoment.length}
-                  </Text>
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
-                    ]}
-                  >
-                    Moments
-                  </Text>
-                </View>
-                <View>
-                  <Text
-                    style={[
-                      CommonStyle.txtTitle,
-                      { fontFamily: FONT.NotoSans },
-                    ]}
-                  >
-                    10k
-                  </Text>
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
-                    ]}
-                  >
-                    Followers
-                  </Text>
-                </View>
-                <View>
-                  <Text
-                    style={[
-                      CommonStyle.txtTitle,
-                      { fontFamily: FONT.NotoSans },
-                    ]}
-                  >
-                    920
-                  </Text>
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
-                    ]}
-                  >
-                    Following
-                  </Text>
-                </View>
-              </View>
-
+            <View style={[ProfileScreenStyle.MomentStatus]}>
               <View>
+                <Text
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
+                  {userSpecialMoment.length == undefined
+                    ? "0"
+                    : userSpecialMoment.length}
+                </Text>
+                <Text
+                  style={[
+                    CommonStyle.txtContent,
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                  ]}
+                >
+                  Moments
+                </Text>
+              </View>
+              <View>
+                <Text
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
+                  10k
+                </Text>
+                <Text
+                  style={[
+                    CommonStyle.txtContent,
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                  ]}
+                >
+                  Followers
+                </Text>
+              </View>
+              <View>
+                <Text
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
+                  920
+                </Text>
+                <Text
+                  style={[
+                    CommonStyle.txtContent,
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                  ]}
+                >
+                  Following
+                </Text>
+              </View>
+            </View>
+
+            <View>
+              <Text
+                style={[
+                  CommonStyle.txtTitle,
+                  CommonStyle.textUpperCase,
+                  { fontFamily: FONT.NotoSans, marginTop: 16 },
+                ]}
+              >
+                {AppString.FavoriteThings}
+              </Text>
+
+              <ScrollView
+                contentContainerStyle={[
+                  MainScreenStyle.scrollItemStyle,
+                  CommonStyle.p8,
+                  { justifyContent: "flex-start" },
+                ]}
+              >
+                {userCategoryQuestion.length > 0 &&
+                  userCategoryQuestion.map((item, index) => {
+                    return (
+                      <CalendarList
+                        ImageUrl={imgBook}
+                        ExploreName={item.category_name}
+                        Id={item.category_id}
+                        index={index}
+                        key={index}
+                        DataLength={userCategoryQuestion.length}
+                        ShowBtn={false}
+                        onPress={() =>
+                          ShowOldItem(
+                            item.category_name,
+                            item.Image,
+                            item.category_id,
+                            index,
+                            item.questions
+                          )
+                        }
+                        AddNewOnPress={() => AddItemShow(index)}
+                      />
+                    );
+                  })}
+                <CalendarList
+                  ShowBtn={true}
+                  key={1}
+                  AddNewOnPress={() => {
+                    userCategoryQuestion.length != 5
+                      ? AddItemShow(0)
+                      : upgradeItem();
+                  }}
+                />
+              </ScrollView>
+            </View>
+
+            <View>
+              <Text
+                style={[
+                  CommonStyle.txtTitle,
+                  CommonStyle.textUpperCase,
+                  { fontFamily: FONT.NotoSans, marginTop: 16 },
+                ]}
+              >
+                {AppString.SpecialMoments}
+              </Text>
+              <ScrollView
+                contentContainerStyle={[
+                  MainScreenStyle.scrollItemStyle,
+                  CommonStyle.toppadding16,
+                ]}
+              >
+                {userSpecialMoment != ""
+                  ? userSpecialMoment.length > 0 &&
+                    userSpecialMoment.map((item, index) => (
+                      <CalendarList
+                        ImageUrl={imgWhiteBirthday}
+                        ExploreName={item.special_moment_name}
+                        Id={item.special_moment_id}
+                        index={index}
+                        key={index}
+                        DataLength={userSpecialMoment.length}
+                        ShowBtn={false}
+                        onPress={() =>
+                          oldUserSpecialMoment(
+                            item.user_special_moment_id,
+                            item.special_moment_id,
+                            item.special_moment_name,
+                            item.user_special_moment_title,
+                            item.user_special_moment_date,
+                            item.special_moment_link,
+                            item.special_moment_other_info,
+                            item.image
+                          )
+                        }
+                      />
+                    ))
+                  : null}
+                <CalendarList
+                  ShowBtn={true}
+                  key={1}
+                  AddNewOnPress={() => {
+                    userSpecialMoment.length != 2
+                      ? AddItemSepShow(0)
+                      : upgradeItem();
+                  }}
+                />
+              </ScrollView>
+            </View>
+          </View>
+        </View>
+
+        {/* All categories Select show ( Show All Item) */}
+        {getAddItemShowModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getAddItemShowModal}
+            onBackdropPress={() => CloseItem()}
+          >
+            <SafeAreaView>
+              <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
                 <Text
                   style={[
                     CommonStyle.txtTitle,
-                    CommonStyle.textUpperCase,
-                    { fontFamily: FONT.NotoSans, marginTop: 16 },
+                    CommonStyle.pb16,
+                    { textAlign: "center" },
                   ]}
                 >
-                  {AppString.FavoriteThings}
+                  {AppString.SelectCategories}
                 </Text>
-
-                <ScrollView
-                  contentContainerStyle={[
-                    MainScreenStyle.scrollItemStyle,
-                    CommonStyle.p8,
-                    { justifyContent: "flex-start" },
-                  ]}
-                >
-                  {userCategoryQuestion.length > 0 &&
-                    userCategoryQuestion.map((item, index) => {
-                      return (
-                        <CalendarList
+                <View key={getId}>
+                  <ScrollView
+                    contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
+                  >
+                    {getFilterCat.length > 0 &&
+                      getFilterCat.map((item, index) => (
+                        <SelectCategoriesList
                           ImageUrl={imgBook}
                           ExploreName={item.category_name}
                           Id={item.category_id}
                           index={index}
                           key={index}
-                          DataLength={userCategoryQuestion.length}
-                          ShowBtn={false}
+                          // DataLength={Data.length}
                           onPress={() =>
-                            ShowOldItem(
+                            SelectCategoriesItem(
                               item.category_name,
                               item.Image,
                               item.category_id,
-                              index,
-                              item.questions
+                              item.questions,
+                              index
                             )
                           }
-                          AddNewOnPress={() => AddItemShow(index)}
+                        />
+                      ))}
+                  </ScrollView>
+                </View>
+              </View>
+            </SafeAreaView>
+          </Modal>
+        ) : null}
+        {/* Show User Category Question */}
+        {getAddNewItemModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getAddNewItemModal}
+            onBackdropPress={() => CloseItem()}
+          >
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={keyboardVerticalOffset}
+            >
+              <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                <View style={CommonStyle.Row}>
+                  <View style={{ width: "20%" }}>
+                    <TouchableOpacity disabled={true}>
+                      {getImage != "" ? (
+                        <Image
+                          source={{ uri: getImage }}
+                          style={Styles.popupImage}
+                        />
+                      ) : (
+                        <Image source={imgImport} style={Styles.popupImage} />
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View style={CommonStyle.PopModalWidth60}>
+                    <Text
+                      style={[
+                        CommonStyle.txtTitle,
+                        CommonStyle.p16,
+                        { textAlign: "center" },
+                      ]}
+                    >
+                      m111 {getAddNewItem}
+                    </Text>
+                  </View>
+                  <View style={{ width: "20%" }}>
+                    <TouchableOpacity onPress={() => DeletedExplore()}>
+                      <Image
+                        source={imgDelete}
+                        style={CommonStyle.imgIconSize}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={CommonStyle.my16}>
+                  {getShowOldQuestion.length > 0 &&
+                    getShowOldQuestion.map((item, index) => {
+                      return (
+                        <EditShowSimpleView
+                          TitleName={item.category_question}
+                          buttonName={item.category_placeholder}
+                          value={item.question_value}
                         />
                       );
                     })}
-                  <CalendarList
-                    ShowBtn={true}
-                    key={1}
-                    AddNewOnPress={() => {
-                      userCategoryQuestion.length != 5
-                        ? AddItemShow(0)
-                        : upgradeItem();
-                    }}
-                  />
-                </ScrollView>
-              </View>
+                </View>
 
-              <View>
-                <Text
-                  style={[
-                    CommonStyle.txtTitle,
-                    CommonStyle.textUpperCase,
-                    { fontFamily: FONT.NotoSans, marginTop: 16 },
-                  ]}
+                <View
+                  style={{ flexDirection: "row", justifyContent: "center" }}
                 >
-                  {AppString.SpecialMoments}
-                </Text>
-                <ScrollView
-                  contentContainerStyle={[
-                    MainScreenStyle.scrollItemStyle,
-                    CommonStyle.toppadding16,
-                  ]}
+                  <POPOutLinkButton
+                    buttonName={AppString.Cancel}
+                    onPress={() => CloseItem()}
+                  />
+
+                  <POPLinkButton
+                    buttonName={AppString.Edit}
+                    onPress={() => AddEditItem(getAddNewItem)}
+                  />
+                </View>
+              </View>
+            </KeyboardAvoidingView>
+          </Modal>
+        ) : null}
+
+        {/* Old categories Update */}
+        {getUpdateDataModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getUpdateDataModal}
+            onBackdropPress={() => CloseItem()}
+          >
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={keyboardVerticalOffset}
+            >
+              <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                <View style={CommonStyle.Row}>
+                  <View style={{ width: "20%" }}>
+                    <TouchableOpacity onPress={() => ImageChange()}>
+                      {getImage != "" ? (
+                        <Image
+                          source={{ uri: getImage }}
+                          style={Styles.popupImage}
+                        />
+                      ) : (
+                        <Image source={imgImport} style={Styles.popupImage} />
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View style={CommonStyle.PopModalWidth60}>
+                    <Text
+                      style={[
+                        CommonStyle.txtTitle,
+                        { textAlign: "center", marginTop: 10 },
+                      ]}
+                    >
+                      m222 {getUpdateDataItem}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={CommonStyle.my16}>
+                  {getShowOldQuestion.length > 0 &&
+                    getShowOldQuestion.map((item, key) => {
+                      UpdateQuestionData2(
+                        item.user_category_question_id,
+                        item.question_value,
+                        key
+                      );
+                      return (
+                        <SimpleInputEditView
+                          TitleName={item.category_question}
+                          buttonName={item.category_placeholder}
+                          value={item.question_value}
+                          onChangeText={(value) => {
+                            UpdateQuestionData(
+                              item.user_category_question_id,
+                              value,
+                              key
+                            );
+                          }}
+                        />
+                      );
+                    })}
+                </View>
+                <View
+                  style={{ flexDirection: "row", justifyContent: "center" }}
                 >
-                  {userSpecialMoment != ""
-                    ? userSpecialMoment.length > 0 &&
-                      userSpecialMoment.map((item, index) => (
-                        <CalendarList
-                          ImageUrl={imgWhiteBirthday}
-                          ExploreName={item.special_moment_name}
-                          Id={item.special_moment_id}
-                          index={index}
-                          key={index}
-                          DataLength={userSpecialMoment.length}
-                          ShowBtn={false}
-                          onPress={() =>
-                            oldUserSpecialMoment(
-                              item.user_special_moment_id,
-                              item.special_moment_id,
-                              item.special_moment_name,
-                              item.user_special_moment_title,
-                              item.user_special_moment_date,
-                              item.special_moment_link,
-                              item.special_moment_other_info,
-                              item.image
+                  <POPOutLinkButton
+                    buttonName={AppString.Cancel}
+                    onPress={() => CloseItem()}
+                  />
+
+                  <POPLinkButton
+                    buttonName={AppString.Save}
+                    onPress={() => SubmitUpdateQuestionData()}
+                  />
+                </View>
+              </View>
+            </KeyboardAvoidingView>
+          </Modal>
+        ) : null}
+
+        {getEditItemModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getEditItemModal}
+            onBackdropPress={() => CloseItem()}
+          >
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={keyboardVerticalOffset}
+            >
+              <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+                <View style={CommonStyle.Row}>
+                  <View style={{ width: "20%" }}>
+                    <TouchableOpacity onPress={() => ImageChange()}>
+                      {getImage != "" ? (
+                        <Image
+                          source={{ uri: getImage }}
+                          style={Styles.popupImage}
+                        />
+                      ) : (
+                        <Image source={imgImport} style={Styles.popupImage} />
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{
+                      width: "60%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
+                      m333 {getAddNewItem}
+                    </Text>
+                  </View>
+                  <View style={{ width: "20%" }}></View>
+                </View>
+
+                <View style={CommonStyle.my16}>
+                  {getQuestions.length > 0 &&
+                    getQuestions.map((item, key) => {
+                      setSecondTemp(
+                        item.category_id,
+                        item.category_question_id,
+                        "",
+                        key
+                      );
+                      return (
+                        <SimpleInputEditView
+                          TitleName={item.category_question}
+                          placeholder={item.category_placeholder}
+                          onChangeText={(value) =>
+                            HandelQuestionData(
+                              item.category_id,
+                              item.category_question_id,
+                              value,
+                              key
                             )
                           }
                         />
-                      ))
-                    : null}
-                  <CalendarList
-                    ShowBtn={true}
-                    key={1}
-                    AddNewOnPress={() => {
-                      userSpecialMoment.length != 2
-                        ? AddItemSepShow(0)
-                        : upgradeItem();
-                    }}
-                  />
-                </ScrollView>
-              </View>
-            </View>
-          </View>
+                      );
+                    })}
 
-          {/* All categories Select show ( Show All Item) */}
-          {getAddItemShowModal == true ? (
-            <Modal
-              testID={"modal"}
-              isVisible={getAddItemShowModal}
-              onBackdropPress={() => CloseItem()}
-            >
-              <SafeAreaView>
-                <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
-                  <Text
-                    style={[
-                      CommonStyle.txtTitle,
-                      CommonStyle.pb16,
-                      { textAlign: "center" },
-                    ]}
-                  >
-                    {AppString.SelectCategories}
-                  </Text>
-                  <View>
-                    <ScrollView
-                      contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
-                    >
-                      {getFilterCat.length > 0 &&
-                        getFilterCat.map((item, index) => (
-                          <SelectCategoriesList
-                            ImageUrl={imgBook}
-                            ExploreName={item.category_name}
-                            Id={item.category_id}
-                            index={index}
-                            key={index}
-                            // DataLength={Data.length}
-                            onPress={() =>
-                              SelectCategoriesItem(
-                                item.category_name,
-                                item.Image,
-                                item.category_id,
-                                item.questions,
-                                index
-                              )
-                            }
-                          />
-                        ))}
-                    </ScrollView>
-                  </View>
-                </View>
-              </SafeAreaView>
-            </Modal>
-          ) : null}
-          {/* Show User Category Question */}
-          {getAddNewItemModal == true ? (
-            <Modal
-              testID={"modal"}
-              isVisible={getAddNewItemModal}
-              onBackdropPress={() => CloseItem()}
-            >
-              <KeyboardAvoidingView
-                behavior="position"
-                keyboardVerticalOffset={keyboardVerticalOffset}
-              >
-                <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
-                  <View style={CommonStyle.Row}>
-                    <View style={{ width: "20%" }}>
-                      <TouchableOpacity disabled={true}>
-                        {getImage != "" ? (
-                          <Image
-                            source={{ uri: getImage }}
-                            style={Styles.popupImage}
-                          />
-                        ) : (
-                          <Image source={imgImport} style={Styles.popupImage} />
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                    <View style={CommonStyle.PopModalWidth60}>
-                      <Text
-                        style={[
-                          CommonStyle.txtTitle,
-                          CommonStyle.p16,
-                          { textAlign: "center" },
-                        ]}
-                      >
-                        {getAddNewItem}
-                      </Text>
-                    </View>
-                    <View style={{ width: "20%" }}>
-                      <TouchableOpacity onPress={() => DeletedExplore()}>
-                        <Image
-                          source={imgDelete}
-                          style={CommonStyle.imgIconSize}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View style={CommonStyle.my16}>
-                    {getShowOldQuestion.length > 0 &&
-                      getShowOldQuestion.map((item, index) => {
-                        return (
-                          <EditShowSimpleView
-                            TitleName={item.category_question}
-                            buttonName={item.question_value}
-                            placeholderTextColor={COLORS.Primary}
-                          />
-                        );
-                      })}
-                  </View>
-
-                  <View
-                    style={{ flexDirection: "row", justifyContent: "center" }}
-                  >
-                    <POPOutLinkButton
-                      buttonName={AppString.Cancel}
-                      onPress={() => CloseItem()}
-                    />
-
-                    <POPLinkButton
-                      buttonName={AppString.Edit}
-                      onPress={() => AddEditItem(getAddNewItem)}
-                    />
-                  </View>
-                </View>
-              </KeyboardAvoidingView>
-            </Modal>
-          ) : null}
-
-          {/* Old categories Update */}
-          {getUpdateDataModal == true ? (
-            <Modal
-              testID={"modal"}
-              isVisible={getUpdateDataModal}
-              onBackdropPress={() => CloseItem()}
-            >
-              <KeyboardAvoidingView
-                behavior="position"
-                keyboardVerticalOffset={keyboardVerticalOffset}
-              >
-                <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
-                  <View style={CommonStyle.Row}>
-                    <View style={{ width: "20%" }}>
-                      <TouchableOpacity onPress={() => ImageChange()}>
-                        {getImage != "" ? (
-                          <Image
-                            source={{ uri: getImage }}
-                            style={Styles.popupImage}
-                          />
-                        ) : (
-                          <Image source={imgImport} style={Styles.popupImage} />
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                    <View style={CommonStyle.PopModalWidth60}>
-                      <Text
-                        style={[
-                          CommonStyle.txtTitle,
-                          { textAlign: "center", marginTop: 10 },
-                        ]}
-                      >
-                        {getUpdateDataItem}
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View style={CommonStyle.my16}>
-                    {getShowOldQuestion.length > 0 &&
-                      getShowOldQuestion.map((item, key) => {
-                        UpdateQuestionData2(
-                          item.user_category_question_id,
-                          item.question_value,
-                          key
-                        );
-                        return (
-                          <SimpleInputEditView
-                            TitleName={item.category_question}
-                            buttonName={item.question_value}
-                            placeholderTextColor={COLORS.Primary}
-                            onChangeText={(value) =>
-                              UpdateQuestionData(
-                                item.user_category_question_id,
-                                value,
-                                key
-                              )
-                            }
-                          />
-                        );
-                      })}
-                  </View>
-                  <View
-                    style={{ flexDirection: "row", justifyContent: "center" }}
-                  >
-                    <POPOutLinkButton
-                      buttonName={AppString.Cancel}
-                      onPress={() => CloseItem()}
-                    />
-
-                    <POPLinkButton
-                      buttonName={AppString.Save}
-                      onPress={() => SubmitUpdateQuestionData()}
-                    />
-                  </View>
-                </View>
-              </KeyboardAvoidingView>
-            </Modal>
-          ) : null}
-
-          {getEditItemModal == true ? (
-            <Modal
-              testID={"modal"}
-              isVisible={getEditItemModal}
-              onBackdropPress={() => CloseItem()}
-            >
-              <KeyboardAvoidingView
-                behavior="position"
-                keyboardVerticalOffset={keyboardVerticalOffset}
-              >
-                <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                  <View style={CommonStyle.Row}>
-                    <View style={{ width: "20%" }}>
-                      <TouchableOpacity onPress={() => ImageChange()}>
-                        {getImage != "" ? (
-                          <Image
-                            source={{ uri: getImage }}
-                            style={Styles.popupImage}
-                          />
-                        ) : (
-                          <Image source={imgImport} style={Styles.popupImage} />
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                    <View
-                      style={{
-                        width: "60%",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                        {getAddNewItem}
-                      </Text>
-                    </View>
-                    <View style={{ width: "20%" }}></View>
-                  </View>
-
-                  <View style={CommonStyle.my16}>
-                    {getQuestions.length > 0 &&
-                      getQuestions.map((item, key) => {
-                        setSecondTemp(
-                          item.category_id,
-                          item.category_question_id,
-                          "",
-                          key
-                        );
-                        return (
-                          <SimpleInputEditView
-                            TitleName={item.category_question}
-                            placeholder={item.category_placeholder}
-                            placeholderTextColor={COLORS.Primary}
-                            onChangeText={(value) =>
-                              HandelQuestionData(
-                                item.category_id,
-                                item.category_question_id,
-                                value,
-                                key
-                              )
-                            }
-                          />
-                        );
-                      })}
-
-                    {/* <SimpleInputEditView
+                  {/* <SimpleInputEditView
                         TitleName={getQuestions[0].category_question}
                         placeholder={getQuestions[0].category_placeholder}
                         onChangeText={(FirstName) => setFirstName(FirstName)}
@@ -1305,32 +1309,114 @@ const MyProfile = ({ navigation }) => {
                         placeholder={getQuestions[3].category_placeholder}
                         onChangeText={(FourName) => setFourName(FourName)}
                       /> */}
-                  </View>
-                  <View
-                    style={{ flexDirection: "row", justifyContent: "center" }}
-                  >
-                    <POPOutLinkButton
-                      buttonName={AppString.Cancel}
-                      onPress={() => CloseItem()}
-                    />
-
-                    <POPLinkButton
-                      buttonName={AppString.Save}
-                      onPress={() => SaveItem()}
-                    />
-                  </View>
                 </View>
-              </KeyboardAvoidingView>
-            </Modal>
-          ) : null}
+                <View
+                  style={{ flexDirection: "row", justifyContent: "center" }}
+                >
+                  <POPOutLinkButton
+                    buttonName={AppString.Cancel}
+                    onPress={() => CloseItem()}
+                  />
 
-          {/* Select Moment Date */}
-          {/* Show Select Moment Date List --- 1. Show */}
-          {getUserOldSpecialMomentModal == true ? (
-            <Modal
-              testID={"modal"}
-              isVisible={getUserOldSpecialMomentModal}
-              onBackdropPress={() => CloseSepItem()}
+                  <POPLinkButton
+                    buttonName={AppString.Save}
+                    onPress={() => SaveItem()}
+                  />
+                </View>
+              </View>
+            </KeyboardAvoidingView>
+          </Modal>
+        ) : null}
+
+        {/* Select Moment Date */}
+        {/* Show Select Moment Date List --- 1. Show */}
+        {getUserOldSpecialMomentModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getUserOldSpecialMomentModal}
+            onBackdropPress={() => CloseSepItem()}
+          >
+            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <View style={{ width: "20%" }}>
+                  {getImageurl != "" ? (
+                    <Image
+                      source={{ uri: getImageurl }}
+                      style={Styles.popupImage}
+                    />
+                  ) : (
+                    <Image source={imgImport} style={Styles.popupImage} />
+                  )}
+                </View>
+                <View style={{ width: "60%" }}>
+                  <Text style={[CommonStyle.txtTitle, { textAlign: "center" }]}>
+                    {getspecialMomentName}
+                  </Text>
+                </View>
+                <View style={{ width: "20%" }}>
+                  <TouchableOpacity
+                    onPress={() => DeleteItem(getuserSpecialMomentId)}
+                  >
+                    <Image source={imgDelete} style={CommonStyle.imgIconSize} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View style={CommonStyle.my16}>
+                <EditShowSimpleView
+                  TitleName={"Title"}
+                  placeholder={getuserSpecialMomentTitle}
+                  placeholderTextColor={COLORS.Primary}
+                />
+                <EditShowSimpleView
+                  TitleName={"Date"}
+                  placeholder={getuserSpecialMomentDate}
+                  placeholderTextColor={COLORS.Primary}
+                />
+                <EditShowSimpleView
+                  TitleName={"Link"}
+                  placeholder={getspecialMomentLink}
+                  placeholderTextColor={COLORS.Primary}
+                />
+                <EditShowSimpleView
+                  TitleName={"Other Info"}
+                  placeholder={getspecialMomentOtherInfo}
+                  placeholderTextColor={COLORS.Primary}
+                />
+              </View>
+
+              <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                <POPOutLinkButton
+                  buttonName={AppString.Cancel}
+                  onPress={() => CloseSepItem()}
+                />
+
+                <POPLinkButton
+                  buttonName={AppString.Edit}
+                  onPress={() => AddEditSepItem(getspecialMomentName)}
+                />
+              </View>
+            </View>
+          </Modal>
+        ) : null}
+
+        {/* Show Select Moment Date List --- 2. Update new date */}
+        {getEditItemSepModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getEditItemSepModal}
+            onBackdropPress={() => CloseSepItem()}
+          >
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={keyboardVerticalOffset}
             >
               <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
                 <View
@@ -1341,55 +1427,88 @@ const MyProfile = ({ navigation }) => {
                     alignContent: "center",
                   }}
                 >
-                  <View style={{ width: "20%" }}>
-                    {getImageurl != "" ? (
-                      <Image
-                        source={{ uri: getImageurl }}
-                        style={Styles.popupImage}
-                      />
-                    ) : (
-                      <Image source={imgImport} style={Styles.popupImage} />
-                    )}
-                  </View>
-                  <View style={{ width: "60%" }}>
-                    <Text
-                      style={[CommonStyle.txtTitle, { textAlign: "center" }]}
+                  <View style={CommonStyle.Row}>
+                    <View style={{ width: "20%" }}>
+                      <TouchableOpacity onPress={() => ImageSepChange()}>
+                        {getImage != "" ? (
+                          <Image
+                            source={{ uri: getImage }}
+                            style={Styles.popupImage}
+                          />
+                        ) : (
+                          <Image source={imgImport} style={Styles.popupImage} />
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                    <View
+                      style={{
+                        width: "60%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
                     >
-                      {getspecialMomentName}
-                    </Text>
-                  </View>
-                  <View style={{ width: "20%" }}>
-                    <TouchableOpacity
-                      onPress={() => DeleteItem(getuserSpecialMomentId)}
-                    >
-                      <Image
-                        source={imgDelete}
-                        style={CommonStyle.imgIconSize}
-                      />
-                    </TouchableOpacity>
+                      <Text
+                        style={[
+                          CommonStyle.txtTitle,
+                          CommonStyle.p16,
+                          { textAlign: "center" },
+                        ]}
+                      >
+                        {getEditSepItem}
+                      </Text>
+                    </View>
+                    <View style={{ width: "20%" }}></View>
                   </View>
                 </View>
 
                 <View style={CommonStyle.my16}>
-                  <EditShowSimpleView
+                  <SimpleInputEditView
                     TitleName={"Title"}
                     placeholder={getuserSpecialMomentTitle}
+                    defaultValue={getPrevData.Title}
                     placeholderTextColor={COLORS.Primary}
+                    onChangeText={(Title) => {
+                      setuserSpecialMomentUpdateTitle(Title);
+                      setPrevData({
+                        ...getPrevData,
+                        Title: Title,
+                      });
+                    }}
                   />
-                  <EditShowSimpleView
+                  <EditShowBtnSimpleView
                     TitleName={"Date"}
-                    placeholder={getuserSpecialMomentDate}
-                    placeholderTextColor={COLORS.Primary}
+                    placeholder={
+                      getuserSpecialMomentDate != null
+                        ? getuserSpecialMomentDate
+                        : "Date"
+                    }
+                    onPress={() => UpdateEnterDate()}
                   />
-                  <EditShowSimpleView
+                  <SimpleInputEditView
                     TitleName={"Link"}
                     placeholder={getspecialMomentLink}
+                    defaultValue={getPrevData.Link}
                     placeholderTextColor={COLORS.Primary}
+                    onChangeText={(Link) => {
+                      setspecialMomentUpdateLink(Link);
+                      setPrevData({
+                        ...getPrevData,
+                        Link: Link,
+                      });
+                    }}
                   />
-                  <EditShowSimpleView
+                  <SimpleInputEditView
                     TitleName={"Other Info"}
                     placeholder={getspecialMomentOtherInfo}
+                    defaultValue={getPrevData.OtherInfo}
                     placeholderTextColor={COLORS.Primary}
+                    onChangeText={(OtherInfo) => {
+                      setspecialMomentUpdateOtherInfo(OtherInfo);
+                      setPrevData({
+                        ...getPrevData,
+                        OtherInfo: OtherInfo,
+                      });
+                    }}
                   />
                 </View>
 
@@ -1402,431 +1521,288 @@ const MyProfile = ({ navigation }) => {
                   />
 
                   <POPLinkButton
-                    buttonName={AppString.Edit}
-                    onPress={() => AddEditSepItem(getspecialMomentName)}
-                  />
-                </View>
-              </View>
-            </Modal>
-          ) : null}
-
-          {/* Show Select Moment Date List --- 2. Update new date */}
-          {getEditItemSepModal == true ? (
-            <Modal
-              testID={"modal"}
-              isVisible={getEditItemSepModal}
-              onBackdropPress={() => CloseSepItem()}
-            >
-              <KeyboardAvoidingView
-                behavior="position"
-                keyboardVerticalOffset={keyboardVerticalOffset}
-              >
-                <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      alignContent: "center",
-                    }}
-                  >
-                    <View style={CommonStyle.Row}>
-                      <View style={{ width: "20%" }}>
-                        <TouchableOpacity onPress={() => ImageSepChange()}>
-                          {getImage != "" ? (
-                            <Image
-                              source={{ uri: getImage }}
-                              style={Styles.popupImage}
-                            />
-                          ) : (
-                            <Image
-                              source={imgImport}
-                              style={Styles.popupImage}
-                            />
-                          )}
-                        </TouchableOpacity>
-                      </View>
-                      <View
-                        style={{
-                          width: "60%",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Text
-                          style={[
-                            CommonStyle.txtTitle,
-                            CommonStyle.p16,
-                            { textAlign: "center" },
-                          ]}
-                        >
-                          {getEditSepItem}
-                        </Text>
-                      </View>
-                      <View style={{ width: "20%" }}></View>
-                    </View>
-                  </View>
-
-                  <View style={CommonStyle.my16}>
-                    <SimpleInputEditView
-                      TitleName={"Title"}
-                      placeholder={getuserSpecialMomentTitle}
-                      defaultValue={getPrevData.Title}
-                      placeholderTextColor={COLORS.Primary}
-                      onChangeText={(Title) => {
-                        setuserSpecialMomentUpdateTitle(Title);
-                        setPrevData({
-                          ...getPrevData,
-                          Title: Title,
-                        });
-                      }}
-                    />
-                    <EditShowBtnSimpleView
-                      TitleName={"Date"}
-                      placeholder={
-                        getuserSpecialMomentDate != null
-                          ? getuserSpecialMomentDate
-                          : "Date"
-                      }
-                      onPress={() => UpdateEnterDate()}
-                    />
-                    <SimpleInputEditView
-                      TitleName={"Link"}
-                      placeholder={getspecialMomentLink}
-                      defaultValue={getPrevData.Link}
-                      placeholderTextColor={COLORS.Primary}
-                      onChangeText={(Link) => {
-                        setspecialMomentUpdateLink(Link);
-                        setPrevData({
-                          ...getPrevData,
-                          Link: Link,
-                        });
-                      }}
-                    />
-                    <SimpleInputEditView
-                      TitleName={"Other Info"}
-                      placeholder={getspecialMomentOtherInfo}
-                      defaultValue={getPrevData.OtherInfo}
-                      placeholderTextColor={COLORS.Primary}
-                      onChangeText={(OtherInfo) => {
-                        setspecialMomentUpdateOtherInfo(OtherInfo);
-                        setPrevData({
-                          ...getPrevData,
-                          OtherInfo: OtherInfo,
-                        });
-                      }}
-                    />
-                  </View>
-
-                  <View
-                    style={{ flexDirection: "row", justifyContent: "center" }}
-                  >
-                    <POPOutLinkButton
-                      buttonName={AppString.Cancel}
-                      onPress={() => CloseSepItem()}
-                    />
-
-                    <POPLinkButton
-                      buttonName={AppString.Save}
-                      // onPress={() => EditSubmitData()}
-                      onPress={() => updateUserSpecialMoment()}
-                    />
-                  </View>
-                </View>
-              </KeyboardAvoidingView>
-            </Modal>
-          ) : null}
-          {getDateModal == true ? (
-            <Modal testID={"modal"} isVisible={getDateModal}>
-              <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                <View style={{ flexDirection: "row" }}>
-                  <View style={{ width: "100%" }}>
-                    <Text
-                      style={[
-                        CommonStyle.txtTitle,
-                        CommonStyle.textUpperCase,
-                        { textAlign: "center", marginTop: 10 },
-                      ]}
-                    ></Text>
-                  </View>
-                </View>
-
-                <View style={CommonStyle.my16}>
-                  <DatePicker
-                    mode={"date"}
-                    date={date}
-                    onDateChange={setDate}
-                  />
-                </View>
-
-                <View
-                  style={{ flexDirection: "row", justifyContent: "center" }}
-                >
-                  <POPLinkButton
                     buttonName={AppString.Save}
-                    onPress={() => SubmitDate()}
+                    // onPress={() => EditSubmitData()}
+                    onPress={() => updateUserSpecialMoment()}
                   />
                 </View>
               </View>
-            </Modal>
-          ) : null}
-
-          {getUpdateDateModal == true ? (
-            <Modal testID={"modal"} isVisible={getUpdateDateModal}>
-              <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                <View style={{ flexDirection: "row" }}>
-                  <View style={{ width: "100%" }}>
-                    <Text
-                      style={[
-                        CommonStyle.txtTitle,
-                        CommonStyle.textUpperCase,
-                        { textAlign: "center", marginTop: 10 },
-                      ]}
-                    ></Text>
-                  </View>
-                </View>
-
-                <View style={CommonStyle.my16}>
-                  <DatePicker
-                    mode={"date"}
-                    date={date}
-                    onDateChange={setDate}
-                  />
-                </View>
-
-                <View
-                  style={{ flexDirection: "row", justifyContent: "center" }}
-                >
-                  <POPLinkButton
-                    buttonName={AppString.Save}
-                    onPress={() => UpdateSubmitDate()}
-                  />
-                </View>
-              </View>
-            </Modal>
-          ) : null}
-
-          {/* Show All Select Moment List ---- 1. Select Moment*/}
-          {getAddItemShowSepModal == true ? (
-            <Modal
-              testID={"modal"}
-              isVisible={getAddItemShowSepModal}
-              onBackdropPress={() => CloseSepItem()}
-            >
-              <KeyboardAvoidingView
-                behavior="position"
-                keyboardVerticalOffset={keyboardVerticalOffset}
-              >
-                <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+            </KeyboardAvoidingView>
+          </Modal>
+        ) : null}
+        {getDateModal == true ? (
+          <Modal testID={"modal"} isVisible={getDateModal}>
+            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ width: "100%" }}>
                   <Text
                     style={[
                       CommonStyle.txtTitle,
-                      CommonStyle.pb16,
                       CommonStyle.textUpperCase,
-                      { textAlign: "center" },
+                      { textAlign: "center", marginTop: 10 },
                     ]}
+                  ></Text>
+                </View>
+              </View>
+
+              <View style={CommonStyle.my16}>
+                <DatePicker mode={"date"} date={date} onDateChange={setDate} />
+              </View>
+
+              <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                <POPLinkButton
+                  buttonName={AppString.Save}
+                  onPress={() => SubmitDate()}
+                />
+              </View>
+            </View>
+          </Modal>
+        ) : null}
+
+        {getUpdateDateModal == true ? (
+          <Modal testID={"modal"} isVisible={getUpdateDateModal}>
+            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ width: "100%" }}>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      CommonStyle.textUpperCase,
+                      { textAlign: "center", marginTop: 10 },
+                    ]}
+                  ></Text>
+                </View>
+              </View>
+
+              <View style={CommonStyle.my16}>
+                <DatePicker mode={"date"} date={date} onDateChange={setDate} />
+              </View>
+
+              <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                <POPLinkButton
+                  buttonName={AppString.Save}
+                  onPress={() => UpdateSubmitDate()}
+                />
+              </View>
+            </View>
+          </Modal>
+        ) : null}
+
+        {/* Show All Select Moment List ---- 1. Select Moment*/}
+        {getAddItemShowSepModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getAddItemShowSepModal}
+            onBackdropPress={() => CloseSepItem()}
+          >
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={keyboardVerticalOffset}
+            >
+              <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                <Text
+                  style={[
+                    CommonStyle.txtTitle,
+                    CommonStyle.pb16,
+                    CommonStyle.textUpperCase,
+                    { textAlign: "center" },
+                  ]}
+                >
+                  {AppString.SelectMoment}
+                </Text>
+                <View>
+                  <ScrollView
+                    contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
                   >
-                    {AppString.SelectMoment}
-                  </Text>
-                  <View>
-                    <ScrollView
-                      contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
-                    >
-                      {getFilterSepCat.length > 0 &&
-                        getFilterSepCat.map((item, index) => (
-                          <SelectCategoriesList
-                            ImageUrl={imgWhiteBirthday}
-                            ExploreName={item.special_moment_name}
-                            Id={item.special_moment_id}
-                            index={index}
-                            key={index}
-                            DataLength={specialMoment.length}
-                            style={{ width: "23%" }}
-                            onPress={() => {
-                              SelectMoment(
-                                item.special_moment_name,
-                                item.special_moment_id
-                              );
-                            }}
+                    {getFilterSepCat.length > 0 &&
+                      getFilterSepCat.map((item, index) => (
+                        <SelectCategoriesList
+                          ImageUrl={imgWhiteBirthday}
+                          ExploreName={item.special_moment_name}
+                          Id={item.special_moment_id}
+                          index={index}
+                          key={index}
+                          DataLength={specialMoment.length}
+                          style={{ width: "23%" }}
+                          onPress={() => {
+                            SelectMoment(
+                              item.special_moment_name,
+                              item.special_moment_id
+                            );
+                          }}
+                        />
+                      ))}
+                  </ScrollView>
+                </View>
+              </View>
+            </KeyboardAvoidingView>
+          </Modal>
+        ) : null}
+
+        {/* Show All Select Moment List ---- 1.Add New Select Moment*/}
+        {getUserNewSpecialMomentModal == true ? (
+          <Modal testID={"modal"} isVisible={getUserNewSpecialMomentModal}>
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={keyboardVerticalOffset}
+            >
+              <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <View style={CommonStyle.Row}>
+                    <View style={{ width: "20%" }}>
+                      <TouchableOpacity onPress={() => ImageSepChange()}>
+                        {getImage != "" ? (
+                          <Image
+                            source={{ uri: getImage }}
+                            style={Styles.popupImage}
                           />
-                        ))}
-                    </ScrollView>
-                  </View>
-                </View>
-              </KeyboardAvoidingView>
-            </Modal>
-          ) : null}
-
-          {/* Show All Select Moment List ---- 1.Add New Select Moment*/}
-          {getUserNewSpecialMomentModal == true ? (
-            <Modal testID={"modal"} isVisible={getUserNewSpecialMomentModal}>
-              <KeyboardAvoidingView
-                behavior="position"
-                keyboardVerticalOffset={keyboardVerticalOffset}
-              >
-                <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      alignContent: "center",
-                    }}
-                  >
-                    <View style={CommonStyle.Row}>
-                      <View style={{ width: "20%" }}>
-                        <TouchableOpacity onPress={() => ImageSepChange()}>
-                          {getImage != "" ? (
-                            <Image
-                              source={{ uri: getImage }}
-                              style={Styles.popupImage}
-                            />
-                          ) : (
-                            <Image
-                              source={imgImport}
-                              style={Styles.popupImage}
-                            />
-                          )}
-                        </TouchableOpacity>
-                      </View>
-                      <View
-                        style={{
-                          width: "60%",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Text
-                          style={[
-                            CommonStyle.txtTitle,
-                            CommonStyle.p16,
-                            { textAlign: "center" },
-                          ]}
-                        >
-                          {getUserNewSpecialMomenItem}
-                        </Text>
-                      </View>
-                      <View style={{ width: "20%" }}></View>
+                        ) : (
+                          <Image source={imgImport} style={Styles.popupImage} />
+                        )}
+                      </TouchableOpacity>
                     </View>
-                  </View>
-                  <View style={CommonStyle.my16}>
-                    <SimpleInputEditView
-                      TitleName={"Title"}
-                      placeholder={"Title"}
-                      defaultValue={getPrevData.Title}
-                      placeholderTextColor={COLORS.Primary}
-                      onChangeText={(Title) => {
-                        setuserSpecialMomentTitle(Title);
-                        setPrevData({
-                          ...getPrevData,
-                          Title: Title,
-                        });
+                    <View
+                      style={{
+                        width: "60%",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
-                    />
-                    <EditShowBtnSimpleView
-                      TitleName={"Date"}
-                      placeholderTextColor={COLORS.Primary}
-                      placeholder={
-                        getFinalSepDate != null ? getFinalSepDate : "Date"
-                      }
-                      onPress={() => EnterDate()}
-                    />
-                    <SimpleInputEditView
-                      TitleName={"Link"}
-                      placeholder={"Link"}
-                      defaultValue={getPrevData.Link}
-                      placeholderTextColor={COLORS.Primary}
-                      onChangeText={(Link) => {
-                        setspecialMomentLink(Link);
-                        setPrevData({
-                          ...getPrevData,
-                          Link: Link,
-                        });
-                      }}
-                    />
-                    <SimpleInputEditView
-                      TitleName={"Other Info"}
-                      placeholder={"Other Info"}
-                      placeholderTextColor={COLORS.Primary}
-                      defaultValue={getPrevData.OtherInfo}
-                      onChangeText={(OtherInfo) => {
-                        setspecialMomentOtherInfo(OtherInfo);
-                        setPrevData({
-                          ...getPrevData,
-                          OtherInfo: OtherInfo,
-                        });
-                      }}
-                    />
-                  </View>
-
-                  <View
-                    style={{ flexDirection: "row", justifyContent: "center" }}
-                  >
-                    <POPOutLinkButton
-                      buttonName={AppString.Cancel}
-                      onPress={() => CloseSepItem()}
-                    />
-
-                    <POPLinkButton
-                      buttonName={AppString.Save}
-                      onPress={() => addNewUserSpecialMoment()}
-                    />
+                    >
+                      <Text
+                        style={[
+                          CommonStyle.txtTitle,
+                          CommonStyle.p16,
+                          { textAlign: "center" },
+                        ]}
+                      >
+                        {getUserNewSpecialMomenItem}
+                      </Text>
+                    </View>
+                    <View style={{ width: "20%" }}></View>
                   </View>
                 </View>
-              </KeyboardAvoidingView>
-            </Modal>
-          ) : null}
-
-          {/* Payment for upgrade */}
-          {getupgradeItemModal == true ? (
-            <Modal
-              testID={"modal"}
-              isVisible={getupgradeItemModal}
-              onBackdropPress={() => CloseItem()}
-            >
-              <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                <View>
-                  <Text
-                    style={[
-                      CommonStyle.txtTitle,
-                      CommonStyle.p16,
-                      CommonStyle.textUpperCase,
-                      { textAlign: "center" },
-                    ]}
-                  >
-                    {AppString.UpgradeProfile}
-                  </Text>
-                </View>
-
-                <View>
-                  <Text
-                    style={
-                      (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
+                <View style={CommonStyle.my16}>
+                  <SimpleInputEditView
+                    TitleName={"Title"}
+                    placeholder={"Title"}
+                    defaultValue={getPrevData.Title}
+                    placeholderTextColor={COLORS.Primary}
+                    onChangeText={(Title) => {
+                      setuserSpecialMomentTitle(Title);
+                      setPrevData({
+                        ...getPrevData,
+                        Title: Title,
+                      });
+                    }}
+                  />
+                  <EditShowBtnSimpleView
+                    TitleName={"Date"}
+                    placeholderTextColor={COLORS.Primary}
+                    placeholder={
+                      getFinalSepDate != null ? getFinalSepDate : "Date"
                     }
-                  >
-                    {AppString.txtUpgradecategories1}
-                    <Text style={{ color: COLORS.gold }}>
-                      {AppString.price}
-                    </Text>
-                    <Text>{AppString.txtUpgradecategories2}</Text>
-                  </Text>
+                    onPress={() => EnterDate()}
+                  />
+                  <SimpleInputEditView
+                    TitleName={"Link"}
+                    placeholder={"Link"}
+                    defaultValue={getPrevData.Link}
+                    placeholderTextColor={COLORS.Primary}
+                    onChangeText={(Link) => {
+                      setspecialMomentLink(Link);
+                      setPrevData({
+                        ...getPrevData,
+                        Link: Link,
+                      });
+                    }}
+                  />
+                  <SimpleInputEditView
+                    TitleName={"Other Info"}
+                    placeholder={"Other Info"}
+                    placeholderTextColor={COLORS.Primary}
+                    defaultValue={getPrevData.OtherInfo}
+                    onChangeText={(OtherInfo) => {
+                      setspecialMomentOtherInfo(OtherInfo);
+                      setPrevData({
+                        ...getPrevData,
+                        OtherInfo: OtherInfo,
+                      });
+                    }}
+                  />
                 </View>
-                <View style={CommonStyle.centerRow}>
+
+                <View
+                  style={{ flexDirection: "row", justifyContent: "center" }}
+                >
                   <POPOutLinkButton
-                    buttonName={AppString.Later}
-                    onPress={() => CloseItem()}
+                    buttonName={AppString.Cancel}
+                    onPress={() => CloseSepItem()}
                   />
 
                   <POPLinkButton
-                    buttonName={AppString.Upgrade}
-                    onPress={() => CloseItem()}
+                    buttonName={AppString.Save}
+                    onPress={() => addNewUserSpecialMoment()}
                   />
                 </View>
               </View>
-            </Modal>
-          ) : null}
-        </ScrollView>
-      </SafeAreaView>
+            </KeyboardAvoidingView>
+          </Modal>
+        ) : null}
+
+        {/* Payment for upgrade */}
+        {getupgradeItemModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getupgradeItemModal}
+            onBackdropPress={() => CloseItem()}
+          >
+            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+              <View>
+                <Text
+                  style={[
+                    CommonStyle.txtTitle,
+                    CommonStyle.p16,
+                    CommonStyle.textUpperCase,
+                    { textAlign: "center" },
+                  ]}
+                >
+                  {AppString.UpgradeProfile}
+                </Text>
+              </View>
+
+              <View>
+                <Text
+                  style={
+                    (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
+                  }
+                >
+                  {AppString.txtUpgradecategories1}
+                  <Text style={{ color: COLORS.gold }}>{AppString.price}</Text>
+                  <Text>{AppString.txtUpgradecategories2}</Text>
+                </Text>
+              </View>
+              <View style={CommonStyle.centerRow}>
+                <POPOutLinkButton
+                  buttonName={AppString.Later}
+                  onPress={() => CloseItem()}
+                />
+
+                <POPLinkButton
+                  buttonName={AppString.Upgrade}
+                  onPress={() => CloseItem()}
+                />
+              </View>
+            </View>
+          </Modal>
+        ) : null}
+      </ScrollView>
       <Spinner visible={getLoader} />
     </View>
   );

@@ -121,9 +121,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
       value,
       key,
     };
-    debugger;
     temp = temp2;
-    debugger;
   };
 
   // Add New Categories Question
@@ -135,7 +133,6 @@ const TutorialSecond = ({ navigation, props, route }) => {
       key,
     };
     setQuestionsData(temp);
-    debugger;
   };
 
   const SubmitData = async () => {
@@ -144,9 +141,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
       await addCategoryQuestion(tokens, 1, getQuestionsData);
-    debugger;
     if (addCategoryQuestionResponse.data.StatusCode == "1") {
-      debugger;
       setModalVisible(false);
       // List Icon COLOR Change
       list = getlistOfCategory;

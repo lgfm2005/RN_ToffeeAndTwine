@@ -177,7 +177,9 @@ export const useActions = () => {
       let response, error;
       try {
         response = await API.UpdateProfile.UpdateProfile(data, session);
+        debugger;
         if (response.data.StatusCode == "1") {
+          debugger;
           dispatch(
             loginAction({
               token: session.token,
@@ -191,6 +193,7 @@ export const useActions = () => {
               isAutoLogin: true,
             })
           );
+          debugger;
         } else {
           error = response.data.Message;
         }
@@ -335,7 +338,7 @@ export const useActions = () => {
         data.append("CategoryID[]", item.category_id);
         data.append("CategoryQuestionID[]", item.category_question_id);
         if (item.value == undefined) {
-          data.append("CategoryQuestionValue[]", item.category_placeholder);
+          data.append("CategoryQuestionValue[]", "");
         } else {
           data.append("CategoryQuestionValue[]", item.value);
         }
@@ -541,7 +544,6 @@ export const useActions = () => {
       } catch (e) {
         profileError = e;
       }
-      debugger;
       return { profileResponse, profileError };
     },
 

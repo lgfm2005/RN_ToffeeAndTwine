@@ -79,19 +79,22 @@ export const SimpleInputEditView = ({
   TitleName,
   buttonName,
   textChange,
+  value,
   ...props
 }) => {
+  console.log("value ===>", value);
   return (
     <View style={[CommonStyle.formSimpletxtEditView]}>
       <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
         {TitleName}
       </Text>
       <TextInput
-        style={CommonStyle.formSimpleEditView}
+        style={[CommonStyle.formSimpleEditView]}
+        value={value}
         placeholder={buttonName}
         onChangeText={textChange}
         selectionColor={COLORS.Primary}
-        placeholderTextColor={COLORS.PrimaryLight}
+        placeholderTextColor={COLORS.gray}
         {...props}
       />
     </View>
@@ -102,6 +105,7 @@ export const EditShowSimpleView = ({
   buttonName,
   textChange,
   onPress,
+  value,
   ...props
 }) => {
   return (
@@ -112,8 +116,10 @@ export const EditShowSimpleView = ({
       <TextInput
         style={CommonStyle.formSimpleEditView}
         placeholder={buttonName}
-        placeholderTextColor={COLORS.PrimaryLight}
+        value={value}
         selectionColor={COLORS.Primary}
+        color={value != "" ? COLORS.Primary : COLORS.gray}
+        placeholderTextColor={COLORS.gray}
         editable={false}
         onPress={onPress}
         {...props}

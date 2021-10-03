@@ -94,6 +94,7 @@ const Search = ({ navigation }) => {
             onChangeText={(text) => onChangeSearch(text)}
             value={getSearchQuery}
             platform="ios"
+            autoFocus
             onCancel={() => navigation.navigate("NavFriendScreen")}
             containerStyle={{
               backgroundColor: COLORS.Secondary,

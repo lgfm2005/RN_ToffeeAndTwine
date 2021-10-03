@@ -67,7 +67,7 @@ const MainScreen = ({ navigation }) => {
       webClientId: AppString.webClientId,
     });
     var token = sessions.isAutoLogin ? true : false;
-    if (token) {
+    if (token && sessions.userFname != null) {
       navigation.navigate("Navigation");
     }
     // SignedIn();

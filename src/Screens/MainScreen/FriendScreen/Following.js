@@ -98,11 +98,19 @@ const Following = ({ navigation }) => {
       <SafeAreaView>
         <View Style={[CommonStyle.Container]}>
           <View style={FriendScreenStyle.backgroundColor}>
-            <FlatList
-              data={getUserFollowing}
-              renderItem={(Data, index) => RenderItem(Data, index)}
-              keyExtractor={(item) => item.id}
-            />
+            {!getUserFollowing.length ? (
+              <View style={CommonStyle.ContainerCenter}>
+                <Text style={CommonStyle.txtContent}>
+                  No Following Found.!!!
+                </Text>
+              </View>
+            ) : (
+              <FlatList
+                data={getUserFollowing}
+                renderItem={(Data, index) => RenderItem(Data, index)}
+                keyExtractor={(item) => item.id}
+              />
+            )}
           </View>
         </View>
         <Spinner visible={getLoader} />

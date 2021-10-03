@@ -37,7 +37,7 @@ const Followers = ({ navigation }) => {
       setLoader(false);
     } else {
       setLoader(false);
-      console.log("user Follower List Error", userFollowerListError);
+      console.log("user Follower List Error ===>", userFollowerListError);
     }
   }, []);
 
@@ -104,11 +104,19 @@ const Followers = ({ navigation }) => {
       <SafeAreaView>
         <View Style={[CommonStyle.Container, CommonStyle.pt16]}>
           <View style={FriendScreenStyle.backgroundColor}>
-            <FlatList
-              data={getUserFollower}
-              renderItem={(Data, index) => RenderItem(Data, index)}
-              keyExtractor={(item) => item.id}
-            />
+            {!getUserFollower.length ? (
+              <View style={CommonStyle.ContainerCenter}>
+                <Text style={CommonStyle.txtContent}>
+                  No Follower Found.!!!
+                </Text>
+              </View>
+            ) : (
+              <FlatList
+                data={getUserFollower}
+                renderItem={(Data, index) => RenderItem(Data, index)}
+                keyExtractor={(item) => item.id}
+              />
+            )}
           </View>
         </View>
       </SafeAreaView>
