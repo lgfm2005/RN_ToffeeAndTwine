@@ -55,59 +55,7 @@ import { FONT } from "../../Assets/utils/FONT";
 import { CalSelectCategoriesList } from "./CalendarScreen/CalSelectCategoriesList";
 import { useActions } from "../../redux/actions";
 import { SelectCategoriesList } from "../../Components/AllListVIew/SelectCategoriesList";
-
-const CalenderDate = [
-  {
-    "2021-09-25": {
-      dots: [
-        {
-          id: 1,
-          key: "vacation",
-          color: "blue",
-          Name: "Jessica Rockwell",
-          NameType: "Birthday",
-          selectedDotColor: "blue",
-          Name: "Jessica Rockwell",
-          NameType: "Birthday",
-        },
-        {
-          id: 2,
-          key: "massage",
-          color: "blue",
-          selectedDotColor: "blue",
-          Name: "Gregory Thomson",
-          NameType: "Anniversary",
-        },
-        {
-          id: 3,
-          key: "workout",
-          color: "green",
-          Name: "Robert Bob Thomson",
-          NameType: "Graduation",
-        },
-        {
-          id: 4,
-          key: "workout",
-          color: "green",
-          Name: "Robert Bob Thomson",
-          NameType: "Graduation",
-        },
-      ],
-    },
-    "2021-09-26": {
-      dots: [
-        {
-          id: 1,
-          key: "vacation",
-          color: "blue",
-          selectedDotColor: "blue",
-          Name: "Jessica Rockwell",
-          NameType: "Birthday",
-        },
-      ],
-    },
-  },
-];
+import Moment from "moment";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
@@ -117,6 +65,7 @@ const CalendarScreen = () => {
     updateCategorySpecialMoment,
     getUserCategorySpecialMoment,
     addCategoryspecialDay,
+    getFriendCategorySpecialMoment,
   } = useActions();
 
   const userData = useSelector((state) => state.session);
@@ -129,6 +78,8 @@ const CalendarScreen = () => {
   // Calender
   const [getCalenderDateModal, setCalenderDateModal] = useState(false);
   const [getCalenderDateItem, setCalenderDateItem] = useState([]);
+  const [getCalenderDateFriend, setCalenderDateFriend] = useState({});
+  const [getCalenderDateFriendList, setCalenderDateFriendList] = useState([]);
 
   // specialMoment
 
@@ -199,6 +150,43 @@ const CalendarScreen = () => {
     setFilterSepCat(dataCategory);
     // console.log(getFilterSepCat);
   };
+
+  const getFriendCategorySpecialMoments = async () => {
+    const { friendCategorySpeciaResponse, friendCategorySpeciaError } =
+      await getFriendCategorySpecialMoment();
+    if (friendCategorySpeciaResponse.data.StatusCode) {
+      var data = friendCategorySpeciaResponse.data.Result;
+      setCalenderDateFriendList(data);
+      const sortedActivities = data.sort(
+        (a, b) => b.user_special_moment_value - a.user_special_moment_value
+      );
+
+      var objectWithGroupByName = {};
+
+      for (var key in sortedActivities) {
+        var dateInfo = sortedActivities[key].user_special_moment_value;
+        objectWithGroupByName[dateInfo] = {
+          customStyles: {
+            container: {
+              backgroundColor: "black",
+            },
+            text: {
+              color: "white",
+              fontWeight: "bold",
+            },
+          },
+        };
+      }
+
+      if (objectWithGroupByName) {
+        setCalenderDateFriend(objectWithGroupByName);
+      }
+      console.log(sortedActivities);
+    }
+  };
+  useEffect(() => {
+    getFriendCategorySpecialMoments();
+  }, []);
 
   // Close All Item
 
@@ -448,24 +436,34 @@ const CalendarScreen = () => {
   };
 
   const CalendarModule = (date) => {
-    // console.log("date 1 ==>", date.dateString)
+    debugger;
+    var dateString = date.dateString;
+    var dataCategory = getCalenderDateFriendList;
+    var calenderDateFriendList = [];
+    if (dataCategory.length > 0) {
+      dataCategory = dataCategory.filter((item) => {
+        return item.user_special_moment_value == dateString;
+      });
+      calenderDateFriendList = dataCategory;
+    }
 
-    // console.log("date.dateString 2 ==>", getCalenderDateItem)
+    if (calenderDateFriendList.length > 0) {
+      setCalenderDateItem(calenderDateFriendList);
+      setCalenderDateModal(true);
+    }
 
-    // console.log("Show", getCalenderDateItem == null)
-
-    Object.keys(CalenderDate).forEach(function (key) {
-      // setCalenderDateModal(true)
-      // CalenderDate[key][date.dateString]["dots"]
-      // console.log("===>>>", CalenderDate[key][date.dateString])
-      if (CalenderDate[key][date.dateString] != null) {
-        setCalenderDateItem(CalenderDate[key][date.dateString]["dots"]);
-        setCalenderDateModal(true);
-        console.log("True");
-      } else {
-        console.log("False");
-      }
-    });
+    // Object.keys(CalenderDate).forEach(function (key) {
+    //   // setCalenderDateModal(true)
+    //   // CalenderDate[key][date.dateString]["dots"]
+    //   // console.log("===>>>", CalenderDate[key][date.dateString])
+    //   if (CalenderDate[key][date.dateString] != null) {
+    //     setCalenderDateItem(CalenderDate[key][date.dateString]["dots"]);
+    //     setCalenderDateModal(true);
+    //     console.log("True");
+    //   } else {
+    //     console.log("False");
+    //   }
+    // });
   };
 
   return (
@@ -583,29 +581,8 @@ const CalendarScreen = () => {
                 // Handler which gets executed on day long press. Default = undefined
                 // onDayLongPress={(day) => { console.log('selected day', day) }}
                 // MarkedDates
-                markedDates={CalenderDate[0]}
-                // markedDates={{
-                //     '2021-09-25': {
-                //         dots: [
-                //             {
-                //                 key: 'vacation',
-                //                 color: 'blue',
-                //                 selectedDotColor: 'blue'
-                //             },
-                //             // {
-                //             //     key: 'massage',
-                //             //     color: 'blue',
-                //             //     selectedDotColor: 'blue'
-                //             // },
-                //             // {
-                //             //     key: 'workout',
-                //             //     color: 'green'
-                //             // }
-                //         ]
-                //     },
-                // }}
-
-                markingType={"multi-dot"}
+                markingType={"custom"}
+                markedDates={getCalenderDateFriend}
                 // Specify theme properties to override specific styles for calendar parts. Default = {}
                 theme={{
                   backgroundColor: COLORS.Secondary,
@@ -658,7 +635,9 @@ const CalendarScreen = () => {
                           { textAlign: "center", paddingBottom: 16 },
                         ]}
                       >
-                        Sep 25th
+                        {Moment(
+                          getCalenderDateItem[0].user_special_moment_value
+                        ).format("MMM DD") + "th"}
                       </Text>
                     </View>
                     {/* <View> */}
@@ -674,11 +653,18 @@ const CalendarScreen = () => {
                               ]}
                             >
                               <Image
-                                source={demodp}
-                                style={CommonStyle.bottomBarImg}
+                                source={
+                                  item.special_moment_image != null
+                                    ? item.special_moment_image
+                                    : imgPlaceHolder
+                                }
+                                style={[
+                                  CommonStyle.bottomBarImg,
+                                  { borderRadius: 34 },
+                                ]}
                               />
                               <Text style={CommonStyle.txtFrienduserName}>
-                                {item.Name}
+                                {item.user_fname + " " + item.user_lname}
                               </Text>
                               <Text
                                 style={
@@ -690,7 +676,7 @@ const CalendarScreen = () => {
                                   })
                                 }
                               >
-                                {item.NameType}
+                                {item.special_moment_name}
                               </Text>
                             </View>
                           );
