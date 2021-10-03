@@ -860,7 +860,7 @@ const HomeScreen = () => {
                         }}
                       >
                         <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                          grgge {getAddNewItem}
+                          {getAddNewItem}
                         </Text>
                       </View>
                       <View style={{ width: "20%" }}></View>

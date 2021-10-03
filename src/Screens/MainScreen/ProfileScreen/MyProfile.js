@@ -66,44 +66,8 @@ import {
   SimpleInputEditView,
 } from "../../../Components/FormInput";
 import Purchases from "react-native-purchases";
+import Moment from "moment";
 
-const Data = [
-  {
-    id: 1,
-    Name: AppString.Coffee,
-    Image: imgCoffee,
-  },
-  {
-    id: 2,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-  {
-    id: 3,
-    Name: AppString.Flowers,
-    Image: imgFlowers,
-  },
-  {
-    id: 4,
-    Name: AppString.Laptop,
-    Image: imgLaptop,
-  },
-  {
-    id: 5,
-    Name: AppString.Ring,
-    Image: imgRing,
-  },
-  {
-    id: 6,
-    Name: AppString.Book,
-    Image: imgBook,
-  },
-  {
-    id: 7,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-];
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
 var temp,
@@ -125,7 +89,6 @@ const MyProfile = ({ navigation }) => {
   const userData = useSelector((state) => state.session);
   const specialMoment = useSelector((state) => state.specialMoment);
   const userSpecialMoment = useSelector((state) => state.UserSpecialMoment);
-
   const categories = useSelector((state) => state.categories);
   const userCategoryQuestion = useSelector(
     (state) => state.UserCategoryQuestion
@@ -195,25 +158,23 @@ const MyProfile = ({ navigation }) => {
 
   const [getDateModal, setDateModal] = useState(false);
   const [getUpdateDateModal, setUpdateDateModal] = useState("");
-  const [getFinalSepDate, setFinalSepDate] = useState();
+  const [getFinalSepDate, setFinalSepDate] = useState("");
   const [date, setDate] = useState(new Date());
 
   const [getFilterSepCat, setFilterSepCat] = useState(specialMoment);
-  const [getDefaultSpecialMometData, setDefaultSpecialMometData] = useState({});
+  const [getDefaultSpecialMometData, setDefaultSpecialMometData] = useState([]);
 
   const [getPrevData, setPrevData] = useState({});
   const [getId, seGetId] = useState("0");
 
   useEffect(() => {
-    if (!userSpecialMoment) {
-      debugger;
+    if (userSpecialMoment) {
       const defaultSpecialMometData = userSpecialMoment.filter((item) => {
-        item.special_moment_id == user.defaultSpecialMoment;
+        return item.default_moment == "1";
       });
-      debugger;
       setDefaultSpecialMometData(defaultSpecialMometData);
-      debugger;
     }
+
     getFilterSepCatgories(userSpecialMoment);
     getFilterCatgories(userCategoryQuestion);
   }, []);
@@ -515,22 +476,18 @@ const MyProfile = ({ navigation }) => {
       deleteUserCategorySpecialDayResponse,
       deleteUserCategorySpecialDayError,
     } = await deleteUserCategorySpecialDay(DeletedId);
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-    debugger;
     if (
       deleteUserCategorySpecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      debugger;
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setUserOldSpecialMomentModal(false);
       setLoader(false);
-      debugger;
     } else {
       setLoader(false);
       setUserOldSpecialMomentModal(false);
@@ -538,12 +495,10 @@ const MyProfile = ({ navigation }) => {
         "NEW deleteUserCategorySpecialDay Error",
         deleteUserCategorySpecialDayError
       );
-      debugger;
       console.log(
         "NEW getUserCategorySpecialMoment Error",
         getUserCategorySpecialMomentError
       );
-      debugger;
     }
   };
 
@@ -837,7 +792,8 @@ const MyProfile = ({ navigation }) => {
                   </Text>
                   <View style={CommonStyle.alignItemsBaseLine}>
                     {getDefaultSpecialMometData.length > 0 &&
-                    getDefaultSpecialMometData.user_special_moment_date == 0 ? (
+                    getDefaultSpecialMometData[0].user_special_moment_date !=
+                      "" ? (
                       <>
                         <Image
                           source={imgbirthdayCakeGary}
@@ -849,7 +805,16 @@ const MyProfile = ({ navigation }) => {
                             { color: COLORS.PrimaryLight },
                           ]}
                         >
-                          {getDefaultSpecialMometData.user_special_moment_date}
+                          {"  "}
+                          {
+                            getDefaultSpecialMometData[0]
+                              .user_special_moment_date_display
+                          }
+                          {"  "}
+                          {Moment(
+                            getDefaultSpecialMometData[0]
+                              .user_special_moment_date
+                          ).format("MMM, DD")}
                         </Text>
                       </>
                     ) : null}
@@ -983,32 +948,30 @@ const MyProfile = ({ navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {userSpecialMoment != ""
-                  ? userSpecialMoment.length > 0 &&
-                    userSpecialMoment.map((item, index) => (
-                      <CalendarList
-                        ImageUrl={imgWhiteBirthday}
-                        ExploreName={item.special_moment_name}
-                        Id={item.special_moment_id}
-                        index={index}
-                        key={index}
-                        DataLength={userSpecialMoment.length}
-                        ShowBtn={false}
-                        onPress={() =>
-                          oldUserSpecialMoment(
-                            item.user_special_moment_id,
-                            item.special_moment_id,
-                            item.special_moment_name,
-                            item.user_special_moment_title,
-                            item.user_special_moment_date,
-                            item.special_moment_link,
-                            item.special_moment_other_info,
-                            item.image
-                          )
-                        }
-                      />
-                    ))
-                  : null}
+                {userSpecialMoment.length > 0 &&
+                  userSpecialMoment.map((item, index) => (
+                    <CalendarList
+                      ImageUrl={imgWhiteBirthday}
+                      ExploreName={item.special_moment_name}
+                      Id={item.special_moment_id}
+                      index={index}
+                      key={index}
+                      DataLength={userSpecialMoment.length}
+                      ShowBtn={false}
+                      onPress={() =>
+                        oldUserSpecialMoment(
+                          item.user_special_moment_id,
+                          item.special_moment_id,
+                          item.special_moment_name,
+                          item.user_special_moment_title,
+                          item.user_special_moment_date,
+                          item.special_moment_link,
+                          item.special_moment_other_info,
+                          item.image
+                        )
+                      }
+                    />
+                  ))}
                 <CalendarList
                   ShowBtn={true}
                   key={1}
@@ -1104,7 +1067,7 @@ const MyProfile = ({ navigation }) => {
                         { textAlign: "center" },
                       ]}
                     >
-                      m111 {getAddNewItem}
+                      {getAddNewItem}
                     </Text>
                   </View>
                   <View style={{ width: "20%" }}>
@@ -1179,7 +1142,7 @@ const MyProfile = ({ navigation }) => {
                         { textAlign: "center", marginTop: 10 },
                       ]}
                     >
-                      m222 {getUpdateDataItem}
+                      {getUpdateDataItem}
                     </Text>
                   </View>
                 </View>
@@ -1258,7 +1221,7 @@ const MyProfile = ({ navigation }) => {
                     }}
                   >
                     <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                      m333 {getAddNewItem}
+                      {getAddNewItem}
                     </Text>
                   </View>
                   <View style={{ width: "20%" }}></View>
@@ -1693,7 +1656,7 @@ const MyProfile = ({ navigation }) => {
                     TitleName={"Title"}
                     placeholder={"Title"}
                     defaultValue={getPrevData.Title}
-                    placeholderTextColor={COLORS.Primary}
+                    placeholderTextColor={COLORS.gray}
                     onChangeText={(Title) => {
                       setuserSpecialMomentTitle(Title);
                       setPrevData({
@@ -1726,7 +1689,7 @@ const MyProfile = ({ navigation }) => {
                   <SimpleInputEditView
                     TitleName={"Other Info"}
                     placeholder={"Other Info"}
-                    placeholderTextColor={COLORS.Primary}
+                    placeholderTextColor={COLORS.gray}
                     defaultValue={getPrevData.OtherInfo}
                     onChangeText={(OtherInfo) => {
                       setspecialMomentOtherInfo(OtherInfo);

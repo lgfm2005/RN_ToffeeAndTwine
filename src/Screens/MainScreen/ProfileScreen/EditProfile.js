@@ -67,27 +67,20 @@ const EditProfile = ({ navigation }) => {
   );
   useEffect(() => {
     console.log("user.defaultSpecialMoment", user.defaultSpecialMoment);
-    debugger;
     if (user.defaultSpecialMoment == 0) {
-      debugger;
       UpdateDefaultSpecialMoment = UserSpecialMoment[0]["special_moment_name"];
-      debugger;
     } else {
       const DefultUserSpecialMoment = UserSpecialMoment.filter(
         (item) => item.special_moment_id == user.defaultSpecialMoment
       );
-      debugger;
       if (DefultUserSpecialMoment.length > 0) {
         UpdateDefaultSpecialMoment =
           DefultUserSpecialMoment[0]["special_moment_name"];
-        debugger;
       } else {
         UpdateDefaultSpecialMoment = "";
-        debugger;
       }
     }
     setHighlightMoment(UpdateDefaultSpecialMoment);
-    debugger;
   }, [user, UserSpecialMoment]);
 
   const CloseItem = () => {

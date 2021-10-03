@@ -177,9 +177,7 @@ export const useActions = () => {
       let response, error;
       try {
         response = await API.UpdateProfile.UpdateProfile(data, session);
-        debugger;
         if (response.data.StatusCode == "1") {
-          debugger;
           dispatch(
             loginAction({
               token: session.token,
@@ -193,7 +191,6 @@ export const useActions = () => {
               isAutoLogin: true,
             })
           );
-          debugger;
         } else {
           error = response.data.Message;
         }
@@ -397,9 +394,12 @@ export const useActions = () => {
           dispatch(
             userSpecialMoment(getUserCategorySpecialMomentResponse.data.Result)
           );
+        } else {
+          dispatch(userSpecialMoment([]));
         }
       } catch (e) {
         getUserCategorySpecialMomentError = e;
+        dispatch(userSpecialMoment([]));
       }
       return {
         getUserCategorySpecialMomentResponse,
