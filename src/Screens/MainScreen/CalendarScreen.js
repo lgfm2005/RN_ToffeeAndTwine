@@ -436,7 +436,6 @@ const CalendarScreen = () => {
   };
 
   const CalendarModule = (date) => {
-    debugger;
     var dateString = date.dateString;
     var dataCategory = getCalenderDateFriendList;
     var calenderDateFriendList = [];

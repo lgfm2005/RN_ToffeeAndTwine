@@ -380,4 +380,9 @@ export default CommonStyle = StyleSheet.create({
     ...fontsize14,
     color: COLORS.red,
   },
+  ContainerCenter: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });

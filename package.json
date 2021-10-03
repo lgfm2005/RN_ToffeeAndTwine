@@ -29,6 +29,7 @@
     "react-native-date-picker": "^4.0.0",
     "react-native-elements": "^3.4.2",
     "react-native-fbsdk": "^3.0.0",
+    "react-native-fix-image": "^2.1.0",
     "react-native-flash-message": "^0.2.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-google-signin": "^2.1.1",

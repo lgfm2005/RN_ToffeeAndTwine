@@ -64,7 +64,6 @@ import Purchases from "react-native-purchases";
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp,
   temp2 = [];
-var data = new FormData();
 var items, list, userData;
 const HomeScreen = () => {
   const {
@@ -335,11 +334,14 @@ const HomeScreen = () => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
-      // console.log(
-      //   "User Category Question Response Error  ===>>>",
-      //   UserCategoryQuestionResponse
-      // );
-      // console.log("Question Response ==>>>", addCategoryQuestionResponse);
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        UserCategoryQuestionResponse
+      );
+      console.log(
+        "Question Response ==>>>",
+        UserCategoryQuestionResponse.data.Result
+      );
     } else {
       // setAddNewFreshItemModal(true);
       setAddItemShowModal(false);
@@ -509,6 +511,7 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           style={[CommonStyle.BgColorWhite]}
+          keyboardShouldPersistTaps={"always"}
         >
           <View style={CommonStyle.authPage}>
             <View style={CommonStyle.Container}>
@@ -544,6 +547,7 @@ const HomeScreen = () => {
               />
               <View style={{ paddingHorizontal: 15 }}>
                 <ScrollView
+                  keyboardShouldPersistTaps={"always"}
                   contentContainerStyle={[
                     MainScreenStyle.scrollItemStyle,
                     CommonStyle.p8,
@@ -607,6 +611,7 @@ const HomeScreen = () => {
               }}
             >
               <ScrollView
+                keyboardShouldPersistTaps={"always"}
                 contentContainerStyle={[
                   MainScreenStyle.scrollItemStyle,
                   CommonStyle.p8,
@@ -660,6 +665,7 @@ const HomeScreen = () => {
                     </Text>
                     <View key={getId}>
                       <ScrollView
+                        keyboardShouldPersistTaps={"always"}
                         contentContainerStyle={[
                           MainScreenStyle.scrollItemStyle,
                         ]}
@@ -726,7 +732,7 @@ const HomeScreen = () => {
                             { textAlign: "center", marginTop: 10 },
                           ]}
                         >
-                          {getUpdateDataItem}
+                          m111 {getUpdateDataItem}
                         </Text>
                       </View>
                       <View style={{ width: "20%" }}></View>
@@ -743,11 +749,9 @@ const HomeScreen = () => {
                           return (
                             <SimpleInputEditView
                               TitleName={item.category_question}
-                              placeholder={item.category_placeholder}
+                              buttonName={item.category_placeholder}
                               value={item.question_value}
-                              placeholderTextColor={COLORS.Primary}
                               onChangeText={(value) => {
-                                console.log("valuevaluevalue", value);
                                 UpdateQuestionData(
                                   item.user_category_question_id,
                                   value,
@@ -812,7 +816,7 @@ const HomeScreen = () => {
                             { textAlign: "center" },
                           ]}
                         >
-                          {getAddNewItem}
+                          m222 {getAddNewItem}
                         </Text>
                         <View style={{ width: "20%" }}></View>
                       </View>
@@ -829,8 +833,8 @@ const HomeScreen = () => {
                           return (
                             <EditShowSimpleView
                               TitleName={item.category_question}
-                              buttonName={item.question_value}
-                              placeholderTextColor={COLORS.Primary}
+                              buttonName={item.category_placeholder}
+                              value={item.question_value}
                             />
                           );
                         })}
@@ -908,7 +912,6 @@ const HomeScreen = () => {
                             <SimpleInputEditView
                               TitleName={item.category_question}
                               placeholder={item.category_placeholder}
-                              placeholderTextColor={COLORS.Primary}
                               onChangeText={(value) =>
                                 HandelQuestionData(
                                   item.category_id,

@@ -24,7 +24,7 @@ import ImagePicker from "react-native-image-crop-picker";
 import {
   imgWhiteEdit,
   imgDownArrow,
-  imgWhiteShare,
+  imgPlaceHolder,
   imgBackleftWhite,
   iimgprofiledemo3,
   imgProfileBackground,
@@ -49,7 +49,7 @@ const EditProfile = ({ navigation }) => {
 
   const { updateProfile } = useActions();
 
-  const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
+  const keyboardVerticalOffset = Platform.OS === "ios" ? 0 : 0;
 
   const [getHighlightMomentModel, setHighlightMomentModel] = useState(false);
   const [getHighlightMoment, setHighlightMoment] = useState("");
@@ -168,55 +168,60 @@ const EditProfile = ({ navigation }) => {
 
   return (
     <View style={[CommonStyle.BgColorWhite, CommonStyle.mb10]}>
-      <SafeAreaView>
-        <View
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            left: 0,
-            zIndex: 1,
-          }}
+      <MyBlackStatusbar />
+
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          left: 0,
+          zIndex: 1,
+        }}
+      >
+        <LinearGradient
+          colors={[
+            "rgba(0,0,0,1)",
+            "rgba(0,0,0,0.8)",
+            "rgba(0,0,0,0.6)",
+            "rgba(0,0,0,0.4)",
+            "rgba(0,0,0,0.0)",
+          ]}
         >
-          <LinearGradient
-            colors={[
-              "rgba(0,0,0,1)",
-              "rgba(0,0,0,0.8)",
-              "rgba(0,0,0,0.6)",
-              "rgba(0,0,0,0.4)",
-              "rgba(0,0,0,0.0)",
-            ]}
+          <View
+            style={[CommonStyle.ProfileToolbarbg, { alignItems: "center" }]}
           >
-            <View
-              style={[CommonStyle.ProfileToolbarbg, { alignItems: "center" }]}
-            >
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Image
-                  source={imgBackleftWhite}
-                  style={CommonStyle.imgIconSize}
-                />
-              </TouchableOpacity>
-              <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
-                Edit Profile
-              </Text>
-              <TouchableOpacity onPress={() => ImageChange()}>
-                <Image source={imgWhiteEdit} style={CommonStyle.imgIconSize} />
-              </TouchableOpacity>
-            </View>
-          </LinearGradient>
-        </View>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          bounces={false}
-        >
-          <View style={CommonStyle.authPage}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={imgBackleftWhite}
+                style={CommonStyle.imgIconSize}
+              />
+            </TouchableOpacity>
+            <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
+              Edit Profile
+            </Text>
+            <TouchableOpacity onPress={() => ImageChange()}>
+              <Image source={imgWhiteEdit} style={CommonStyle.imgIconSize} />
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
+      </View>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
+        <View style={CommonStyle.authPage}>
+          <KeyboardAvoidingView
+            behavior="position"
+            // keyboardVerticalOffset={keyboardVerticalOffset}
+          >
             <View style={CommonStyle.imgmask}>
               <ImageBackground
                 source={
-                  getImage != ""
-                    ? { uri: getImage }
-                    : { uri: user.userProfileImage }
+                  user.userProfileImage != ""
+                    ? { uri: user.userProfileImage }
+                    : imgPlaceHolder
                 }
                 style={CommonStyle.imgProfileBackground}
               ></ImageBackground>
@@ -226,11 +231,10 @@ const EditProfile = ({ navigation }) => {
               />
             </View>
 
-            <View style={[CommonStyle.Container]}>
+            <View style={[CommonStyle.Container, { marginTop: 30 }]}>
               <View style={CommonStyle.formGroup}>
                 <Text style={CommonStyle.formLabel}>{AppString.FirstName}</Text>
                 <FormInput
-                  // buttonName={AppString.FirstName}
                   buttonName={user.userFname}
                   placeholderTextColor={COLORS.Primary}
                   textChange={(FirstName) => setFirstName(FirstName)}
@@ -276,28 +280,28 @@ const EditProfile = ({ navigation }) => {
                 />
               </View>
             </View>
-          </View>
+          </KeyboardAvoidingView>
+        </View>
 
-          {getHighlightMomentModel == true ? (
-            <Modal
-              testID={"modal"}
-              isVisible={getHighlightMomentModel}
-              onBackdropPress={() => CloseItem()}
-            >
-              <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                <FlatList
-                  data={UserSpecialMoment}
-                  renderItem={({ item, index }) => RenderItem(item, index)}
-                  keyExtractor={(UserSpecialMoment) =>
-                    UserSpecialMoment.special_moment_id
-                  }
-                />
-              </View>
-            </Modal>
-          ) : null}
-        </ScrollView>
-        <Spinner visible={getLoader} />
-      </SafeAreaView>
+        {getHighlightMomentModel == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getHighlightMomentModel}
+            onBackdropPress={() => CloseItem()}
+          >
+            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+              <FlatList
+                data={UserSpecialMoment}
+                renderItem={({ item, index }) => RenderItem(item, index)}
+                keyExtractor={(UserSpecialMoment) =>
+                  UserSpecialMoment.special_moment_id
+                }
+              />
+            </View>
+          </Modal>
+        ) : null}
+      </ScrollView>
+      <Spinner visible={getLoader} />
     </View>
   );
 };

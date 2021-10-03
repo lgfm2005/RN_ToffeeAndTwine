@@ -335,7 +335,7 @@ export const useActions = () => {
         data.append("CategoryID[]", item.category_id);
         data.append("CategoryQuestionID[]", item.category_question_id);
         if (item.value == undefined) {
-          data.append("CategoryQuestionValue[]", item.category_placeholder);
+          data.append("CategoryQuestionValue[]", "");
         } else {
           data.append("CategoryQuestionValue[]", item.value);
         }
@@ -394,9 +394,12 @@ export const useActions = () => {
           dispatch(
             userSpecialMoment(getUserCategorySpecialMomentResponse.data.Result)
           );
+        } else {
+          dispatch(userSpecialMoment([]));
         }
       } catch (e) {
         getUserCategorySpecialMomentError = e;
+        dispatch(userSpecialMoment([]));
       }
       return {
         getUserCategorySpecialMomentResponse,
