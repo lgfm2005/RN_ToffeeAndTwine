@@ -22,6 +22,8 @@ import TutorialStyle from "../Signup/Tutorial/TutorialStyle";
 import { ToolbarMain } from "../../Components/ToolbarMain/ToolbarMain";
 import { MainScreenStyle } from "./MainScreenStyle";
 import { AppString } from "../../Assets/utils/AppString";
+import Moment from "moment";
+
 import {
   demodp,
   imgExploreaNShare,
@@ -73,6 +75,8 @@ const HomeScreen = () => {
     GetSpecialMoment,
     getUserCategorySpecialMoment,
     deleteUserCategoryQuestion,
+    userSubscription,
+    getProfile,
   } = useActions();
 
   var userData = useSelector((state) => state.session);
@@ -86,6 +90,7 @@ const HomeScreen = () => {
   useEffect(() => {
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
+    Purchases.syncPurchases();
   }, []);
   useEffect(async () => {
     setLoader(true);
@@ -209,14 +214,33 @@ const HomeScreen = () => {
   const handleSubmitPayment = async () => {
     // setLoading(true);
     // HapticFeedback.trigger("impactLight");
+
+    var date = Moment("15/02/2013", "DD/MM/YYYY");
+    var startDate = Moment("12/03/2013", "DD/MM/YYYY");
+    var endDate = Moment("15/01/2013", "DD/MM/YYYY");
+
+    if (date.isBefore(startDate)) {
+      alert("Yay!");
+    } else {
+      alert("Nay! :(");
+    }
     try {
+      const purchaserInfo1 = await Purchases.getPurchaserInfo();
+      console.log("purchaserInfo:", purchaserInfo1.latestExpirationDate);
+
       const offerings = await Purchases.getOfferings();
       console.log("offerings:", offerings);
       const monthlyPackage = offerings.current.monthly;
       const { purchaserInfo } = await Purchases.purchasePackage(monthlyPackage);
       const { latestExpirationDate } = purchaserInfo;
-      console.log("latestExpirationDate:", latestExpirationDate, purchaserInfo);
-      // const { error } = await SendReceipt(latestExpirationDate, purchaserInfo);
+      debugger;
+      console.log("latestExpirationDate:", latestExpirationDate);
+
+      const { error } = await userSubscription(
+        "1.99",
+        Moment(latestExpirationDate).format("YYYY-MM-DD"),
+        Moment(new Date()).format("YYYY-MM-DD")
+      );
       // if (error)
       //   throw new Error(
       //     error?.response?.data?.error || error.message || "Unkown error."
@@ -463,9 +487,18 @@ const HomeScreen = () => {
   };
 
   // Payment for upgrade
-  const upgradeItem = () => {
+  const upgradeItem = async () => {
     console.log("111");
-    setupgradeItemModal(true);
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode) {
+      var isActive =
+        profileResponse.data.Result[0].user_details[0].user_subscription_status;
+      if (isActive == "0") {
+        AddItemShow(0);
+      } else {
+        setupgradeItemModal(true);
+      }
+    }
   };
 
   return (

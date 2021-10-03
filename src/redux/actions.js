@@ -643,6 +643,25 @@ export const useActions = () => {
       return { friendCategorySpeciaResponse, friendCategorySpeciaError };
     },
 
+    userSubscription: async (PlanPrice, StartDate, ExpireDate) => {
+      let UserSubscriptionResponse, UserSubscriptionError;
+      try {
+        var data = new FormData();
+        data.append("PlanPrice", PlanPrice);
+        data.append("StartDate", StartDate);
+        data.append("ExpireDate", ExpireDate);
+        UserSubscriptionResponse = await API.UserSubscription.get(
+          sessions,
+          data
+        );
+        if (UserSubscriptionResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        UserSubscriptionError = e;
+      }
+      return { UserSubscriptionResponse, UserSubscriptionError };
+    },
+
     //
   };
 };

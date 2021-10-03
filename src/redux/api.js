@@ -281,3 +281,13 @@ export const GetFriendCategorySpecialMoment = {
       "get"
     ),
 };
+
+export const UserSubscription = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `rest_api/controller_user/user_subscription`,
+      "post",
+      data
+    ),
+};
