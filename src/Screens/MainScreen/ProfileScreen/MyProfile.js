@@ -167,6 +167,8 @@ const MyProfile = ({ navigation }) => {
   const [getPrevData, setPrevData] = useState({});
   const [getId, seGetId] = useState("0");
 
+  const [setFinalDataShow, getFinalDataShow] = useState("");
+
   useEffect(() => {
     if (userSpecialMoment) {
       const defaultSpecialMometData = userSpecialMoment.filter((item) => {
@@ -198,7 +200,23 @@ const MyProfile = ({ navigation }) => {
     setAddNewItemModal(false);
     setEditItemModal(false);
     setUpdateDataModal(false);
+    setPrevData({});
     setupgradeItemModal(false);
+    setFinalSepDate("");
+    setuserSpecialMomentDate("");
+  };
+
+  // Close All Item
+  const CloseSepItem = () => {
+    setEditItemSepModal(false);
+    setUserNewSpecialMomentModal(false);
+    setUserOldSpecialMomentModal(false);
+    setDateModal(false);
+    setupgradeItemModal(false);
+    setPrevData({});
+    setAddItemShowSepModal(false);
+    setFinalSepDate("");
+    setuserSpecialMomentDate("");
   };
 
   const ImageChange = () => {
@@ -413,7 +431,11 @@ const MyProfile = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
     } else {
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
       setUpdateDataModal(false);
       setAddItemShowModal(false);
       setEditItemModal(false);
@@ -425,6 +447,46 @@ const MyProfile = ({ navigation }) => {
       console.log("UserCategoryQuestionError", UserCategoryQuestionError);
     }
     console.log("fewf", getIdItem);
+  };
+
+  const DeleteItem = async (DeletedId) => {
+    setUserOldSpecialMomentModal(false);
+    setLoader(true);
+    const {
+      deleteUserCategorySpecialDayResponse,
+      deleteUserCategorySpecialDayError,
+    } = await deleteUserCategorySpecialDay(DeletedId);
+    const {
+      getUserCategorySpecialMomentResponse,
+      getUserCategorySpecialMomentError,
+    } = await getUserCategorySpecialMoment();
+    debugger;
+    if (
+      deleteUserCategorySpecialDayResponse.data.StatusCode == "1" &&
+      getUserCategorySpecialMomentResponse.data.StatusCode == "1"
+    ) {
+      getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
+      console.log("Add Category Special Moment Done");
+      setUserOldSpecialMomentModal(false);
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
+      setLoader(false);
+      debugger;
+    } else {
+      debugger;
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
+      setLoader(false);
+      setUserOldSpecialMomentModal(false);
+      console.log(
+        "NEW deleteUserCategorySpecialDay Error",
+        deleteUserCategorySpecialDayError
+      );
+      console.log(
+        "NEW getUserCategorySpecialMoment Error",
+        getUserCategorySpecialMomentError
+      );
+    }
   };
 
   // Special Moment Day
@@ -439,17 +501,6 @@ const MyProfile = ({ navigation }) => {
     }
     setFilterSepCat(dataCategory);
     // console.log(getFilterSepCat);
-  };
-
-  // Close All Item
-  const CloseSepItem = () => {
-    setAddItemShowSepModal(false);
-    setEditItemSepModal(false);
-    setUserNewSpecialMomentModal(false);
-    setUserOldSpecialMomentModal(false);
-    setDateModal(false);
-    setupgradeItemModal(false);
-    setPrevData({});
   };
 
   const ImageSepChange = () => {
@@ -469,43 +520,12 @@ const MyProfile = ({ navigation }) => {
     setEditItemSepModal(false);
   };
 
-  const DeleteItem = async (DeletedId) => {
-    setUserOldSpecialMomentModal(false);
-    setLoader(true);
-    const {
-      deleteUserCategorySpecialDayResponse,
-      deleteUserCategorySpecialDayError,
-    } = await deleteUserCategorySpecialDay(DeletedId);
-    const {
-      getUserCategorySpecialMomentResponse,
-      getUserCategorySpecialMomentError,
-    } = await getUserCategorySpecialMoment();
-    if (
-      deleteUserCategorySpecialDayResponse.data.StatusCode == "1" &&
-      getUserCategorySpecialMomentResponse.data.StatusCode == "1"
-    ) {
-      getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
-      console.log("Add Category Special Moment Done");
-      setUserOldSpecialMomentModal(false);
-      setLoader(false);
-    } else {
-      setLoader(false);
-      setUserOldSpecialMomentModal(false);
-      console.log(
-        "NEW deleteUserCategorySpecialDay Error",
-        deleteUserCategorySpecialDayError
-      );
-      console.log(
-        "NEW getUserCategorySpecialMoment Error",
-        getUserCategorySpecialMomentError
-      );
-    }
-  };
-
   //  Show All Select Moment List (Select Only one) --- 1.Select Moment
   const SelectMoment = (specialMomentName, specialMomentId) => {
     setAddItemShowSepModal(false);
     AddNewItemSepShow(specialMomentName, specialMomentId);
+    setFinalSepDate("");
+    setuserSpecialMomentDate("");
   };
 
   //  Show Moment (Select Only one) --- 2.Select Moment
@@ -521,29 +541,29 @@ const MyProfile = ({ navigation }) => {
     setUserNewSpecialMomentModal(false);
     setDateModal(true);
     var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
   const SubmitDate = () => {
     setDateModal(false);
     setUserNewSpecialMomentModal(true);
     var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
   const UpdateEnterDate = () => {
     setEditItemSepModal(false);
-
     setUpdateDateModal(true);
     var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
+    // setuserSpecialMomentDate(DateSubstring);
   };
   const UpdateSubmitDate = () => {
     setUpdateDateModal(false);
     setEditItemSepModal(true);
     var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
 
@@ -552,6 +572,8 @@ const MyProfile = ({ navigation }) => {
     setUserOldSpecialMomentModal(false);
     setEditItemSepModal(true);
     setEditSepItem(getspecialMomentName);
+    console.log("EWfewfewfwfewf=>>>>>>>>>>", getuserSpecialMomentDate);
+    setFinalSepDate(getuserSpecialMomentDate);
   };
 
   // oldUserSpecialMoment --> 1.Open
@@ -589,6 +611,14 @@ const MyProfile = ({ navigation }) => {
     setUserNewSpecialMomentModal(false);
     setLoader(true);
 
+    // if (!getFinalSepDate) {
+    //   getFinalDataShow("");
+    //   debugger;
+    // } else {
+    //   getFinalDataShow(getFinalSepDate);
+    //   debugger;
+    // }
+    debugger;
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
@@ -599,6 +629,7 @@ const MyProfile = ({ navigation }) => {
         JSON.stringify(getImageurl),
         "0"
       );
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -610,6 +641,7 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      setFinalSepDate("");
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setLoader(false);
@@ -637,17 +669,29 @@ const MyProfile = ({ navigation }) => {
     setEditItemSepModal(false);
     setUserOldSpecialMomentModal(false);
 
+    // if (!getFinalSepDate) {
+    //   getFinalDataShow("");
+    //   debugger;
+    // } else {
+    //   getFinalDataShow(getFinalSepDate);
+    //   debugger;
+    // }
+    debugger;
     const {
       updateCategorySpecialMomentResponse,
       updateCategorySpecialMomentError,
     } = await updateCategorySpecialMoment(
       getuserSpecialMomentId,
-      getuserSpecialMomentUpdateTitle,
+      getuserSpecialMomentTitle,
+      // getuserSpecialMomentUpdateTitle,
       getFinalSepDate,
-      getspecialMomentUpdateLink,
-      getspecialMomentUpdateOtherInfo,
+      // getspecialMomentUpdateLink,
+      getspecialMomentLink,
+      getspecialMomentOtherInfo,
+      // getspecialMomentUpdateOtherInfo,
       JSON.stringify(getImageurl)
     );
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -664,6 +708,7 @@ const MyProfile = ({ navigation }) => {
       setLoader(false);
       setPrevData({});
       setImage("");
+      setFinalSepDate("");
       setImageurl("");
     } else {
       setUserNewSpecialMomentModal(false);
@@ -806,15 +851,12 @@ const MyProfile = ({ navigation }) => {
                           ]}
                         >
                           {"  "}
+                          {getDefaultSpecialMometData[0].special_moment_name}
+                          {"  "}
                           {
                             getDefaultSpecialMometData[0]
                               .user_special_moment_date_display
                           }
-                          {"  "}
-                          {Moment(
-                            getDefaultSpecialMometData[0]
-                              .user_special_moment_date
-                          ).format("MMM, DD")}
                         </Text>
                       </>
                     ) : null}
@@ -892,8 +934,7 @@ const MyProfile = ({ navigation }) => {
               <ScrollView
                 contentContainerStyle={[
                   MainScreenStyle.scrollItemStyle,
-                  CommonStyle.p8,
-                  { justifyContent: "flex-start" },
+                  CommonStyle.toppadding16,
                 ]}
               >
                 {userCategoryQuestion.length > 0 &&
@@ -1002,7 +1043,7 @@ const MyProfile = ({ navigation }) => {
                     { textAlign: "center" },
                   ]}
                 >
-                  {AppString.SelectCategories}
+                  m111 {AppString.SelectCategories}
                 </Text>
                 <View key={getId}>
                   <ScrollView
@@ -1067,11 +1108,16 @@ const MyProfile = ({ navigation }) => {
                         { textAlign: "center" },
                       ]}
                     >
-                      {getAddNewItem}
+                      m222 {getAddNewItem}
                     </Text>
                   </View>
                   <View style={{ width: "20%" }}>
-                    <TouchableOpacity onPress={() => DeletedExplore()}>
+                    <TouchableOpacity
+                      style={{
+                        alignItems: "flex-end",
+                      }}
+                      onPress={() => DeletedExplore()}
+                    >
                       <Image
                         source={imgDelete}
                         style={CommonStyle.imgIconSize}
@@ -1137,12 +1183,9 @@ const MyProfile = ({ navigation }) => {
                   </View>
                   <View style={CommonStyle.PopModalWidth60}>
                     <Text
-                      style={[
-                        CommonStyle.txtTitle,
-                        { textAlign: "center", marginTop: 10 },
-                      ]}
+                      style={[CommonStyle.txtTitle, { textAlign: "center" }]}
                     >
-                      {getUpdateDataItem}
+                      m333 {getUpdateDataItem}
                     </Text>
                   </View>
                 </View>
@@ -1221,7 +1264,7 @@ const MyProfile = ({ navigation }) => {
                     }}
                   >
                     <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                      {getAddNewItem}
+                      m444 {getAddNewItem}
                     </Text>
                   </View>
                   <View style={{ width: "20%" }}></View>
@@ -1320,11 +1363,14 @@ const MyProfile = ({ navigation }) => {
                 </View>
                 <View style={{ width: "60%" }}>
                   <Text style={[CommonStyle.txtTitle, { textAlign: "center" }]}>
-                    {getspecialMomentName}
+                    m555 {getspecialMomentName}
                   </Text>
                 </View>
                 <View style={{ width: "20%" }}>
                   <TouchableOpacity
+                    style={{
+                      alignItems: "flex-end",
+                    }}
                     onPress={() => DeleteItem(getuserSpecialMomentId)}
                   >
                     <Image source={imgDelete} style={CommonStyle.imgIconSize} />
@@ -1335,23 +1381,23 @@ const MyProfile = ({ navigation }) => {
               <View style={CommonStyle.my16}>
                 <EditShowSimpleView
                   TitleName={"Title"}
-                  placeholder={getuserSpecialMomentTitle}
-                  placeholderTextColor={COLORS.Primary}
+                  placeholder={"Title"}
+                  value={getuserSpecialMomentTitle}
                 />
                 <EditShowSimpleView
                   TitleName={"Date"}
-                  placeholder={getuserSpecialMomentDate}
-                  placeholderTextColor={COLORS.Primary}
+                  placeholder={"Date"}
+                  value={getuserSpecialMomentDate}
                 />
                 <EditShowSimpleView
                   TitleName={"Link"}
-                  placeholder={getspecialMomentLink}
-                  placeholderTextColor={COLORS.Primary}
+                  placeholder={"Link"}
+                  value={getspecialMomentLink}
                 />
                 <EditShowSimpleView
                   TitleName={"Other Info"}
-                  placeholder={getspecialMomentOtherInfo}
-                  placeholderTextColor={COLORS.Primary}
+                  placeholder={"Other Info"}
+                  value={getspecialMomentOtherInfo}
                 />
               </View>
 
@@ -1417,7 +1463,7 @@ const MyProfile = ({ navigation }) => {
                           { textAlign: "center" },
                         ]}
                       >
-                        {getEditSepItem}
+                        m666 {getEditSepItem}
                       </Text>
                     </View>
                     <View style={{ width: "20%" }}></View>
@@ -1427,48 +1473,53 @@ const MyProfile = ({ navigation }) => {
                 <View style={CommonStyle.my16}>
                   <SimpleInputEditView
                     TitleName={"Title"}
-                    placeholder={getuserSpecialMomentTitle}
-                    defaultValue={getPrevData.Title}
-                    placeholderTextColor={COLORS.Primary}
-                    onChangeText={(Title) => {
-                      setuserSpecialMomentUpdateTitle(Title);
+                    buttonName={"Title"}
+                    defaultValue={getuserSpecialMomentTitle}
+                    textChange={(Title) => {
+                      setuserSpecialMomentTitle(Title);
                       setPrevData({
                         ...getPrevData,
+                        // ...getuserSpecialMomentTitle,
                         Title: Title,
                       });
                     }}
                   />
                   <EditShowBtnSimpleView
                     TitleName={"Date"}
-                    placeholder={
-                      getuserSpecialMomentDate != null
+                    buttonName={
+                      getFinalSepDate
+                        ? getFinalSepDate
+                        : getuserSpecialMomentDate
                         ? getuserSpecialMomentDate
                         : "Date"
                     }
+                    buttonCheck={getuserSpecialMomentDate == "" ? false : true}
                     onPress={() => UpdateEnterDate()}
                   />
                   <SimpleInputEditView
                     TitleName={"Link"}
-                    placeholder={getspecialMomentLink}
-                    defaultValue={getPrevData.Link}
-                    placeholderTextColor={COLORS.Primary}
+                    buttonName={"Link"}
+                    defaultValue={getspecialMomentLink}
                     onChangeText={(Link) => {
-                      setspecialMomentUpdateLink(Link);
+                      setspecialMomentLink(Link);
+                      // setspecialMomentUpdateLink(Link);
                       setPrevData({
                         ...getPrevData,
+                        // ...getspecialMomentLink,
                         Link: Link,
                       });
                     }}
                   />
                   <SimpleInputEditView
                     TitleName={"Other Info"}
-                    placeholder={getspecialMomentOtherInfo}
-                    defaultValue={getPrevData.OtherInfo}
-                    placeholderTextColor={COLORS.Primary}
+                    buttonName={"Other Info"}
+                    defaultValue={getspecialMomentOtherInfo}
                     onChangeText={(OtherInfo) => {
-                      setspecialMomentUpdateOtherInfo(OtherInfo);
+                      // setspecialMomentUpdateOtherInfo(OtherInfo);
+                      setspecialMomentOtherInfo(OtherInfo);
                       setPrevData({
                         ...getPrevData,
+                        // ...getspecialMomentOtherInfo,
                         OtherInfo: OtherInfo,
                       });
                     }}
@@ -1509,12 +1560,17 @@ const MyProfile = ({ navigation }) => {
               </View>
 
               <View style={CommonStyle.my16}>
-                <DatePicker mode={"date"} date={date} onDateChange={setDate} />
+                <DatePicker
+                  mode={"date"}
+                  locale="en"
+                  date={date}
+                  onDateChange={setDate}
+                />
               </View>
 
               <View style={{ flexDirection: "row", justifyContent: "center" }}>
                 <POPLinkButton
-                  buttonName={AppString.Save}
+                  buttonName={AppString.Select}
                   onPress={() => SubmitDate()}
                 />
               </View>
@@ -1538,12 +1594,17 @@ const MyProfile = ({ navigation }) => {
               </View>
 
               <View style={CommonStyle.my16}>
-                <DatePicker mode={"date"} date={date} onDateChange={setDate} />
+                <DatePicker
+                  locale="en"
+                  mode={"date"}
+                  date={date}
+                  onDateChange={setDate}
+                />
               </View>
 
               <View style={{ flexDirection: "row", justifyContent: "center" }}>
                 <POPLinkButton
-                  buttonName={AppString.Save}
+                  buttonName={AppString.Select}
                   onPress={() => UpdateSubmitDate()}
                 />
               </View>
@@ -1645,7 +1706,7 @@ const MyProfile = ({ navigation }) => {
                           { textAlign: "center" },
                         ]}
                       >
-                        {getUserNewSpecialMomenItem}
+                        m777 {getUserNewSpecialMomenItem}
                       </Text>
                     </View>
                     <View style={{ width: "20%" }}></View>
@@ -1667,17 +1728,21 @@ const MyProfile = ({ navigation }) => {
                   />
                   <EditShowBtnSimpleView
                     TitleName={"Date"}
-                    placeholderTextColor={COLORS.Primary}
-                    placeholder={
-                      getFinalSepDate != null ? getFinalSepDate : "Date"
+                    buttonName={
+                      getFinalSepDate
+                        ? getFinalSepDate
+                        : getuserSpecialMomentDate
+                        ? getuserSpecialMomentDate
+                        : "Date"
                     }
+                    buttonCheck={getuserSpecialMomentDate == "" ? false : true}
                     onPress={() => EnterDate()}
                   />
                   <SimpleInputEditView
                     TitleName={"Link"}
                     placeholder={"Link"}
                     defaultValue={getPrevData.Link}
-                    placeholderTextColor={COLORS.Primary}
+                    placeholderTextColor={COLORS.gray}
                     onChangeText={(Link) => {
                       setspecialMomentLink(Link);
                       setPrevData({
@@ -1746,7 +1811,7 @@ const MyProfile = ({ navigation }) => {
                     (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
                   }
                 >
-                  {AppString.txtUpgradecategories1}
+                  m888 {AppString.txtUpgradecategories1}
                   <Text style={{ color: COLORS.gold }}>{AppString.price}</Text>
                   <Text>{AppString.txtUpgradecategories2}</Text>
                 </Text>

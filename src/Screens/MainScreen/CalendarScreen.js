@@ -71,6 +71,10 @@ const CalendarScreen = () => {
   const userData = useSelector((state) => state.session);
   const specialMoment = useSelector((state) => state.specialMoment);
   const userSpecialMoment = useSelector((state) => state.UserSpecialMoment);
+
+  // Payment for upgrade
+  const [getupgradeItemModal, setupgradeItemModal] = useState(false);
+
   // console.log("specialMoment ===>", specialMoment);
   // CalenderDate
   const [getLoader, setLoader] = useState(false);
@@ -131,6 +135,8 @@ const CalendarScreen = () => {
   const [getFilterSepCat, setFilterSepCat] = useState(specialMoment);
 
   const [getPrevData, setPrevData] = useState({});
+
+  const [setFinalDataShow, getFinalDataShow] = useState("");
   useEffect(() => {
     if (userSpecialMoment == "") {
       return;
@@ -190,6 +196,13 @@ const CalendarScreen = () => {
 
   // Close All Item
 
+  // Close All Item
+  const CloseItem = () => {
+    setPrevData({});
+    setFinalSepDate("");
+    setupgradeItemModal(false);
+  };
+
   const CloseSepItem = () => {
     setAddItemShowSepModal(false);
     setEditItemSepModal(false);
@@ -197,7 +210,7 @@ const CalendarScreen = () => {
     setUserNewSpecialMomentModal(false);
     setUserOldSpecialMomentModal(false);
     setDateModal(false);
-    setPrevData({});
+    setupgradeItemModal(false);
   };
 
   const ImageSepChange = () => {
@@ -238,7 +251,8 @@ const CalendarScreen = () => {
       setUserOldSpecialMomentModal(false);
       setLoader(false);
     } else {
-      setUserOldSpecialMomentModal(true);
+      setUserOldSpecialMomentModal(false);
+      setLoader(false);
       console.log(
         "NEW CategorySpecialMoment Error",
         deleteUserCategorySpecialDayError
@@ -269,14 +283,14 @@ const CalendarScreen = () => {
     setUserNewSpecialMomentModal(false);
     setDateModal(true);
     var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
   const SubmitDate = () => {
     setDateModal(false);
     setUserNewSpecialMomentModal(true);
     var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
   const UpdateEnterDate = () => {
@@ -284,14 +298,14 @@ const CalendarScreen = () => {
 
     setUpdateDateModal(true);
     var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
   const UpdateSubmitDate = () => {
     setUpdateDateModal(false);
     setEditItemSepModal(true);
     var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
 
@@ -337,11 +351,18 @@ const CalendarScreen = () => {
     setUserNewSpecialMomentModal(false);
     setLoader(true);
 
+    if (!getFinalSepDate) {
+      getFinalDataShow("");
+      debugger;
+    } else {
+      getFinalDataShow(getFinalSepDate);
+      debugger;
+    }
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
         getuserSpecialMomentTitle,
-        getFinalSepDate,
+        setFinalDataShow,
         getspecialMomentLink,
         getspecialMomentOtherInfo,
         JSON.stringify(getImageurl),
@@ -356,6 +377,7 @@ const CalendarScreen = () => {
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
       setPrevData({});
+      setFinalSepDate("");
       setImage("");
       setImageurl("");
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
@@ -385,13 +407,20 @@ const CalendarScreen = () => {
     setEditItemSepModal(false);
     setUserOldSpecialMomentModal(false);
 
+    if (!getFinalSepDate) {
+      getFinalDataShow("");
+      debugger;
+    } else {
+      getFinalDataShow(getFinalSepDate);
+      debugger;
+    }
     const {
       updateCategorySpecialMomentResponse,
       updateCategorySpecialMomentError,
     } = await updateCategorySpecialMoment(
       getuserSpecialMomentId,
       getuserSpecialMomentUpdateTitle,
-      getFinalSepDate,
+      setFinalDataShow,
       getspecialMomentUpdateLink,
       getspecialMomentUpdateOtherInfo,
       JSON.stringify(getImageurl)
@@ -410,6 +439,7 @@ const CalendarScreen = () => {
       setUserNewSpecialMomentModal(false);
       setUserOldSpecialMomentModal(false);
       setLoader(false);
+      setFinalSepDate("");
       setPrevData({});
       setImage("");
       setImageurl("");
@@ -463,6 +493,11 @@ const CalendarScreen = () => {
     //     console.log("False");
     //   }
     // });
+  };
+
+  // Payment for upgrade
+  const upgradeItem = () => {
+    setupgradeItemModal(true);
   };
 
   return (
@@ -544,7 +579,11 @@ const CalendarScreen = () => {
                 <CalendarList
                   ShowBtn={true}
                   key={1}
-                  AddNewOnPress={() => AddItemSepShow(0)}
+                  AddNewOnPress={() => {
+                    userSpecialMoment.length != 2
+                      ? AddItemSepShow(0)
+                      : upgradeItem();
+                  }}
                 />
               </ScrollView>
             </View>
@@ -703,8 +742,6 @@ const CalendarScreen = () => {
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
-                      justifyContent: "center",
-                      alignContent: "center",
                     }}
                   >
                     <View style={{ width: "20%" }}>
@@ -719,13 +756,25 @@ const CalendarScreen = () => {
                     </View>
                     <View style={{ width: "60%" }}>
                       <Text
-                        style={[CommonStyle.txtTitle, { textAlign: "center" }]}
+                        style={[
+                          CommonStyle.txtTitle,
+                          {
+                            textAlign: "center",
+                          },
+                        ]}
                       >
-                        {getspecialMomentName}
+                        m000 {getspecialMomentName}
                       </Text>
                     </View>
-                    <View style={{ width: "20%" }}>
+                    <View
+                      style={{
+                        width: "20%",
+                      }}
+                    >
                       <TouchableOpacity
+                        style={{
+                          alignItems: "flex-end",
+                        }}
                         onPress={() => DeleteItem(getuserSpecialMomentId)}
                       >
                         <Image
@@ -739,23 +788,23 @@ const CalendarScreen = () => {
                   <View style={CommonStyle.my16}>
                     <EditShowSimpleView
                       TitleName={"Title"}
-                      placeholder={getuserSpecialMomentTitle}
-                      placeholderTextColor={COLORS.Primary}
+                      placeholder={"Title"}
+                      value={getuserSpecialMomentTitle}
                     />
                     <EditShowSimpleView
                       TitleName={"Date"}
-                      placeholder={getuserSpecialMomentDate}
-                      placeholderTextColor={COLORS.Primary}
+                      placeholder={"Date"}
+                      value={getuserSpecialMomentDate}
                     />
                     <EditShowSimpleView
                       TitleName={"Link"}
-                      placeholder={getspecialMomentLink}
-                      placeholderTextColor={COLORS.Primary}
+                      placeholder={"Link"}
+                      value={getspecialMomentLink}
                     />
                     <EditShowSimpleView
                       TitleName={"Other Info"}
-                      placeholder={getspecialMomentOtherInfo}
-                      placeholderTextColor={COLORS.Primary}
+                      placeholder={"Other Info"}
+                      value={getspecialMomentOtherInfo}
                     />
                   </View>
 
@@ -791,8 +840,6 @@ const CalendarScreen = () => {
                     <View
                       style={{
                         flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
                         alignContent: "center",
                       }}
                     >
@@ -812,7 +859,7 @@ const CalendarScreen = () => {
                             )}
                           </TouchableOpacity>
                         </View>
-                        <View style={{ width: "80%" }}>
+                        <View>
                           <Text
                             style={[
                               CommonStyle.txtTitle,
@@ -820,51 +867,59 @@ const CalendarScreen = () => {
                               { textAlign: "center" },
                             ]}
                           >
-                            EDIT {getEditSepItem}
+                            m666 {getEditSepItem}
                           </Text>
                         </View>
+                        <View style={{ width: "20%" }}></View>
                       </View>
                     </View>
                     <View style={CommonStyle.my16}>
                       <SimpleInputEditView
                         TitleName={"Title"}
-                        placeholder={"Title"}
-                        defaultValue={getPrevData.Title}
-                        onChangeText={(Title) => {
+                        buttonName={"Title"}
+                        defaultValue={getuserSpecialMomentTitle}
+                        textChange={(Title) => {
                           setuserSpecialMomentUpdateTitle(Title);
                           setPrevData({
-                            ...getPrevData,
+                            ...getuserSpecialMomentTitle,
                             Title: Title,
                           });
                         }}
                       />
                       <EditShowBtnSimpleView
                         TitleName={"Date"}
-                        placeholder={
-                          getFinalSepDate != null ? getFinalSepDate : "Date"
+                        buttonName={
+                          getFinalSepDate
+                            ? getFinalSepDate
+                            : getuserSpecialMomentDate
+                            ? getuserSpecialMomentDate
+                            : "Date"
+                        }
+                        buttonCheck={
+                          getuserSpecialMomentDate == "" ? false : true
                         }
                         onPress={() => UpdateEnterDate()}
                       />
                       <SimpleInputEditView
                         TitleName={"Link"}
-                        placeholder={"Link"}
-                        defaultValue={getPrevData.Link}
+                        buttonName={"Link"}
+                        defaultValue={getspecialMomentLink}
                         onChangeText={(Link) => {
                           setspecialMomentUpdateLink(Link);
                           setPrevData({
-                            ...getPrevData,
+                            ...getspecialMomentLink,
                             Link: Link,
                           });
                         }}
                       />
                       <SimpleInputEditView
                         TitleName={"Other Info"}
-                        placeholder={"Other Info"}
-                        defaultValue={getPrevData.OtherInfo}
+                        buttonName={"Other Info"}
+                        defaultValue={getspecialMomentOtherInfo}
                         onChangeText={(OtherInfo) => {
                           setspecialMomentUpdateOtherInfo(OtherInfo);
                           setPrevData({
-                            ...getPrevData,
+                            ...getspecialMomentOtherInfo,
                             OtherInfo: OtherInfo,
                           });
                         }}
@@ -907,6 +962,7 @@ const CalendarScreen = () => {
                   <View style={CommonStyle.my16}>
                     <DatePicker
                       mode={"date"}
+                      locale="en"
                       date={date}
                       onDateChange={setDate}
                     />
@@ -916,7 +972,7 @@ const CalendarScreen = () => {
                     style={{ flexDirection: "row", justifyContent: "center" }}
                   >
                     <POPLinkButton
-                      buttonName={AppString.Save}
+                      buttonName={AppString.Select}
                       onPress={() => SubmitDate()}
                     />
                   </View>
@@ -942,6 +998,7 @@ const CalendarScreen = () => {
                   <View style={CommonStyle.my16}>
                     <DatePicker
                       mode={"date"}
+                      locale="en"
                       date={date}
                       onDateChange={setDate}
                     />
@@ -951,7 +1008,7 @@ const CalendarScreen = () => {
                     style={{ flexDirection: "row", justifyContent: "center" }}
                   >
                     <POPLinkButton
-                      buttonName={AppString.Save}
+                      buttonName={AppString.Select}
                       onPress={() => UpdateSubmitDate()}
                     />
                   </View>
@@ -1052,9 +1109,10 @@ const CalendarScreen = () => {
                               { textAlign: "center" },
                             ]}
                           >
-                            NEW {getUserNewSpecialMomenItem}
+                            m999 {getUserNewSpecialMomenItem}
                           </Text>
                         </View>
+                        <View style={{ width: "20%" }}></View>
                       </View>
                     </View>
                     <View style={CommonStyle.my16}>
@@ -1062,6 +1120,7 @@ const CalendarScreen = () => {
                         TitleName={"Title"}
                         placeholder={"Title"}
                         defaultValue={getPrevData.Title}
+                        placeholderTextColor={COLORS.gray}
                         onChangeText={(Title) => {
                           setuserSpecialMomentTitle(Title);
                           setPrevData({
@@ -1072,8 +1131,15 @@ const CalendarScreen = () => {
                       />
                       <EditShowBtnSimpleView
                         TitleName={"Date"}
-                        placeholder={
-                          getFinalSepDate != null ? getFinalSepDate : "Date"
+                        buttonName={
+                          getFinalSepDate
+                            ? getFinalSepDate
+                            : getuserSpecialMomentDate
+                            ? getuserSpecialMomentDate
+                            : "Date"
+                        }
+                        buttonCheck={
+                          getuserSpecialMomentDate == "" ? false : true
                         }
                         onPress={() => EnterDate()}
                       />
@@ -1081,6 +1147,7 @@ const CalendarScreen = () => {
                         TitleName={"Link"}
                         placeholder={"Link"}
                         defaultValue={getPrevData.Link}
+                        placeholderTextColor={COLORS.gray}
                         onChangeText={(Link) => {
                           setspecialMomentLink(Link);
                           setPrevData({
@@ -1092,6 +1159,7 @@ const CalendarScreen = () => {
                       <SimpleInputEditView
                         TitleName={"Other Info"}
                         placeholder={"Other Info"}
+                        placeholderTextColor={COLORS.gray}
                         defaultValue={getPrevData.OtherInfo}
                         onChangeText={(OtherInfo) => {
                           setspecialMomentOtherInfo(OtherInfo);
@@ -1121,6 +1189,55 @@ const CalendarScreen = () => {
               </Modal>
             ) : null}
           </View>
+
+          {/* Payment for upgrade */}
+          {getupgradeItemModal == true ? (
+            <Modal
+              testID={"modal"}
+              isVisible={getupgradeItemModal}
+              onBackdropPress={() => CloseItem()}
+            >
+              <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+                <View>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      CommonStyle.p16,
+                      CommonStyle.textUpperCase,
+                      { textAlign: "center" },
+                    ]}
+                  >
+                    {AppString.UpgradeProfile}
+                  </Text>
+                </View>
+
+                <View>
+                  <Text
+                    style={
+                      (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
+                    }
+                  >
+                    m888 {AppString.txtUpgradecategories1}
+                    <Text style={{ color: COLORS.gold }}>
+                      {AppString.price}
+                    </Text>
+                    <Text>{AppString.txtUpgradecategories2}</Text>
+                  </Text>
+                </View>
+                <View style={CommonStyle.centerRow}>
+                  <POPOutLinkButton
+                    buttonName={AppString.Later}
+                    onPress={() => CloseItem()}
+                  />
+
+                  <POPLinkButton
+                    buttonName={AppString.Upgrade}
+                    onPress={() => CloseItem()}
+                  />
+                </View>
+              </View>
+            </Modal>
+          ) : null}
         </ScrollView>
         <Spinner visible={getLoader} />
       </SafeAreaView>

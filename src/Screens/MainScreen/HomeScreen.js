@@ -818,14 +818,20 @@ const HomeScreen = () => {
                         >
                           m222 {getAddNewItem}
                         </Text>
-                        <View style={{ width: "20%" }}></View>
                       </View>
-                      <TouchableOpacity onPress={() => DeletedExplore()}>
-                        <Image
-                          source={imgDelete}
-                          style={CommonStyle.imgIconSize}
-                        />
-                      </TouchableOpacity>
+                      <View style={{ width: "20%" }}>
+                        <TouchableOpacity
+                          style={{
+                            alignItems: "flex-end",
+                          }}
+                          onPress={() => DeletedExplore()}
+                        >
+                          <Image
+                            source={imgDelete}
+                            style={CommonStyle.imgIconSize}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     </View>
                     <View style={CommonStyle.my16}>
                       {getShowOldQuestion.length > 0 &&
