@@ -214,19 +214,17 @@ const HomeScreen = () => {
     // setLoading(true);
     // HapticFeedback.trigger("impactLight");
 
-    var date = Moment("15/02/2013", "DD/MM/YYYY");
-    var startDate = Moment("12/03/2013", "DD/MM/YYYY");
-    var endDate = Moment("15/01/2013", "DD/MM/YYYY");
+    var currentDate = Moment(new Date(), "DD/MM/YYYY");
 
-    if (date.isBefore(startDate)) {
-      alert("Yay!");
-    } else {
-      alert("Nay! :(");
-    }
     try {
       const purchaserInfo1 = await Purchases.getPurchaserInfo();
-      console.log("purchaserInfo:", purchaserInfo1.latestExpirationDate);
-
+      var latestExpirationDates = Moment(
+        purchaserInfo1.latestExpirationDate,
+        "DD/MM/YYYY"
+      );
+      if (currentDate.isBefore(latestExpirationDates)) {
+      } else {
+      }
       const offerings = await Purchases.getOfferings();
       console.log("offerings:", offerings);
       const monthlyPackage = offerings.current.monthly;
@@ -235,11 +233,12 @@ const HomeScreen = () => {
       debugger;
       console.log("latestExpirationDate:", latestExpirationDate);
 
-      const { error } = await userSubscription(
-        "1.99",
-        Moment(latestExpirationDate).format("YYYY-MM-DD"),
-        Moment(new Date()).format("YYYY-MM-DD")
-      );
+      const { UserSubscriptionResponse, UserSubscriptionError } =
+        await userSubscription(
+          "1.99",
+          Moment(latestExpirationDate).format("YYYY-MM-DD"),
+          Moment(new Date()).format("YYYY-MM-DD")
+        );
       // if (error)
       //   throw new Error(
       //     error?.response?.data?.error || error.message || "Unkown error."

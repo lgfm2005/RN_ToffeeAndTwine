@@ -291,3 +291,13 @@ export const UserSubscription = {
       data
     ),
 };
+
+export const UpdateNotification = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `rest_api/controller_user/update_notification_id`,
+      "post",
+      data
+    ),
+};

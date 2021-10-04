@@ -60,6 +60,7 @@ const MainScreen = ({ navigation }) => {
     getUserCategoryQuestion,
     socialAuth,
     GetSpecialMoment,
+    updateNotification,
   } = useActions();
 
   useEffect(() => {
@@ -80,6 +81,11 @@ const MainScreen = ({ navigation }) => {
   const registerForPushNotifications = (permission) => {
     // console.log("registerForPushNotifications::", permission);
     // do something with permission value
+  };
+
+  const getToken = async () => {
+    const deviceState = await (await OneSignal.getDeviceState()).pushToken;
+    return deviceState;
   };
 
   React.useEffect(() => {
@@ -130,6 +136,10 @@ const MainScreen = ({ navigation }) => {
       const isRegistered = response.data.Result.IsRegistered;
       if (isRegistered == "1") {
         const token = { token: tokens };
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
+        ///Device Token:- 032e9f8679129d8c8571fffcc8213a673f1de60478f867a10c5bca161abf6764
+
         const { GetCategoryListerror, GetCategoryListresponse } =
           await CategoryList(30, token);
         if (GetCategoryListresponse.data.StatusCode == "1") {

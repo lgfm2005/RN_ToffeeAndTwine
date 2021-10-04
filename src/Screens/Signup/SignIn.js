@@ -44,6 +44,7 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from "react-native-fbsdk";
+import OneSignal from "react-native-onesignal";
 
 const SignIn = ({ navigation }) => {
   const {
@@ -52,6 +53,7 @@ const SignIn = ({ navigation }) => {
     getUserCategoryQuestion,
     socialAuth,
     GetSpecialMoment,
+    updateNotification,
   } = useActions();
   const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
@@ -71,6 +73,11 @@ const SignIn = ({ navigation }) => {
     });
     // SignedIn();
   }, []);
+
+  const getToken = async () => {
+    const deviceState = await (await OneSignal.getDeviceState()).pushToken;
+    return deviceState;
+  };
 
   const SignedIn = async () => {
     const isSignedIn = await GoogleSignin.isSignedIn();
@@ -111,6 +118,8 @@ const SignIn = ({ navigation }) => {
       const isRegistered = response.data.Result.IsRegistered;
       if (isRegistered == "1") {
         const token = { token: tokens };
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
         const { GetCategoryListerror, GetCategoryListresponse } =
           await CategoryList(30, token);
         if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -198,6 +207,8 @@ const SignIn = ({ navigation }) => {
     if (response.data.StatusCode == "1") {
       const tokens = response.data.Result[0].Token;
       const token = { token: tokens };
+      var deviceToken = await getToken();
+      await updateNotification(token, deviceToken);
       const { GetCategoryListerror, GetCategoryListresponse } =
         await CategoryList(30, token);
       if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -363,10 +374,10 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                // onPress={() => handleSignIn(getEmail, getCreatePassword)}
+                onPress={() => handleSignIn(getEmail, getCreatePassword)}
                 // btncheck={isvalidForm()}
                 // btnabled={isvalidForm()}
-                onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
+                // onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
                 // onPress={() => handleSignIn("rshah@uninversalstreamsolution.com", "12345")}
                 // onPress={() => handleSignIn("uss.jignesh@gmail.com", "12345")}
               />

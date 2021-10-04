@@ -47,6 +47,7 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from "react-native-fbsdk";
+import OneSignal from "react-native-onesignal";
 
 const Signup = ({ navigation }) => {
   const {
@@ -55,6 +56,7 @@ const Signup = ({ navigation }) => {
     getUserCategoryQuestion,
     socialAuth,
     GetSpecialMoment,
+    updateNotification,
   } = useActions();
 
   const keyboardVerticalOffset = Platform.OS === "ios" ? 1 : 0;
@@ -91,6 +93,11 @@ const Signup = ({ navigation }) => {
     // SignedIn();
   }, []);
 
+  const getToken = async () => {
+    const deviceState = await (await OneSignal.getDeviceState()).pushToken;
+    return deviceState;
+  };
+
   const socialAuthLogin = async (firstName, lastName, email, type) => {
     const { error, response } = await socialAuth(
       firstName,
@@ -103,6 +110,8 @@ const Signup = ({ navigation }) => {
       const isRegistered = response.data.Result.IsRegistered;
       if (isRegistered == "1") {
         const token = { token: tokens };
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
         const { GetCategoryListerror, GetCategoryListresponse } =
           await CategoryList(30, token);
         if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -306,6 +315,9 @@ const Signup = ({ navigation }) => {
         await GetSpecialMoment({
           token: tokens,
         });
+      var tokenInfo = { token: tokens };
+      var deviceToken = await getToken();
+      await updateNotification(tokenInfo, deviceToken);
       if (signUpresponse.data.StatusCode == "1") {
         if (specialMomentResponse.data.StatusCode == "1") {
           navigation.navigate("TutorialFirst", {

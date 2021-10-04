@@ -10,6 +10,7 @@ import {
 import { createAction } from "redux-actions";
 import * as API from "./api";
 import { showMessage } from "react-native-flash-message";
+import OneSignal from "react-native-onesignal";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -70,6 +71,7 @@ export const useActions = () => {
       data.append("Email", Email);
       data.append("Password", Password);
       data.append("CPassword", CPassword);
+
       let signUpresponse, signUperror;
       try {
         signUpresponse = await API.Signups.signUp(data);
@@ -663,6 +665,23 @@ export const useActions = () => {
         UserSubscriptionError = e;
       }
       return { UserSubscriptionResponse, UserSubscriptionError };
+    },
+
+    updateNotification: async (token, UserNotificationID) => {
+      let updateNotificationResponse, updateNotificationError;
+      try {
+        var data = new FormData();
+        data.append("UserNotificationID", UserNotificationID);
+        updateNotificationResponse = await API.UpdateNotification.get(
+          token,
+          data
+        );
+        if (updateNotificationResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        updateNotificationError = e;
+      }
+      return { updateNotificationResponse, updateNotificationError };
     },
 
     //
