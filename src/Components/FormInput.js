@@ -82,7 +82,6 @@ export const SimpleInputEditView = ({
   value,
   ...props
 }) => {
-  console.log("value ===>", value);
   return (
     <View style={[CommonStyle.formSimpletxtEditView]}>
       <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
@@ -94,6 +93,7 @@ export const SimpleInputEditView = ({
         placeholder={buttonName}
         onChangeText={textChange}
         selectionColor={COLORS.Primary}
+        color={value != "" ? COLORS.Primary : COLORS.gray}
         placeholderTextColor={COLORS.gray}
         {...props}
       />
@@ -130,18 +130,27 @@ export const EditShowSimpleView = ({
 export const EditShowBtnSimpleView = ({
   TitleName,
   buttonName,
-  placeholder,
+  buttonCheck,
   onPress,
   ...props
 }) => {
   return (
-    <View style={[CommonStyle.formSimpletxtEditView]}>
+    <View
+      style={[
+        CommonStyle.formSimpletxtEditView,
+        { paddingTop: 10, paddingBottom: 10 },
+      ]}
+    >
       <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
         {TitleName}
       </Text>
       <TouchableOpacity onPress={onPress}>
         <View style={{ paddingLeft: 16 }}>
-          <Text style={{ color: COLORS.Primary }}>{placeholder}</Text>
+          {buttonCheck == false && buttonName == "Date" ? (
+            <Text style={{ color: COLORS.gray }}>{buttonName}</Text>
+          ) : (
+            <Text style={{ color: COLORS.Primary }}>{buttonName}</Text>
+          )}
         </View>
       </TouchableOpacity>
     </View>

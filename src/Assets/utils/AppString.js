@@ -132,6 +132,7 @@ export const AppString = {
   txtUpgradecategories2: " per month to add more than 5 categories.",
   Giftit: "Gift it",
   NoThanks: "No, Thanks",
+  Select: "Select",
   YesNotify: "Yes, Notify",
   Deleteaccount: "Delete account",
   Logout: "Logout",
