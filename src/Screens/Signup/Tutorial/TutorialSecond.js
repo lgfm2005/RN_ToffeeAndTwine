@@ -125,10 +125,20 @@ const TutorialSecond = ({ navigation, props, route }) => {
   };
 
   // Add New Categories Question
+  // const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
+  //   temp[key] = {
+  //     categoryId,
+  //     categoryQuestionId,
+  //     value,
+  //     key,
+  //   };
+  //   setQuestionsData(temp);
+  // };
+
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
     temp[key] = {
-      categoryId,
-      categoryQuestionId,
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
       value,
       key,
     };

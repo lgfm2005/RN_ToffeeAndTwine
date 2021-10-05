@@ -78,7 +78,7 @@ const MyProfile = ({ navigation }) => {
     getUserCategoryQuestion,
     updateCategoryQuestion,
     deleteUserCategoryQuestion,
-
+    getProfile,
     deleteUserCategorySpecialDay,
     updateCategorySpecialMoment,
     getUserCategorySpecialMoment,
@@ -168,6 +168,10 @@ const MyProfile = ({ navigation }) => {
 
   const [setFinalDataShow, getFinalDataShow] = useState("");
 
+  const [getMomentsCount, setMomentsCount] = useState(0);
+  const [getFollowerCount, setFollowerCount] = useState("0");
+  const [getFollowingCount, setFollowingCount] = useState("0");
+
   useEffect(() => {
     if (userSpecialMoment) {
       console.log(
@@ -234,7 +238,6 @@ const MyProfile = ({ navigation }) => {
     }).then((image) => {
       setImage(image.path);
       setImageurl(image);
-      debugger;
       console.log("image===>", image);
     });
   };
@@ -248,8 +251,6 @@ const MyProfile = ({ navigation }) => {
     }).then((image) => {
       setImage(image.path);
       setImageurl(image);
-
-      debugger;
       // console.log("image===>", image);
     });
   };
@@ -265,7 +266,6 @@ const MyProfile = ({ navigation }) => {
     setAddNewItem(Name);
     setIdItem(id);
     setShowOldQuestion(questions);
-    debugger;
   };
 
   // All categories Select show (Show All Item)
@@ -365,15 +365,12 @@ const MyProfile = ({ navigation }) => {
         getImageurl
       );
 
-    debugger;
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-    debugger;
     if (
       updateCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
-      debugger;
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       // setAddNewFreshItemModal(false);
       setUpdateDataModal(false);
@@ -410,12 +407,10 @@ const MyProfile = ({ navigation }) => {
       await addCategoryQuestion(userData, 0, getQuestionsData, getImageurl);
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-    debugger;
     if (
       addCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
-      debugger;
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
@@ -497,7 +492,6 @@ const MyProfile = ({ navigation }) => {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-    debugger;
     if (
       deleteUserCategorySpecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
@@ -508,9 +502,7 @@ const MyProfile = ({ navigation }) => {
       setFinalSepDate("");
       setuserSpecialMomentDate("");
       setLoader(false);
-      debugger;
     } else {
-      debugger;
       setFinalSepDate("");
       setuserSpecialMomentDate("");
       setLoader(false);
@@ -610,7 +602,6 @@ const MyProfile = ({ navigation }) => {
     specialMomentOtherInfo,
     Imageurl
   ) => {
-    debugger;
     // console.log("userSpecialMomentId", userSpecialMomentId);
     // console.log("specialMomentId", specialMomentId);
     // console.log("specialMomentName", specialMomentName);
@@ -637,12 +628,11 @@ const MyProfile = ({ navigation }) => {
 
     // if (!getFinalSepDate) {
     //   getFinalDataShow("");
-    //   debugger;
+    //     ;
     // } else {
     //   getFinalDataShow(getFinalSepDate);
-    //   debugger;
+    //     ;
     // }
-    debugger;
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
@@ -653,7 +643,6 @@ const MyProfile = ({ navigation }) => {
         JSON.stringify(getImageurl),
         "0"
       );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -694,7 +683,6 @@ const MyProfile = ({ navigation }) => {
     setEditItemSepModal(false);
     setUserOldSpecialMomentModal(false);
 
-    debugger;
     const {
       updateCategorySpecialMomentResponse,
       updateCategorySpecialMomentError,
@@ -709,7 +697,6 @@ const MyProfile = ({ navigation }) => {
       // getspecialMomentUpdateOtherInfo,
       JSON.stringify(getImageurl)
     );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -787,6 +774,19 @@ const MyProfile = ({ navigation }) => {
   useEffect(() => {
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
+  }, []);
+
+  const getProfiles = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode) {
+      debugger;
+      setFollowerCount(profileResponse.data.Result[0].follower_count);
+      setFollowingCount(profileResponse.data.Result[0].following_count);
+      setMomentsCount(profileResponse.data.Result[0].special_moment_count);
+    }
+  };
+  useEffect(() => {
+    getProfiles();
   }, []);
 
   return (
@@ -893,9 +893,10 @@ const MyProfile = ({ navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
-                  {userSpecialMoment.length == undefined
+                  {getMomentsCount == 0 ? "--" : getMomentsCount}
+                  {/* {userSpecialMoment.length == undefined
                     ? "0"
-                    : userSpecialMoment.length}
+                    : userSpecialMoment.length} */}
                 </Text>
                 <Text
                   style={[
@@ -910,7 +911,7 @@ const MyProfile = ({ navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
-                  10k
+                  {getFollowerCount == "0" ? "--" : getFollowerCount}
                 </Text>
                 <Text
                   style={[
@@ -925,7 +926,7 @@ const MyProfile = ({ navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
-                  920
+                  {getFollowingCount == "0" ? "--" : getFollowingCount}
                 </Text>
                 <Text
                   style={[

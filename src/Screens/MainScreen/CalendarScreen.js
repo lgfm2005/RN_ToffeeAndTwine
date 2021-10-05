@@ -242,7 +242,6 @@ const CalendarScreen = () => {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-    debugger;
     if (
       deleteUserCategorySpecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
@@ -253,9 +252,7 @@ const CalendarScreen = () => {
       setFinalSepDate("");
       setuserSpecialMomentDate("");
       setLoader(false);
-      debugger;
     } else {
-      debugger;
       setFinalSepDate("");
       setuserSpecialMomentDate("");
       setLoader(false);
@@ -322,11 +319,8 @@ const CalendarScreen = () => {
     setUserOldSpecialMomentModal(false);
     setEditItemSepModal(true);
     setEditSepItem(getspecialMomentName);
-    debugger;
     console.log("EWfewfewfwfewf=>>>>>>>>>>", getuserSpecialMomentDate);
-    debugger;
     setFinalSepDate(getuserSpecialMomentDate);
-    debugger;
   };
 
   // oldUserSpecialMoment --> 1.Open
@@ -366,12 +360,11 @@ const CalendarScreen = () => {
 
     // if (!getFinalSepDate) {
     //   getFinalDataShow("");
-    //   debugger;
+    //      ;
     // } else {
     //   getFinalDataShow(getFinalSepDate);
-    //   debugger;
+    //      ;
     // }
-    debugger;
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
@@ -382,7 +375,6 @@ const CalendarScreen = () => {
         JSON.stringify(getImageurl),
         "0"
       );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -423,7 +415,6 @@ const CalendarScreen = () => {
     setEditItemSepModal(false);
     setUserOldSpecialMomentModal(false);
 
-    debugger;
     const {
       updateCategorySpecialMomentResponse,
       updateCategorySpecialMomentError,
@@ -438,7 +429,6 @@ const CalendarScreen = () => {
       // getspecialMomentUpdateOtherInfo,
       JSON.stringify(getImageurl)
     );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,

@@ -101,7 +101,6 @@ const HomeScreen = () => {
       setLoader(false);
       // console.log("Category List Error", GetCategoryListerror);
     }
-
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
     if (UserCategoryQuestionResponse.data.StatusCode == "1") {
@@ -119,7 +118,6 @@ const HomeScreen = () => {
       //   GetCategoryListerror
       // );
     }
-
     const { specialMomentResponse, specialMomentError } =
       await GetSpecialMoment();
     if (specialMomentResponse.data.StatusCode == "1") {
@@ -128,20 +126,22 @@ const HomeScreen = () => {
       setLoader(false);
       console.log(" special Moment Error");
     }
-
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-    if (getUserCategorySpecialMomentResponse.data.StatusCode == "1") {
-      console.log("special User Moment Response Done ");
+    if (getUserCategorySpecialMomentError) {
       setLoader(false);
     } else {
-      setLoader(false);
-      console.log(
-        " special User Moment Response Error",
-        getUserCategorySpecialMomentError
-      );
+      if (getUserCategorySpecialMomentResponse.data.StatusCode == "1") {
+        console.log("special User Moment Response Done ");
+      } else {
+        setLoader(false);
+        console.log(
+          " special User Moment Response Error",
+          getUserCategorySpecialMomentError
+        );
+      }
     }
   }, []);
 
@@ -205,7 +205,6 @@ const HomeScreen = () => {
       setImageNew(image.path);
       setImage(image.path);
       setImageStatus(1);
-      debugger;
       // console.log("image===>", image);
     });
   };
@@ -240,7 +239,6 @@ const HomeScreen = () => {
       const monthlyPackage = offerings.current.monthly;
       const { purchaserInfo } = await Purchases.purchasePackage(monthlyPackage);
       const { latestExpirationDate } = purchaserInfo;
-      debugger;
       console.log("latestExpirationDate:", latestExpirationDate);
 
       const { UserSubscriptionResponse, UserSubscriptionError } =
@@ -332,15 +330,12 @@ const HomeScreen = () => {
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
       await addCategoryQuestion(userData, 0, getQuestionsData, getImageAPI);
-    debugger;
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-    debugger;
     if (
       addCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
-      debugger;
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       setAddItemShowModal(false);
       setEditItemModal(false);
@@ -408,15 +403,12 @@ const HomeScreen = () => {
         getIdItem,
         getImageAPI
       );
-    debugger;
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-    debugger;
     if (
       updateCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
-      debugger;
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       // setAddNewFreshItemModal(false);
       setLoader(false);
@@ -463,7 +455,6 @@ const HomeScreen = () => {
     var questionList = userCategoryQuestion[key];
     console.log("SquestionList", questionList);
     setImageOld(Image);
-    debugger;
     setShowOldQuestion([]);
     setTimeout(() => {
       setShowOldQuestion(questions);
@@ -479,7 +470,6 @@ const HomeScreen = () => {
     setAddNewItemModal(false);
     setUpdateDataModal(true);
     setUpdateDataItem(getAddNewItem);
-    debugger;
     // setEditItemModal(true);
     // setEditItem(getAddNewItem);
   };

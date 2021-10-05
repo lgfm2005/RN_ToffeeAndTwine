@@ -414,6 +414,7 @@ export const useActions = () => {
       try {
         getUserCategorySpecialMomentResponse =
           await API.GetUserCategorySpecialMoment.get(sessions);
+        debugger;
         if (getUserCategorySpecialMomentResponse.data.StatusCode == "1") {
           dispatch(
             userSpecialMoment(getUserCategorySpecialMomentResponse.data.Result)
@@ -422,9 +423,16 @@ export const useActions = () => {
           dispatch(userSpecialMoment([]));
         }
       } catch (e) {
+        debugger;
         getUserCategorySpecialMomentError = e;
+        console.log(
+          "getUserCategorySpecialMomentError::",
+          getUserCategorySpecialMomentError
+        );
         dispatch(userSpecialMoment([]));
       }
+
+      debugger;
       return {
         getUserCategorySpecialMomentResponse,
         getUserCategorySpecialMomentError,
