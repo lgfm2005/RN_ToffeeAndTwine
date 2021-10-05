@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1210"
+   LastUpgradeVersion = "1250"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -24,26 +24,16 @@
    </BuildAction>
    <TestAction
       buildConfiguration = "Debug"
-      selected Identifier = "Xcode. Foundation. .LLDB"
-      selectedLauncherIdentifier = "Xcode. Foundation.Launcher.LLDB"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "toffeetwineTests.xctest"
-               BlueprintName = "toffeetwineTests"
-               ReferencedContainer = "container:toffeetwine.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
-      selected Identifier = "Xcode. Foundation. .LLDB"
-      selectedLauncherIdentifier = "Xcode. Foundation.Launcher.LLDB"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"

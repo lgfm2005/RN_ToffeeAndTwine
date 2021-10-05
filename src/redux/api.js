@@ -306,3 +306,8 @@ export const FollowUser = {
   get: async (session, data) =>
     await api(session, `rest_api/controller_friend/follow_user`, "post", data),
 };
+
+export const BlockFriend = {
+  get: async (session, data) =>
+    await api(session, `rest_api/controller_friend/block_friend`, "post", data),
+};

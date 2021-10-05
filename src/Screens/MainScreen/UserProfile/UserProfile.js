@@ -91,7 +91,7 @@ const Data = [
 
 const UserProfile = ({ route, navigation }) => {
   const { userInfo } = route.params;
-  const { getProfile } = useActions();
+  const { getProfile, followUser, blockFriend } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
@@ -102,6 +102,8 @@ const UserProfile = ({ route, navigation }) => {
   const [getMomentsCount, setMomentsCount] = useState(0);
   const [getFollowerCount, setFollowerCount] = useState("0");
   const [getFollowingCount, setFollowingCount] = useState("0");
+  const [friendSpecialMoments, setFriendSpecialMoments] = useState([]);
+  const [friendCategoryQuestions, setFriendCategoryQuestions] = useState([]);
 
   const CloseItem = () => {
     setUserBlockModal(false);
@@ -128,15 +130,33 @@ const UserProfile = ({ route, navigation }) => {
     setAwesomeShowModal(true),
   ];
 
+  const followUserAction = async () => {
+    const { followUserResponse, followUserError } = await followUser(
+      userInfo.user_id
+    );
+  };
+  const blockFriendAction = async () => {
+    const { blockFriendResponse, blockFriendError } = await blockFriend(
+      userInfo.user_id,
+      1
+    );
+  };
+
   const getProfiles = async () => {
     const { profileResponse, profileError } = await getProfile(
       userInfo.user_id
     );
-    debugger;
+
     if (profileResponse.data.StatusCode) {
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
       setMomentsCount(profileResponse.data.Result[0].special_moment_count);
+      setFriendCategoryQuestions(
+        profileResponse.data.Result[0].friend_category_questions
+      );
+      setFriendSpecialMoments(
+        profileResponse.data.Result[0].friend_special_moments
+      );
     }
   };
   useEffect(() => {
@@ -223,8 +243,8 @@ const UserProfile = ({ route, navigation }) => {
                 </View>
                 <FilledButton
                   buttonName={AppString.Follow}
-                  styleBtn={Mediumbtn}
-                  onPress={() => UserFollow()}
+                  styleBtn={[Mediumbtn, { marginHorizontal: 10 }]}
+                  onPress={() => followUserAction()}
                 />
               </View>
             </View>
@@ -262,16 +282,30 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {Data.length > 0 &&
-                  Data.map((item, index) => (
+                {friendCategoryQuestions.length > 0 &&
+                  friendCategoryQuestions.map((item, index) => (
                     <CalendarList
-                      ImageUrl={item.Image}
-                      ExploreName={item.Name}
-                      Id={item.id}
+                      ImageUrl={imgBook}
+                      ExploreName={item.category_name}
+                      Id={item.category_id}
                       index={index}
                       key={index}
-                      DataLength={Data.length}
-                      onPress={() => FavoriteThings(item.Name)}
+                      DataLength={friendCategoryQuestions.length}
+                      ShowBtn={false}
+                      onPress={() =>
+                        // ShowOldItem(
+                        //   item.category_name,
+                        //   item.user_category_image,
+                        //   item.category_id,
+                        //   index,
+                        //   item.questions
+                        // )
+                        console.log("ddfdf")
+                      }
+                      AddNewOnPress={
+                        () => console.log("ddfdf")
+                        //  AddItemShow(index)
+                      }
                     />
                   ))}
               </ScrollView>
@@ -287,16 +321,30 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {Data.length > 0 &&
-                  Data.map((item, index) => (
+                {friendSpecialMoments.length > 0 &&
+                  friendSpecialMoments.map((item, index) => (
                     <CalendarList
-                      ImageUrl={item.Image}
-                      ExploreName={item.Name}
-                      Id={item.id}
+                      ImageUrl={imgBook}
+                      ExploreName={item.special_moment_name}
+                      Id={item.special_moment_id}
                       index={index}
                       key={index}
-                      DataLength={Data.length}
-                      // onPress={() => FavoriteThings(item.Name)}
+                      DataLength={friendSpecialMoments.length}
+                      ShowBtn={false}
+                      onPress={() =>
+                        // ShowOldItem(
+                        //   item.category_name,
+                        //   item.user_category_image,
+                        //   item.category_id,
+                        //   index,
+                        //   item.questions
+                        // )
+                        console.log("ddfdf")
+                      }
+                      AddNewOnPress={
+                        () => console.log("ddfdf")
+                        //  AddItemShow(index)
+                      }
                     />
                   ))}
               </ScrollView>
@@ -309,7 +357,10 @@ const UserProfile = ({ route, navigation }) => {
                 onBackdropPress={() => CloseItem()}
               >
                 <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
-                  <View style={CommonStyle.Row}>
+                  <TouchableOpacity
+                    onPress={() => blockFriendAction()}
+                    style={CommonStyle.Row}
+                  >
                     <Image
                       source={imgUserBlock}
                       style={CommonStyle.imgIconSize}
@@ -317,7 +368,7 @@ const UserProfile = ({ route, navigation }) => {
                     <Text style={[CommonStyle.txtTitle, { paddingLeft: 15 }]}>
                       Block
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 </View>
               </Modal>
             ) : null}

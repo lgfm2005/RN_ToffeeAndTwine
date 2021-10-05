@@ -135,6 +135,7 @@ const HomeScreen = () => {
     } else {
       if (getUserCategorySpecialMomentResponse.data.StatusCode == "1") {
         console.log("special User Moment Response Done ");
+        setLoader(false);
       } else {
         setLoader(false);
         console.log(

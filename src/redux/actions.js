@@ -716,6 +716,22 @@ export const useActions = () => {
       return { followUserResponse, followUserError };
     },
 
+    blockFriend: async (BlockTo, Status) => {
+      let blockFriendResponse, blockFriendError;
+      try {
+        var data = new FormData();
+        data.append("BlockTo", BlockTo);
+        data.append("Status", Status);
+
+        blockFriendResponse = await API.BlockFriend.get(sessions, data);
+        if (blockFriendResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        blockFriendError = e;
+      }
+      return { blockFriendResponse, blockFriendError };
+    },
+
     //
   };
 };

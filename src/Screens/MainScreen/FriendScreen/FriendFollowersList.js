@@ -43,6 +43,7 @@ import {
   imgWhiteAnniversary,
   imgWhiteChristmas,
   imgWhiteDot,
+  imgBook,
   demofaceman,
 } from "../../../Assets/utils/Image";
 import { MainScreenStyle } from "../MainScreenStyle";
@@ -84,7 +85,7 @@ const SprecialMOmentsData = [
 
 const FriendFollowersList = ({ route, navigation }) => {
   const { userID } = route.params;
-  const { getProfile } = useActions();
+  const { getProfile, RemoveFollowerFriend, blockFriend } = useActions();
   const [getUserBlockModal, setUserBlockModal] = useState(false);
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
   const [getNotificationSendModal, setNotificationSendModal] = useState(false);
@@ -95,6 +96,9 @@ const FriendFollowersList = ({ route, navigation }) => {
   const [getUserName, setUserName] = useState("");
 
   const [getAddNewItem, setAddNewItem] = useState(false);
+
+  const [friendSpecialMoments, setFriendSpecialMoments] = useState([]);
+  const [friendCategoryQuestions, setFriendCategoryQuestions] = useState([]);
 
   const CloseItem = () => {
     setUserBlockModal(false);
@@ -121,6 +125,17 @@ const FriendFollowersList = ({ route, navigation }) => {
     setAwesomeShowModal(true),
   ];
 
+  const blockFriendAction = async () => {
+    const { blockFriendResponse, blockFriendError } = await blockFriend(
+      userID,
+      1
+    );
+  };
+  const removeFollowerFriend = async () => {
+    const { RemoveFriendResponse, RemoveFriendError } =
+      await RemoveFollowerFriend(userID);
+  };
+
   const getProfiles = async () => {
     const { profileResponse, profileError } = await getProfile(userID);
     if (profileResponse.data.StatusCode) {
@@ -134,6 +149,13 @@ const FriendFollowersList = ({ route, navigation }) => {
         " " +
         profileResponse.data.Result[0].user_details[0].user_lname;
       setUserName(name);
+
+      setFriendCategoryQuestions(
+        profileResponse.data.Result[0].friend_category_questions
+      );
+      setFriendSpecialMoments(
+        profileResponse.data.Result[0].friend_special_moments
+      );
     }
   };
   useEffect(() => {
@@ -226,8 +248,8 @@ const FriendFollowersList = ({ route, navigation }) => {
                 </View>
                 <FilledButton
                   buttonName={AppString.Remove}
-                  styleBtn={Mediumbtn}
-                  onPress={() => {}}
+                  styleBtn={[Mediumbtn, { marginHorizontal: 10 }]}
+                  onPress={() => removeFollowerFriend()}
                 />
               </View>
             </View>
@@ -237,7 +259,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
-                  {getMomentsCount}
+                  {getMomentsCount == 0 ? "--" : getMomentsCount}
                 </Text>
                 <Text
                   style={[
@@ -252,7 +274,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
-                  {getFollowerCount}
+                  {getFollowerCount == "0" ? "--" : getFollowerCount}
                 </Text>
                 <Text
                   style={[
@@ -267,7 +289,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
-                  {getFollowingCount}
+                  {getFollowingCount == "0" ? "--" : getFollowingCount}
                 </Text>
                 <Text
                   style={[
@@ -296,16 +318,30 @@ const FriendFollowersList = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {Data.length > 0 &&
-                  Data.map((item, index) => (
+                {friendCategoryQuestions.length > 0 &&
+                  friendCategoryQuestions.map((item, index) => (
                     <CalendarList
-                      ImageUrl={item.Image}
-                      ExploreName={item.Name}
-                      // Id={item.id}
-                      // index={index}
+                      ImageUrl={imgBook}
+                      ExploreName={item.category_name}
+                      Id={item.category_id}
+                      index={index}
                       key={index}
-                      DataLength={Data.length}
-                      onPress={() => FavoriteThings(item.Name)}
+                      DataLength={friendCategoryQuestions.length}
+                      ShowBtn={false}
+                      onPress={() =>
+                        // ShowOldItem(
+                        //   item.category_name,
+                        //   item.user_category_image,
+                        //   item.category_id,
+                        //   index,
+                        //   item.questions
+                        // )
+                        console.log("ddfdf")
+                      }
+                      AddNewOnPress={
+                        () => console.log("ddfdf")
+                        //  AddItemShow(index)
+                      }
                     />
                   ))}
               </ScrollView>
@@ -327,16 +363,30 @@ const FriendFollowersList = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {SprecialMOmentsData.length > 0 &&
-                  SprecialMOmentsData.map((item, index) => (
+                {friendSpecialMoments.length > 0 &&
+                  friendSpecialMoments.map((item, index) => (
                     <CalendarList
-                      ImageUrl={item.Image}
-                      ExploreName={item.Name}
-                      // Id={item.id}
-                      // index={index}
+                      ImageUrl={imgBook}
+                      ExploreName={item.special_moment_name}
+                      Id={item.special_moment_id}
+                      index={index}
                       key={index}
-                      DataLength={Data.length}
-                      // onPress={() => FavoriteThings(item.Name)}
+                      DataLength={friendSpecialMoments.length}
+                      ShowBtn={false}
+                      onPress={() =>
+                        // ShowOldItem(
+                        //   item.category_name,
+                        //   item.user_category_image,
+                        //   item.category_id,
+                        //   index,
+                        //   item.questions
+                        // )
+                        console.log("ddfdf")
+                      }
+                      AddNewOnPress={
+                        () => console.log("ddfdf")
+                        //  AddItemShow(index)
+                      }
                     />
                   ))}
               </ScrollView>
@@ -349,7 +399,10 @@ const FriendFollowersList = ({ route, navigation }) => {
                 onBackdropPress={() => CloseItem()}
               >
                 <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
-                  <View style={CommonStyle.Row}>
+                  <TouchableOpacity
+                    onPress={() => blockFriendAction()}
+                    style={CommonStyle.Row}
+                  >
                     <Image
                       source={imgUserBlock}
                       style={CommonStyle.imgIconSize}
@@ -357,7 +410,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                     <Text style={[CommonStyle.txtTitle, { paddingLeft: 15 }]}>
                       Block
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 </View>
               </Modal>
             ) : null}

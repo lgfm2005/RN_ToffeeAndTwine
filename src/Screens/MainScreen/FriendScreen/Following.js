@@ -64,22 +64,32 @@ const Following = ({ navigation }) => {
     }
   };
 
+  const selectFriend = (item) => {
+    console.log("selectFriend", item);
+    navigation.navigate("FriendFollowersList", {
+      userID: item.following_user_id,
+    });
+  };
+
   const RenderItem = (Data, index) => {
     return (
       <View style={[FriendScreenStyle.FollowerListBg, CommonStyle.mb16]}>
-        <View style={FriendScreenStyle.followerTxtIcon}>
-          <Image
-            source={
-              Data.item.user_profile_image == ""
-                ? { uri: Data.item.user_profile_image }
-                : imgPlaceHolder
-            }
-            style={CommonStyle.showProfileImage}
-          />
-          <Text style={CommonStyle.txtFrienduserName}>
-            {Data.item.user_fname + " " + Data.item.user_lname}
-          </Text>
-        </View>
+        <TouchableOpacity onPress={() => selectFriend(Data.item)}>
+          <View style={FriendScreenStyle.followerTxtIcon}>
+            <Image
+              source={
+                Data.item.user_profile_image == ""
+                  ? { uri: Data.item.user_profile_image }
+                  : imgPlaceHolder
+              }
+              style={CommonStyle.showProfileImage}
+            />
+            <Text style={CommonStyle.txtFrienduserName}>
+              {Data.item.user_fname + " " + Data.item.user_lname}
+            </Text>
+          </View>
+        </TouchableOpacity>
+
         <View style={FriendScreenStyle.btnBg}>
           <POPLinkButton
             buttonName={AppString.UnFollow}
