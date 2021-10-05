@@ -341,6 +341,8 @@ const SignIn = ({ navigation }) => {
               <FormInput
                 buttonName={AppString.Enteremailaddress}
                 textChange={(Email) => setEmail(Email)}
+                keyboardType="email-address"
+                autoCapitalize="none"
               />
             </View>
 
@@ -375,8 +377,8 @@ const SignIn = ({ navigation }) => {
               <FilledButton
                 buttonName={AppString.Signin}
                 onPress={() => handleSignIn(getEmail, getCreatePassword)}
-                // btncheck={isvalidForm()}
-                // btnabled={isvalidForm()}
+                btncheck={isvalidForm()}
+                btnabled={isvalidForm()}
                 // onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
                 // onPress={() => handleSignIn("rshah@uninversalstreamsolution.com", "12345")}
                 // onPress={() => handleSignIn("uss.jignesh@gmail.com", "12345")}

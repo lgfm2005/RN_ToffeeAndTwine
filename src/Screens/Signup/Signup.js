@@ -367,6 +367,8 @@ const Signup = ({ navigation }) => {
               <FormInput
                 buttonName={AppString.Enteremailaddress}
                 textChange={(Email) => setEmail(Email)}
+                keyboardType="email-address"
+                autoCapitalize="none"
               />
             </View>
 

@@ -165,6 +165,12 @@ const HomeScreen = () => {
   const [getupgradeItemModal, setupgradeItemModal] = useState(false);
 
   const [getQuestions, setQuestions] = useState("");
+
+  const [getImageOld, setImageOld] = useState("");
+  const [getImageNew, setImageNew] = useState("");
+  const [getImageAPI, setImageAPI] = useState("");
+  const [getImageStatus, setImageStatus] = useState(0);
+
   const [getImage, setImage] = useState("");
   const [getQuestionsData, setQuestionsData] = useState([]);
   const [getShowOldQuestion, setShowOldQuestion] = useState([]);
@@ -193,10 +199,14 @@ const HomeScreen = () => {
       width: 300,
       height: 400,
       cropping: true,
-      // includeBase64: true,
+      includeBase64: true,
     }).then((image) => {
+      setImageAPI(image);
+      setImageNew(image.path);
       setImage(image.path);
-      console.log("image===>", image);
+      setImageStatus(1);
+      debugger;
+      // console.log("image===>", image);
     });
   };
 
@@ -321,18 +331,25 @@ const HomeScreen = () => {
 
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData, 0, getQuestionsData);
+      await addCategoryQuestion(userData, 0, getQuestionsData, getImageAPI);
+    debugger;
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
+    debugger;
     if (
       addCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
+      debugger;
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
       console.log(
         "User Category Question Response Error  ===>>>",
         UserCategoryQuestionResponse
@@ -342,7 +359,10 @@ const HomeScreen = () => {
         UserCategoryQuestionResponse.data.Result
       );
     } else {
-      // setAddNewFreshItemModal(true);
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
@@ -382,15 +402,21 @@ const HomeScreen = () => {
 
     // API
     const { updateCategoryQuestionResponse, updateCategoryQuestionError } =
-      await updateCategoryQuestion(userData, getUpdateQuestionData);
-
+      await updateCategoryQuestion(
+        userData,
+        getUpdateQuestionData,
+        getIdItem,
+        getImageAPI
+      );
+    debugger;
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-
+    debugger;
     if (
       updateCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
+      debugger;
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       // setAddNewFreshItemModal(false);
       setLoader(false);
@@ -398,7 +424,11 @@ const HomeScreen = () => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
-
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
+      setIdItem("");
       // console.log(
       //   "User Category Question Response Done  ===>>>",
       //   UserCategoryQuestionResponse
@@ -410,6 +440,11 @@ const HomeScreen = () => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
+      setIdItem("");
       // console.log("Question Error ==>>>", updateCategoryQuestionError);
       // console.log(
       //   "User Category Question Response Error  ===>>>",
@@ -427,7 +462,8 @@ const HomeScreen = () => {
     console.log("ShowOldItem key", key);
     var questionList = userCategoryQuestion[key];
     console.log("SquestionList", questionList);
-
+    setImageOld(Image);
+    debugger;
     setShowOldQuestion([]);
     setTimeout(() => {
       setShowOldQuestion(questions);
@@ -443,7 +479,7 @@ const HomeScreen = () => {
     setAddNewItemModal(false);
     setUpdateDataModal(true);
     setUpdateDataItem(getAddNewItem);
-
+    debugger;
     // setEditItemModal(true);
     // setEditItem(getAddNewItem);
   };
@@ -487,7 +523,7 @@ const HomeScreen = () => {
     console.log("fewf", getIdItem);
   };
 
-  // Payment for upgrade
+  // Payment for upgrade∂ç
   const upgradeItem = async () => {
     console.log("111");
     const { profileResponse, profileError } = await getProfile();
@@ -567,7 +603,7 @@ const HomeScreen = () => {
                           onPress={() =>
                             ShowOldItem(
                               item.category_name,
-                              item.Image,
+                              item.user_category_image,
                               item.category_id,
                               index,
                               item.questions
@@ -711,14 +747,19 @@ const HomeScreen = () => {
                     <View style={CommonStyle.Row}>
                       <View style={{ width: "20%" }}>
                         <TouchableOpacity onPress={() => ImageChange()}>
-                          {getImage != "" ? (
+                          {getImageOld == "" ? (
                             <Image
-                              source={{ uri: getImage }}
+                              source={imgImport}
+                              style={Styles.popupImage}
+                            />
+                          ) : getImageStatus == 0 ? (
+                            <Image
+                              source={{ uri: getImageOld }}
                               style={Styles.popupImage}
                             />
                           ) : (
                             <Image
-                              source={imgImport}
+                              source={{ uri: getImageNew }}
                               style={Styles.popupImage}
                             />
                           )}
@@ -731,7 +772,7 @@ const HomeScreen = () => {
                             { textAlign: "center", marginTop: 10 },
                           ]}
                         >
-                          m111 {getUpdateDataItem}
+                          {getUpdateDataItem}
                         </Text>
                       </View>
                       <View style={{ width: "20%" }}></View>
@@ -794,9 +835,9 @@ const HomeScreen = () => {
                     <View style={CommonStyle.Row}>
                       <View style={{ width: "20%" }}>
                         <TouchableOpacity disabled={true}>
-                          {getImage != "" ? (
+                          {getImageOld != "" ? (
                             <Image
-                              source={{ uri: getImage }}
+                              source={{ uri: getImageOld }}
                               style={Styles.popupImage}
                             />
                           ) : (
@@ -815,7 +856,7 @@ const HomeScreen = () => {
                             { textAlign: "center" },
                           ]}
                         >
-                          m222 {getAddNewItem}
+                          {getAddNewItem}
                         </Text>
                       </View>
                       <View style={{ width: "20%" }}>
@@ -877,9 +918,9 @@ const HomeScreen = () => {
                     <View style={CommonStyle.Row}>
                       <View style={{ width: "20%" }}>
                         <TouchableOpacity onPress={() => ImageChange()}>
-                          {getImage != "" ? (
+                          {getImageNew != "" ? (
                             <Image
-                              source={{ uri: getImage }}
+                              source={{ uri: getImageNew }}
                               style={Styles.popupImage}
                             />
                           ) : (

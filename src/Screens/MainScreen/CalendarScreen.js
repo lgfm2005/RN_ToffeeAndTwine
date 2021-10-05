@@ -195,12 +195,11 @@ const CalendarScreen = () => {
   }, []);
 
   // Close All Item
-
-  // Close All Item
   const CloseItem = () => {
     setPrevData({});
-    setFinalSepDate("");
     setupgradeItemModal(false);
+    setFinalSepDate("");
+    setuserSpecialMomentDate("");
   };
 
   const CloseSepItem = () => {
@@ -210,6 +209,8 @@ const CalendarScreen = () => {
     setUserNewSpecialMomentModal(false);
     setUserOldSpecialMomentModal(false);
     setDateModal(false);
+    setFinalSepDate("");
+    setuserSpecialMomentDate("");
     setupgradeItemModal(false);
   };
 
@@ -241,7 +242,7 @@ const CalendarScreen = () => {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-
+    debugger;
     if (
       deleteUserCategorySpecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
@@ -249,16 +250,22 @@ const CalendarScreen = () => {
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setUserOldSpecialMomentModal(false);
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
       setLoader(false);
+      debugger;
     } else {
-      setUserOldSpecialMomentModal(false);
+      debugger;
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
       setLoader(false);
+      setUserOldSpecialMomentModal(false);
       console.log(
-        "NEW CategorySpecialMoment Error",
+        "NEW deleteUserCategorySpecialDay Error",
         deleteUserCategorySpecialDayError
       );
       console.log(
-        "NEW CategorySpecialMoment Error",
+        "NEW getUserCategorySpecialMoment Error",
         getUserCategorySpecialMomentError
       );
     }
@@ -268,6 +275,7 @@ const CalendarScreen = () => {
   const SelectMoment = (specialMomentName, specialMomentId) => {
     setAddItemShowSepModal(false);
     AddNewItemSepShow(specialMomentName, specialMomentId);
+    setFinalSepDate("");
   };
 
   //  Show Moment (Select Only one) --- 2.Select Moment
@@ -295,11 +303,11 @@ const CalendarScreen = () => {
   };
   const UpdateEnterDate = () => {
     setEditItemSepModal(false);
-
     setUpdateDateModal(true);
     var DateSubstring =
       date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
+    // setuserSpecialMomentDate(DateSubstring);
   };
   const UpdateSubmitDate = () => {
     setUpdateDateModal(false);
@@ -310,10 +318,15 @@ const CalendarScreen = () => {
   };
 
   // Old Select Categories -- > Edit Item
-  const AddEditItem = (getspecialMomentName) => {
+  const AddEditSepItem = (getspecialMomentName) => {
     setUserOldSpecialMomentModal(false);
     setEditItemSepModal(true);
     setEditSepItem(getspecialMomentName);
+    debugger;
+    console.log("EWfewfewfwfewf=>>>>>>>>>>", getuserSpecialMomentDate);
+    debugger;
+    setFinalSepDate(getuserSpecialMomentDate);
+    debugger;
   };
 
   // oldUserSpecialMoment --> 1.Open
@@ -351,23 +364,25 @@ const CalendarScreen = () => {
     setUserNewSpecialMomentModal(false);
     setLoader(true);
 
-    if (!getFinalSepDate) {
-      getFinalDataShow("");
-      debugger;
-    } else {
-      getFinalDataShow(getFinalSepDate);
-      debugger;
-    }
+    // if (!getFinalSepDate) {
+    //   getFinalDataShow("");
+    //   debugger;
+    // } else {
+    //   getFinalDataShow(getFinalSepDate);
+    //   debugger;
+    // }
+    debugger;
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
         getuserSpecialMomentTitle,
-        setFinalDataShow,
+        getFinalSepDate,
         getspecialMomentLink,
         getspecialMomentOtherInfo,
         JSON.stringify(getImageurl),
         "0"
       );
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -377,9 +392,9 @@ const CalendarScreen = () => {
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
       setPrevData({});
-      setFinalSepDate("");
       setImage("");
       setImageurl("");
+      setFinalSepDate("");
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setLoader(false);
@@ -388,13 +403,14 @@ const CalendarScreen = () => {
       setPrevData({});
       setImage("");
       setImageurl("");
-      setUserNewSpecialMomentModal(true);
+      setFinalSepDate("");
+      setUserNewSpecialMomentModal(false);
       console.log(
-        "NEW CategorySpecialMoment Error",
+        "NEW addCategoryspecialDayError Error",
         addCategoryspecialDayError
       );
       console.log(
-        "NEW CategorySpecialMoment Error",
+        "NEW getUserCategorySpecialMomentError Error",
         getUserCategorySpecialMomentError
       );
     }
@@ -407,24 +423,22 @@ const CalendarScreen = () => {
     setEditItemSepModal(false);
     setUserOldSpecialMomentModal(false);
 
-    if (!getFinalSepDate) {
-      getFinalDataShow("");
-      debugger;
-    } else {
-      getFinalDataShow(getFinalSepDate);
-      debugger;
-    }
+    debugger;
     const {
       updateCategorySpecialMomentResponse,
       updateCategorySpecialMomentError,
     } = await updateCategorySpecialMoment(
       getuserSpecialMomentId,
-      getuserSpecialMomentUpdateTitle,
-      setFinalDataShow,
-      getspecialMomentUpdateLink,
-      getspecialMomentUpdateOtherInfo,
+      getuserSpecialMomentTitle,
+      // getuserSpecialMomentUpdateTitle,
+      getFinalSepDate,
+      // getspecialMomentUpdateLink,
+      getspecialMomentLink,
+      getspecialMomentOtherInfo,
+      // getspecialMomentUpdateOtherInfo,
       JSON.stringify(getImageurl)
     );
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -439,9 +453,9 @@ const CalendarScreen = () => {
       setUserNewSpecialMomentModal(false);
       setUserOldSpecialMomentModal(false);
       setLoader(false);
-      setFinalSepDate("");
       setPrevData({});
       setImage("");
+      setFinalSepDate("");
       setImageurl("");
     } else {
       setUserNewSpecialMomentModal(false);
@@ -460,9 +474,9 @@ const CalendarScreen = () => {
       );
     }
   };
-
   const AddItemSepShow = () => {
     setAddItemShowSepModal(true);
+    setFinalSepDate("");
   };
 
   const CalendarModule = (date) => {
@@ -513,7 +527,7 @@ const CalendarScreen = () => {
               <View style={[CommonStyle.my16, CommonStyle.Row]}>
                 <Image
                   source={
-                    userData.userProfileImage == ""
+                    userData.userProfileImage != ""
                       ? { uri: userData.userProfileImage }
                       : imgPlaceHolder
                   }
@@ -545,37 +559,33 @@ const CalendarScreen = () => {
               <ScrollView
                 contentContainerStyle={[
                   MainScreenStyle.scrollItemStyle,
-                  CommonStyle.p8,
-                  { justifyContent: "flex-start" },
+                  CommonStyle.toppadding16,
                 ]}
               >
-                {userSpecialMoment != ""
-                  ? // ? userSpecialMoment.map((item, index) => (
-                    userSpecialMoment.length > 0 &&
-                    userSpecialMoment.map((item, index) => (
-                      <CalendarList
-                        ImageUrl={imgWhiteBirthday}
-                        ExploreName={item.special_moment_name}
-                        Id={item.special_moment_id}
-                        index={index}
-                        key={index}
-                        DataLength={userSpecialMoment.length}
-                        ShowBtn={false}
-                        onPress={() =>
-                          oldUserSpecialMoment(
-                            item.user_special_moment_id,
-                            item.special_moment_id,
-                            item.special_moment_name,
-                            item.user_special_moment_title,
-                            item.user_special_moment_date,
-                            item.special_moment_link,
-                            item.special_moment_other_info,
-                            item.image
-                          )
-                        }
-                      />
-                    ))
-                  : null}
+                {userSpecialMoment.length > 0 &&
+                  userSpecialMoment.map((item, index) => (
+                    <CalendarList
+                      ImageUrl={imgWhiteBirthday}
+                      ExploreName={item.special_moment_name}
+                      Id={item.special_moment_id}
+                      index={index}
+                      key={index}
+                      DataLength={userSpecialMoment.length}
+                      ShowBtn={false}
+                      onPress={() =>
+                        oldUserSpecialMoment(
+                          item.user_special_moment_id,
+                          item.special_moment_id,
+                          item.special_moment_name,
+                          item.user_special_moment_title,
+                          item.user_special_moment_date,
+                          item.special_moment_link,
+                          item.special_moment_other_info,
+                          item.image
+                        )
+                      }
+                    />
+                  ))}
                 <CalendarList
                   ShowBtn={true}
                   key={1}
@@ -763,7 +773,7 @@ const CalendarScreen = () => {
                           },
                         ]}
                       >
-                        m000 {getspecialMomentName}
+                        {getspecialMomentName}
                       </Text>
                     </View>
                     <View
@@ -818,7 +828,7 @@ const CalendarScreen = () => {
 
                     <POPLinkButton
                       buttonName={AppString.Edit}
-                      onPress={() => AddEditItem(getspecialMomentName)}
+                      onPress={() => AddEditSepItem(getspecialMomentName)}
                     />
                   </View>
                 </View>
@@ -867,7 +877,7 @@ const CalendarScreen = () => {
                               { textAlign: "center" },
                             ]}
                           >
-                            m666 {getEditSepItem}
+                            {getEditSepItem}
                           </Text>
                         </View>
                         <View style={{ width: "20%" }}></View>
@@ -879,9 +889,10 @@ const CalendarScreen = () => {
                         buttonName={"Title"}
                         defaultValue={getuserSpecialMomentTitle}
                         textChange={(Title) => {
-                          setuserSpecialMomentUpdateTitle(Title);
+                          setuserSpecialMomentTitle(Title);
                           setPrevData({
-                            ...getuserSpecialMomentTitle,
+                            ...getPrevData,
+                            // ...getuserSpecialMomentTitle,
                             Title: Title,
                           });
                         }}
@@ -905,9 +916,11 @@ const CalendarScreen = () => {
                         buttonName={"Link"}
                         defaultValue={getspecialMomentLink}
                         onChangeText={(Link) => {
-                          setspecialMomentUpdateLink(Link);
+                          setspecialMomentLink(Link);
+                          // setspecialMomentUpdateLink(Link);
                           setPrevData({
-                            ...getspecialMomentLink,
+                            ...getPrevData,
+                            // ...getspecialMomentLink,
                             Link: Link,
                           });
                         }}
@@ -917,9 +930,11 @@ const CalendarScreen = () => {
                         buttonName={"Other Info"}
                         defaultValue={getspecialMomentOtherInfo}
                         onChangeText={(OtherInfo) => {
-                          setspecialMomentUpdateOtherInfo(OtherInfo);
+                          // setspecialMomentUpdateOtherInfo(OtherInfo);
+                          setspecialMomentOtherInfo(OtherInfo);
                           setPrevData({
-                            ...getspecialMomentOtherInfo,
+                            ...getPrevData,
+                            // ...getspecialMomentOtherInfo,
                             OtherInfo: OtherInfo,
                           });
                         }}
@@ -1036,7 +1051,7 @@ const CalendarScreen = () => {
                         { textAlign: "center" },
                       ]}
                     >
-                      SELECT {AppString.SelectMoment}
+                      {AppString.SelectMoment}
                     </Text>
                     <View>
                       <ScrollView
@@ -1101,7 +1116,13 @@ const CalendarScreen = () => {
                             )}
                           </TouchableOpacity>
                         </View>
-                        <View style={CommonStyle.PopModalWidth60}>
+                        <View
+                          style={{
+                            width: "60%",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
                           <Text
                             style={[
                               CommonStyle.txtTitle,
@@ -1109,7 +1130,7 @@ const CalendarScreen = () => {
                               { textAlign: "center" },
                             ]}
                           >
-                            m999 {getUserNewSpecialMomenItem}
+                            {getUserNewSpecialMomenItem}
                           </Text>
                         </View>
                         <View style={{ width: "20%" }}></View>
@@ -1217,7 +1238,7 @@ const CalendarScreen = () => {
                       (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
                     }
                   >
-                    m888 {AppString.txtUpgradecategories1}
+                    {AppString.txtUpgradecategories1}
                     <Text style={{ color: COLORS.gold }}>
                       {AppString.price}
                     </Text>

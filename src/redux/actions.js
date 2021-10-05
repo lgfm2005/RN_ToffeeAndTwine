@@ -176,10 +176,13 @@ export const useActions = () => {
       data.append("LName", userLname);
       data.append("Image", ImageUrl);
       data.append("DefaultSpecialMoment", DefaultSpecialMoment);
+      debugger;
       let response, error;
       try {
         response = await API.UpdateProfile.UpdateProfile(data, session);
+        debugger;
         if (response.data.StatusCode == "1") {
+          debugger;
           dispatch(
             loginAction({
               token: session.token,
@@ -193,6 +196,7 @@ export const useActions = () => {
               isAutoLogin: true,
             })
           );
+          debugger;
         } else {
           error = response.data.Message;
         }
@@ -326,11 +330,17 @@ export const useActions = () => {
       };
     },
 
-    addCategoryQuestion: async (tokens, IsFirst, getQuestionsData) => {
+    addCategoryQuestion: async (
+      tokens,
+      IsFirst,
+      getQuestionsData,
+      DataImage
+    ) => {
       var session = sessions;
       if (tokens) {
         session = tokens;
       }
+      debugger;
       var data = new FormData();
       getQuestionsData.map((item) => {
         data.append("IsFirst", IsFirst);
@@ -341,7 +351,9 @@ export const useActions = () => {
         } else {
           data.append("CategoryQuestionValue[]", item.value);
         }
+        data.append("Image", JSON.stringify(DataImage));
       });
+      debugger;
       let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
         addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
@@ -358,7 +370,12 @@ export const useActions = () => {
       return { addCategoryQuestionResponse, addCategoryQuestionError };
     },
 
-    updateCategoryQuestion: async (tokens, getUpdateQuestionData) => {
+    updateCategoryQuestion: async (
+      tokens,
+      getUpdateQuestionData,
+      getIdItem,
+      ImageDataurl
+    ) => {
       var session = sessions;
       if (tokens) {
         session = tokens;
@@ -368,14 +385,19 @@ export const useActions = () => {
         data.append("UserCategoryQuestionID[]", item.categoryQuestionId);
         data.append("CategoryQuestionValue[]", item.value);
       });
-
+      // console.log("getUpdateQuestionData   ====>>>>", getIdItem);
+      data.append("CategoryID", getIdItem);
+      data.append("Image", JSON.stringify(ImageDataurl));
+      debugger;
       let updateCategoryQuestionResponse, updateCategoryQuestionError;
       try {
         updateCategoryQuestionResponse = await API.UpdateCategoryQuestion.get(
           sessions,
           data
         );
+        debugger;
         if (updateCategoryQuestionResponse.data.StatusCode == "1") {
+          debugger;
         } else {
           updateCategoryQuestionError =
             updateCategoryQuestionResponse.data.Message;

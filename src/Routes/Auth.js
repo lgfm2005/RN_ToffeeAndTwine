@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -23,8 +23,9 @@ import FlashMessage from "react-native-flash-message";
 const Stack = createStackNavigator();
 import { useDispatch, useSelector } from "react-redux";
 
-const Auth = () => {
-  // const sessions = useSelector((state) => state.session);
+const Auth = ({ navigation }) => {
+  const sessions = useSelector((state) => state.session);
+
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator

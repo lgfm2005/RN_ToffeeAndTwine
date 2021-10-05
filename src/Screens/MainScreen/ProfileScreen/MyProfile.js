@@ -85,7 +85,6 @@ const MyProfile = ({ navigation }) => {
     addCategoryspecialDay,
   } = useActions();
 
-  const user = useSelector((state) => state.session);
   const userData = useSelector((state) => state.session);
   const specialMoment = useSelector((state) => state.specialMoment);
   const userSpecialMoment = useSelector((state) => state.UserSpecialMoment);
@@ -105,7 +104,6 @@ const MyProfile = ({ navigation }) => {
   const [getAddNewItem, setAddNewItem] = useState("");
   // getEditItemModal
   const [getEditItemModal, setEditItemModal] = useState(false);
-  const [getImage, setImage] = useState("");
   const [getQuestions, setQuestions] = useState("");
   const [getQuestionsData, setQuestionsData] = useState([]);
   // Update Data Modal
@@ -153,8 +151,9 @@ const MyProfile = ({ navigation }) => {
   const [getspecialMomentUpdateOtherInfo, setspecialMomentUpdateOtherInfo] =
     useState("");
 
-  // const [getImage, setImage] = useState("");
+  const [getImage, setImage] = useState("");
   const [getImageurl, setImageurl] = useState("");
+  const [getImageStatus, setImageStatus] = useState("");
 
   const [getDateModal, setDateModal] = useState(false);
   const [getUpdateDateModal, setUpdateDateModal] = useState("");
@@ -171,15 +170,22 @@ const MyProfile = ({ navigation }) => {
 
   useEffect(() => {
     if (userSpecialMoment) {
+      console.log(
+        "========== userSpecialMoment ==========>",
+        userSpecialMoment
+      );
       const defaultSpecialMometData = userSpecialMoment.filter((item) => {
-        return item.default_moment == "1";
+        return item.special_moment_id == userData.defaultSpecialMoment;
       });
+      console.log(
+        "=========== defaultSpecialMometData =========>",
+        defaultSpecialMometData
+      );
       setDefaultSpecialMometData(defaultSpecialMometData);
     }
-
     getFilterSepCatgories(userSpecialMoment);
     getFilterCatgories(userCategoryQuestion);
-  }, []);
+  }, [userSpecialMoment]);
 
   const getFilterCatgories = (data) => {
     var dataCategory = categories;
@@ -224,13 +230,29 @@ const MyProfile = ({ navigation }) => {
       width: 300,
       height: 400,
       cropping: true,
-      // includeBase64: true,
+      includeBase64: true,
     }).then((image) => {
       setImage(image.path);
+      setImageurl(image);
+      debugger;
       console.log("image===>", image);
     });
   };
 
+  const ImageSepChange = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true,
+    }).then((image) => {
+      setImage(image.path);
+      setImageurl(image);
+
+      debugger;
+      // console.log("image===>", image);
+    });
+  };
   // Select Item Categories --> Open
   const ShowOldItem = (Name, Image, id, key, questions) => {
     temp = [];
@@ -239,9 +261,11 @@ const MyProfile = ({ navigation }) => {
     console.log("ShowOldItem id", id);
     console.log("ShowOldItem key", key);
     setAddNewItemModal(true);
+    setImageurl(Image);
     setAddNewItem(Name);
     setIdItem(id);
     setShowOldQuestion(questions);
+    debugger;
   };
 
   // All categories Select show (Show All Item)
@@ -335,14 +359,21 @@ const MyProfile = ({ navigation }) => {
     console.log("getUpdateQuestionData", getUpdateQuestionData);
     // API
     const { updateCategoryQuestionResponse, updateCategoryQuestionError } =
-      await updateCategoryQuestion(userData, getUpdateQuestionData);
+      await updateCategoryQuestion(
+        userData,
+        getUpdateQuestionData,
+        getImageurl
+      );
 
+    debugger;
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
+    debugger;
     if (
       updateCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
+      debugger;
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       // setAddNewFreshItemModal(false);
       setUpdateDataModal(false);
@@ -376,18 +407,21 @@ const MyProfile = ({ navigation }) => {
 
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData, 0, getQuestionsData);
+      await addCategoryQuestion(userData, 0, getQuestionsData, getImageurl);
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-
+    debugger;
     if (
       addCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
+      debugger;
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
+      setImage("");
+      setImageurl("");
       // console.log(
       //   "User Category Question Response Error  ===>>>",
       //   UserCategoryQuestionResponse
@@ -395,9 +429,12 @@ const MyProfile = ({ navigation }) => {
       // console.log("Question Response ==>>>", addCategoryQuestionResponse);
     } else {
       // setAddNewFreshItemModal(true);
-      setAddItemShowModal(true);
-      setEditItemModal(true);
-      setAddNewItemModal(true);
+      setImage("");
+      setImageurl("");
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
+      setLoader(false);
       // console.log("Question Error ==>>>", addCategoryQuestionError);
       // console.log(
       //   "User Category Question Response Error  ===>>>",
@@ -503,19 +540,6 @@ const MyProfile = ({ navigation }) => {
     // console.log(getFilterSepCat);
   };
 
-  const ImageSepChange = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-    }).then((image) => {
-      setImage(image.path);
-      setImageurl(image);
-      // console.log("image===>", image);
-    });
-  };
-
   const EditSubmitData = () => {
     setEditItemSepModal(false);
   };
@@ -525,7 +549,6 @@ const MyProfile = ({ navigation }) => {
     setAddItemShowSepModal(false);
     AddNewItemSepShow(specialMomentName, specialMomentId);
     setFinalSepDate("");
-    setuserSpecialMomentDate("");
   };
 
   //  Show Moment (Select Only one) --- 2.Select Moment
@@ -587,6 +610,7 @@ const MyProfile = ({ navigation }) => {
     specialMomentOtherInfo,
     Imageurl
   ) => {
+    debugger;
     // console.log("userSpecialMomentId", userSpecialMomentId);
     // console.log("specialMomentId", specialMomentId);
     // console.log("specialMomentName", specialMomentName);
@@ -650,6 +674,7 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      setFinalSepDate("");
       setUserNewSpecialMomentModal(false);
       console.log(
         "NEW addCategoryspecialDayError Error",
@@ -669,13 +694,6 @@ const MyProfile = ({ navigation }) => {
     setEditItemSepModal(false);
     setUserOldSpecialMomentModal(false);
 
-    // if (!getFinalSepDate) {
-    //   getFinalDataShow("");
-    //   debugger;
-    // } else {
-    //   getFinalDataShow(getFinalSepDate);
-    //   debugger;
-    // }
     debugger;
     const {
       updateCategorySpecialMomentResponse,
@@ -951,7 +969,7 @@ const MyProfile = ({ navigation }) => {
                         onPress={() =>
                           ShowOldItem(
                             item.category_name,
-                            item.Image,
+                            item.user_category_image,
                             item.category_id,
                             index,
                             item.questions
@@ -1008,7 +1026,7 @@ const MyProfile = ({ navigation }) => {
                           item.user_special_moment_date,
                           item.special_moment_link,
                           item.special_moment_other_info,
-                          item.image
+                          item.user_category_image
                         )
                       }
                     />
@@ -1043,7 +1061,7 @@ const MyProfile = ({ navigation }) => {
                     { textAlign: "center" },
                   ]}
                 >
-                  m111 {AppString.SelectCategories}
+                  {AppString.SelectCategories}
                 </Text>
                 <View key={getId}>
                   <ScrollView
@@ -1090,9 +1108,9 @@ const MyProfile = ({ navigation }) => {
                 <View style={CommonStyle.Row}>
                   <View style={{ width: "20%" }}>
                     <TouchableOpacity disabled={true}>
-                      {getImage != "" ? (
+                      {getImageurl != "" ? (
                         <Image
-                          source={{ uri: getImage }}
+                          source={{ uri: getImageurl }}
                           style={Styles.popupImage}
                         />
                       ) : (
@@ -1108,7 +1126,7 @@ const MyProfile = ({ navigation }) => {
                         { textAlign: "center" },
                       ]}
                     >
-                      m222 {getAddNewItem}
+                      {getAddNewItem}
                     </Text>
                   </View>
                   <View style={{ width: "20%" }}>
@@ -1171,9 +1189,9 @@ const MyProfile = ({ navigation }) => {
                 <View style={CommonStyle.Row}>
                   <View style={{ width: "20%" }}>
                     <TouchableOpacity onPress={() => ImageChange()}>
-                      {getImage != "" ? (
+                      {getImageurl != "" ? (
                         <Image
-                          source={{ uri: getImage }}
+                          source={{ uri: getImageurl }}
                           style={Styles.popupImage}
                         />
                       ) : (
@@ -1185,7 +1203,7 @@ const MyProfile = ({ navigation }) => {
                     <Text
                       style={[CommonStyle.txtTitle, { textAlign: "center" }]}
                     >
-                      m333 {getUpdateDataItem}
+                      {getUpdateDataItem}
                     </Text>
                   </View>
                 </View>
@@ -1264,7 +1282,7 @@ const MyProfile = ({ navigation }) => {
                     }}
                   >
                     <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                      m444 {getAddNewItem}
+                      {getAddNewItem}
                     </Text>
                   </View>
                   <View style={{ width: "20%" }}></View>
@@ -1363,7 +1381,7 @@ const MyProfile = ({ navigation }) => {
                 </View>
                 <View style={{ width: "60%" }}>
                   <Text style={[CommonStyle.txtTitle, { textAlign: "center" }]}>
-                    m555 {getspecialMomentName}
+                    {getspecialMomentName}
                   </Text>
                 </View>
                 <View style={{ width: "20%" }}>
@@ -1463,7 +1481,7 @@ const MyProfile = ({ navigation }) => {
                           { textAlign: "center" },
                         ]}
                       >
-                        m666 {getEditSepItem}
+                        {getEditSepItem}
                       </Text>
                     </View>
                     <View style={{ width: "20%" }}></View>
@@ -1706,7 +1724,7 @@ const MyProfile = ({ navigation }) => {
                           { textAlign: "center" },
                         ]}
                       >
-                        m777 {getUserNewSpecialMomenItem}
+                        {getUserNewSpecialMomenItem}
                       </Text>
                     </View>
                     <View style={{ width: "20%" }}></View>
@@ -1811,7 +1829,7 @@ const MyProfile = ({ navigation }) => {
                     (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
                   }
                 >
-                  m888 {AppString.txtUpgradecategories1}
+                  {AppString.txtUpgradecategories1}
                   <Text style={{ color: COLORS.gold }}>{AppString.price}</Text>
                   <Text>{AppString.txtUpgradecategories2}</Text>
                 </Text>

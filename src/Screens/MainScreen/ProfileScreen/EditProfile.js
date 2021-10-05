@@ -61,17 +61,28 @@ const EditProfile = ({ navigation }) => {
   const [getImage, setImage] = useState("");
   const [getImageShow, setImageShow] = useState([]);
 
-  console.log(
-    "user.defaultSpecialMoment>>>>>>>>>>.",
-    user.defaultSpecialMoment
-  );
+  // console.log(
+  //   "user.defaultSpecialMoment>>>>>>>>>>.",
+  //   user.defaultSpecialMoment
+  // );
   useEffect(() => {
-    console.log("user.defaultSpecialMoment", user.defaultSpecialMoment);
+    console.log(
+      "user.defaultSpecialMoment    ========    22222222",
+      user.defaultSpecialMoment
+    );
     if (user.defaultSpecialMoment == 0) {
+      // console.log(
+      //   "user.defaultSpecialMoment ====  else =====  ",
+      //   user.defaultSpecialMoment
+      // );
       UpdateDefaultSpecialMoment = UserSpecialMoment[0]["special_moment_name"];
     } else {
       const DefultUserSpecialMoment = UserSpecialMoment.filter(
         (item) => item.special_moment_id == user.defaultSpecialMoment
+      );
+      console.log(
+        "DefultUserSpecialMoment==================1111111111111111",
+        DefultUserSpecialMoment
       );
       if (DefultUserSpecialMoment.length > 0) {
         UpdateDefaultSpecialMoment =
@@ -121,9 +132,17 @@ const EditProfile = ({ navigation }) => {
       UpdateLastName = getLastName;
     }
     if (getHighlightMomentId == "") {
-      UpdateDefaultSpecialMomentShow = "1";
+      UpdateDefaultSpecialMomentShow = user.defaultSpecialMoment;
+      console.log(
+        "UpdateDefaultSpecialMomentShow",
+        UpdateDefaultSpecialMomentShow
+      );
     } else {
       UpdateDefaultSpecialMomentShow = getHighlightMomentId;
+      console.log(
+        "UpdateDefaultSpecialMomentShow",
+        UpdateDefaultSpecialMomentShow
+      );
     }
 
     // console.log("UpdateFirstName ====>>>>", UpdateFirstName);
@@ -191,7 +210,8 @@ const EditProfile = ({ navigation }) => {
           <View
             style={[CommonStyle.ProfileToolbarbg, { alignItems: "center" }]}
           >
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            {/* <TouchableOpacity onPress={() => navigation.goBack()}> */}
+            <TouchableOpacity onPress={() => navigation.push("MyProfile")}>
               <Image
                 source={imgBackleftWhite}
                 style={CommonStyle.imgIconSize}
