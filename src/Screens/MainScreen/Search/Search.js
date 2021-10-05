@@ -56,15 +56,15 @@ const Search = ({ navigation }) => {
     }
   };
 
-  const OpenUserProfile = (userName) => {
-    console.log("OpenUserProfile", userName);
-    navigation.navigate("UserProfile", { userName: userName });
+  const OpenUserProfile = (userInfo) => {
+    console.log("OpenUserProfile", userInfo);
+    navigation.navigate("UserProfile", { userInfo: userInfo });
   };
 
   const RenderItem = (Data, index) => {
     return (
-      <TouchableOpacity onPress={() => OpenUserProfile(Data.item.user_id)}>
-        {/* <TouchableOpacity onPress={() => {}}> */}
+      <TouchableOpacity onPress={() => OpenUserProfile(Data.item)}>
+        {/* <TouchableOpacity onPress={() => {}}> // Data.item.user_id */}
         <View style={[SearchBarStyle.FollowerListBg, CommonStyle.mb16]}>
           <View style={SearchBarStyle.followerTxtIcon}>
             <Image

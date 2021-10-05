@@ -49,6 +49,7 @@ import { MainScreenStyle } from "../MainScreenStyle";
 import { CalendarList } from "../../../Components/AllListVIew/CalendarList";
 import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
 import { EditShowSimpleView } from "../../../Components/FormInput";
+import { useActions } from "../../../redux/actions";
 
 const Data = [
   {
@@ -89,7 +90,8 @@ const Data = [
 ];
 
 const UserProfile = ({ route, navigation }) => {
-  const { userName } = route.params;
+  const { userInfo } = route.params;
+  const { getProfile } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
@@ -97,6 +99,9 @@ const UserProfile = ({ route, navigation }) => {
   const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
 
   const [getAddNewItem, setAddNewItem] = useState(false);
+  const [getMomentsCount, setMomentsCount] = useState(0);
+  const [getFollowerCount, setFollowerCount] = useState("0");
+  const [getFollowingCount, setFollowingCount] = useState("0");
 
   const CloseItem = () => {
     setUserBlockModal(false);
@@ -122,6 +127,21 @@ const UserProfile = ({ route, navigation }) => {
     setNotificationSendModal(false),
     setAwesomeShowModal(true),
   ];
+
+  const getProfiles = async () => {
+    const { profileResponse, profileError } = await getProfile(
+      userInfo.user_id
+    );
+    debugger;
+    if (profileResponse.data.StatusCode) {
+      setFollowerCount(profileResponse.data.Result[0].follower_count);
+      setFollowingCount(profileResponse.data.Result[0].following_count);
+      setMomentsCount(profileResponse.data.Result[0].special_moment_count);
+    }
+  };
+  useEffect(() => {
+    getProfiles();
+  }, []);
 
   return (
     <View>
@@ -160,7 +180,7 @@ const UserProfile = ({ route, navigation }) => {
                         { color: COLORS.Secondary },
                       ]}
                     >
-                      MyProfile
+                      Profile
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => UserBlock()}>
@@ -183,7 +203,7 @@ const UserProfile = ({ route, navigation }) => {
               <View style={UserProfileScreenStyle.NameAndEditbg}>
                 <View>
                   <Text style={UserProfileScreenStyle.userName}>
-                    {userName}
+                    {userInfo.user_fname}
                   </Text>
                   <View style={CommonStyle.alignItemsBaseLine}>
                     <Image
@@ -211,15 +231,23 @@ const UserProfile = ({ route, navigation }) => {
 
             <View style={[UserProfileScreenStyle.MomentStatus]}>
               <View>
-                <Text style={CommonStyle.txtTitle}>1</Text>
+                <Text style={CommonStyle.txtTitle}>
+                  {getMomentsCount == 0 ? "--" : getMomentsCount}
+                </Text>
                 <Text style={CommonStyle.txtContent}>Moments</Text>
               </View>
               <View>
-                <Text style={CommonStyle.txtTitle}>10k</Text>
+                <Text style={CommonStyle.txtTitle}>
+                  {" "}
+                  {getFollowerCount == "0" ? "--" : getFollowerCount}
+                </Text>
                 <Text style={CommonStyle.txtContent}>Followers</Text>
               </View>
               <View>
-                <Text style={CommonStyle.txtTitle}>920</Text>
+                <Text style={CommonStyle.txtTitle}>
+                  {" "}
+                  {getFollowingCount == "0" ? "--" : getFollowingCount}
+                </Text>
                 <Text style={CommonStyle.txtContent}>Following</Text>
               </View>
             </View>

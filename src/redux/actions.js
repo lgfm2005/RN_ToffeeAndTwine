@@ -176,13 +176,10 @@ export const useActions = () => {
       data.append("LName", userLname);
       data.append("Image", ImageUrl);
       data.append("DefaultSpecialMoment", DefaultSpecialMoment);
-      debugger;
       let response, error;
       try {
         response = await API.UpdateProfile.UpdateProfile(data, session);
-        debugger;
         if (response.data.StatusCode == "1") {
-          debugger;
           dispatch(
             loginAction({
               token: session.token,
@@ -196,7 +193,6 @@ export const useActions = () => {
               isAutoLogin: true,
             })
           );
-          debugger;
         } else {
           error = response.data.Message;
         }
@@ -340,7 +336,6 @@ export const useActions = () => {
       if (tokens) {
         session = tokens;
       }
-      debugger;
       var data = new FormData();
       getQuestionsData.map((item) => {
         data.append("IsFirst", IsFirst);
@@ -353,7 +348,6 @@ export const useActions = () => {
         }
         data.append("Image", JSON.stringify(DataImage));
       });
-      debugger;
       let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
         addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
@@ -388,16 +382,13 @@ export const useActions = () => {
       // console.log("getUpdateQuestionData   ====>>>>", getIdItem);
       data.append("CategoryID", getIdItem);
       data.append("Image", JSON.stringify(ImageDataurl));
-      debugger;
       let updateCategoryQuestionResponse, updateCategoryQuestionError;
       try {
         updateCategoryQuestionResponse = await API.UpdateCategoryQuestion.get(
           sessions,
           data
         );
-        debugger;
         if (updateCategoryQuestionResponse.data.StatusCode == "1") {
-          debugger;
         } else {
           updateCategoryQuestionError =
             updateCategoryQuestionResponse.data.Message;
@@ -414,7 +405,6 @@ export const useActions = () => {
       try {
         getUserCategorySpecialMomentResponse =
           await API.GetUserCategorySpecialMoment.get(sessions);
-        debugger;
         if (getUserCategorySpecialMomentResponse.data.StatusCode == "1") {
           dispatch(
             userSpecialMoment(getUserCategorySpecialMomentResponse.data.Result)
@@ -423,7 +413,6 @@ export const useActions = () => {
           dispatch(userSpecialMoment([]));
         }
       } catch (e) {
-        debugger;
         getUserCategorySpecialMomentError = e;
         console.log(
           "getUserCategorySpecialMomentError::",
@@ -432,7 +421,6 @@ export const useActions = () => {
         dispatch(userSpecialMoment([]));
       }
 
-      debugger;
       return {
         getUserCategorySpecialMomentResponse,
         getUserCategorySpecialMomentError,
@@ -712,6 +700,20 @@ export const useActions = () => {
         updateNotificationError = e;
       }
       return { updateNotificationResponse, updateNotificationError };
+    },
+
+    followUser: async (friendRequestTo) => {
+      let followUserResponse, followUserError;
+      try {
+        var data = new FormData();
+        data.append("FriendRequestTo", friendRequestTo);
+        followUserResponse = await API.FollowUser.get(sessions, data);
+        if (followUserResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        followUserError = e;
+      }
+      return { followUserResponse, followUserError };
     },
 
     //

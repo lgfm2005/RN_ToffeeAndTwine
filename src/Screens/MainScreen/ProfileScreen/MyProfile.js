@@ -779,7 +779,6 @@ const MyProfile = ({ navigation }) => {
   const getProfiles = async () => {
     const { profileResponse, profileError } = await getProfile();
     if (profileResponse.data.StatusCode) {
-      debugger;
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
       setMomentsCount(profileResponse.data.Result[0].special_moment_count);

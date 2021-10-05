@@ -301,3 +301,8 @@ export const UpdateNotification = {
       data
     ),
 };
+
+export const FollowUser = {
+  get: async (session, data) =>
+    await api(session, `rest_api/controller_friend/follow_user`, "post", data),
+};
