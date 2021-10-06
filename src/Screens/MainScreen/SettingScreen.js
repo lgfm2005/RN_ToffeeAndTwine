@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, Image, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CommonStyle from "../../Assets/Style/CommonStyle";
@@ -11,19 +11,33 @@ import { COLORS } from "../../Assets/utils/COLORS";
 import { useActions } from "../../redux/actions";
 
 const SettingScreen = ({ navigation }) => {
-  const { Logout } = useActions();
+  const { Logout, getSetting, updateSetting } = useActions();
   const [getGiftingSwitch, setGiftingSwitch] = useState(false);
   const [getSpecialMomentsSwitch, setSpecialMomentsSwitch] = useState(false);
+  const [isFitst, setIsFitst] = useState(false);
 
   const [getNotification, setNotification] = useState(true);
   const [getManageSubscriptions, setManageSubscriptions] = useState(false);
   const [getHelp, setHelp] = useState(false);
   const [getAbout, setAbout] = useState(false);
 
-  const GiftingToggleSwitch = () => {
+  const GiftingToggleSwitch = async () => {
+    var getGifting = getGiftingSwitch ? 1 : 0;
+    var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
+    const { response, error } = await updateSetting(
+      getGifting,
+      getSpecialMoments
+    );
+
     setGiftingSwitch(!getGiftingSwitch);
   };
-  const SpecialMomentsToggleSwitch = () => {
+  const SpecialMomentsToggleSwitch = async () => {
+    var getGifting = getGiftingSwitch ? 1 : 0;
+    var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
+    const { response, error } = await updateSetting(
+      getGifting,
+      getSpecialMoments
+    );
     setSpecialMomentsSwitch(!getSpecialMomentsSwitch);
   };
 
@@ -39,6 +53,26 @@ const SettingScreen = ({ navigation }) => {
   const About = () => {
     setAbout(!getAbout);
   };
+
+  const GetSetting = async () => {
+    const { response, error } = await getSetting();
+    debugger;
+    if (response.data.StatusCode) {
+      setGiftingSwitch(false);
+      if (response.data.Result.isNotifyGifting == "1") {
+        setGiftingSwitch(true);
+      } else {
+      }
+      setSpecialMomentsSwitch(false);
+      if (response.data.Result.isNotifySpecialMoment == " 1") {
+        setSpecialMomentsSwitch(true);
+      }
+    }
+  };
+  if (!isFitst) {
+    GetSetting();
+    setIsFitst(true);
+  }
 
   return (
     <View style={[CommonStyle.BgColorWhite, { width: "100%" }]}>
