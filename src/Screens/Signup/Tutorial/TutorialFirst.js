@@ -89,7 +89,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
     console.log("getLastName ===>>", getLastName);
     console.log("getRadioId ===>>", getRadioId);
     var DateSubstring =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalDate(DateSubstring);
     console.log("getRadioName ===>>", DateSubstring);
   };

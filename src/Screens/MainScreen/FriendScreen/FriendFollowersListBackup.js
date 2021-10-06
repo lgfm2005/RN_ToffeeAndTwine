@@ -57,16 +57,47 @@ import { FriendScreenStyle } from "./FriendScreenStyle";
 import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
 
+const Data = [
+  {
+    id: 1,
+    Name: AppString.Coffee,
+    Image: imgCoffee,
+  },
+  {
+    id: 2,
+    Name: AppString.Dessert,
+    Image: imgDesserts,
+  },
+];
+
+const SprecialMOmentsData = [
+  {
+    id: 1,
+    Name: AppString.Birthday,
+    Image: imgWhiteBirthday,
+  },
+  {
+    id: 2,
+    Name: AppString.Anniversary,
+    Image: imgWhiteAnniversary,
+  },
+];
 var temp,
   temp2 = [];
 const FriendFollowersList = ({ route, navigation }) => {
   const { userID } = route.params;
   const { getProfile, RemoveFollowerFriend, blockFriend } = useActions();
   const [getUserBlockModal, setUserBlockModal] = useState(false);
+  const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
+  const [getNotificationSendModal, setNotificationSendModal] = useState(false);
+  const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
   const [getMomentsCount, setMomentsCount] = useState(0);
   const [getFollowerCount, setFollowerCount] = useState(0);
   const [getFollowingCount, setFollowingCount] = useState(0);
   const [getUserName, setUserName] = useState("");
+
+  const [getAddNewItem, setAddNewItem] = useState(false);
+
   const [friendSpecialMoments, setFriendSpecialMoments] = useState([]);
   const [friendCategoryQuestions, setFriendCategoryQuestions] = useState([]);
 
@@ -74,11 +105,26 @@ const FriendFollowersList = ({ route, navigation }) => {
     setUserBlockModal(false);
     setFavoriteThingsModal(false);
     setNotificationSendModal(false);
+    setAwesomeShowModal(false);
   };
   const UserBlock = () => {
     console.log("===>>>11111");
     setUserBlockModal(true);
   };
+  const FavoriteThings = (favItem) => {
+    console.log("favItem", favItem);
+    setAddNewItem(favItem);
+    setFavoriteThingsModal(true);
+  };
+  const SendNotificationFav = () => {
+    setFavoriteThingsModal(false);
+    setNotificationSendModal(true);
+  };
+
+  const AwesomeShowModal = () => [
+    setNotificationSendModal(false),
+    setAwesomeShowModal(true),
+  ];
 
   const blockFriendAction = async () => {
     const { blockFriendResponse, blockFriendError } = await blockFriend(
@@ -112,6 +158,26 @@ const FriendFollowersList = ({ route, navigation }) => {
         profileResponse.data.Result[0].friend_special_moments
       );
     }
+  };
+
+  // Select Item Categories --> Open
+  const ShowOldItem = (Name, Image, id, key, questions) => {
+    temp = [];
+    console.log("ShowOldItem Name", Name);
+    console.log("ShowOldItem Image", Image);
+    console.log("ShowOldItem Id", id);
+    console.log("ShowOldItem key", key);
+
+    // var questionList = userCategoryQuestion[key];
+    // console.log("SquestionList", questionList);
+    // setImageOld(Image);
+    // setShowOldQuestion([]);
+    // setTimeout(() => {
+    //   setShowOldQuestion(questions);
+    //   setAddNewItemModal(true);
+    //   setAddNewItem(Name);
+    //   setIdItem(id);
+    // }, 1000);
   };
 
   useEffect(() => {
@@ -284,14 +350,19 @@ const FriendFollowersList = ({ route, navigation }) => {
                       key={index}
                       DataLength={friendCategoryQuestions.length}
                       ShowBtn={false}
-                      onPress={
-                        () => ShowOldItem()
-                        // item.category_name,
-                        // item.user_category_image,
-                        // item.category_id,
-                        // index,
-                        // item.questions
+                      onPress={() =>
+                        ShowOldItem(
+                          item.category_name,
+                          item.user_category_image,
+                          item.category_id,
+                          index,
+                          item.questions
+                        )
                       }
+                      // AddNewOnPress={
+                      //   () => console.log("ddfdf")
+                      //   //  AddItemShow(index)
+                      // }
                     />
                   ))}
               </ScrollView>
@@ -333,6 +404,10 @@ const FriendFollowersList = ({ route, navigation }) => {
                         // )
                         console.log("ddfdf")
                       }
+                      AddNewOnPress={
+                        () => console.log("ddfdf")
+                        //  AddItemShow(index)
+                      }
                     />
                   ))}
               </ScrollView>
@@ -357,6 +432,142 @@ const FriendFollowersList = ({ route, navigation }) => {
                       Block
                     </Text>
                   </TouchableOpacity>
+                </View>
+              </Modal>
+            ) : null}
+
+            {getFavoriteThingsModal == true ? (
+              <Modal
+                testID={"modal"}
+                isVisible={getFavoriteThingsModal}
+                onBackdropPress={() => CloseItem()}
+              >
+                <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                  <View style={CommonStyle.Row}>
+                    <View style={{ width: "20%" }}>
+                      {/* <Image source={{ uri: getImage }} style={CommonStyle.popupProfileImage} /> */}
+                      <Image
+                        source={imgImport}
+                        style={CommonStyle.popupProfileImage}
+                      />
+                    </View>
+                    <View style={{ width: "60%" }}>
+                      <Text
+                        style={[
+                          CommonStyle.txtTitle,
+                          CommonStyle.p16,
+                          CommonStyle.textUpperCase,
+                          { textAlign: "center" },
+                        ]}
+                      >
+                        {getAddNewItem}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={CommonStyle.my16}>
+                    <EditShowSimpleView
+                      TitleName={"Color"}
+                      buttonName={"Demo"}
+                    />
+                    <EditShowSimpleView
+                      TitleName={"Type"}
+                      buttonName={"Demo"}
+                    />
+                    <EditShowSimpleView
+                      TitleName={"Amount"}
+                      buttonName={"Demo"}
+                    />
+                    <EditShowSimpleView
+                      TitleName={"Vase"}
+                      buttonName={"Demo"}
+                    />
+                    <EditShowSimpleView
+                      TitleName={"Link"}
+                      buttonName={"Demo"}
+                    />
+                    <EditShowSimpleView
+                      TitleName={"Other Info"}
+                      buttonName={"Demo"}
+                    />
+                  </View>
+
+                  <View
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
+                    <ImagePOPLinkButton
+                      buttonName={AppString.Giftit}
+                      buttonImage={imgWhitegift}
+                      onPress={() => SendNotificationFav()}
+                    />
+                  </View>
+                </View>
+              </Modal>
+            ) : null}
+            {getNotificationSendModal == true ? (
+              <Modal
+                testID={"modal"}
+                isVisible={getNotificationSendModal}
+                onBackdropPress={() => CloseItem()}
+              >
+                <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                  <View style={CommonStyle.Row}>
+                    <View style={{ width: "20%" }}>
+                      {/* <Image source={{ uri: getImage }} style={CommonStyle.popupProfileImage} /> */}
+                      <Image
+                        source={imgImport}
+                        style={CommonStyle.popupProfileImage}
+                      />
+                    </View>
+                    <View style={{ width: "60%" }}>
+                      <Text
+                        style={[
+                          CommonStyle.txtTitle,
+                          CommonStyle.p16,
+                          CommonStyle.textUpperCase,
+                          { textAlign: "center" },
+                        ]}
+                      >
+                        {getAddNewItem}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <Text style={CommonStyle.txtTitle}>{AppString.planning}</Text>
+
+                  <View
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
+                    <POPOutLinkButton
+                      buttonName={AppString.NoThanks}
+                      onPress={() => CloseItem()}
+                    />
+
+                    <POPLinkButton
+                      buttonName={AppString.YesNotify}
+                      onPress={() => AwesomeShowModal()}
+                    />
+                  </View>
+                </View>
+              </Modal>
+            ) : null}
+            {getAwesomeShowModal == true ? (
+              <Modal
+                testID={"modal"}
+                isVisible={getAwesomeShowModal}
+                onBackdropPress={() => CloseItem()}
+              >
+                <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                  <View style={[CommonStyle.centerRow, { width: "100%" }]}>
+                    <Image
+                      source={imgCheckCircle}
+                      style={CommonStyle.popupProfileImage}
+                    />
+                  </View>
+
+                  <Text style={[CommonStyle.txtTitle, { marginTop: 10 }]}>
+                    {AppString.FriendsAwesome}
+                  </Text>
                 </View>
               </Modal>
             ) : null}

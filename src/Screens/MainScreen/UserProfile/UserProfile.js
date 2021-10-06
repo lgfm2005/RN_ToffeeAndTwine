@@ -14,10 +14,14 @@ import {
 // Lib
 import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
+import Spinner from "react-native-loading-spinner-overlay";
 
 // Asset
 import { imgbirthdayCakeGary } from "../../../Assets/utils/Image";
-import CommonStyle from "../../../Assets/Style/CommonStyle";
+import CommonStyle, {
+  fontsize12,
+  fontsize18,
+} from "../../../Assets/Style/CommonStyle";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import {
   FilledButton,
@@ -31,16 +35,18 @@ import { UserProfileScreenStyle } from "./UserProfileScreenStyle";
 import {
   imgWhitegift,
   imgUserBlock,
-  imgBackleftWhite,
+  demofaceman,
+  imgPlaceHolder,
   iimgprofiledemo3,
   imgImport,
   imgCheckCircle,
   profileimgdemo,
+  imgBackleftWhite,
   imgProfileBackground,
   imgCoffee,
   imgDesserts,
-  imgFlowers,
   imgLaptop,
+  imgGiftNotification,
   imgRing,
   imgBook,
   imgWhiteDot,
@@ -50,66 +56,55 @@ import { CalendarList } from "../../../Components/AllListVIew/CalendarList";
 import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
 import { EditShowSimpleView } from "../../../Components/FormInput";
 import { useActions } from "../../../redux/actions";
-
-const Data = [
-  {
-    id: 1,
-    Name: AppString.Coffee,
-    Image: imgCoffee,
-  },
-  {
-    id: 2,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-  {
-    id: 3,
-    Name: AppString.Flowers,
-    Image: imgFlowers,
-  },
-  {
-    id: 4,
-    Name: AppString.Laptop,
-    Image: imgLaptop,
-  },
-  {
-    id: 5,
-    Name: AppString.Ring,
-    Image: imgRing,
-  },
-  {
-    id: 6,
-    Name: AppString.Book,
-    Image: imgBook,
-  },
-  {
-    id: 7,
-    Name: AppString.Dessert,
-    Image: imgDesserts,
-  },
-];
+import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 
 const UserProfile = ({ route, navigation }) => {
   const { userInfo } = route.params;
-  const { getProfile, followUser, blockFriend } = useActions();
+  const { getProfile, followUser, blockFriend, AddGiftNotication } =
+    useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
   const [getNotificationSendModal, setNotificationSendModal] = useState(false);
   const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
-
   const [getAddNewItem, setAddNewItem] = useState(false);
+  const [friendSpecialMoments, setFriendSpecialMoments] = useState([]);
+  const [friendCategoryQuestions, setFriendCategoryQuestions] = useState([]);
+
   const [getMomentsCount, setMomentsCount] = useState(0);
   const [getFollowerCount, setFollowerCount] = useState("0");
   const [getFollowingCount, setFollowingCount] = useState("0");
-  const [friendSpecialMoments, setFriendSpecialMoments] = useState([]);
-  const [friendCategoryQuestions, setFriendCategoryQuestions] = useState([]);
+
+  const [getProfileImage, setProfileImage] = useState("");
+  const [getResult, setResult] = useState("");
+  const [getLoader, setLoader] = useState(false);
+
+  const [getImageNew, setImageNew] = useState("");
+  const [getShowOldQuestion, setShowOldQuestion] = useState("");
+  const [getAddNewItemModal, setAddNewItemModal] = useState("");
+  const [getTitleName, setTitleName] = useState("");
+  const [getCategoryId, setCategoryId] = useState("");
+
+  //SpecialMoment
+  const [getSpecialMomentName, setSpecialMomentName] = useState("");
+  const [getUserSpecialMomentTitle, setUserSpecialMomentTitle] = useState("");
+  const [getUserSpecialMomentDate, setUserSpecialMomentDate] = useState("");
+  const [getSpecialMomentLink, setSpecialMomentLink] = useState("");
+  const [getSpecialMomentOtherInfo, setSpecialMomentOtherInfo] = useState("");
+  const [getSpecialMomentImage, setSpecialMomentImage] = useState("");
+  const [getUserSpecialMomentId, setUserSpecialMomentId] = useState("");
+  const [getSpecialMomentId, setSpecialMomentId] = useState("");
+  const [getFriendDefaultSpecialMomentText, setFriendDefaultSpecialMomentText] =
+    useState("");
 
   const CloseItem = () => {
     setUserBlockModal(false);
     setFavoriteThingsModal(false);
     setNotificationSendModal(false);
     setAwesomeShowModal(false);
+    setAddNewItemModal(false);
+    setImageNew("");
+    setSpecialMomentImage("");
   };
   const UserBlock = () => {
     console.log("===>>>11111");
@@ -120,20 +115,21 @@ const UserProfile = ({ route, navigation }) => {
     setAddNewItem(favItem);
     setFavoriteThingsModal(true);
   };
-  const SendNotificationFav = () => {
-    setFavoriteThingsModal(false);
-    setNotificationSendModal(true);
-  };
-
-  const AwesomeShowModal = () => [
-    setNotificationSendModal(false),
-    setAwesomeShowModal(true),
-  ];
 
   const followUserAction = async () => {
     const { followUserResponse, followUserError } = await followUser(
       userInfo.user_id
     );
+    setLoader(true);
+    if (followUserResponse.data.StatusCode == "1") {
+      setLoader(false);
+      console.log("followUserResponse ===============>");
+      console.log(followUserResponse);
+    } else {
+      setLoader(false);
+      console.log("followUserError ===============>");
+      console.log(followUserError);
+    }
   };
   const blockFriendAction = async () => {
     const { blockFriendResponse, blockFriendError } = await blockFriend(
@@ -142,14 +138,80 @@ const UserProfile = ({ route, navigation }) => {
     );
   };
 
+  // Favorite Things
+  const ShowOldItem = (Name, Image, CategoryId, key, questions) => {
+    temp = [];
+    console.log("ShowOldItem Name", Name);
+    console.log("ShowOldItem Image", Image);
+    console.log("ShowOldItem Id", CategoryId);
+    console.log("ShowOldItem key", key);
+    console.log("ShowOldItem questions", questions);
+
+    setImageNew(Image);
+    setShowOldQuestion(questions);
+    setAddNewItemModal(true);
+    setTitleName(Name);
+    setCategoryId(CategoryId);
+  };
+
+  const Giftit = () => {
+    setAddNewItemModal(false);
+    setNotificationSendModal(true);
+  };
+
+  const AwesomeShowModal = async () => {
+    setNotificationSendModal(false), setAwesomeShowModal(true), setLoader(true);
+    const { addgiftnoticationResponse, addgiftnoticatioError } =
+      await AddGiftNotication(userInfo.user_id, getCategoryId);
+    debugger;
+    if (addgiftnoticationResponse.data.StatusCode == "1") {
+      debugger;
+      console.log("add gift notication Response", addgiftnoticationResponse);
+      setLoader(false);
+    } else {
+      setLoader(false);
+      console.log("add gift notication Error", addgiftnoticatioError);
+    }
+  };
+
+  // SpecialMoments
+  const SpecialMomentsData = (
+    specialMomentName,
+    userSpecialMomentTitle,
+    userSpecialMomentDate,
+    specialMomentLink,
+    specialMomentOtherInfo,
+    Image,
+    userSpecialMomentId,
+    specialMomentId
+  ) => {
+    setFavoriteThingsModal(true);
+    setSpecialMomentName(specialMomentName);
+    setUserSpecialMomentTitle(userSpecialMomentTitle);
+    setUserSpecialMomentDate(userSpecialMomentDate);
+    setSpecialMomentLink(specialMomentLink);
+    setSpecialMomentOtherInfo(specialMomentOtherInfo);
+    setSpecialMomentImage(Image);
+    setUserSpecialMomentId(userSpecialMomentId);
+    setSpecialMomentId(specialMomentId);
+  };
+
   const getProfiles = async () => {
+    setLoader(true);
     const { profileResponse, profileError } = await getProfile(
       userInfo.user_id
     );
 
     if (profileResponse.data.StatusCode) {
+      setResult(profileResponse.data.Result[0].user_details);
+      setProfileImage(
+        profileResponse.data.Result[0].user_details[0].user_profile_image
+      );
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
+      setFriendDefaultSpecialMomentText(
+        profileResponse.data.Result[0].friend_default_special_moment_text
+      );
       setMomentsCount(profileResponse.data.Result[0].special_moment_count);
       setFriendCategoryQuestions(
         profileResponse.data.Result[0].friend_category_questions
@@ -157,61 +219,72 @@ const UserProfile = ({ route, navigation }) => {
       setFriendSpecialMoments(
         profileResponse.data.Result[0].friend_special_moments
       );
+      setLoader(false);
+    } else {
+      setLoader(false);
     }
   };
+
   useEffect(() => {
     getProfiles();
   }, []);
 
   return (
-    <View>
+    <View style={{ color: COLORS.white }}>
+      <MyBlackStatusbar />
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          left: 0,
+          zIndex: 1,
+        }}
+      >
+        <LinearGradient
+          colors={[
+            "rgba(0,0,0,1)",
+            "rgba(0,0,0,0.8)",
+            "rgba(0,0,0,0.6)",
+            "rgba(0,0,0,0.4)",
+            "rgba(0,0,0,0.0)",
+          ]}
+        >
+          <View style={CommonStyle.ProfileToolbarbg}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("NavFriendScreen")}
+            >
+              <Image
+                source={imgBackleftWhite}
+                style={CommonStyle.imgIconSize}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => UserBlock()}>
+              <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
+                Profile
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => UserBlock()}>
+              <Image source={imgWhiteDot} style={CommonStyle.imgIconSize} />
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
+      </View>
       <ScrollView
         showsHorizontalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
       >
         <View style={CommonStyle.authPage}>
           <View style={CommonStyle.imgmask}>
             <ImageBackground
-              source={iimgprofiledemo3}
-              style={[CommonStyle.imgProfileBackground, { zIndex: 2 }]}
-            >
-              <LinearGradient
-                colors={[
-                  "rgba(0,0,0,1)",
-                  "rgba(0,0,0,0.8)",
-                  "rgba(0,0,0,0.6)",
-                  "rgba(0,0,0,0.4)",
-                  "rgba(0,0,0,0.0)",
-                ]}
-              >
-                <View style={CommonStyle.ProfileToolbarbg}>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("NavFriendScreen")}
-                  >
-                    <Image
-                      source={imgBackleftWhite}
-                      style={CommonStyle.imgIconSize}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => UserBlock()}>
-                    <Text
-                      style={[
-                        CommonStyle.txtTitle,
-                        { color: COLORS.Secondary },
-                      ]}
-                    >
-                      Profile
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => UserBlock()}>
-                    <Image
-                      source={imgWhiteDot}
-                      style={CommonStyle.imgIconSize}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </LinearGradient>
-            </ImageBackground>
+              source={
+                getProfileImage != ""
+                  ? { uri: getProfileImage }
+                  : imgPlaceHolder
+              }
+              style={[CommonStyle.imgProfileBackground]}
+            ></ImageBackground>
             <Image
               source={imgProfileBackground}
               style={CommonStyle.imgmaskbg}
@@ -225,25 +298,26 @@ const UserProfile = ({ route, navigation }) => {
                   <Text style={UserProfileScreenStyle.userName}>
                     {userInfo.user_fname}
                   </Text>
-                  <View style={CommonStyle.alignItemsBaseLine}>
-                    <Image
-                      source={imgbirthdayCakeGary}
-                      style={CommonStyle.imgIconSize}
-                    />
-                    <Text
-                      style={[
-                        CommonStyle.txtContent,
-                        { color: COLORS.PrimaryLight },
-                      ]}
-                    >
-                      {" "}
-                      Birthday: April, 14th
-                    </Text>
-                  </View>
+                  {getFriendDefaultSpecialMomentText.length > 0 ? (
+                    <View style={CommonStyle.alignItemsBaseLine}>
+                      <Image
+                        source={imgbirthdayCakeGary}
+                        style={CommonStyle.imgIconSize}
+                      />
+                      <Text
+                        style={[
+                          CommonStyle.txtContent,
+                          { color: COLORS.PrimaryLight },
+                        ]}
+                      >
+                        {getFriendDefaultSpecialMomentText}
+                      </Text>
+                    </View>
+                  ) : null}
                 </View>
-                <FilledButton
+                <POPLinkButton
                   buttonName={AppString.Follow}
-                  styleBtn={[Mediumbtn, { marginHorizontal: 10 }]}
+                  styleBtn={Mediumbtn}
                   onPress={() => followUserAction()}
                 />
               </View>
@@ -293,19 +367,18 @@ const UserProfile = ({ route, navigation }) => {
                       DataLength={friendCategoryQuestions.length}
                       ShowBtn={false}
                       onPress={() =>
-                        // ShowOldItem(
-                        //   item.category_name,
-                        //   item.user_category_image,
-                        //   item.category_id,
-                        //   index,
-                        //   item.questions
-                        // )
-                        console.log("ddfdf")
+                        ShowOldItem(
+                          item.category_name,
+                          item.user_category_image,
+                          item.category_id,
+                          index,
+                          item.questions
+                        )
                       }
-                      AddNewOnPress={
-                        () => console.log("ddfdf")
-                        //  AddItemShow(index)
-                      }
+                      // AddNewOnPress={
+                      //   () => console.log("ddfdf")
+                      //   //  AddItemShow(index)
+                      // }
                     />
                   ))}
               </ScrollView>
@@ -332,24 +405,23 @@ const UserProfile = ({ route, navigation }) => {
                       DataLength={friendSpecialMoments.length}
                       ShowBtn={false}
                       onPress={() =>
-                        // ShowOldItem(
-                        //   item.category_name,
-                        //   item.user_category_image,
-                        //   item.category_id,
-                        //   index,
-                        //   item.questions
-                        // )
-                        console.log("ddfdf")
-                      }
-                      AddNewOnPress={
-                        () => console.log("ddfdf")
-                        //  AddItemShow(index)
+                        SpecialMomentsData(
+                          item.special_moment_name,
+                          item.user_special_moment_title,
+                          item.user_special_moment_date,
+                          item.special_moment_link,
+                          item.special_moment_other_info,
+                          item.image,
+                          item.user_special_moment_id,
+                          item.special_moment_id
+                        )
                       }
                     />
                   ))}
               </ScrollView>
             </View>
 
+            {/* Block */}
             {getUserBlockModal == true ? (
               <Modal
                 testID={"modal"}
@@ -373,6 +445,7 @@ const UserProfile = ({ route, navigation }) => {
               </Modal>
             ) : null}
 
+            {/* SpecialMoment  --- 1*/}
             {getFavoriteThingsModal == true ? (
               <Modal
                 testID={"modal"}
@@ -382,44 +455,105 @@ const UserProfile = ({ route, navigation }) => {
                 <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
-                      {/* <Image source={{ uri: getImage }} style={CommonStyle.popupProfileImage} /> */}
-                      <Image
-                        source={imgImport}
-                        style={CommonStyle.popupProfileImage}
-                      />
+                      {getImageNew == "" ? (
+                        <Image
+                          source={{ uri: getSpecialMomentImage }}
+                          style={CommonStyle.popupImage}
+                        />
+                      ) : (
+                        <Image
+                          source={imgImport}
+                          style={CommonStyle.popupImage}
+                        />
+                      )}
                     </View>
                     <View style={{ width: "80%" }}>
                       <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                        {getAddNewItem}
+                        {getSpecialMomentName}
                       </Text>
                     </View>
                   </View>
 
                   <View style={CommonStyle.my16}>
                     <EditShowSimpleView
-                      TitleName={"Color"}
-                      buttonName={"Demo"}
+                      TitleName={"Title"}
+                      value={getUserSpecialMomentTitle}
                     />
                     <EditShowSimpleView
-                      TitleName={"Type"}
-                      buttonName={"Demo"}
-                    />
-                    <EditShowSimpleView
-                      TitleName={"Amount"}
-                      buttonName={"Demo"}
-                    />
-                    <EditShowSimpleView
-                      TitleName={"Vase"}
-                      buttonName={"Demo"}
+                      TitleName={"Date"}
+                      value={getUserSpecialMomentDate}
                     />
                     <EditShowSimpleView
                       TitleName={"Link"}
-                      buttonName={"Demo"}
+                      value={getSpecialMomentLink}
                     />
                     <EditShowSimpleView
                       TitleName={"Other Info"}
-                      buttonName={"Demo"}
+                      value={getSpecialMomentOtherInfo}
                     />
+                  </View>
+
+                  <View
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
+                    {/* <ImagePOPLinkButton
+                      buttonName={AppString.Giftit}
+                      buttonImage={imgWhitegift}
+                      onPress={() => SendSpecialMoment()}
+                    /> */}
+                  </View>
+                </View>
+              </Modal>
+            ) : null}
+
+            {/* Show User Category Question */}
+            {getAddNewItemModal == true ? (
+              <Modal
+                testID={"modal"}
+                isVisible={getAddNewItemModal}
+                onBackdropPress={() => CloseItem()}
+              >
+                <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                  <View style={CommonStyle.Row}>
+                    <View style={{ width: "20%" }}>
+                      <TouchableOpacity disabled={true}>
+                        {getImageNew == "" ? (
+                          <Image
+                            source={{ uri: getImageNew }}
+                            style={CommonStyle.popupImage}
+                          />
+                        ) : (
+                          <Image
+                            source={imgImport}
+                            style={CommonStyle.popupImage}
+                          />
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ width: "60%" }}>
+                      <Text
+                        style={[
+                          CommonStyle.txtTitle,
+                          CommonStyle.p16,
+                          { textAlign: "center" },
+                        ]}
+                      >
+                        {getTitleName}
+                      </Text>
+                    </View>
+                    <View style={{ width: "20%" }}></View>
+                  </View>
+                  <View style={CommonStyle.my16}>
+                    {getShowOldQuestion.length > 0 &&
+                      getShowOldQuestion.map((item, index) => {
+                        return (
+                          <EditShowSimpleView
+                            TitleName={item.category_question}
+                            buttonName={item.category_placeholder}
+                            value={item.question_value}
+                          />
+                        );
+                      })}
                   </View>
 
                   <View
@@ -427,13 +561,15 @@ const UserProfile = ({ route, navigation }) => {
                   >
                     <ImagePOPLinkButton
                       buttonName={AppString.Giftit}
-                      buttonImage={imgWhitegift}
-                      onPress={() => SendNotificationFav()}
+                      buttonImage={imgGiftNotification}
+                      onPress={() => Giftit()}
                     />
                   </View>
                 </View>
               </Modal>
             ) : null}
+
+            {/* getNotificationSendModal */}
             {getNotificationSendModal == true ? (
               <Modal
                 testID={"modal"}
@@ -443,20 +579,44 @@ const UserProfile = ({ route, navigation }) => {
                 <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
-                      {/* <Image source={{ uri: getImage }} style={CommonStyle.popupProfileImage} /> */}
-                      <Image
-                        source={imgImport}
-                        style={CommonStyle.popupProfileImage}
-                      />
+                      <TouchableOpacity disabled={true}>
+                        {getImageNew == "" ? (
+                          <Image
+                            source={{ uri: getImageNew }}
+                            style={CommonStyle.popupImage}
+                          />
+                        ) : (
+                          <Image
+                            source={imgImport}
+                            style={CommonStyle.popupImage}
+                          />
+                        )}
+                      </TouchableOpacity>
                     </View>
-                    <View style={{ width: "80%" }}>
-                      <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                        {getAddNewItem}
+                    <View style={{ width: "60%" }}>
+                      <Text
+                        style={[
+                          CommonStyle.txtTitle,
+                          CommonStyle.p16,
+                          { textAlign: "center" },
+                        ]}
+                      >
+                        {getTitleName}
                       </Text>
                     </View>
+                    <View style={{ width: "20%" }}></View>
                   </View>
 
-                  <Text style={CommonStyle.txtTitle}>{AppString.planning}</Text>
+                  <View style={{ marginTop: 10, marginBottom: 10 }}>
+                    <Text
+                      style={[
+                        CommonStyle.txtContent,
+                        { marginLeft: 10, marginRight: 10, fontSize: 18 },
+                      ]}
+                    >
+                      {AppString.planning}
+                    </Text>
+                  </View>
 
                   <View
                     style={{ flexDirection: "row", justifyContent: "center" }}
@@ -474,6 +634,8 @@ const UserProfile = ({ route, navigation }) => {
                 </View>
               </Modal>
             ) : null}
+
+            {/* getAwesomeShowModal */}
             {getAwesomeShowModal == true ? (
               <Modal
                 testID={"modal"}
@@ -488,7 +650,15 @@ const UserProfile = ({ route, navigation }) => {
                     />
                   </View>
 
-                  <Text style={[CommonStyle.txtTitle, { marginTop: 10 }]}>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      {
+                        margin: 10,
+                        fontSize: 18,
+                      },
+                    ]}
+                  >
                     {AppString.FriendsAwesome}
                   </Text>
                 </View>
@@ -497,6 +667,7 @@ const UserProfile = ({ route, navigation }) => {
           </View>
         </View>
       </ScrollView>
+      <Spinner visible={getLoader} />
     </View>
   );
 };

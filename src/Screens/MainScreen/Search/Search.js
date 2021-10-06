@@ -57,7 +57,7 @@ const Search = ({ navigation }) => {
   };
 
   const OpenUserProfile = (userInfo) => {
-    console.log("OpenUserProfile", userInfo);
+    // console.log("OpenUserProfile", userInfo);
     navigation.navigate("UserProfile", { userInfo: userInfo });
   };
 

@@ -708,7 +708,9 @@ export const useActions = () => {
         var data = new FormData();
         data.append("FriendRequestTo", friendRequestTo);
         followUserResponse = await API.FollowUser.get(sessions, data);
+        debugger;
         if (followUserResponse.data.StatusCode == "1") {
+          debugger;
         }
       } catch (e) {
         followUserError = e;
@@ -730,6 +732,27 @@ export const useActions = () => {
         blockFriendError = e;
       }
       return { blockFriendResponse, blockFriendError };
+    },
+
+    AddGiftNotication: async (GiftTo, CategoryID) => {
+      let addgiftnoticationResponse, addgiftnoticatioError;
+      try {
+        var data = new FormData();
+        data.append("GiftTo", GiftTo);
+        data.append("CategoryID", CategoryID);
+        debugger;
+        addgiftnoticationResponse = await API.AddGiftNotication.get(
+          sessions,
+          data
+        );
+        debugger;
+        if (addgiftnoticationResponse.data.StatusCode == "1") {
+          debugger;
+        }
+      } catch (e) {
+        addgiftnoticatioError = e;
+      }
+      return { addgiftnoticationResponse, addgiftnoticatioError };
     },
 
     //

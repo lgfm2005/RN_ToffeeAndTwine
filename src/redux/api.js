@@ -311,3 +311,8 @@ export const BlockFriend = {
   get: async (session, data) =>
     await api(session, `rest_api/controller_friend/block_friend`, "post", data),
 };
+
+export const AddGiftNotication = {
+  get: async (session, data) =>
+    await api(session, `rest_api/controller_gift/add_gift`, "post", data),
+};

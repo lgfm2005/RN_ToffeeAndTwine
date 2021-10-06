@@ -43,6 +43,7 @@ import { useActions } from "../../../redux/actions";
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 var temp,
   temp2 = [];
+var data = new FormData();
 var items, list;
 const TutorialSecond = ({ navigation, props, route }) => {
   const { addCategoryQuestion, CategoryList } = useActions();
@@ -59,6 +60,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
   const [getModalName, setModalName] = useState("");
 
   const [getImage, setImage] = useState("");
+  const [getImageAPI, setImageAPI] = useState("");
 
   const NextScreen = async () => {
     setLoader(true);
@@ -105,6 +107,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
       height: 400,
       cropping: true,
     }).then((image) => {
+      setImageAPI(image);
       setImage(image.path);
       console.log("image===>", image.path);
     });
@@ -116,8 +119,8 @@ const TutorialSecond = ({ navigation, props, route }) => {
 
   const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
     temp2[key] = {
-      categoryId,
-      categoryQuestionId,
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
       value,
       key,
     };
@@ -125,16 +128,6 @@ const TutorialSecond = ({ navigation, props, route }) => {
   };
 
   // Add New Categories Question
-  // const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
-  //   temp[key] = {
-  //     categoryId,
-  //     categoryQuestionId,
-  //     value,
-  //     key,
-  //   };
-  //   setQuestionsData(temp);
-  // };
-
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
     temp[key] = {
       category_id: categoryId,
@@ -144,15 +137,16 @@ const TutorialSecond = ({ navigation, props, route }) => {
     };
     setQuestionsData(temp);
   };
-
   const SubmitData = async () => {
     setModalVisible(false);
     setLoader(true);
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(tokens, 1, getQuestionsData);
+      await addCategoryQuestion(tokens, 1, getQuestionsData, getImageAPI);
     if (addCategoryQuestionResponse.data.StatusCode == "1") {
       setModalVisible(false);
+      setImage("");
+      setImageAPI("");
       // List Icon COLOR Change
       list = getlistOfCategory;
       items = list[getIndexIcon];
@@ -166,6 +160,37 @@ const TutorialSecond = ({ navigation, props, route }) => {
     }
     setLoader(false);
   };
+
+  // const SubmitData = async () => {
+  //   setModalVisible(false);
+  //   setLoader(true);
+
+  //   getQuestionsData.map((item) => {
+  //     data.append("IsFirst", 0);
+  //     data.append("CategoryID[]", item.categoryId);
+  //     data.append("CategoryQuestionID[]", item.categoryQuestionId);
+  //     data.append("CategoryQuestionValue[]", item.value);
+  //   });
+
+  //   // API
+  //   const { addCategoryQuestionError, addCategoryQuestionResponse } =
+  //     await addCategoryQuestion(tokens, data);
+  //   if (addCategoryQuestionResponse.data.StatusCode == "1") {
+  //     setModalVisible(false);
+
+  //     // List Icon COLOR Change
+  //     list = getlistOfCategory;
+  //     items = list[getIndexIcon];
+  //     items.isSelected = true;
+  //     list[getIndexIcon] = items;
+
+  //     console.log("Question Response ==>>>", addCategoryQuestionResponse);
+  //   } else {
+  //     setModalVisible(true);
+  //     console.log("Question Error ==>>>", addCategoryQuestionError);
+  //   }
+  //   setLoader(false);
+  // };
 
   return (
     <SafeAreaView style={CommonStyle.BgColorWhite}>
@@ -254,6 +279,26 @@ const TutorialSecond = ({ navigation, props, route }) => {
                       </View>
                     </View>
 
+                    {/* <View style={CommonStyle.my16}>
+                      {getQuestions.map((item, key) => {
+                        return (
+                          <SimpleInputEditView
+                            key={key}
+                            TitleName={item.category_question}
+                            placeholder={item.category_placeholder}
+                            onChangeText={(value) =>
+                              HandelQuestionData(
+                                item.category_id,
+                                item.category_question_id,
+                                value,
+                                key
+                              )
+                            }
+                          />
+                        );
+                      })}
+                    </View> */}
+
                     <View style={CommonStyle.my16}>
                       {getQuestions.length > 0 &&
                         getQuestions.map((item, key) => {
@@ -267,7 +312,6 @@ const TutorialSecond = ({ navigation, props, route }) => {
                             <SimpleInputEditView
                               TitleName={item.category_question}
                               placeholder={item.category_placeholder}
-                              placeholderTextColor={COLORS.Primary}
                               onChangeText={(value) =>
                                 HandelQuestionData(
                                   item.category_id,

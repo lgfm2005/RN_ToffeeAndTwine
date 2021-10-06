@@ -28,6 +28,7 @@ export const imgPlus = require("../Image/imgPlus.png");
 export const imgSearch = require("../Image/imgSearch.png");
 export const imgDelete = require("../Image/imgDelete.png");
 export const imgPlaceHolder = require("../Image/imgPlaceHolder.png");
+export const imgGiftNotification = require("../Image/imgGiftNotification.png");
 
 // Nav
 export const imgNavHome = require("../Image/imgNavHome.png");

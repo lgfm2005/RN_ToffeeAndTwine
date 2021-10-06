@@ -56,7 +56,6 @@ const SettingScreen = ({ navigation }) => {
 
   const GetSetting = async () => {
     const { response, error } = await getSetting();
-    debugger;
     if (response.data.StatusCode) {
       setGiftingSwitch(false);
       if (response.data.Result.isNotifyGifting == "1") {
