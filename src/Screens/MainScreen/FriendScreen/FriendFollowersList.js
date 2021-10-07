@@ -31,7 +31,6 @@ import { AppString } from "../../../Assets/utils/AppString";
 import {
   imgWhitegift,
   imgUserBlock,
-  imgBackleftWhite,
   iimgprofiledemo3,
   imgImport,
   imgCheckCircle,
@@ -45,6 +44,9 @@ import {
   imgWhiteDot,
   imgBook,
   demofaceman,
+  imgPlaceHolder,
+  imgBackleftWhite,
+  imgGiftNotification,
 } from "../../../Assets/utils/Image";
 import { MainScreenStyle } from "../MainScreenStyle";
 import { CalendarList } from "../../../Components/AllListVIew/CalendarList";
@@ -56,12 +58,15 @@ import { EditShowSimpleView } from "../../../Components/FormInput";
 import { FriendScreenStyle } from "./FriendScreenStyle";
 import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
+import Spinner from "react-native-loading-spinner-overlay";
 
 var temp,
   temp2 = [];
 const FriendFollowersList = ({ route, navigation }) => {
   const { userID } = route.params;
-  const { getProfile, RemoveFollowerFriend, blockFriend } = useActions();
+  const { getProfile, RemoveFollowerFriend, blockFriend, AddGiftNotication } =
+    useActions();
+
   const [getUserBlockModal, setUserBlockModal] = useState(false);
   const [getMomentsCount, setMomentsCount] = useState(0);
   const [getFollowerCount, setFollowerCount] = useState(0);
@@ -70,30 +75,131 @@ const FriendFollowersList = ({ route, navigation }) => {
   const [friendSpecialMoments, setFriendSpecialMoments] = useState([]);
   const [friendCategoryQuestions, setFriendCategoryQuestions] = useState([]);
 
+  const [getProfileImage, setProfileImage] = useState("");
+  const [getResult, setResult] = useState("");
+  const [getLoader, setLoader] = useState(false);
+
+  const [getImageNew, setImageNew] = useState("");
+  const [getShowOldQuestion, setShowOldQuestion] = useState("");
+  const [getAddNewItemModal, setAddNewItemModal] = useState("");
+  const [getTitleName, setTitleName] = useState("");
+  const [getCategoryId, setCategoryId] = useState("");
+
+  //SpecialMoment
+  const [getSpecialMomentName, setSpecialMomentName] = useState("");
+  const [getUserSpecialMomentTitle, setUserSpecialMomentTitle] = useState("");
+  const [getUserSpecialMomentDate, setUserSpecialMomentDate] = useState("");
+  const [getSpecialMomentLink, setSpecialMomentLink] = useState("");
+  const [getSpecialMomentOtherInfo, setSpecialMomentOtherInfo] = useState("");
+  const [getSpecialMomentImage, setSpecialMomentImage] = useState("");
+  const [getUserSpecialMomentId, setUserSpecialMomentId] = useState("");
+  const [getSpecialMomentId, setSpecialMomentId] = useState("");
+  const [getFriendDefaultSpecialMomentText, setFriendDefaultSpecialMomentText] =
+    useState("");
+
+  const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
+  const [getNotificationSendModal, setNotificationSendModal] = useState(false);
+  const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
+
   const CloseItem = () => {
     setUserBlockModal(false);
     setFavoriteThingsModal(false);
     setNotificationSendModal(false);
+    setAddNewItemModal(false);
+    setImageNew("");
+    setSpecialMomentImage("");
+    setAwesomeShowModal(false);
   };
+
+  // Favorite Things
+  const ShowOldItem = (Name, Image, CategoryId, key, questions) => {
+    temp = [];
+    console.log("ShowOldItem Name", Name);
+    console.log("ShowOldItem Image", Image);
+    console.log("ShowOldItem Id", CategoryId);
+    console.log("ShowOldItem key", key);
+    console.log("ShowOldItem questions", questions);
+
+    setImageNew(Image);
+    setShowOldQuestion(questions);
+    setAddNewItemModal(true);
+    setTitleName(Name);
+    setCategoryId(CategoryId);
+  };
+
+  const Giftit = () => {
+    setAddNewItemModal(false);
+    setNotificationSendModal(true);
+  };
+
+  const AwesomeShowModal = async () => {
+    setNotificationSendModal(false), setAwesomeShowModal(true), setLoader(true);
+    const { addgiftnoticationResponse, addgiftnoticatioError } =
+      await AddGiftNotication(userID, getCategoryId);
+    if (addgiftnoticationResponse.data.StatusCode == "1") {
+      console.log("add gift notication Response", addgiftnoticationResponse);
+      setLoader(false);
+    } else {
+      setLoader(false);
+      console.log("add gift notication Error", addgiftnoticatioError);
+    }
+  };
+
+  // SpecialMoments
+  const SpecialMomentsData = (
+    specialMomentName,
+    userSpecialMomentTitle,
+    userSpecialMomentDate,
+    specialMomentLink,
+    specialMomentOtherInfo,
+    Image,
+    userSpecialMomentId,
+    specialMomentId
+  ) => {
+    setFavoriteThingsModal(true);
+    setSpecialMomentName(specialMomentName);
+    setUserSpecialMomentTitle(userSpecialMomentTitle);
+    setUserSpecialMomentDate(userSpecialMomentDate);
+    setSpecialMomentLink(specialMomentLink);
+    setSpecialMomentOtherInfo(specialMomentOtherInfo);
+    setSpecialMomentImage(Image);
+    setUserSpecialMomentId(userSpecialMomentId);
+    setSpecialMomentId(specialMomentId);
+  };
+
   const UserBlock = () => {
     console.log("===>>>11111");
     setUserBlockModal(true);
   };
 
   const blockFriendAction = async () => {
+    setLoader(true);
     const { blockFriendResponse, blockFriendError } = await blockFriend(
       userID,
       1
     );
+    setLoader(false);
   };
   const removeFollowerFriend = async () => {
+    setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(userID);
+    setLoader(false);
   };
 
   const getProfiles = async () => {
+    setLoader(true);
+
     const { profileResponse, profileError } = await getProfile(userID);
     if (profileResponse.data.StatusCode) {
+      setResult(profileResponse.data.Result[0].user_details);
+      setProfileImage(
+        profileResponse.data.Result[0].user_details[0].user_profile_image
+      );
+      setFriendDefaultSpecialMomentText(
+        profileResponse.data.Result[0].friend_default_special_moment_text
+      );
+
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
       setMomentsCount(
@@ -111,12 +217,17 @@ const FriendFollowersList = ({ route, navigation }) => {
       setFriendSpecialMoments(
         profileResponse.data.Result[0].friend_special_moments
       );
+      setLoader(false);
+    } else {
+      setLoader(false);
     }
   };
 
   useEffect(() => {
     getProfiles();
   }, []);
+
+  console.log("getSpecialMomentImage::", getSpecialMomentImage);
 
   return (
     <View style={CommonStyle.BgColorWhite}>
@@ -171,7 +282,11 @@ const FriendFollowersList = ({ route, navigation }) => {
         <View style={CommonStyle.authPage}>
           <View style={CommonStyle.imgmask}>
             <ImageBackground
-              source={demofaceman}
+              source={
+                getProfileImage != ""
+                  ? { uri: getProfileImage }
+                  : imgPlaceHolder
+              }
               style={[CommonStyle.imgProfileBackground]}
             ></ImageBackground>
             <Image
@@ -186,25 +301,27 @@ const FriendFollowersList = ({ route, navigation }) => {
                 <View>
                   <Text style={FriendScreenStyle.userName}>{getUserName}</Text>
                   {/* <Text style={FriendScreenStyle.userName}>{userName}</Text> */}
-                  <View style={CommonStyle.alignItemsBaseLine}>
-                    <Image
-                      source={imgbirthdayCakeGary}
-                      style={CommonStyle.imgIconSize}
-                    />
-                    <Text
-                      style={[
-                        CommonStyle.txtContent,
-                        { color: COLORS.PrimaryLight },
-                      ]}
-                    >
-                      {" "}
-                      Birthday: April, 14th
-                    </Text>
-                  </View>
+                  {getFriendDefaultSpecialMomentText.length > 0 ? (
+                    <View style={CommonStyle.alignItemsBaseLine}>
+                      <Image
+                        source={imgbirthdayCakeGary}
+                        style={CommonStyle.imgIconSize}
+                      />
+                      <Text
+                        style={[
+                          CommonStyle.txtContent,
+                          { color: COLORS.PrimaryLight },
+                        ]}
+                      >
+                        {" "}
+                        Birthday: April, 14th
+                      </Text>
+                    </View>
+                  ) : null}
                 </View>
-                <FilledButton
+                <POPLinkButton
                   buttonName={AppString.Remove}
-                  styleBtn={[Mediumbtn, { marginHorizontal: 10 }]}
+                  styleBtn={[Mediumbtn]}
                   onPress={() => removeFollowerFriend()}
                 />
               </View>
@@ -285,7 +402,15 @@ const FriendFollowersList = ({ route, navigation }) => {
                       DataLength={friendCategoryQuestions.length}
                       ShowBtn={false}
                       onPress={
-                        () => ShowOldItem()
+                        () =>
+                          ShowOldItem(
+                            item.category_name,
+                            item.user_category_image,
+                            item.category_id,
+                            index,
+                            item.questions
+                          )
+
                         // item.category_name,
                         // item.user_category_image,
                         // item.category_id,
@@ -324,14 +449,16 @@ const FriendFollowersList = ({ route, navigation }) => {
                       DataLength={friendSpecialMoments.length}
                       ShowBtn={false}
                       onPress={() =>
-                        // ShowOldItem(
-                        //   item.category_name,
-                        //   item.user_category_image,
-                        //   item.category_id,
-                        //   index,
-                        //   item.questions
-                        // )
-                        console.log("ddfdf")
+                        SpecialMomentsData(
+                          item.special_moment_name,
+                          item.user_special_moment_title,
+                          item.user_special_moment_date,
+                          item.special_moment_link,
+                          item.special_moment_other_info,
+                          item.image,
+                          item.user_special_moment_id,
+                          item.special_moment_id
+                        )
                       }
                     />
                   ))}
@@ -363,6 +490,246 @@ const FriendFollowersList = ({ route, navigation }) => {
           </View>
         </View>
       </ScrollView>
+
+      {/* Block */}
+      {getUserBlockModal == true ? (
+        <Modal
+          testID={"modal"}
+          isVisible={getUserBlockModal}
+          onBackdropPress={() => CloseItem()}
+        >
+          <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+            <TouchableOpacity
+              onPress={() => blockFriendAction()}
+              style={CommonStyle.Row}
+            >
+              <Image source={imgUserBlock} style={CommonStyle.imgIconSize} />
+              <Text style={[CommonStyle.txtTitle, { paddingLeft: 15 }]}>
+                Block
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      ) : null}
+
+      {/* SpecialMoment  --- 1*/}
+      {getFavoriteThingsModal == true ? (
+        <Modal
+          testID={"modal"}
+          isVisible={getFavoriteThingsModal}
+          onBackdropPress={() => CloseItem()}
+        >
+          <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+            <View style={CommonStyle.Row}>
+              <View style={{ width: "20%" }}>
+                {getImageNew == "" ? (
+                  <Image
+                    source={
+                      getSpecialMomentImage == "" ||
+                      getSpecialMomentImage == null
+                        ? imgPlaceHolder
+                        : { uri: getSpecialMomentImage }
+                    }
+                    style={CommonStyle.popupImage}
+                  />
+                ) : (
+                  <Image source={imgImport} style={CommonStyle.popupImage} />
+                )}
+              </View>
+              <View style={{ width: "80%" }}>
+                <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
+                  {getSpecialMomentName}
+                </Text>
+              </View>
+            </View>
+
+            <View style={CommonStyle.my16}>
+              <EditShowSimpleView
+                TitleName={"Title"}
+                value={getUserSpecialMomentTitle}
+              />
+              <EditShowSimpleView
+                TitleName={"Date"}
+                value={getUserSpecialMomentDate}
+              />
+              <EditShowSimpleView
+                TitleName={"Link"}
+                value={getSpecialMomentLink}
+              />
+              <EditShowSimpleView
+                TitleName={"Other Info"}
+                value={getSpecialMomentOtherInfo}
+              />
+            </View>
+
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              {/* <ImagePOPLinkButton
+                      buttonName={AppString.Giftit}
+                      buttonImage={imgWhitegift}
+                      onPress={() => SendSpecialMoment()}
+                    /> */}
+            </View>
+          </View>
+        </Modal>
+      ) : null}
+
+      {/* Show User Category Question */}
+      {getAddNewItemModal == true ? (
+        <Modal
+          testID={"modal"}
+          isVisible={getAddNewItemModal}
+          onBackdropPress={() => CloseItem()}
+        >
+          <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+            <View style={CommonStyle.Row}>
+              <View style={{ width: "20%" }}>
+                <TouchableOpacity disabled={true}>
+                  {getImageNew == "" ? (
+                    <Image
+                      source={
+                        getImageNew == "" || getImageNew == null
+                          ? imgPlaceHolder
+                          : { uri: getImageNew }
+                      }
+                      style={CommonStyle.popupImage}
+                    />
+                  ) : (
+                    <Image source={imgImport} style={CommonStyle.popupImage} />
+                  )}
+                </TouchableOpacity>
+              </View>
+              <View style={{ width: "60%" }}>
+                <Text
+                  style={[
+                    CommonStyle.txtTitle,
+                    CommonStyle.p16,
+                    { textAlign: "center" },
+                  ]}
+                >
+                  {getTitleName}
+                </Text>
+              </View>
+              <View style={{ width: "20%" }}></View>
+            </View>
+            <View style={CommonStyle.my16}>
+              {getShowOldQuestion.length > 0 &&
+                getShowOldQuestion.map((item, index) => {
+                  return (
+                    <EditShowSimpleView
+                      TitleName={item.category_question}
+                      buttonName={item.category_placeholder}
+                      value={item.question_value}
+                    />
+                  );
+                })}
+            </View>
+
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <ImagePOPLinkButton
+                buttonName={AppString.Giftit}
+                buttonImage={imgGiftNotification}
+                onPress={() => Giftit()}
+              />
+            </View>
+          </View>
+        </Modal>
+      ) : null}
+
+      {/* getNotificationSendModal */}
+      {getNotificationSendModal == true ? (
+        <Modal
+          testID={"modal"}
+          isVisible={getNotificationSendModal}
+          onBackdropPress={() => CloseItem()}
+        >
+          <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+            <View style={CommonStyle.Row}>
+              <View style={{ width: "20%" }}>
+                <TouchableOpacity disabled={true}>
+                  {getImageNew == "" ? (
+                    <Image
+                      source={
+                        getImageNew == "" || getImageNew == null
+                          ? imgPlaceHolder
+                          : { uri: getImageNew }
+                      }
+                      style={CommonStyle.popupImage}
+                    />
+                  ) : (
+                    <Image source={imgImport} style={CommonStyle.popupImage} />
+                  )}
+                </TouchableOpacity>
+              </View>
+              <View style={{ width: "60%" }}>
+                <Text
+                  style={[
+                    CommonStyle.txtTitle,
+                    CommonStyle.p16,
+                    { textAlign: "center" },
+                  ]}
+                >
+                  {getTitleName}
+                </Text>
+              </View>
+              <View style={{ width: "20%" }}></View>
+            </View>
+
+            <View style={{ marginTop: 10, marginBottom: 10 }}>
+              <Text
+                style={[
+                  CommonStyle.txtContent,
+                  { marginLeft: 10, marginRight: 10, fontSize: 18 },
+                ]}
+              >
+                {AppString.planning}
+              </Text>
+            </View>
+
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <POPOutLinkButton
+                buttonName={AppString.NoThanks}
+                onPress={() => CloseItem()}
+              />
+
+              <POPLinkButton
+                buttonName={AppString.YesNotify}
+                onPress={() => AwesomeShowModal()}
+              />
+            </View>
+          </View>
+        </Modal>
+      ) : null}
+
+      {/* getAwesomeShowModal */}
+      {getAwesomeShowModal == true ? (
+        <Modal
+          testID={"modal"}
+          isVisible={getAwesomeShowModal}
+          onBackdropPress={() => CloseItem()}
+        >
+          <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+            <View style={[CommonStyle.centerRow, { width: "100%" }]}>
+              <Image
+                source={imgCheckCircle}
+                style={CommonStyle.popupProfileImage}
+              />
+            </View>
+
+            <Text
+              style={[
+                CommonStyle.txtTitle,
+                {
+                  margin: 10,
+                  fontSize: 18,
+                },
+              ]}
+            >
+              {AppString.FriendsAwesome}
+            </Text>
+          </View>
+        </Modal>
+      ) : null}
+      <Spinner visible={getLoader} />
     </View>
   );
 };

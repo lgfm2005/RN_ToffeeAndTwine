@@ -457,7 +457,12 @@ const UserProfile = ({ route, navigation }) => {
                     <View style={{ width: "20%" }}>
                       {getImageNew == "" ? (
                         <Image
-                          source={{ uri: getSpecialMomentImage }}
+                          source={
+                            getSpecialMomentImage == "" ||
+                            getSpecialMomentImage == null
+                              ? imgPlaceHolder
+                              : { uri: getSpecialMomentImage }
+                          }
                           style={CommonStyle.popupImage}
                         />
                       ) : (
@@ -519,7 +524,11 @@ const UserProfile = ({ route, navigation }) => {
                       <TouchableOpacity disabled={true}>
                         {getImageNew == "" ? (
                           <Image
-                            source={{ uri: getImageNew }}
+                            source={
+                              getImageNew == "" || getImageNew == null
+                                ? imgPlaceHolder
+                                : { uri: getImageNew }
+                            }
                             style={CommonStyle.popupImage}
                           />
                         ) : (
@@ -582,7 +591,11 @@ const UserProfile = ({ route, navigation }) => {
                       <TouchableOpacity disabled={true}>
                         {getImageNew == "" ? (
                           <Image
-                            source={{ uri: getImageNew }}
+                            source={
+                              getImageNew == "" || getImageNew == null
+                                ? imgPlaceHolder
+                                : { uri: getImageNew }
+                            }
                             style={CommonStyle.popupImage}
                           />
                         ) : (
