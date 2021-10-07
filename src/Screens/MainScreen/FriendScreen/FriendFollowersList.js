@@ -97,6 +97,8 @@ const FriendFollowersList = ({ route, navigation }) => {
   const [getFriendDefaultSpecialMomentText, setFriendDefaultSpecialMomentText] =
     useState("");
 
+  const [getFriendStatus, setFriendStatus] = useState("");
+
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
   const [getNotificationSendModal, setNotificationSendModal] = useState(false);
   const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
@@ -180,6 +182,7 @@ const FriendFollowersList = ({ route, navigation }) => {
     );
     setLoader(false);
   };
+
   const removeFollowerFriend = async () => {
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
@@ -199,7 +202,9 @@ const FriendFollowersList = ({ route, navigation }) => {
       setFriendDefaultSpecialMomentText(
         profileResponse.data.Result[0].friend_default_special_moment_text
       );
-
+      setFriendStatus(
+        profileResponse.data.Result[0].user_details[0].friend_status
+      );
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
       setMomentsCount(
@@ -313,17 +318,30 @@ const FriendFollowersList = ({ route, navigation }) => {
                           { color: COLORS.PrimaryLight },
                         ]}
                       >
-                        {" "}
-                        Birthday: April, 14th
+                        {getFriendDefaultSpecialMomentText}
                       </Text>
                     </View>
                   ) : null}
                 </View>
-                <POPLinkButton
-                  buttonName={AppString.Remove}
-                  styleBtn={[Mediumbtn]}
-                  onPress={() => removeFollowerFriend()}
-                />
+                {getFriendStatus == "1" ? (
+                  <POPLinkButton
+                    buttonName={AppString.Follow}
+                    styleBtn={Mediumbtn}
+                    onPress={() => followUserAction()}
+                  />
+                ) : getFriendStatus == "2" ? (
+                  <POPLinkButton
+                    buttonName={AppString.Following}
+                    // styleBtn={Mediumbtn}
+                    // onPress={() => followUserAction()}
+                  />
+                ) : (
+                  <POPLinkButton
+                    buttonName={AppString.Remove}
+                    styleBtn={[Mediumbtn]}
+                    onPress={() => removeFollowerFriend()}
+                  />
+                )}
               </View>
             </View>
 

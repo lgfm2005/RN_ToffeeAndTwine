@@ -195,14 +195,13 @@ const CalendarScreen = () => {
   }, []);
 
   // Close All Item
-  const CloseItem = () => {
-    setPrevData({});
-    setupgradeItemModal(false);
-    setFinalSepDate("");
-    setuserSpecialMomentDate("");
-  };
 
   const CloseSepItem = () => {
+    setPrevData({});
+    setDate("");
+    setImage("");
+    setImageurl("");
+    setFinalSepDate("");
     setAddItemShowSepModal(false);
     setEditItemSepModal(false);
     setCalenderDateModal(false);
@@ -225,10 +224,6 @@ const CalendarScreen = () => {
       setImageurl(image);
       // console.log("image===>", image);
     });
-  };
-
-  const EditSubmitData = () => {
-    setEditItemSepModal(false);
   };
 
   const DeleteItem = async (DeletedId) => {
@@ -375,6 +370,7 @@ const CalendarScreen = () => {
         JSON.stringify(getImageurl),
         "0"
       );
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -383,6 +379,7 @@ const CalendarScreen = () => {
       addCategoryspecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
+      debugger;
       setPrevData({});
       setImage("");
       setImageurl("");
@@ -429,15 +426,18 @@ const CalendarScreen = () => {
       // getspecialMomentUpdateOtherInfo,
       JSON.stringify(getImageurl)
     );
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
+    debugger;
 
     if (
       updateCategorySpecialMomentResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
+      debugger;
       console.log("update Category Special Moment Done");
       getFilterSepCatgories(updateCategorySpecialMomentResponse.data.Result);
       setUserNewSpecialMomentModal(false);
@@ -1206,7 +1206,7 @@ const CalendarScreen = () => {
             <Modal
               testID={"modal"}
               isVisible={getupgradeItemModal}
-              onBackdropPress={() => CloseItem()}
+              onBackdropPress={() => CloseSepItem()}
             >
               <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
                 <View>
@@ -1238,12 +1238,12 @@ const CalendarScreen = () => {
                 <View style={CommonStyle.centerRow}>
                   <POPOutLinkButton
                     buttonName={AppString.Later}
-                    onPress={() => CloseItem()}
+                    onPress={() => CloseSepItem()}
                   />
 
                   <POPLinkButton
                     buttonName={AppString.Upgrade}
-                    onPress={() => CloseItem()}
+                    onPress={() => CloseSepItem()}
                   />
                 </View>
               </View>

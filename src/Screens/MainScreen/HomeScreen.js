@@ -282,25 +282,32 @@ const HomeScreen = () => {
     AddNewFreshItem(Name, Image, id, questions);
   };
 
+  // setSecondTemp
   const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
+    debugger;
     temp2[key] = {
       category_id: categoryId,
       category_question_id: categoryQuestionId,
       value,
       key,
     };
+    debugger;
     temp = temp2;
+    debugger;
   };
 
   // Add New Categories Question
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
+    debugger;
     temp[key] = {
       category_id: categoryId,
       category_question_id: categoryQuestionId,
       value,
       key,
     };
+    debugger;
     setQuestionsData(temp);
+    console.log("setQuestionsData ====>>>>", getQuestionsData);
   };
 
   // Add --> Select Categories --> New Item
@@ -316,23 +323,25 @@ const HomeScreen = () => {
     setEditItemModal(true);
     setAddNewItem(Name);
     setQuestions(questions);
-    setQuestionsData(questions);
+    // setQuestionsData(questions);
   };
 
   // Submit Add New Categories Question
   const SaveItem = async () => {
-    setQuestionsData(temp);
+    // setQuestionsData(temp);
     setUpdateDataModal(false);
     setAddItemShowModal(false);
     setEditItemModal(false);
     setAddNewItemModal(false);
     setLoader(true);
-
+    debugger;
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
       await addCategoryQuestion(userData, 0, getQuestionsData, getImageAPI);
+    debugger;
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
+    debugger;
     if (
       addCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
@@ -354,6 +363,7 @@ const HomeScreen = () => {
         "Question Response ==>>>",
         UserCategoryQuestionResponse.data.Result
       );
+      debugger;
     } else {
       setImageNew("");
       setImageOld("");
@@ -367,6 +377,7 @@ const HomeScreen = () => {
         "User Category Question Response Error  ===>>>",
         UserCategoryQuestionError
       );
+      debugger;
     }
     setLoader(false);
   };
@@ -388,6 +399,7 @@ const HomeScreen = () => {
 
     // temp = [];
   };
+
   // Submit Update Data Categories Question
   const SubmitUpdateQuestionData = async () => {
     setUpdateDataModal(false);
@@ -555,15 +567,18 @@ const HomeScreen = () => {
                 </Text>
               </View>
 
-              <Text
-                style={[
-                  CommonStyle.txtTitle,
-                  CommonStyle.textUpperCase,
-                  { fontFamily: FONT.NotoSans },
-                ]}
-              >
-                {AppString.ExploreShare}
-              </Text>
+              {/* Explore Share */}
+              <View>
+                <Text
+                  style={[
+                    CommonStyle.txtTitle,
+                    CommonStyle.textUpperCase,
+                    { fontFamily: FONT.NotoSans },
+                  ]}
+                >
+                  {AppString.ExploreShare}
+                </Text>
+              </View>
             </View>
 
             <View style={{ backgroundColor: COLORS.Secondary }}>
@@ -571,6 +586,8 @@ const HomeScreen = () => {
                 source={imgExploreaNShare}
                 style={MainScreenStyle.homeImg}
               />
+
+              {/* Explore Share List */}
               <View style={{ paddingHorizontal: 15 }}>
                 <ScrollView
                   keyboardShouldPersistTaps={"always"}
@@ -617,6 +634,7 @@ const HomeScreen = () => {
               </View>
             </View>
 
+            {/* Upgrade for more categories */}
             <View style={[CommonStyle.Container, CommonStyle.BgColorWhite]}>
               <Text
                 style={[
@@ -630,6 +648,7 @@ const HomeScreen = () => {
               </Text>
             </View>
 
+            {/* Upgrade for more categories List*/}
             <View
               style={{
                 backgroundColor: COLORS.Secondary,
@@ -949,14 +968,14 @@ const HomeScreen = () => {
                             <SimpleInputEditView
                               TitleName={item.category_question}
                               placeholder={item.category_placeholder}
-                              onChangeText={(value) =>
+                              onChangeText={(value) => {
                                 HandelQuestionData(
                                   item.category_id,
                                   item.category_question_id,
                                   value,
                                   key
-                                )
-                              }
+                                );
+                              }}
                             />
                           );
                         })}

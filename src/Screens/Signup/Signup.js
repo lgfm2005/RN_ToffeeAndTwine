@@ -94,7 +94,8 @@ const Signup = ({ navigation }) => {
   }, []);
 
   const getToken = async () => {
-    const deviceState = await (await OneSignal.getDeviceState()).pushToken;
+    // const deviceState = await (await OneSignal.getDeviceState()).pushToken;
+    const deviceState = await (await OneSignal.getDeviceState()).userId;
     return deviceState;
   };
 

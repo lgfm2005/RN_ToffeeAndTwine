@@ -153,7 +153,11 @@ const MyProfile = ({ navigation }) => {
 
   const [getImage, setImage] = useState("");
   const [getImageurl, setImageurl] = useState("");
-  const [getImageStatus, setImageStatus] = useState("");
+
+  const [getImageOld, setImageOld] = useState("");
+  const [getImageNew, setImageNew] = useState("");
+  const [getImageAPI, setImageAPI] = useState("");
+  const [getImageStatus, setImageStatus] = useState(0);
 
   const [getDateModal, setDateModal] = useState(false);
   const [getUpdateDateModal, setUpdateDateModal] = useState("");
@@ -236,9 +240,11 @@ const MyProfile = ({ navigation }) => {
       cropping: true,
       includeBase64: true,
     }).then((image) => {
+      setImageAPI(image);
+      setImageNew(image.path);
       setImage(image.path);
-      setImageurl(image);
-      console.log("image===>", image);
+      setImageStatus(1);
+      // console.log("image===>", image);
     });
   };
 
@@ -254,22 +260,10 @@ const MyProfile = ({ navigation }) => {
       // console.log("image===>", image);
     });
   };
-  // Select Item Categories --> Open
-  const ShowOldItem = (Name, Image, id, key, questions) => {
-    temp = [];
-    console.log("ShowOldItem Name", Name);
-    console.log("ShowOldItem Image", Image);
-    console.log("ShowOldItem id", id);
-    console.log("ShowOldItem key", key);
-    setAddNewItemModal(true);
-    setImageurl(Image);
-    setAddNewItem(Name);
-    setIdItem(id);
-    setShowOldQuestion(questions);
-  };
 
   // All categories Select show (Show All Item)
   const AddItemShow = () => {
+    temp = [];
     console.log("All categories Select show (Show All Item)");
     setAddItemShowModal(true);
   };
@@ -279,9 +273,20 @@ const MyProfile = ({ navigation }) => {
     console.log(" Select categories ===>>>", Name, Image, id, questions);
     setAddItemShowModal(false);
     // console.log("Key  ===>", key);
-
     // setAddNewFreshItemModal(true)
     AddNewFreshItem(Name, Image, id, questions);
+  };
+
+  // Add New Categories Question
+  const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
+    temp[key] = {
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
+      value,
+      key,
+    };
+    setQuestionsData(temp);
+    // console.log("setQuestionsData ====>>>>", getQuestionsData);
   };
 
   // Add --> Select Categories --> New Item
@@ -300,35 +305,59 @@ const MyProfile = ({ navigation }) => {
     setQuestionsData(questions);
   };
 
-  const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
-    temp2[key] = {
-      category_id: categoryId,
-      category_question_id: categoryQuestionId,
-      value,
-      key,
-    };
-    temp = temp2;
-  };
-
-  // Add New Categories Question
-  const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
-    temp[key] = {
-      category_id: categoryId,
-      category_question_id: categoryQuestionId,
-      value,
-      key,
-    };
-    setQuestionsData(temp);
-  };
-
-  // Old Select Categories -- > Edit Item
-  const AddEditItem = (getAddNewItem) => {
-    temp = [];
+  // Submit Add New Categories Question
+  const SaveItem = async () => {
+    // setQuestionsData(temp);
+    setUpdateDataModal(false);
+    setAddItemShowModal(false);
+    setEditItemModal(false);
     setAddNewItemModal(false);
-    setUpdateDataModal(true);
-    setUpdateDataItem(getAddNewItem);
-    // setEditItemModal(true);
-    // setEditItem(getAddNewItem);
+    setLoader(true);
+    debugger;
+    // API
+    const { addCategoryQuestionError, addCategoryQuestionResponse } =
+      await addCategoryQuestion(userData, 0, getQuestionsData, getImageAPI);
+    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+      await getUserCategoryQuestion();
+    debugger;
+    if (
+      addCategoryQuestionResponse.data.StatusCode == "1" &&
+      UserCategoryQuestionResponse.data.StatusCode == "1"
+    ) {
+      getFilterCatgories(UserCategoryQuestionResponse.data.Result);
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
+      setLoader(false);
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        UserCategoryQuestionResponse
+      );
+      console.log(
+        "Question Response ==>>>",
+        UserCategoryQuestionResponse.data.Result
+      );
+      debugger;
+    } else {
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
+      console.log("Question Error ==>>>", addCategoryQuestionError);
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        UserCategoryQuestionError
+      );
+      debugger;
+    }
+    setLoader(false);
   };
 
   // Update Categories Question
@@ -348,23 +377,23 @@ const MyProfile = ({ navigation }) => {
 
     // temp = [];
   };
+
   // Submit Update Data Categories Question
   const SubmitUpdateQuestionData = async () => {
-    setLoader(true);
     setUpdateDataModal(false);
     setAddItemShowModal(false);
     setEditItemModal(false);
     setAddNewItemModal(false);
+    setLoader(true);
 
-    console.log("getUpdateQuestionData", getUpdateQuestionData);
     // API
     const { updateCategoryQuestionResponse, updateCategoryQuestionError } =
       await updateCategoryQuestion(
         userData,
         getUpdateQuestionData,
-        getImageurl
+        getIdItem,
+        getImageAPI
       );
-
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
     if (
@@ -373,70 +402,78 @@ const MyProfile = ({ navigation }) => {
     ) {
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       // setAddNewFreshItemModal(false);
+      setLoader(false);
       setUpdateDataModal(false);
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
-      setLoader(false);
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
+      setIdItem("");
       // console.log(
       //   "User Category Question Response Done  ===>>>",
       //   UserCategoryQuestionResponse
       // );
       // console.log("Question Response ==>>>", updateCategoryQuestionResponse);
     } else {
+      setLoader(false);
       setUpdateDataModal(false);
-      getFilterCatgories("");
-      console.log("Question Error ==>>>", updateCategoryQuestionError);
-      console.log(
-        "User Category Question Response Error  ===>>>",
-        UserCategoryQuestionError
-      );
+      setAddItemShowModal(false);
+      setEditItemModal(false);
+      setAddNewItemModal(false);
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
+      setIdItem("");
+      // console.log("Question Error ==>>>", updateCategoryQuestionError);
+      // console.log(
+      //   "User Category Question Response Error  ===>>>",
+      //   GetCategoryListerror
+      // );
     }
-    // setLoader(false);
   };
-  // Submit Add New Categories Question
-  const SaveItem = async () => {
-    setUpdateDataModal(false);
-    setAddItemShowModal(false);
-    setEditItemModal(false);
-    setAddNewItemModal(false);
-    setLoader(true);
 
-    // API
-    const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData, 0, getQuestionsData, getImageurl);
-    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
-      await getUserCategoryQuestion();
-    if (
-      addCategoryQuestionResponse.data.StatusCode == "1" &&
-      UserCategoryQuestionResponse.data.StatusCode == "1"
-    ) {
-      setAddItemShowModal(false);
-      setEditItemModal(false);
-      setAddNewItemModal(false);
-      setLoader(false);
-      setImage("");
-      setImageurl("");
-      // console.log(
-      //   "User Category Question Response Error  ===>>>",
-      //   UserCategoryQuestionResponse
-      // );
-      // console.log("Question Response ==>>>", addCategoryQuestionResponse);
-    } else {
-      // setAddNewFreshItemModal(true);
-      setImage("");
-      setImageurl("");
-      setAddItemShowModal(false);
-      setEditItemModal(false);
-      setAddNewItemModal(false);
-      setLoader(false);
-      // console.log("Question Error ==>>>", addCategoryQuestionError);
-      // console.log(
-      //   "User Category Question Response Error  ===>>>",
-      //   UserCategoryQuestionError
-      // );
-    }
-    setLoader(false);
+  // Select Item Categories --> Open
+  const ShowOldItem = (Name, Image, id, key, questions) => {
+    temp = [];
+    console.log("ShowOldItem Name", Name);
+    console.log("ShowOldItem Image", Image);
+    console.log("ShowOldItem Id", id);
+    console.log("ShowOldItem key", key);
+    var questionList = userCategoryQuestion[key];
+    console.log("SquestionList", questionList);
+    setImageOld(Image);
+    setShowOldQuestion([]);
+    setTimeout(() => {
+      setShowOldQuestion(questions);
+      setAddNewItemModal(true);
+      setAddNewItem(Name);
+      setIdItem(id);
+    }, 1000);
+  };
+
+  // Old Select Categories -- > Edit Item
+  const AddEditItem = (getAddNewItem) => {
+    temp = [];
+    setAddNewItemModal(false);
+    setUpdateDataModal(true);
+    setUpdateDataItem(getAddNewItem);
+    // setEditItemModal(true);
+    // setEditItem(getAddNewItem);
+  };
+
+  // setSecondTemp
+  const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
+    temp2[key] = {
+      category_id: categoryId,
+      category_question_id: categoryQuestionId,
+      value,
+      key,
+    };
+    temp = temp2;
   };
 
   const DeletedExplore = async () => {
@@ -457,17 +494,14 @@ const MyProfile = ({ navigation }) => {
       deleteUserCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
+      getFilterCatgories(UserCategoryQuestionResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setUpdateDataModal(false);
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
-      setFinalSepDate("");
-      setuserSpecialMomentDate("");
     } else {
-      setFinalSepDate("");
-      setuserSpecialMomentDate("");
       setUpdateDataModal(false);
       setAddItemShowModal(false);
       setEditItemModal(false);
@@ -480,6 +514,8 @@ const MyProfile = ({ navigation }) => {
     }
     console.log("fewf", getIdItem);
   };
+
+  // ------------------ Explore Share List Completed ----------------
 
   const DeleteItem = async (DeletedId) => {
     setUserOldSpecialMomentModal(false);
@@ -530,10 +566,6 @@ const MyProfile = ({ navigation }) => {
     }
     setFilterSepCat(dataCategory);
     // console.log(getFilterSepCat);
-  };
-
-  const EditSubmitData = () => {
-    setEditItemSepModal(false);
   };
 
   //  Show All Select Moment List (Select Only one) --- 1.Select Moment
@@ -742,35 +774,6 @@ const MyProfile = ({ navigation }) => {
     setupgradeItemModal(true);
   };
 
-  const handleSubmitPayment = async () => {
-    // setLoading(true);
-    // HapticFeedback.trigger("impactLight");
-    try {
-      const offerings = await Purchases.getOfferings();
-      console.log("offerings:", offerings);
-      const monthlyPackage = offerings.current.monthly;
-      const { purchaserInfo } = await Purchases.purchasePackage(monthlyPackage);
-      const { latestExpirationDate } = purchaserInfo;
-      console.log("latestExpirationDate:", latestExpirationDate, purchaserInfo);
-      // const { error } = await SendReceipt(latestExpirationDate, purchaserInfo);
-      // if (error)
-      //   throw new Error(
-      //     error?.response?.data?.error || error.message || "Unkown error."
-      //   );
-      // await UserProfile(userId);
-      // onClose?.();
-    } catch (e) {
-      console.log("Error:", e);
-      // setLoading(false);
-      // if (e.userCancelled) return;
-      // setError(
-      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
-      // );
-      // setErrorDetails(e.message);
-      // HapticFeedback.trigger("impactHeavy");
-    }
-  };
-
   useEffect(() => {
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
@@ -784,6 +787,7 @@ const MyProfile = ({ navigation }) => {
       setMomentsCount(profileResponse.data.Result[0].special_moment_count);
     }
   };
+
   useEffect(() => {
     getProfiles();
   }, []);
@@ -848,8 +852,8 @@ const MyProfile = ({ navigation }) => {
           <View style={[CommonStyle.Container]}>
             <View style={[CommonStyle.my16, CommonStyle.Row]}>
               <View style={ProfileScreenStyle.NameAndEditbg}>
-                <View>
-                  <Text style={ProfileScreenStyle.userName}>
+                <View style={{ width: "80%" }}>
+                  <Text style={[ProfileScreenStyle.userName]}>
                     {userData.userFname + " " + userData.userLname}
                   </Text>
                   <View style={CommonStyle.alignItemsBaseLine}>
@@ -879,11 +883,13 @@ const MyProfile = ({ navigation }) => {
                     ) : null}
                   </View>
                 </View>
-                <POPLinkButton
-                  buttonName={AppString.Edit}
-                  styleBtn={Mediumbtn}
-                  onPress={() => navigation.navigate("EditProfile")}
-                />
+                <View style={{ width: "20%" }}>
+                  <POPLinkButton
+                    buttonName={AppString.Edit}
+                    styleBtn={Mediumbtn}
+                    onPress={() => navigation.navigate("EditProfile")}
+                  />
+                </View>
               </View>
             </View>
 
@@ -938,6 +944,7 @@ const MyProfile = ({ navigation }) => {
               </View>
             </View>
 
+            {/* Favorite Things */}
             <View>
               <Text
                 style={[
@@ -949,6 +956,7 @@ const MyProfile = ({ navigation }) => {
                 {AppString.FavoriteThings}
               </Text>
 
+              {/* Favorite Things List */}
               <ScrollView
                 contentContainerStyle={[
                   MainScreenStyle.scrollItemStyle,
@@ -975,7 +983,7 @@ const MyProfile = ({ navigation }) => {
                             item.questions
                           )
                         }
-                        AddNewOnPress={() => AddItemShow(index)}
+                        // AddNewOnPress={() => AddItemShow(index)}
                       />
                     );
                   })}
@@ -991,6 +999,7 @@ const MyProfile = ({ navigation }) => {
               </ScrollView>
             </View>
 
+            {/* Special Moments */}
             <View>
               <Text
                 style={[
@@ -1065,6 +1074,7 @@ const MyProfile = ({ navigation }) => {
                 </Text>
                 <View key={getId}>
                   <ScrollView
+                    keyboardShouldPersistTaps={"always"}
                     contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
                   >
                     {getFilterCat.length > 0 &&
@@ -1093,6 +1103,92 @@ const MyProfile = ({ navigation }) => {
             </SafeAreaView>
           </Modal>
         ) : null}
+
+        {/* Old categories Update */}
+        {getUpdateDataModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getUpdateDataModal}
+            onBackdropPress={() => CloseItem()}
+          >
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={keyboardVerticalOffset}
+            >
+              <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                <View style={CommonStyle.Row}>
+                  <View style={{ width: "20%" }}>
+                    <TouchableOpacity onPress={() => ImageChange()}>
+                      {getImageOld == "" ? (
+                        <Image source={imgImport} style={Styles.popupImage} />
+                      ) : getImageStatus == 0 ? (
+                        <Image
+                          source={{ uri: getImageOld }}
+                          style={Styles.popupImage}
+                        />
+                      ) : (
+                        <Image
+                          source={{ uri: getImageNew }}
+                          style={Styles.popupImage}
+                        />
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{ width: "60%" }}>
+                    <Text
+                      style={[
+                        CommonStyle.txtTitle,
+                        { textAlign: "center", marginTop: 10 },
+                      ]}
+                    >
+                      {getUpdateDataItem}
+                    </Text>
+                  </View>
+                  <View style={{ width: "20%" }}></View>
+                </View>
+
+                <View style={CommonStyle.my16}>
+                  {getShowOldQuestion.length > 0 &&
+                    getShowOldQuestion.map((item, key) => {
+                      UpdateQuestionData2(
+                        item.user_category_question_id,
+                        item.question_value,
+                        key
+                      );
+                      return (
+                        <SimpleInputEditView
+                          TitleName={item.category_question}
+                          buttonName={item.category_placeholder}
+                          value={item.question_value}
+                          onChangeText={(value) => {
+                            UpdateQuestionData(
+                              item.user_category_question_id,
+                              value,
+                              key
+                            );
+                          }}
+                        />
+                      );
+                    })}
+                </View>
+                <View
+                  style={{ flexDirection: "row", justifyContent: "center" }}
+                >
+                  <POPOutLinkButton
+                    buttonName={AppString.Cancel}
+                    onPress={() => CloseItem()}
+                  />
+
+                  <POPLinkButton
+                    buttonName={AppString.Save}
+                    onPress={() => SubmitUpdateQuestionData()}
+                  />
+                </View>
+              </View>
+            </KeyboardAvoidingView>
+          </Modal>
+        ) : null}
+
         {/* Show User Category Question */}
         {getAddNewItemModal == true ? (
           <Modal
@@ -1108,9 +1204,9 @@ const MyProfile = ({ navigation }) => {
                 <View style={CommonStyle.Row}>
                   <View style={{ width: "20%" }}>
                     <TouchableOpacity disabled={true}>
-                      {getImageurl != "" ? (
+                      {getImageOld != "" ? (
                         <Image
-                          source={{ uri: getImageurl }}
+                          source={{ uri: getImageOld }}
                           style={Styles.popupImage}
                         />
                       ) : (
@@ -1118,7 +1214,7 @@ const MyProfile = ({ navigation }) => {
                       )}
                     </TouchableOpacity>
                   </View>
-                  <View style={CommonStyle.PopModalWidth60}>
+                  <View style={{ width: "60%" }}>
                     <Text
                       style={[
                         CommonStyle.txtTitle,
@@ -1174,82 +1270,6 @@ const MyProfile = ({ navigation }) => {
           </Modal>
         ) : null}
 
-        {/* Old categories Update */}
-        {getUpdateDataModal == true ? (
-          <Modal
-            testID={"modal"}
-            isVisible={getUpdateDataModal}
-            onBackdropPress={() => CloseItem()}
-          >
-            <KeyboardAvoidingView
-              behavior="position"
-              keyboardVerticalOffset={keyboardVerticalOffset}
-            >
-              <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
-                <View style={CommonStyle.Row}>
-                  <View style={{ width: "20%" }}>
-                    <TouchableOpacity onPress={() => ImageChange()}>
-                      {getImageurl != "" ? (
-                        <Image
-                          source={{ uri: getImageurl }}
-                          style={Styles.popupImage}
-                        />
-                      ) : (
-                        <Image source={imgImport} style={Styles.popupImage} />
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                  <View style={CommonStyle.PopModalWidth60}>
-                    <Text
-                      style={[CommonStyle.txtTitle, { textAlign: "center" }]}
-                    >
-                      {getUpdateDataItem}
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={CommonStyle.my16}>
-                  {getShowOldQuestion.length > 0 &&
-                    getShowOldQuestion.map((item, key) => {
-                      UpdateQuestionData2(
-                        item.user_category_question_id,
-                        item.question_value,
-                        key
-                      );
-                      return (
-                        <SimpleInputEditView
-                          TitleName={item.category_question}
-                          buttonName={item.category_placeholder}
-                          value={item.question_value}
-                          onChangeText={(value) => {
-                            UpdateQuestionData(
-                              item.user_category_question_id,
-                              value,
-                              key
-                            );
-                          }}
-                        />
-                      );
-                    })}
-                </View>
-                <View
-                  style={{ flexDirection: "row", justifyContent: "center" }}
-                >
-                  <POPOutLinkButton
-                    buttonName={AppString.Cancel}
-                    onPress={() => CloseItem()}
-                  />
-
-                  <POPLinkButton
-                    buttonName={AppString.Save}
-                    onPress={() => SubmitUpdateQuestionData()}
-                  />
-                </View>
-              </View>
-            </KeyboardAvoidingView>
-          </Modal>
-        ) : null}
-
         {getEditItemModal == true ? (
           <Modal
             testID={"modal"}
@@ -1264,9 +1284,9 @@ const MyProfile = ({ navigation }) => {
                 <View style={CommonStyle.Row}>
                   <View style={{ width: "20%" }}>
                     <TouchableOpacity onPress={() => ImageChange()}>
-                      {getImage != "" ? (
+                      {getImageNew != "" ? (
                         <Image
-                          source={{ uri: getImage }}
+                          source={{ uri: getImageNew }}
                           style={Styles.popupImage}
                         />
                       ) : (
@@ -1312,27 +1332,6 @@ const MyProfile = ({ navigation }) => {
                         />
                       );
                     })}
-
-                  {/* <SimpleInputEditView
-                        TitleName={getQuestions[0].category_question}
-                        placeholder={getQuestions[0].category_placeholder}
-                        onChangeText={(FirstName) => setFirstName(FirstName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={getQuestions[1].category_question}
-                        placeholder={getQuestions[1].category_placeholder}
-                        onChangeText={(SecondName) => setSecondName(SecondName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={getQuestions[2].category_question}
-                        placeholder={getQuestions[2].category_placeholder}
-                        onChangeText={(ThirdName) => setThirdName(ThirdName)}
-                      />
-                      <SimpleInputEditView
-                        TitleName={getQuestions[3].category_question}
-                        placeholder={getQuestions[3].category_placeholder}
-                        onChangeText={(FourName) => setFourName(FourName)}
-                      /> */}
                 </View>
                 <View
                   style={{ flexDirection: "row", justifyContent: "center" }}

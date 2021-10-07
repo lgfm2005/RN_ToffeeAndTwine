@@ -255,6 +255,7 @@ export const useActions = () => {
       if (tokens) {
         session = tokens;
       }
+      debugger;
       var data = new FormData();
       data.append("SpecialMomentID", SpecialMomentID);
       data.append("UserSpecialMomentTitle", UserSpecialMomentTitle);
@@ -263,6 +264,7 @@ export const useActions = () => {
       data.append("UserSpecialMomentInfo", UserSpecialMomentInfo);
       data.append("Image", Image);
       data.append("IsFirst", IsFirst);
+      debugger;
 
       let addCategoryspecialDayResponse, addCategoryspecialDayError;
       try {
@@ -270,10 +272,13 @@ export const useActions = () => {
           session,
           data
         );
+        debugger;
         if (addCategoryspecialDayResponse.data.StatusCode == "1") {
+          debugger;
         } else {
           addCategoryspecialDayError =
             addCategoryspecialDayResponse.data.Message;
+          debugger;
         }
       } catch (e) {
         addCategoryspecialDayError = e;
@@ -336,6 +341,7 @@ export const useActions = () => {
       if (tokens) {
         session = tokens;
       }
+      debugger;
       var data = new FormData();
       getQuestionsData.map((item) => {
         data.append("IsFirst", IsFirst);
@@ -348,13 +354,16 @@ export const useActions = () => {
         }
         data.append("Image", JSON.stringify(DataImage));
       });
+      debugger;
       let addCategoryQuestionResponse, addCategoryQuestionError;
       try {
         addCategoryQuestionResponse = await API.AddCategoryQuestion.get(
           sessions,
           data
         );
+        debugger;
         if (addCategoryQuestionResponse.data.StatusCode == "1") {
+          debugger;
         } else {
           addCategoryQuestionError = addCategoryQuestionResponse.data.Message;
         }
@@ -464,12 +473,14 @@ export const useActions = () => {
       data.append("UserSpecialMomentLink", UserSpecialMomentLink);
       data.append("UserSpecialMomentInfo", UserSpecialMomentInfo);
       data.append("Image", Image);
-
+      debugger;
       let updateCategorySpecialMomentResponse, updateCategorySpecialMomentError;
       try {
         updateCategorySpecialMomentResponse =
           await API.UpdateCategorySpecialMoment.get(sessions, data);
+        debugger;
         if (updateCategorySpecialMomentResponse.data.StatusCode == "1") {
+          debugger;
         } else {
           updateCategorySpecialMomentError =
             updateCategorySpecialMomentResponse.data.Message;

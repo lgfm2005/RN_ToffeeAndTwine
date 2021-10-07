@@ -60,8 +60,13 @@ import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusb
 
 const UserProfile = ({ route, navigation }) => {
   const { userInfo } = route.params;
-  const { getProfile, followUser, blockFriend, AddGiftNotication } =
-    useActions();
+  const {
+    getProfile,
+    followUser,
+    blockFriend,
+    AddGiftNotication,
+    RemoveFollowerFriend,
+  } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
@@ -96,6 +101,7 @@ const UserProfile = ({ route, navigation }) => {
   const [getSpecialMomentId, setSpecialMomentId] = useState("");
   const [getFriendDefaultSpecialMomentText, setFriendDefaultSpecialMomentText] =
     useState("");
+  const [getFriendStatus, setFriendStatus] = useState("");
 
   const CloseItem = () => {
     setUserBlockModal(false);
@@ -136,6 +142,13 @@ const UserProfile = ({ route, navigation }) => {
       userInfo.user_id,
       1
     );
+  };
+
+  const removeFollowerFriend = async () => {
+    setLoader(true);
+    const { RemoveFriendResponse, RemoveFriendError } =
+      await RemoveFollowerFriend(userID);
+    setLoader(false);
   };
 
   // Favorite Things
@@ -206,6 +219,9 @@ const UserProfile = ({ route, navigation }) => {
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
+      );
+      setFriendStatus(
+        profileResponse.data.Result[0].user_details[0].friend_status
       );
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
@@ -315,11 +331,25 @@ const UserProfile = ({ route, navigation }) => {
                     </View>
                   ) : null}
                 </View>
-                <POPLinkButton
-                  buttonName={AppString.Follow}
-                  styleBtn={Mediumbtn}
-                  onPress={() => followUserAction()}
-                />
+                {getFriendStatus == "1" ? (
+                  <POPLinkButton
+                    buttonName={AppString.Follow}
+                    styleBtn={Mediumbtn}
+                    onPress={() => followUserAction()}
+                  />
+                ) : getFriendStatus == "2" ? (
+                  <POPLinkButton
+                    buttonName={AppString.Following}
+                    // styleBtn={Mediumbtn}
+                    // onPress={() => followUserAction()}
+                  />
+                ) : (
+                  <POPLinkButton
+                    buttonName={AppString.Remove}
+                    styleBtn={[Mediumbtn]}
+                    onPress={() => removeFollowerFriend()}
+                  />
+                )}
               </View>
             </View>
 

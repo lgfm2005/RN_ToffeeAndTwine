@@ -75,7 +75,8 @@ const SignIn = ({ navigation }) => {
   }, []);
 
   const getToken = async () => {
-    const deviceState = await (await OneSignal.getDeviceState()).pushToken;
+    // const deviceState = await (await OneSignal.getDeviceState()).pushToken;
+    const deviceState = await await OneSignal.getDeviceState().userId;
     return deviceState;
   };
 
@@ -376,13 +377,13 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                onPress={() => handleSignIn(getEmail, getCreatePassword)}
-                btncheck={isvalidForm()}
-                btnabled={isvalidForm()}
+                // onPress={() => handleSignIn(getEmail, getCreatePassword)}
+                // btncheck={isvalidForm()}
+                // btnabled={isvalidForm()}
                 // onPress={() =>
                 //   handleSignIn("kachhadiya101@gmail.com", "123456")
                 // }
-                // onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
+                onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
                 // onPress={() => handleSignIn("bhavesh@gmail.com", "123456")}
                 // onPress={() =>
                 //   handleSignIn("rshah@universalstreamsolution.com", "123456")

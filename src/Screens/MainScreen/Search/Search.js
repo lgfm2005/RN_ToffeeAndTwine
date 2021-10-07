@@ -69,7 +69,7 @@ const Search = ({ navigation }) => {
           <View style={SearchBarStyle.followerTxtIcon}>
             <Image
               source={
-                Data.item.user_profile_image == ""
+                Data.item.user_profile_image != ""
                   ? { uri: Data.item.user_profile_image }
                   : imgPlaceHolder
               }

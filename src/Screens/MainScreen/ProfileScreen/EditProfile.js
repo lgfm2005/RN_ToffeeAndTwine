@@ -61,6 +61,9 @@ const EditProfile = ({ navigation }) => {
   const [getImage, setImage] = useState("");
   const [getImageShow, setImageShow] = useState([]);
 
+  const [getImageNew, setImageNew] = useState([]);
+  const [getImageAPI, setImageAPI] = useState([]);
+
   // console.log(
   //   "user.defaultSpecialMoment>>>>>>>>>>.",
   //   user.defaultSpecialMoment
@@ -75,7 +78,17 @@ const EditProfile = ({ navigation }) => {
       //   "user.defaultSpecialMoment ====  else =====  ",
       //   user.defaultSpecialMoment
       // );
-      UpdateDefaultSpecialMoment = UserSpecialMoment[0]["special_moment_name"];
+
+      if (
+        UserSpecialMoment &&
+        UserSpecialMoment[0] &&
+        UserSpecialMoment[0]["special_moment_name"]
+      ) {
+        UpdateDefaultSpecialMoment =
+          UserSpecialMoment[0]["special_moment_name"];
+      } else {
+        UpdateDefaultSpecialMoment = "";
+      }
     } else {
       const DefultUserSpecialMoment = UserSpecialMoment.filter(
         (item) => item.special_moment_id == user.defaultSpecialMoment
@@ -98,7 +111,11 @@ const EditProfile = ({ navigation }) => {
     setHighlightMomentModel(false);
   };
   const HighlightMomentModel = () => {
-    setHighlightMomentModel(true);
+    if (UpdateDefaultSpecialMoment == "") {
+      setHighlightMomentModel(false);
+    } else {
+      setHighlightMomentModel(true);
+    }
   };
   const HighlightMomentView = (Title, Id) => {
     setHighlightMoment(Title);
@@ -115,6 +132,8 @@ const EditProfile = ({ navigation }) => {
     }).then((image) => {
       setImageShow(JSON.stringify(image));
       setImage(image.path);
+      setImageNew(image.path);
+      setImageAPI(JSON.stringify(image));
       // console.log("image===>", image);
     });
   };
@@ -153,7 +172,7 @@ const EditProfile = ({ navigation }) => {
     const { error, response } = await updateProfile(
       UpdateFirstName,
       UpdateLastName,
-      getImageShow,
+      getImageAPI,
       UpdateDefaultSpecialMomentShow
     );
 
@@ -237,14 +256,24 @@ const EditProfile = ({ navigation }) => {
             // keyboardVerticalOffset={keyboardVerticalOffset}
           >
             <View style={CommonStyle.imgmask}>
-              <ImageBackground
-                source={
-                  user.userProfileImage != ""
-                    ? { uri: user.userProfileImage }
-                    : imgPlaceHolder
-                }
-                style={CommonStyle.imgProfileBackground}
-              ></ImageBackground>
+              {getImageNew == "" ? (
+                user.userProfileImage != "" ? (
+                  <ImageBackground
+                    source={{ uri: user.userProfileImage }}
+                    style={CommonStyle.imgProfileBackground}
+                  ></ImageBackground>
+                ) : (
+                  <ImageBackground
+                    source={imgPlaceHolder}
+                    style={CommonStyle.imgProfileBackground}
+                  ></ImageBackground>
+                )
+              ) : (
+                <ImageBackground
+                  source={{ uri: getImageNew }}
+                  style={CommonStyle.imgProfileBackground}
+                ></ImageBackground>
+              )}
               <Image
                 source={imgProfileBackground}
                 style={CommonStyle.imgmaskbg}
