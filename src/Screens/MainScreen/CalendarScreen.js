@@ -26,19 +26,7 @@ import TutorialStyle from "../Signup/Tutorial/TutorialStyle";
 import { ToolbarMain } from "../../Components/ToolbarMain/ToolbarMain";
 import { MainScreenStyle } from "./MainScreenStyle";
 import { AppString } from "../../Assets/utils/AppString";
-import {
-  imgCoffee,
-  imgDesserts,
-  imgFlowers,
-  imgPlaceHolder,
-  imgImport,
-  imgBook,
-  imgDelete,
-  imgWhiteChristmas,
-  imgWhiteAnniversary,
-  imgWhiteBirthday,
-  demodp,
-} from "../../Assets/utils/Image";
+import { imgPlaceHolder, imgImport, imgDelete } from "../../Assets/utils/Image";
 import { COLORS } from "../../Assets/utils/COLORS";
 import {
   EditShowBtnSimpleView,
@@ -57,6 +45,7 @@ import { useActions } from "../../redux/actions";
 import { SelectCategoriesList } from "../../Components/AllListVIew/SelectCategoriesList";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
+import { ImageUrl } from "../../Assets/utils/ImageUrl";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
@@ -115,18 +104,6 @@ const CalendarScreen = () => {
   const [getspecialMomentLink, setspecialMomentLink] = useState("");
   const [getspecialMomentOtherInfo, setspecialMomentOtherInfo] = useState("");
 
-  const [getSpecialMomentUpdateId, setSpecialMomentUpdateId] = useState("");
-  const [getuserSpecialMomentUpdateId, setuserSpecialMomentUpdateId] =
-    useState("");
-  const [getspecialMomentUpdateName, setspecialMomentUpdateName] = useState("");
-  const [getuserSpecialMomentUpdateTitle, setuserSpecialMomentUpdateTitle] =
-    useState("");
-  const [getuserSpecialMomentUpdateDate, setuserSpecialMomentUpdateDate] =
-    useState("");
-  const [getspecialMomentUpdateLink, setspecialMomentUpdateLink] = useState("");
-  const [getspecialMomentUpdateOtherInfo, setspecialMomentUpdateOtherInfo] =
-    useState("");
-
   const [getImage, setImage] = useState("");
   const [getImageurl, setImageurl] = useState("");
 
@@ -139,7 +116,6 @@ const CalendarScreen = () => {
 
   const [getPrevData, setPrevData] = useState({});
 
-  const [setFinalDataShow, getFinalDataShow] = useState("");
   useEffect(() => {
     if (userSpecialMoment == "") {
       return;
@@ -262,7 +238,6 @@ const CalendarScreen = () => {
 
   const CloseSepItem = () => {
     setPrevData({});
-    setDate("");
     setImage("");
     setImageurl("");
     setFinalSepDate("");
@@ -272,7 +247,6 @@ const CalendarScreen = () => {
     setUserNewSpecialMomentModal(false);
     setUserOldSpecialMomentModal(false);
     setDateModal(false);
-    setFinalSepDate("");
     setuserSpecialMomentDate("");
     setupgradeItemModal(false);
   };
@@ -343,6 +317,7 @@ const CalendarScreen = () => {
     setSpecialMomentId(specialMomentId);
   };
 
+  // Date - 1
   const EnterDate = () => {
     setUserNewSpecialMomentModal(false);
     setDateModal(true);
@@ -350,6 +325,7 @@ const CalendarScreen = () => {
       date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
+  // Date - 2
   const SubmitDate = () => {
     setDateModal(false);
     setUserNewSpecialMomentModal(true);
@@ -357,6 +333,7 @@ const CalendarScreen = () => {
       date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
+  // Date - 3
   const UpdateEnterDate = () => {
     setEditItemSepModal(false);
     setUpdateDateModal(true);
@@ -365,6 +342,7 @@ const CalendarScreen = () => {
     setFinalSepDate(DateSubstring);
     // setuserSpecialMomentDate(DateSubstring);
   };
+  // Date - 4
   const UpdateSubmitDate = () => {
     setUpdateDateModal(false);
     setEditItemSepModal(true);
@@ -378,7 +356,6 @@ const CalendarScreen = () => {
     setUserOldSpecialMomentModal(false);
     setEditItemSepModal(true);
     setEditSepItem(getspecialMomentName);
-    console.log("EWfewfewfwfewf=>>>>>>>>>>", getuserSpecialMomentDate);
     setFinalSepDate(getuserSpecialMomentDate);
   };
 
@@ -482,12 +459,9 @@ const CalendarScreen = () => {
     } = await updateCategorySpecialMoment(
       getuserSpecialMomentId,
       getuserSpecialMomentTitle,
-      // getuserSpecialMomentUpdateTitle,
       getFinalSepDate,
-      // getspecialMomentUpdateLink,
       getspecialMomentLink,
       getspecialMomentOtherInfo,
-      // getspecialMomentUpdateOtherInfo,
       JSON.stringify(getImageurl)
     );
     debugger;
@@ -509,8 +483,9 @@ const CalendarScreen = () => {
       setLoader(false);
       setPrevData({});
       setImage("");
-      setFinalSepDate("");
       setImageurl("");
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
     } else {
       setUserNewSpecialMomentModal(false);
       setUserOldSpecialMomentModal(false);
@@ -518,6 +493,8 @@ const CalendarScreen = () => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
       console.log(
         "updateCategorySpecialMoment Error",
         updateCategorySpecialMomentError
@@ -613,6 +590,7 @@ const CalendarScreen = () => {
               </Text>
             </View>
 
+            {/* user Special Moment */}
             <View
               style={{
                 backgroundColor: COLORS.Secondary,
@@ -629,7 +607,12 @@ const CalendarScreen = () => {
                 {userSpecialMoment.length > 0 &&
                   userSpecialMoment.map((item, index) => (
                     <CalendarList
-                      ImageUrl={imgWhiteBirthday}
+                      ImageUrl={{
+                        uri:
+                          ImageUrl.MomentsWhite +
+                          item.special_moment_name.trim() +
+                          ImageUrl.Png,
+                      }}
                       ExploreName={item.special_moment_name}
                       Id={item.special_moment_id}
                       index={index}
@@ -662,6 +645,7 @@ const CalendarScreen = () => {
               </ScrollView>
             </View>
 
+            {/* Friend Special Moments */}
             <View>
               <View style={[CommonStyle.Container, { paddingBottom: 10 }]}>
                 <Text
@@ -1126,7 +1110,12 @@ const CalendarScreen = () => {
                         {getFilterSepCat.length > 0 &&
                           getFilterSepCat.map((item, index) => (
                             <SelectCategoriesList
-                              ImageUrl={imgWhiteBirthday}
+                              ImageUrl={{
+                                uri:
+                                  ImageUrl.MomentsWhite +
+                                  item.special_moment_name.trim() +
+                                  ImageUrl.Png,
+                              }}
                               ExploreName={item.special_moment_name}
                               Id={item.special_moment_id}
                               index={index}

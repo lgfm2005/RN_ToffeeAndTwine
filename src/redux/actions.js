@@ -463,10 +463,12 @@ export const useActions = () => {
       data.append("UserSpecialMomentLink", UserSpecialMomentLink);
       data.append("UserSpecialMomentInfo", UserSpecialMomentInfo);
       data.append("Image", Image);
+      debugger;
       let updateCategorySpecialMomentResponse, updateCategorySpecialMomentError;
       try {
         updateCategorySpecialMomentResponse =
           await API.UpdateCategorySpecialMoment.get(sessions, data);
+        debugger;
         if (updateCategorySpecialMomentResponse.data.StatusCode == "1") {
         } else {
           updateCategorySpecialMomentError =
