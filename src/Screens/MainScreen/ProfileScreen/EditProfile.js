@@ -127,6 +127,7 @@ const EditProfile = ({ navigation }) => {
     ImagePicker.openPicker({
       width: 300,
       height: 400,
+      compressImageQuality: 0.8,
       cropping: true,
       includeBase64: true,
     }).then((image) => {

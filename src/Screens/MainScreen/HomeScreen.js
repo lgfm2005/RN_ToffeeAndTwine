@@ -297,7 +297,7 @@ const HomeScreen = () => {
     temp = temp2;
   };
 
-  // Add New Categories Question
+  // Add New Categories Questionr
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
     temp[key] = {
       category_id: categoryId,
@@ -616,7 +616,7 @@ const HomeScreen = () => {
                             uri:
                               ImageUrl.Categories +
                               item.category_name +
-                              ImageUrl.png,
+                              ImageUrl.Png,
                           }}
                           ExploreName={item.category_name}
                           Id={item.category_id}
@@ -685,8 +685,8 @@ const HomeScreen = () => {
                       ImageUrl={{
                         uri:
                           ImageUrl.Categories +
-                          item.category_name +
-                          ImageUrl.png,
+                          item.category_name.trim() +
+                          ImageUrl.Png,
                       }}
                       // ImageUrl={imgBook}
                       ExploreName={item.category_name}
@@ -740,7 +740,12 @@ const HomeScreen = () => {
                         {getFilterCat.length > 0 &&
                           getFilterCat.map((item, index) => (
                             <SelectCategoriesList
-                              ImageUrl={imgBook}
+                              ImageUrl={{
+                                uri:
+                                  ImageUrl.Categories +
+                                  item.category_name.trim() +
+                                  ImageUrl.Png,
+                              }}
                               ExploreName={item.category_name}
                               Id={item.category_id}
                               index={index}

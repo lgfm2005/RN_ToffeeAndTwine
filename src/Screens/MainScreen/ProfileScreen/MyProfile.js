@@ -67,6 +67,7 @@ import {
 } from "../../../Components/FormInput";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
+import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
@@ -138,18 +139,6 @@ const MyProfile = ({ navigation }) => {
   const [getuserSpecialMomentDate, setuserSpecialMomentDate] = useState("");
   const [getspecialMomentLink, setspecialMomentLink] = useState("");
   const [getspecialMomentOtherInfo, setspecialMomentOtherInfo] = useState("");
-
-  const [getSpecialMomentUpdateId, setSpecialMomentUpdateId] = useState("");
-  const [getuserSpecialMomentUpdateId, setuserSpecialMomentUpdateId] =
-    useState("");
-  const [getspecialMomentUpdateName, setspecialMomentUpdateName] = useState("");
-  const [getuserSpecialMomentUpdateTitle, setuserSpecialMomentUpdateTitle] =
-    useState("");
-  const [getuserSpecialMomentUpdateDate, setuserSpecialMomentUpdateDate] =
-    useState("");
-  const [getspecialMomentUpdateLink, setspecialMomentUpdateLink] = useState("");
-  const [getspecialMomentUpdateOtherInfo, setspecialMomentUpdateOtherInfo] =
-    useState("");
 
   const [getImage, setImage] = useState("");
   const [getImageurl, setImageurl] = useState("");
@@ -747,15 +736,17 @@ const MyProfile = ({ navigation }) => {
       // getspecialMomentUpdateOtherInfo,
       JSON.stringify(getImageurl)
     );
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-
+    debugger;
     if (
       updateCategorySpecialMomentResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
+      debugger;
       console.log("update Category Special Moment Done");
       getFilterSepCatgories(updateCategorySpecialMomentResponse.data.Result);
       setUserNewSpecialMomentModal(false);
@@ -797,12 +788,15 @@ const MyProfile = ({ navigation }) => {
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
   }, []);
 
+  useEffect(() => {
+    setMomentsCount(userSpecialMoment.length);
+  }, [userSpecialMoment]);
+
   const getProfiles = async () => {
     const { profileResponse, profileError } = await getProfile();
-    if (profileResponse.data.StatusCode) {
+    if (profileResponse.data.StatusCode == "1") {
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
-      setMomentsCount(profileResponse.data.Result[0].special_moment_count);
     }
   };
 
@@ -985,7 +979,12 @@ const MyProfile = ({ navigation }) => {
                   userCategoryQuestion.map((item, index) => {
                     return (
                       <CalendarList
-                        ImageUrl={imgBook}
+                        ImageUrl={{
+                          uri:
+                            ImageUrl.Categories +
+                            item.category_name.trim() +
+                            ImageUrl.Png,
+                        }}
                         ExploreName={item.category_name}
                         Id={item.category_id}
                         index={index}
@@ -1037,7 +1036,12 @@ const MyProfile = ({ navigation }) => {
                 {userSpecialMoment.length > 0 &&
                   userSpecialMoment.map((item, index) => (
                     <CalendarList
-                      ImageUrl={imgWhiteBirthday}
+                      ImageUrl={{
+                        uri:
+                          ImageUrl.MomentsWhite +
+                          item.special_moment_name.trim() +
+                          ImageUrl.Png,
+                      }}
                       ExploreName={item.special_moment_name}
                       Id={item.special_moment_id}
                       index={index}
@@ -1098,7 +1102,12 @@ const MyProfile = ({ navigation }) => {
                     {getFilterCat.length > 0 &&
                       getFilterCat.map((item, index) => (
                         <SelectCategoriesList
-                          ImageUrl={imgBook}
+                          ImageUrl={{
+                            uri:
+                              ImageUrl.Categories +
+                              item.category_name.trim() +
+                              ImageUrl.Png,
+                          }}
                           ExploreName={item.category_name}
                           Id={item.category_id}
                           index={index}
@@ -1670,7 +1679,12 @@ const MyProfile = ({ navigation }) => {
                     {getFilterSepCat.length > 0 &&
                       getFilterSepCat.map((item, index) => (
                         <SelectCategoriesList
-                          ImageUrl={imgWhiteBirthday}
+                          ImageUrl={{
+                            uri:
+                              ImageUrl.MomentsWhite +
+                              item.special_moment_name.trim() +
+                              ImageUrl.Png,
+                          }}
                           ExploreName={item.special_moment_name}
                           Id={item.special_moment_id}
                           index={index}

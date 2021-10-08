@@ -39,6 +39,7 @@ import { MainScreenStyle } from "../../MainScreen/MainScreenStyle";
 import { UpgradeCategoriesList } from "../../../Components/AllListVIew/UpgradeCategoriesList";
 import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
+import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 var temp,
@@ -250,7 +251,10 @@ const TutorialSecond = ({ navigation, props, route }) => {
               >
                 {getlistOfCategory.map((item, index) => (
                   <UpgradeCategoriesList
-                    ImageUrl={item.Image}
+                    ImageUrl={{
+                      uri:
+                        ImageUrl.Categories + item.Name.trim() + ImageUrl.Png,
+                    }}
                     ExploreName={item.Name}
                     checkColor={item.isSelected}
                     Id={item.id}
@@ -296,26 +300,6 @@ const TutorialSecond = ({ navigation, props, route }) => {
                         </Text>
                       </View>
                     </View>
-
-                    {/* <View style={CommonStyle.my16}>
-                      {getQuestions.map((item, key) => {
-                        return (
-                          <SimpleInputEditView
-                            key={key}
-                            TitleName={item.category_question}
-                            placeholder={item.category_placeholder}
-                            onChangeText={(value) =>
-                              HandelQuestionData(
-                                item.category_id,
-                                item.category_question_id,
-                                value,
-                                key
-                              )
-                            }
-                          />
-                        );
-                      })}
-                    </View> */}
 
                     <View style={CommonStyle.my16}>
                       {getQuestions.length > 0 &&
