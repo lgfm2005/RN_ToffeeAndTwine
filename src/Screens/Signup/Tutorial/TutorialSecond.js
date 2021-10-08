@@ -52,7 +52,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
 
   const [getlistOfCategory, setListOfCategory] = useState(categoryList);
   const [getIndexIcon, setIndexIcon] = useState("");
-  const [getQuestions, setQuestions] = useState("");
+  const [getQuestions, setQuestions] = useState([]);
   const [getQuestionsData, setQuestionsData] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [getLoader, setLoader] = useState(false);
@@ -140,9 +140,27 @@ const TutorialSecond = ({ navigation, props, route }) => {
   const SubmitData = async () => {
     setModalVisible(false);
     setLoader(true);
+
+    var questionsList = getQuestionsData;
+    if (getQuestions.length > 0) {
+      if (questionsList.length == 0) {
+        getQuestions.map((item, key) => {
+          questionsList.push(item);
+        });
+      } else {
+        getQuestions.map((items, key) => {
+          var dataCategory = questionsList.filter((item) => {
+            return item.category_question_id == items.category_question_id;
+          });
+          if (dataCategory.length == 0) {
+            questionsList.push(items);
+          }
+        });
+      }
+    }
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(tokens, 1, getQuestionsData, getImageAPI);
+      await addCategoryQuestion(tokens, 1, questionsList, getImageAPI);
     if (addCategoryQuestionResponse.data.StatusCode == "1") {
       setModalVisible(false);
       setImage("");
@@ -302,12 +320,6 @@ const TutorialSecond = ({ navigation, props, route }) => {
                     <View style={CommonStyle.my16}>
                       {getQuestions.length > 0 &&
                         getQuestions.map((item, key) => {
-                          setSecondTemp(
-                            item.category_id,
-                            item.category_question_id,
-                            "",
-                            key
-                          );
                           return (
                             <SimpleInputEditView
                               TitleName={item.category_question}

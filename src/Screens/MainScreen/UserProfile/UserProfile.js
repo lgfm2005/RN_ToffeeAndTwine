@@ -176,9 +176,7 @@ const UserProfile = ({ route, navigation }) => {
     setNotificationSendModal(false), setAwesomeShowModal(true), setLoader(true);
     const { addgiftnoticationResponse, addgiftnoticatioError } =
       await AddGiftNotication(userInfo.user_id, getCategoryId);
-    debugger;
     if (addgiftnoticationResponse.data.StatusCode == "1") {
-      debugger;
       console.log("add gift notication Response", addgiftnoticationResponse);
       setLoader(false);
     } else {

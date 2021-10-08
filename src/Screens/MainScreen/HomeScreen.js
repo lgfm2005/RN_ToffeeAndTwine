@@ -165,7 +165,7 @@ const HomeScreen = () => {
   // Payment for upgrade
   const [getupgradeItemModal, setupgradeItemModal] = useState(false);
 
-  const [getQuestions, setQuestions] = useState("");
+  const [getQuestions, setQuestions] = useState([]);
 
   const [getImageOld, setImageOld] = useState("");
   const [getImageNew, setImageNew] = useState("");
@@ -218,6 +218,9 @@ const HomeScreen = () => {
     setAddNewItemModal(false);
     setupgradeItemModal(false);
     setUpdateDataModal(false);
+    setQuestionsData([]);
+    temp = [];
+    temp2 = [];
   };
 
   const handleSubmitPayment = async () => {
@@ -284,28 +287,23 @@ const HomeScreen = () => {
 
   // setSecondTemp
   const setSecondTemp = (categoryId, categoryQuestionId, value, key) => {
-    debugger;
     temp2[key] = {
       category_id: categoryId,
       category_question_id: categoryQuestionId,
       value,
       key,
     };
-    debugger;
     temp = temp2;
-    debugger;
   };
 
   // Add New Categories Question
   const HandelQuestionData = (categoryId, categoryQuestionId, value, key) => {
-    debugger;
     temp[key] = {
       category_id: categoryId,
       category_question_id: categoryQuestionId,
       value,
       key,
     };
-    debugger;
     setQuestionsData(temp);
     console.log("setQuestionsData ====>>>>", getQuestionsData);
   };
@@ -328,20 +326,34 @@ const HomeScreen = () => {
 
   // Submit Add New Categories Question
   const SaveItem = async () => {
+    var questionsList = getQuestionsData;
+    if (getQuestions.length > 0) {
+      if (questionsList.length == 0) {
+        getQuestions.map((item, key) => {
+          questionsList.push(item);
+        });
+      } else {
+        getQuestions.map((items, key) => {
+          var dataCategory = questionsList.filter((item) => {
+            return item.category_question_id == items.category_question_id;
+          });
+          if (dataCategory.length == 0) {
+            questionsList.push(items);
+          }
+        });
+      }
+    }
     // setQuestionsData(temp);
     setUpdateDataModal(false);
     setAddItemShowModal(false);
     setEditItemModal(false);
     setAddNewItemModal(false);
     setLoader(true);
-    debugger;
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData, 0, getQuestionsData, getImageAPI);
-    debugger;
+      await addCategoryQuestion(userData, 0, questionsList, getImageAPI);
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-    debugger;
     if (
       addCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
@@ -363,7 +375,6 @@ const HomeScreen = () => {
         "Question Response ==>>>",
         UserCategoryQuestionResponse.data.Result
       );
-      debugger;
     } else {
       setImageNew("");
       setImageOld("");
@@ -377,7 +388,6 @@ const HomeScreen = () => {
         "User Category Question Response Error  ===>>>",
         UserCategoryQuestionError
       );
-      debugger;
     }
     setLoader(false);
   };
@@ -958,12 +968,12 @@ const HomeScreen = () => {
                     <View style={CommonStyle.my16}>
                       {getQuestions.length > 0 &&
                         getQuestions.map((item, key) => {
-                          setSecondTemp(
-                            item.category_id,
-                            item.category_question_id,
-                            "",
-                            key
-                          );
+                          // setSecondTemp(
+                          //   item.category_id,
+                          //   item.category_question_id,
+                          //   item.value,
+                          //   key
+                          // );
                           return (
                             <SimpleInputEditView
                               TitleName={item.category_question}
