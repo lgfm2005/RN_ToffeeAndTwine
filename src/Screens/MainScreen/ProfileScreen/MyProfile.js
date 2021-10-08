@@ -104,7 +104,7 @@ const MyProfile = ({ navigation }) => {
   const [getAddNewItem, setAddNewItem] = useState("");
   // getEditItemModal
   const [getEditItemModal, setEditItemModal] = useState(false);
-  const [getQuestions, setQuestions] = useState("");
+  const [getQuestions, setQuestions] = useState([]);
   const [getQuestionsData, setQuestionsData] = useState([]);
   // Update Data Modal
   const [getUpdateDataModal, setUpdateDataModal] = useState(false);
@@ -218,6 +218,9 @@ const MyProfile = ({ navigation }) => {
     setupgradeItemModal(false);
     setFinalSepDate("");
     setuserSpecialMomentDate("");
+    setQuestionsData([]);
+    temp = [];
+    temp2 = [];
   };
 
   // Close All Item
@@ -313,13 +316,30 @@ const MyProfile = ({ navigation }) => {
     setEditItemModal(false);
     setAddNewItemModal(false);
     setLoader(true);
-    debugger;
+
+    var questionsList = getQuestionsData;
+    if (getQuestions.length > 0) {
+      if (questionsList.length == 0) {
+        getQuestions.map((item, key) => {
+          questionsList.push(item);
+        });
+      } else {
+        getQuestions.map((items, key) => {
+          var dataCategory = questionsList.filter((item) => {
+            return item.category_question_id == items.category_question_id;
+          });
+          if (dataCategory.length == 0) {
+            questionsList.push(items);
+          }
+        });
+      }
+    }
+
     // API
     const { addCategoryQuestionError, addCategoryQuestionResponse } =
-      await addCategoryQuestion(userData, 0, getQuestionsData, getImageAPI);
+      await addCategoryQuestion(userData, 0, questionsList, getImageAPI);
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
-    debugger;
     if (
       addCategoryQuestionResponse.data.StatusCode == "1" &&
       UserCategoryQuestionResponse.data.StatusCode == "1"
@@ -341,7 +361,6 @@ const MyProfile = ({ navigation }) => {
         "Question Response ==>>>",
         UserCategoryQuestionResponse.data.Result
       );
-      debugger;
     } else {
       setImageNew("");
       setImageOld("");
@@ -355,7 +374,6 @@ const MyProfile = ({ navigation }) => {
         "User Category Question Response Error  ===>>>",
         UserCategoryQuestionError
       );
-      debugger;
     }
     setLoader(false);
   };
@@ -1311,12 +1329,6 @@ const MyProfile = ({ navigation }) => {
                 <View style={CommonStyle.my16}>
                   {getQuestions.length > 0 &&
                     getQuestions.map((item, key) => {
-                      setSecondTemp(
-                        item.category_id,
-                        item.category_question_id,
-                        "",
-                        key
-                      );
                       return (
                         <SimpleInputEditView
                           TitleName={item.category_question}
