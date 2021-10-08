@@ -187,6 +187,7 @@ const CalendarScreen = () => {
     setupgradeItemModal(false);
   };
 
+  // Image Sep Change
   const ImageSepChange = () => {
     ImagePicker.openPicker({
       width: 300,
@@ -200,6 +201,7 @@ const CalendarScreen = () => {
     });
   };
 
+  // Delete Item Moment
   const DeleteItem = async (DeletedId) => {
     setUserOldSpecialMomentModal(false);
     setLoader(true);
@@ -441,6 +443,8 @@ const CalendarScreen = () => {
       );
     }
   };
+
+  // AddItemSepShow
   const AddItemSepShow = () => {
     setAddItemShowSepModal(true);
     setFinalSepDate("");
@@ -933,6 +937,8 @@ const CalendarScreen = () => {
                 </KeyboardAvoidingView>
               </Modal>
             ) : null}
+
+            {/* getDateModal */}
             {getDateModal == true ? (
               <Modal testID={"modal"} isVisible={getDateModal}>
                 <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
@@ -969,6 +975,7 @@ const CalendarScreen = () => {
               </Modal>
             ) : null}
 
+            {/* getUpdateDateModal */}
             {getUpdateDateModal == true ? (
               <Modal testID={"modal"} isVisible={getUpdateDateModal}>
                 <View style={[CommonStyle.p16, TutorialStyle.popbg]}>

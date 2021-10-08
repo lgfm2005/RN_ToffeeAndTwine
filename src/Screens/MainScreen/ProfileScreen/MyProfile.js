@@ -126,8 +126,6 @@ const MyProfile = ({ navigation }) => {
     useState(false);
   const [getUserNewSpecialMomenItem, setUserNewSpecialMomentItem] =
     useState("");
-  const [getUserNewSpecialMomenIdItem, setUserNewSpecialMomenIdItem] =
-    useState("");
 
   // UserOldSpecialMoment ---> 1.Edit
   const [getUserOldSpecialMomentModal, setUserOldSpecialMomentModal] =
@@ -159,7 +157,11 @@ const MyProfile = ({ navigation }) => {
   const [getPrevData, setPrevData] = useState({});
   const [getId, seGetId] = useState("0");
 
-  const [setFinalDataShow, getFinalDataShow] = useState("");
+  // set Image Sep
+  // const [getImageSepOld, setImageSepOld] = useState("");
+  // const [getImageSepNew, setImageSepNew] = useState("");
+  // const [getImageSepAPI, setImageSepAPI] = useState("");
+  // const [getImageSepStatus, setImageSepStatus] = useState(0);
 
   const [getMomentsCount, setMomentsCount] = useState(0);
   const [getFollowerCount, setFollowerCount] = useState("0");
@@ -206,23 +208,11 @@ const MyProfile = ({ navigation }) => {
     setPrevData({});
     setupgradeItemModal(false);
     setFinalSepDate("");
+    setImageurl("");
     setuserSpecialMomentDate("");
     setQuestionsData([]);
     temp = [];
     temp2 = [];
-  };
-
-  // Close All Item
-  const CloseSepItem = () => {
-    setEditItemSepModal(false);
-    setUserNewSpecialMomentModal(false);
-    setUserOldSpecialMomentModal(false);
-    setDateModal(false);
-    setupgradeItemModal(false);
-    setPrevData({});
-    setAddItemShowSepModal(false);
-    setFinalSepDate("");
-    setuserSpecialMomentDate("");
   };
 
   const ImageChange = () => {
@@ -236,19 +226,6 @@ const MyProfile = ({ navigation }) => {
       setImageNew(image.path);
       setImage(image.path);
       setImageStatus(1);
-      // console.log("image===>", image);
-    });
-  };
-
-  const ImageSepChange = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-    }).then((image) => {
-      setImage(image.path);
-      setImageurl(image);
       // console.log("image===>", image);
     });
   };
@@ -524,6 +501,49 @@ const MyProfile = ({ navigation }) => {
 
   // ------------------ Explore Share List Completed ----------------
 
+  const getFilterSepCatgories = (data) => {
+    var dataCategory = specialMoment;
+    if (data.length > 0) {
+      data.map((items, indexs) => {
+        dataCategory = dataCategory.filter((item) => {
+          return item.special_moment_id !== items.special_moment_id;
+        });
+      });
+    }
+    setFilterSepCat(dataCategory);
+    // console.log(getFilterSepCat);
+  };
+
+  // Close All Item
+  const CloseSepItem = () => {
+    setPrevData({});
+    setImage("");
+    setImageurl("");
+    setFinalSepDate("");
+    setAddItemShowSepModal(false);
+    setEditItemSepModal(false);
+    setUserNewSpecialMomentModal(false);
+    setUserOldSpecialMomentModal(false);
+    setDateModal(false);
+    setuserSpecialMomentDate("");
+    setupgradeItemModal(false);
+  };
+
+  // Image Sep Change
+  const ImageSepChange = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true,
+    }).then((image) => {
+      setImage(image.path);
+      setImageurl(image);
+      // console.log("image===>", image);
+    });
+  };
+
+  // Delete Item Moment
   const DeleteItem = async (DeletedId) => {
     setUserOldSpecialMomentModal(false);
     setLoader(true);
@@ -561,20 +581,6 @@ const MyProfile = ({ navigation }) => {
     }
   };
 
-  // Special Moment Day
-  const getFilterSepCatgories = (data) => {
-    var dataCategory = specialMoment;
-    if (data.length > 0) {
-      data.map((items, indexs) => {
-        dataCategory = dataCategory.filter((item) => {
-          return item.special_moment_id !== items.special_moment_id;
-        });
-      });
-    }
-    setFilterSepCat(dataCategory);
-    // console.log(getFilterSepCat);
-  };
-
   //  Show All Select Moment List (Select Only one) --- 1.Select Moment
   const SelectMoment = (specialMomentName, specialMomentId) => {
     setAddItemShowSepModal(false);
@@ -591,6 +597,7 @@ const MyProfile = ({ navigation }) => {
     setSpecialMomentId(specialMomentId);
   };
 
+  // Date - 1
   const EnterDate = () => {
     setUserNewSpecialMomentModal(false);
     setDateModal(true);
@@ -598,6 +605,7 @@ const MyProfile = ({ navigation }) => {
       date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
+  // Date - 2
   const SubmitDate = () => {
     setDateModal(false);
     setUserNewSpecialMomentModal(true);
@@ -605,6 +613,7 @@ const MyProfile = ({ navigation }) => {
       date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalSepDate(DateSubstring);
   };
+  // Date - 3
   const UpdateEnterDate = () => {
     setEditItemSepModal(false);
     setUpdateDateModal(true);
@@ -613,6 +622,7 @@ const MyProfile = ({ navigation }) => {
     setFinalSepDate(DateSubstring);
     // setuserSpecialMomentDate(DateSubstring);
   };
+  // Date - 4
   const UpdateSubmitDate = () => {
     setUpdateDateModal(false);
     setEditItemSepModal(true);
@@ -626,8 +636,8 @@ const MyProfile = ({ navigation }) => {
     setUserOldSpecialMomentModal(false);
     setEditItemSepModal(true);
     setEditSepItem(getspecialMomentName);
-    console.log("EWfewfewfwfewf=>>>>>>>>>>", getuserSpecialMomentDate);
     setFinalSepDate(getuserSpecialMomentDate);
+    debugger;
   };
 
   // oldUserSpecialMoment --> 1.Open
@@ -658,6 +668,7 @@ const MyProfile = ({ navigation }) => {
     setImageurl(Imageurl);
     setspecialMomentLink(specialMomentLink);
     setspecialMomentOtherInfo(specialMomentOtherInfo);
+    debugger;
   };
 
   //  Show Moment (Select Only one) --- 3.Submit Data
@@ -667,10 +678,10 @@ const MyProfile = ({ navigation }) => {
 
     // if (!getFinalSepDate) {
     //   getFinalDataShow("");
-    //     ;
+    //      ;
     // } else {
     //   getFinalDataShow(getFinalSepDate);
-    //     ;
+    //      ;
     // }
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
@@ -682,6 +693,7 @@ const MyProfile = ({ navigation }) => {
         JSON.stringify(getImageurl),
         "0"
       );
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -690,6 +702,7 @@ const MyProfile = ({ navigation }) => {
       addCategoryspecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
+      debugger;
       setPrevData({});
       setImage("");
       setImageurl("");
@@ -728,12 +741,9 @@ const MyProfile = ({ navigation }) => {
     } = await updateCategorySpecialMoment(
       getuserSpecialMomentId,
       getuserSpecialMomentTitle,
-      // getuserSpecialMomentUpdateTitle,
       getFinalSepDate,
-      // getspecialMomentUpdateLink,
       getspecialMomentLink,
       getspecialMomentOtherInfo,
-      // getspecialMomentUpdateOtherInfo,
       JSON.stringify(getImageurl)
     );
     debugger;
@@ -742,6 +752,7 @@ const MyProfile = ({ navigation }) => {
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
     debugger;
+
     if (
       updateCategorySpecialMomentResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
@@ -754,8 +765,9 @@ const MyProfile = ({ navigation }) => {
       setLoader(false);
       setPrevData({});
       setImage("");
-      setFinalSepDate("");
       setImageurl("");
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
     } else {
       setUserNewSpecialMomentModal(false);
       setUserOldSpecialMomentModal(false);
@@ -763,6 +775,8 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      setFinalSepDate("");
+      setuserSpecialMomentDate("");
       console.log(
         "updateCategorySpecialMoment Error",
         updateCategorySpecialMomentError
@@ -774,9 +788,12 @@ const MyProfile = ({ navigation }) => {
     }
   };
 
+  // AddItemSepShow
   const AddItemSepShow = () => {
     setAddItemShowSepModal(true);
+    setFinalSepDate("");
   };
+  //  --------------------- Special Moment Completed -----------------
 
   // Payment for upgrade
   const upgradeItem = () => {
@@ -1057,7 +1074,7 @@ const MyProfile = ({ navigation }) => {
                           item.user_special_moment_date,
                           item.special_moment_link,
                           item.special_moment_other_info,
-                          item.user_category_image
+                          item.image
                         )
                       }
                     />
@@ -1385,8 +1402,6 @@ const MyProfile = ({ navigation }) => {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
-                  alignContent: "center",
                 }}
               >
                 <View style={{ width: "20%" }}>
@@ -1400,11 +1415,22 @@ const MyProfile = ({ navigation }) => {
                   )}
                 </View>
                 <View style={{ width: "60%" }}>
-                  <Text style={[CommonStyle.txtTitle, { textAlign: "center" }]}>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      {
+                        textAlign: "center",
+                      },
+                    ]}
+                  >
                     {getspecialMomentName}
                   </Text>
                 </View>
-                <View style={{ width: "20%" }}>
+                <View
+                  style={{
+                    width: "20%",
+                  }}
+                >
                   <TouchableOpacity
                     style={{
                       alignItems: "flex-end",
@@ -1469,14 +1495,25 @@ const MyProfile = ({ navigation }) => {
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
                     alignContent: "center",
                   }}
                 >
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
+                        {/* {getImageSepOld == "" ? (
+                          <Image source={imgImport} style={Styles.popupImage} />
+                        ) : getImageSepStatus == 0 ? (
+                          <Image
+                            source={{ uri: getImageOld }}
+                            style={Styles.popupImage}
+                          />
+                        ) : (
+                          <Image
+                            source={{ uri: getImageNew }}
+                            style={Styles.popupImage}
+                          />
+                        )} */}
                         {getImage != "" ? (
                           <Image
                             source={{ uri: getImage }}
@@ -1487,13 +1524,7 @@ const MyProfile = ({ navigation }) => {
                         )}
                       </TouchableOpacity>
                     </View>
-                    <View
-                      style={{
-                        width: "60%",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
+                    <View>
                       <Text
                         style={[
                           CommonStyle.txtTitle,
@@ -1507,7 +1538,6 @@ const MyProfile = ({ navigation }) => {
                     <View style={{ width: "20%" }}></View>
                   </View>
                 </View>
-
                 <View style={CommonStyle.my16}>
                   <SimpleInputEditView
                     TitleName={"Title"}
@@ -1582,6 +1612,8 @@ const MyProfile = ({ navigation }) => {
             </KeyboardAvoidingView>
           </Modal>
         ) : null}
+
+        {/* getDateModal */}
         {getDateModal == true ? (
           <Modal testID={"modal"} isVisible={getDateModal}>
             <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
@@ -1616,6 +1648,7 @@ const MyProfile = ({ navigation }) => {
           </Modal>
         ) : null}
 
+        {/* getUpdateDateModal */}
         {getUpdateDateModal == true ? (
           <Modal testID={"modal"} isVisible={getUpdateDateModal}>
             <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
@@ -1633,8 +1666,8 @@ const MyProfile = ({ navigation }) => {
 
               <View style={CommonStyle.my16}>
                 <DatePicker
-                  locale="en"
                   mode={"date"}
+                  locale="en"
                   date={date}
                   onDateChange={setDate}
                 />
