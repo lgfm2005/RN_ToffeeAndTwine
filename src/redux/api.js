@@ -316,3 +316,8 @@ export const AddGiftNotication = {
   get: async (session, data) =>
     await api(session, `rest_api/controller_gift/add_gift`, "post", data),
 };
+
+export const DelectAccount = {
+  get: async (session, data) =>
+    await api(session, `rest_api/controller_user/delete_account`, "get", data),
+};

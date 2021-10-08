@@ -11,7 +11,7 @@ import { COLORS } from "../../Assets/utils/COLORS";
 import { useActions } from "../../redux/actions";
 
 const SettingScreen = ({ navigation }) => {
-  const { Logout, getSetting, updateSetting } = useActions();
+  const { Logout, getSetting, updateSetting, DelectAccount } = useActions();
   const [getGiftingSwitch, setGiftingSwitch] = useState(false);
   const [getSpecialMomentsSwitch, setSpecialMomentsSwitch] = useState(false);
   const [isFitst, setIsFitst] = useState(false);
@@ -68,6 +68,15 @@ const SettingScreen = ({ navigation }) => {
       }
     }
   };
+
+  const FinalDeletedAccount = async () => {
+    const { DelectAccountResponse, DelectAccountError } = await DelectAccount();
+    if (DelectAccountResponse.data.StatusCode) {
+      Logout(), navigation.navigate("MainScreen");
+    } else {
+    }
+  };
+
   if (!isFitst) {
     GetSetting();
     setIsFitst(true);
@@ -249,7 +258,12 @@ const SettingScreen = ({ navigation }) => {
             ) : null}
           </View>
 
-          <TouchableOpacity onPress={() => {}} style={{ paddingBottom: 16 }}>
+          <TouchableOpacity
+            onPress={() => {
+              FinalDeletedAccount();
+            }}
+            style={{ paddingBottom: 16 }}
+          >
             <Text style={[CommonStyle.txtTitle, { color: COLORS.Primary }]}>
               {AppString.Deleteaccount}
             </Text>

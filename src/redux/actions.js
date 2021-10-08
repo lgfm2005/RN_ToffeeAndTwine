@@ -750,6 +750,18 @@ export const useActions = () => {
       return { addgiftnoticationResponse, addgiftnoticatioError };
     },
 
+    DelectAccount: async (GiftTo, CategoryID) => {
+      let DelectAccountResponse, DelectAccountError;
+      try {
+        DelectAccountResponse = await API.DelectAccount.get(sessions);
+        if (DelectAccountResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        DelectAccountError = e;
+      }
+      return { DelectAccountResponse, DelectAccountError };
+    },
+
     //
   };
 };

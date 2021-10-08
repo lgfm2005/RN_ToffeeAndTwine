@@ -223,6 +223,9 @@ const MyProfile = ({ navigation }) => {
       cropping: true,
       includeBase64: true,
     }).then((image) => {
+      // setImage(image.path);
+      // setImageurl(image);
+
       setImageAPI(image);
       setImageNew(image.path);
       setImage(image.path);
@@ -691,6 +694,7 @@ const MyProfile = ({ navigation }) => {
     setuserSpecialMomentTitle(userSpecialMomentTitle);
     setuserSpecialMomentDate(userSpecialMomentDate);
     setImageurl(Imageurl);
+    // setImage(Imageurl);
     setspecialMomentLink(specialMomentLink);
     setspecialMomentOtherInfo(specialMomentOtherInfo);
     debugger;
@@ -1591,27 +1595,10 @@ const MyProfile = ({ navigation }) => {
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
-                        {/* {getImageSepOld == "" ? (
-                          <Image source={imgImport} style={Styles.popupImage} />
-                        ) : getImageSepStatus == 0 ? (
-                          <Image
-                            source={{ uri: getImageOld }}
-                            style={Styles.popupImage}
-                          />
-                        ) : (
-                          <Image
-                            source={{ uri: getImageNew }}
-                            style={Styles.popupImage}
-                          />
-                        )} */}
-                        {getImage != "" ? (
-                          <Image
-                            source={{ uri: getImage }}
-                            style={Styles.popupImage}
-                          />
-                        ) : (
-                          <Image source={imgImport} style={Styles.popupImage} />
-                        )}
+                        <Image
+                          source={{ uri: getImage }}
+                          style={Styles.popupImage}
+                        />
                       </TouchableOpacity>
                     </View>
                     <View>
@@ -1848,14 +1835,10 @@ const MyProfile = ({ navigation }) => {
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
-                        {getImage != "" ? (
-                          <Image
-                            source={{ uri: getImage }}
-                            style={Styles.popupImage}
-                          />
-                        ) : (
-                          <Image source={imgImport} style={Styles.popupImage} />
-                        )}
+                        <Image
+                          source={{ uri: getImage }}
+                          style={Styles.popupImage}
+                        />
                       </TouchableOpacity>
                     </View>
                     <View
