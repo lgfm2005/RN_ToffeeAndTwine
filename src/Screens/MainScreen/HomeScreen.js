@@ -60,6 +60,7 @@ import { MyWhiteStatusbar } from "../../Components/MyStatusBar/MyWhiteStatusbar"
 import { FONT } from "../../Assets/utils/FONT";
 import { useActions } from "../../redux/actions";
 import Purchases from "react-native-purchases";
+import { ImageUrl } from "../../Assets/utils/ImageUrl";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp,
@@ -601,7 +602,12 @@ const HomeScreen = () => {
                     userCategoryQuestion.map((item, index) => {
                       return (
                         <ExploreShareList
-                          ImageUrl={imgBook}
+                          ImageUrl={{
+                            uri:
+                              ImageUrl.Categories +
+                              item.category_name +
+                              ImageUrl.png,
+                          }}
                           ExploreName={item.category_name}
                           Id={item.category_id}
                           index={index}
@@ -666,7 +672,13 @@ const HomeScreen = () => {
                 {getFilterCat.length > 0 &&
                   getFilterCat.map((item, index) => (
                     <UpgradeCategoriesList
-                      ImageUrl={imgBook}
+                      ImageUrl={{
+                        uri:
+                          ImageUrl.Categories +
+                          item.category_name +
+                          ImageUrl.png,
+                      }}
+                      // ImageUrl={imgBook}
                       ExploreName={item.category_name}
                       Id={item.category_id}
                       index={index}
