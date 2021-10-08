@@ -394,11 +394,34 @@ const MyProfile = ({ navigation }) => {
     setAddNewItemModal(false);
     setLoader(true);
 
+    var questionsList = getUpdateQuestionData;
+    if (getShowOldQuestion.length > 0) {
+      if (questionsList.length == 0) {
+        getShowOldQuestion.map((item, key) => {
+          var items = item;
+          items.categoryQuestionId = item.user_category_question_id;
+          items.value = item.question_value;
+          questionsList.push(items);
+        });
+      } else {
+        getShowOldQuestion.map((items, key) => {
+          var dataCategory = questionsList.filter((item) => {
+            return item.user_category_question_id == items.categoryQuestionId;
+          });
+          if (dataCategory.length == 0) {
+            var items = item;
+            items.categoryQuestionId = item.user_category_question_id;
+            items.value = item.question_value;
+            questionsList.push(items);
+          }
+        });
+      }
+    }
     // API
     const { updateCategoryQuestionResponse, updateCategoryQuestionError } =
       await updateCategoryQuestion(
         userData,
-        getUpdateQuestionData,
+        questionsList,
         getIdItem,
         getImageAPI
       );
