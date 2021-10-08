@@ -87,10 +87,23 @@ const HomeScreen = () => {
     (state) => state.UserCategoryQuestion
   );
 
+  const userSubscriptions = async (latestExpirationDate) => {
+    const { UserSubscriptionResponse, UserSubscriptionError } =
+      await userSubscription(
+        "1.99",
+        Moment(latestExpirationDate).format("YYYY-MM-DD"),
+        Moment(new Date()).format("YYYY-MM-DD")
+      );
+  };
+
   useEffect(() => {
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
     Purchases.syncPurchases();
+    Purchases.addPurchaserInfoUpdateListener((info) => {
+      // handle any changes to purchaserInfo
+      userSubscriptions(info.latestExpirationDate);
+    });
   }, []);
   useEffect(async () => {
     setLoader(true);
@@ -229,35 +242,31 @@ const HomeScreen = () => {
     // HapticFeedback.trigger("impactLight");
 
     var currentDate = Moment(new Date(), "DD/MM/YYYY");
-
     try {
       const purchaserInfo1 = await Purchases.getPurchaserInfo();
       var latestExpirationDates = Moment(
         purchaserInfo1.latestExpirationDate,
         "DD/MM/YYYY"
       );
-      if (currentDate.isBefore(latestExpirationDates)) {
+
+      var isBefore = currentDate.isBefore(latestExpirationDates);
+      if (!isBefore) {
+        if (
+          typeof purchaserInfo1.entitlements.active.pro_monthly !== "undefined"
+        ) {
+          // Grant user "pro" access
+        }
+        const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
+        const monthlyPackage = offerings.current.monthly;
+        const { purchaserInfo } = await Purchases.purchasePackage(
+          monthlyPackage
+        );
+        const { latestExpirationDate } = purchaserInfo;
+        console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
-      const offerings = await Purchases.getOfferings();
-      console.log("offerings:", offerings);
-      const monthlyPackage = offerings.current.monthly;
-      const { purchaserInfo } = await Purchases.purchasePackage(monthlyPackage);
-      const { latestExpirationDate } = purchaserInfo;
-      console.log("latestExpirationDate:", latestExpirationDate);
-
-      const { UserSubscriptionResponse, UserSubscriptionError } =
-        await userSubscription(
-          "1.99",
-          Moment(latestExpirationDate).format("YYYY-MM-DD"),
-          Moment(new Date()).format("YYYY-MM-DD")
-        );
-      // if (error)
-      //   throw new Error(
-      //     error?.response?.data?.error || error.message || "Unkown error."
-      //   );
-      // await UserProfile(userId);
-      // onClose?.();
+      CloseItem();
     } catch (e) {
       console.log("Error:", e);
       // setLoading(false);
@@ -419,11 +428,35 @@ const HomeScreen = () => {
     setAddNewItemModal(false);
     setLoader(true);
 
+    var questionsList = getUpdateQuestionData;
+    if (getShowOldQuestion.length > 0) {
+      if (questionsList.length == 0) {
+        getShowOldQuestion.map((item, key) => {
+          var items = item;
+          items.categoryQuestionId = item.user_category_question_id;
+          items.value = item.question_value;
+          questionsList.push(items);
+        });
+      } else {
+        getShowOldQuestion.map((items, key) => {
+          var dataCategory = questionsList.filter((item) => {
+            return item.user_category_question_id == items.categoryQuestionId;
+          });
+          if (dataCategory.length == 0) {
+            var items = item;
+            items.categoryQuestionId = item.user_category_question_id;
+            items.value = item.question_value;
+            questionsList.push(items);
+          }
+        });
+      }
+    }
+
     // API
     const { updateCategoryQuestionResponse, updateCategoryQuestionError } =
       await updateCategoryQuestion(
         userData,
-        getUpdateQuestionData,
+        questionsList,
         getIdItem,
         getImageAPI
       );
@@ -544,14 +577,14 @@ const HomeScreen = () => {
     if (profileResponse.data.StatusCode) {
       var isActive =
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
-      if (isActive == "0") {
+      if (isActive == "1") {
         AddItemShow(0);
       } else {
         setupgradeItemModal(true);
       }
     }
   };
-
+  console.log("userData.userProfileImage:", userData.userProfileImage);
   return (
     <View style={CommonStyle.BgColorWhite}>
       <MyBlackStatusbar />
@@ -567,9 +600,10 @@ const HomeScreen = () => {
               <View style={[CommonStyle.my16, CommonStyle.Row]}>
                 <Image
                   source={
-                    userData.userProfileImage != ""
-                      ? { uri: userData.userProfileImage }
-                      : imgPlaceHolder
+                    userData.userProfileImage == "" ||
+                    userData.userProfileImage == undefined
+                      ? imgPlaceHolder
+                      : { uri: userData.userProfileImage }
                   }
                   style={CommonStyle.ProfileImage}
                 />

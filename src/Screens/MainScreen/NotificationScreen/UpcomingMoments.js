@@ -23,6 +23,7 @@ import { NotificationScreenStyle } from "./NotificationScreenStyle";
 import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
+import { useActions } from "../../../redux/actions";
 
 const Data = [
   {
@@ -46,6 +47,26 @@ const Data = [
 ];
 
 const UpcomingMoments = ({ navigation }) => {
+  const { getProfile } = useActions();
+
+  const UpGradePayment = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode) {
+      var isActive =
+        profileResponse.data.Result[0].user_details[0].user_subscription_status;
+      if (isActive == "1") {
+        navigation.navigate("UpcomingMoments");
+      } else {
+        navigation.navigate("UpcomingUpGrade");
+      }
+    }
+  };
+
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      UpGradePayment();
+    });
+  }, []);
   const RenderItem = (item, index) => {
     return (
       <View style={[NotificationScreenStyle.FollowerListBg, CommonStyle.mb16]}>

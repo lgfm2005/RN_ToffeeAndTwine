@@ -42,8 +42,8 @@ import { useActions } from "../../../redux/actions";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
-var temp,
-  temp2 = [];
+var temp2 = [];
+var temp = [];
 var data = new FormData();
 var items, list;
 const TutorialSecond = ({ navigation, props, route }) => {
@@ -107,6 +107,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
       width: 300,
       height: 400,
       cropping: true,
+      includeBase64: true,
     }).then((image) => {
       setImageAPI(image);
       setImage(image.path);
