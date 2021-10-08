@@ -316,3 +316,17 @@ export const AddGiftNotication = {
   get: async (session, data) =>
     await api(session, `rest_api/controller_gift/add_gift`, "post", data),
 };
+
+export const GetNotifyList = {
+  get: async (session) =>
+    await api(session, `/rest_api/controller_gift/get_notify_list`, "get"),
+};
+
+export const GetUpcomingMoments = {
+  get: async (session) =>
+    await api(
+      session,
+      `/rest_api/controller_moment/get_upcoming_moments`,
+      "get"
+    ),
+};

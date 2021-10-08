@@ -750,6 +750,30 @@ export const useActions = () => {
       return { addgiftnoticationResponse, addgiftnoticatioError };
     },
 
+    getNotifyList: async () => {
+      let getNotifyListResponse, getNotifyListError;
+      try {
+        getNotifyListResponse = await API.GetNotifyList.get(sessions);
+        if (getNotifyListResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        getNotifyListError = e;
+      }
+      return { getNotifyListResponse, getNotifyListError };
+    },
+
+    getUpcomingMoments: async () => {
+      let getUpcomingMomentsResponse, getUpcomingMomentsError;
+      try {
+        getUpcomingMomentsResponse = await API.GetUpcomingMoments.get(sessions);
+        if (getUpcomingMomentsResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        getUpcomingMomentsError = e;
+      }
+      return { getUpcomingMomentsResponse, getUpcomingMomentsError };
+    },
+
     //
   };
 };
