@@ -22,7 +22,7 @@ const Stack = createStackNavigator();
 function UpcomingMomentScreen() {
   return (
     <Stack.Navigator
-      initialRouteName="UpcomingUpGrade"
+      initialRouteName="UpcomingMoments"
       screenOptions={{
         headerShown: false,
       }}

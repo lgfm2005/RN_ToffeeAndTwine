@@ -55,6 +55,7 @@ import { FONT } from "../../Assets/utils/FONT";
 import { CalSelectCategoriesList } from "./CalendarScreen/CalSelectCategoriesList";
 import { useActions } from "../../redux/actions";
 import { SelectCategoriesList } from "../../Components/AllListVIew/SelectCategoriesList";
+import Purchases from "react-native-purchases";
 import Moment from "moment";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
@@ -66,6 +67,8 @@ const CalendarScreen = () => {
     getUserCategorySpecialMoment,
     addCategoryspecialDay,
     getFriendCategorySpecialMoment,
+    userSubscription,
+    getProfile,
   } = useActions();
 
   const userData = useSelector((state) => state.session);
@@ -142,6 +145,67 @@ const CalendarScreen = () => {
       return;
     }
     getFilterSepCatgories(userSpecialMoment);
+  }, []);
+
+  const handleSubmitPayment = async () => {
+    // setLoading(true);
+    // HapticFeedback.trigger("impactLight");
+
+    var currentDate = Moment(new Date(), "DD/MM/YYYY");
+    try {
+      const purchaserInfo1 = await Purchases.getPurchaserInfo();
+      var latestExpirationDates = Moment(
+        purchaserInfo1.latestExpirationDate,
+        "DD/MM/YYYY"
+      );
+
+      var isBefore = currentDate.isBefore(latestExpirationDates);
+      if (!isBefore) {
+        if (
+          typeof purchaserInfo1.entitlements.active.pro_monthly !== "undefined"
+        ) {
+          // Grant user "pro" access
+        }
+        const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
+        const monthlyPackage = offerings.current.monthly;
+        const { purchaserInfo } = await Purchases.purchasePackage(
+          monthlyPackage
+        );
+        const { latestExpirationDate } = purchaserInfo;
+        console.log("latestExpirationDate:", latestExpirationDate);
+      } else {
+      }
+      CloseItem();
+    } catch (e) {
+      console.log("Error:", e);
+      // setLoading(false);
+      // if (e.userCancelled) return;
+      // setError(
+      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
+      // );
+      // setErrorDetails(e.message);
+      // HapticFeedback.trigger("impactHeavy");
+    }
+  };
+
+  const userSubscriptions = async (latestExpirationDate) => {
+    const { UserSubscriptionResponse, UserSubscriptionError } =
+      await userSubscription(
+        "1.99",
+        Moment(latestExpirationDate).format("YYYY-MM-DD"),
+        Moment(new Date()).format("YYYY-MM-DD")
+      );
+  };
+
+  useEffect(() => {
+    Purchases.setDebugLogsEnabled(true);
+    Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
+    Purchases.syncPurchases();
+    Purchases.addPurchaserInfoUpdateListener((info) => {
+      // handle any changes to purchaserInfo
+      userSubscriptions(info.latestExpirationDate);
+    });
   }, []);
 
   const getFilterSepCatgories = (data) => {
@@ -500,8 +564,18 @@ const CalendarScreen = () => {
   };
 
   // Payment for upgrade
-  const upgradeItem = () => {
-    setupgradeItemModal(true);
+
+  const upgradeItem = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode) {
+      var isActive =
+        profileResponse.data.Result[0].user_details[0].user_subscription_status;
+      if (isActive == "1") {
+        AddItemSepShow(0);
+      } else {
+        setupgradeItemModal(true);
+      }
+    }
   };
 
   return (
@@ -1243,7 +1317,7 @@ const CalendarScreen = () => {
 
                   <POPLinkButton
                     buttonName={AppString.Upgrade}
-                    onPress={() => CloseSepItem()}
+                    onPress={() => handleSubmitPayment()}
                   />
                 </View>
               </View>

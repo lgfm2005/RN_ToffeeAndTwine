@@ -86,10 +86,23 @@ const HomeScreen = () => {
     (state) => state.UserCategoryQuestion
   );
 
+  const userSubscriptions = async (latestExpirationDate) => {
+    const { UserSubscriptionResponse, UserSubscriptionError } =
+      await userSubscription(
+        "1.99",
+        Moment(latestExpirationDate).format("YYYY-MM-DD"),
+        Moment(new Date()).format("YYYY-MM-DD")
+      );
+  };
+
   useEffect(() => {
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
     Purchases.syncPurchases();
+    Purchases.addPurchaserInfoUpdateListener((info) => {
+      // handle any changes to purchaserInfo
+      userSubscriptions(info.latestExpirationDate);
+    });
   }, []);
   useEffect(async () => {
     setLoader(true);
@@ -228,35 +241,31 @@ const HomeScreen = () => {
     // HapticFeedback.trigger("impactLight");
 
     var currentDate = Moment(new Date(), "DD/MM/YYYY");
-
     try {
       const purchaserInfo1 = await Purchases.getPurchaserInfo();
       var latestExpirationDates = Moment(
         purchaserInfo1.latestExpirationDate,
         "DD/MM/YYYY"
       );
-      if (currentDate.isBefore(latestExpirationDates)) {
+
+      var isBefore = currentDate.isBefore(latestExpirationDates);
+      if (!isBefore) {
+        if (
+          typeof purchaserInfo1.entitlements.active.pro_monthly !== "undefined"
+        ) {
+          // Grant user "pro" access
+        }
+        const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
+        const monthlyPackage = offerings.current.monthly;
+        const { purchaserInfo } = await Purchases.purchasePackage(
+          monthlyPackage
+        );
+        const { latestExpirationDate } = purchaserInfo;
+        console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
-      const offerings = await Purchases.getOfferings();
-      console.log("offerings:", offerings);
-      const monthlyPackage = offerings.current.monthly;
-      const { purchaserInfo } = await Purchases.purchasePackage(monthlyPackage);
-      const { latestExpirationDate } = purchaserInfo;
-      console.log("latestExpirationDate:", latestExpirationDate);
-
-      const { UserSubscriptionResponse, UserSubscriptionError } =
-        await userSubscription(
-          "1.99",
-          Moment(latestExpirationDate).format("YYYY-MM-DD"),
-          Moment(new Date()).format("YYYY-MM-DD")
-        );
-      // if (error)
-      //   throw new Error(
-      //     error?.response?.data?.error || error.message || "Unkown error."
-      //   );
-      // await UserProfile(userId);
-      // onClose?.();
+      CloseItem();
     } catch (e) {
       console.log("Error:", e);
       // setLoading(false);
@@ -543,7 +552,7 @@ const HomeScreen = () => {
     if (profileResponse.data.StatusCode) {
       var isActive =
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
-      if (isActive == "0") {
+      if (isActive == "1") {
         AddItemShow(0);
       } else {
         setupgradeItemModal(true);
