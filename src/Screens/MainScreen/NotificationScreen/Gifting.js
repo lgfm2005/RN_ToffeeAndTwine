@@ -54,12 +54,29 @@ const Data = [
   },
 ];
 
+import { useActions } from "../../../redux/actions";
 const Gifting = ({ navigation }) => {
+  const [giftingList, setGiftingList] = useState([]);
+  const { userSubscription, getNotifyList } = useActions();
+
+  const getNotifyLists = async () => {
+    const { getNotifyListResponse, getNotifyListError } = await getNotifyList();
+    if (getNotifyListResponse.data.StatusCode == "1") {
+      var data = getNotifyListResponse.data.Result;
+      setGiftingList(data);
+    }
+  };
+
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      getNotifyLists();
+    });
+  }, []);
   const RenderItem = (item, index) => {
     return (
       <View style={[NotificationScreenStyle.FollowerListBg, CommonStyle.mb16]}>
         <View style={[NotificationScreenStyle.followerTxtIcon, { padding: 5 }]}>
-          <Image source={item.Image} style={CommonStyle.showProfileImage} />
+          <Image source={demodp} style={CommonStyle.showProfileImage} />
           <View>
             <Text
               style={[
@@ -67,8 +84,10 @@ const Gifting = ({ navigation }) => {
                 { color: COLORS.PrimaryLight },
               ]}
             >
-              <Text style={{ color: COLORS.black }}>{item.UserName} </Text>
-              {item.Plan}
+              <Text style={{ color: COLORS.black }}>
+                {item.gift_by_fname} {item.gift_by_lname}{" "}
+              </Text>
+              {"plans to get"}
             </Text>
             <Text
               style={[
@@ -76,8 +95,10 @@ const Gifting = ({ navigation }) => {
                 { color: COLORS.PrimaryLight },
               ]}
             >
-              <Text style={{ color: COLORS.black }}>{item.Title} </Text>
-              {item.SubTitle}
+              <Text style={{ color: COLORS.black }}>
+                {item.gift_to_fname} {item.gift_to_lname}{" "}
+              </Text>
+              {item.category_name}
             </Text>
           </View>
           <Text
@@ -86,7 +107,8 @@ const Gifting = ({ navigation }) => {
               NotificationScreenStyle.txtcolor,
             ]}
           >
-            {item.Time}
+            {" "}
+            {"15 mins."}
           </Text>
         </View>
       </View>
@@ -99,7 +121,7 @@ const Gifting = ({ navigation }) => {
       <View Style={[CommonStyle.Container]}>
         <View style={NotificationScreenStyle.backgroundColor}>
           <FlatList
-            data={Data}
+            data={giftingList}
             renderItem={({ item, index }) => RenderItem(item, index)}
             keyExtractor={(item) => item.id}
           />

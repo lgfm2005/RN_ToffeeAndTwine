@@ -47,44 +47,53 @@ const Data = [
 ];
 
 const UpcomingMoments = ({ navigation }) => {
-  const { getProfile } = useActions();
+  const { getProfile, getUpcomingMoments } = useActions();
+  const [upcomingMomentsList, setUpcomingMomentsList] = useState([]);
 
   const UpGradePayment = async () => {
     const { profileResponse, profileError } = await getProfile();
-    if (profileResponse.data.StatusCode) {
+    if ((profileResponse.data.StatusCode = "1")) {
       var isActive =
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
       if (isActive == "1") {
-        navigation.navigate("UpcomingMoments");
+        // navigation.navigate("UpcomingMoments");
       } else {
         navigation.navigate("UpcomingUpGrade");
       }
     }
   };
 
+  const getUpcomingMoment = async () => {
+    const { getUpcomingMomentsResponse, getUpcomingMomentsError } =
+      await getUpcomingMoments();
+    if (getUpcomingMomentsResponse.data.StatusCode == "1") {
+      var data = getUpcomingMomentsResponse.data.Result;
+      debugger;
+      setUpcomingMomentsList(data);
+    }
+  };
+
   useEffect(() => {
     navigation.addListener("focus", () => {
       UpGradePayment();
+      getUpcomingMoment();
     });
   }, []);
   const RenderItem = (item, index) => {
     return (
       <View style={[NotificationScreenStyle.FollowerListBg, CommonStyle.mb16]}>
-        <View
-          style={[
-            NotificationScreenStyle.followerTxtIcon,
-            { alignItems: "center" },
-          ]}
-        >
-          <Image source={item.Image} style={CommonStyle.showProfileImage} />
+        <View style={[{ alignItems: "center", flexDirection: "row" }]}>
+          <Image source={demodp} style={CommonStyle.showProfileImage} />
           <Text
             style={[
               CommonStyle.txtFrienduserName,
               { color: COLORS.PrimaryLight },
             ]}
           >
-            <Text style={{ color: COLORS.black }}>{item.Usename} </Text>
-            {item.Title}
+            <Text style={{ color: COLORS.black }}>
+              {item.by_user_fname} {item.by_user_lname}{" "}
+            </Text>
+            {item.special_moment_name} {"is on"} {item.special_moment_value}
           </Text>
         </View>
       </View>
@@ -97,7 +106,7 @@ const UpcomingMoments = ({ navigation }) => {
       <View>
         <View style={NotificationScreenStyle.backgroundColor}>
           <FlatList
-            data={Data}
+            data={upcomingMomentsList}
             renderItem={({ item, index }) => RenderItem(item, index)}
             keyExtractor={(item) => item.id}
           />
