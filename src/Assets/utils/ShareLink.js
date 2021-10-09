@@ -2,9 +2,9 @@ import { Share } from "react-native";
 export const ShareAppLink = async () => {
   try {
     const result = await Share.share({
-      title: "App link",
-      message: "Please install this app and stay safe ",
-      url: "https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en",
+      title: "Toffee + Twine",
+      message: "Please install this app",
+      url: "https://apps.apple.com/us/app/toffee-twine/id1530001198",
     });
     if (result.action === Share.sharedAction) {
       if (result.activityType) {

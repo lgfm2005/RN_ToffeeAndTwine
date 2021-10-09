@@ -102,6 +102,19 @@ const SettingScreen = ({ navigation }) => {
     } else {
     }
   };
+  const userSubscriptions = async (info) => {
+    if (info.latestExpirationDate != null) {
+      if (typeof info.entitlements.active.pro_monthly !== "undefined") {
+        var latestExpirationDates = Moment(info.latestExpirationDate)
+          .format("YYYY-MM-DD")
+          .toString();
+        var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
+        const { UserSubscriptionResponse, UserSubscriptionError } =
+          await userSubscription("1.99", latestExpirationDates, cuttentDate);
+        GetSetting();
+      }
+    }
+  };
 
   const handleSubmitPayment = async () => {
     // setLoading(true);
@@ -129,6 +142,7 @@ const SettingScreen = ({ navigation }) => {
           monthlyPackage
         );
         const { latestExpirationDate } = purchaserInfo;
+        userSubscriptions(purchaserInfo);
         console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
@@ -144,28 +158,14 @@ const SettingScreen = ({ navigation }) => {
     }
   };
 
-  const userSubscriptions = async (latestExpirationDate) => {
-    if (latestExpirationDate != null) {
-      var latestExpirationDates = Moment(latestExpirationDate)
-        .format("YYYY-MM-DD")
-        .toString();
-      var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
-
-      const { UserSubscriptionResponse, UserSubscriptionError } =
-        await userSubscription("1.99", latestExpirationDates, cuttentDate);
-
-      GetSetting();
-    }
-  };
-
   useEffect(() => {
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
     Purchases.syncPurchases();
-    Purchases.addPurchaserInfoUpdateListener((info) => {
-      // handle any changes to purchaserInfo
-      userSubscriptions(info.latestExpirationDate);
-    });
+    // Purchases.addPurchaserInfoUpdateListener((info) => {
+    //   // handle any changes to purchaserInfo
+
+    // });
   }, []);
 
   if (!isFitst) {
