@@ -6,6 +6,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 
 // Lib
@@ -27,6 +28,23 @@ const Followers = ({ navigation }) => {
 
   const [getLoader, setLoader] = useState(false);
   const [getUserFollower, setUserFollower] = useState("");
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    // setLoader(true);
+    const { userFollowerListResponse, userFollowerListError } =
+      await getUserFollowerList();
+    if (userFollowerListResponse.data.StatusCode == "1") {
+      setUserFollower(userFollowerListResponse.data.Result);
+      // setLoader(false);
+      setRefreshing(false);
+    } else {
+      setRefreshing(false);
+      // setLoader(false);
+      console.log("user Follower List Error ===>", userFollowerListError);
+    }
+  }, [refreshing]);
 
   useEffect(async () => {
     setLoader(true);
@@ -75,9 +93,11 @@ const Followers = ({ navigation }) => {
           <View style={FriendScreenStyle.followerTxtIcon}>
             <Image
               source={
-                Data.item.user_profile_image == ""
-                  ? { uri: Data.item.user_profile_image }
-                  : imgPlaceHolder
+                Data.item.user_profile_image == "" ||
+                Data.item.user_profile_image == null ||
+                Data.item.user_profile_image == undefined
+                  ? imgPlaceHolder
+                  : { uri: Data.item.user_profile_image }
               }
               style={CommonStyle.showProfileImage}
             />
@@ -115,6 +135,12 @@ const Followers = ({ navigation }) => {
                 data={getUserFollower}
                 renderItem={(Data, index) => RenderItem(Data, index)}
                 keyExtractor={(item) => item.id}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
               />
             )}
           </View>

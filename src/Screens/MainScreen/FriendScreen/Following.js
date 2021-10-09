@@ -6,7 +6,7 @@ import {
   View,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView,
+  RefreshControl,
   Platform,
   ScrollView,
 } from "react-native";
@@ -29,6 +29,20 @@ const Following = ({ navigation }) => {
 
   const [getLoader, setLoader] = useState(false);
   const [getUserFollowing, setUserFollowing] = useState("");
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    const { UserFollowingListResponse, UserFollowingListError } =
+      await getUserFollowingList();
+    if (UserFollowingListResponse.data.StatusCode == "1") {
+      setUserFollowing(UserFollowingListResponse.data.Result);
+      setRefreshing(false);
+    } else {
+      setRefreshing(false);
+      console.log("user Follower List Error", UserFollowingListError);
+    }
+  }, [refreshing]);
 
   useEffect(async () => {
     setLoader(true);
@@ -78,9 +92,11 @@ const Following = ({ navigation }) => {
           <View style={FriendScreenStyle.followerTxtIcon}>
             <Image
               source={
-                Data.item.user_profile_image == ""
-                  ? { uri: Data.item.user_profile_image }
-                  : imgPlaceHolder
+                Data.item.user_profile_image == "" ||
+                Data.item.user_profile_image == null ||
+                Data.item.user_profile_image == undefined
+                  ? imgPlaceHolder
+                  : { uri: Data.item.user_profile_image }
               }
               style={CommonStyle.showProfileImage}
             />
@@ -119,6 +135,12 @@ const Following = ({ navigation }) => {
                 data={getUserFollowing}
                 renderItem={(Data, index) => RenderItem(Data, index)}
                 keyExtractor={(item) => item.id}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
               />
             )}
           </View>

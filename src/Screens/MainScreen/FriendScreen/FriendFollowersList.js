@@ -64,8 +64,13 @@ var temp,
   temp2 = [];
 const FriendFollowersList = ({ route, navigation }) => {
   const { userID } = route.params;
-  const { getProfile, RemoveFollowerFriend, blockFriend, AddGiftNotication } =
-    useActions();
+  const {
+    getProfile,
+    followUser,
+    RemoveFollowerFriend,
+    blockFriend,
+    AddGiftNotication,
+  } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
   const [getMomentsCount, setMomentsCount] = useState(0);
@@ -183,11 +188,38 @@ const FriendFollowersList = ({ route, navigation }) => {
     setLoader(false);
   };
 
-  const removeFollowerFriend = async () => {
+  // Friend API
+  const FollowAction = async () => {
+    setLoader(true);
+    const { followUserResponse, followUserError } = await followUser(userID);
+
+    if (followUserResponse.data.StatusCode == "1") {
+      setLoader(false);
+    } else {
+      setLoader(false);
+    }
+  };
+
+  const UnFollowAction = async () => {
+    setLoader(true);
+    const { UnfollowFriendListResponse, UnfollowFriendListError } =
+      await getUnfollowFriendList(userID);
+    if (UnfollowFriendListResponse.data.StatusCode == "1") {
+      setLoader(false);
+    } else {
+      setLoader(false);
+    }
+  };
+
+  const RemoveAction = async () => {
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(userID);
-    setLoader(false);
+    if (RemoveFriendResponse.data.StatusCode == "1") {
+      setLoader(false);
+    } else {
+      setLoader(false);
+    }
   };
 
   const getProfiles = async () => {
@@ -323,28 +355,29 @@ const FriendFollowersList = ({ route, navigation }) => {
                     </View>
                   ) : null}
                 </View>
-                {/* <POPLinkButton
-                  buttonName={AppString.Follow}
-                  styleBtn={Mediumbtn}
-                  onPress={() => followUserAction()}
-                /> */}
                 {getFriendStatus == "1" ? (
                   <POPLinkButton
-                    buttonName={AppString.Follow}
+                    buttonName={AppString.UnFollow}
                     styleBtn={Mediumbtn}
-                    onPress={() => followUserAction()}
+                    onPress={() => UnFollowAction()}
                   />
                 ) : getFriendStatus == "2" ? (
                   <POPLinkButton
-                    buttonName={AppString.Following}
-                    // styleBtn={Mediumbtn}
-                    // onPress={() => followUserAction()}
+                    buttonName={AppString.Follow}
+                    styleBtn={Mediumbtn}
+                    onPress={() => FollowAction()}
                   />
-                ) : (
+                ) : getFriendStatus == "3" ? (
                   <POPLinkButton
                     buttonName={AppString.Remove}
                     styleBtn={[Mediumbtn]}
-                    onPress={() => removeFollowerFriend()}
+                    onPress={() => RemoveAction()}
+                  />
+                ) : (
+                  <POPLinkButton
+                    buttonName={AppString.Follow}
+                    styleBtn={Mediumbtn}
+                    onPress={() => FollowAction()}
                   />
                 )}
               </View>
