@@ -884,6 +884,8 @@ const MyProfile = ({ navigation }) => {
           monthlyPackage
         );
         const { latestExpirationDate } = purchaserInfo;
+        userSubscriptions(purchaserInfo);
+
         console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
@@ -900,25 +902,24 @@ const MyProfile = ({ navigation }) => {
     }
   };
 
-  const userSubscriptions = async (latestExpirationDate) => {
-    if (latestExpirationDate != null) {
-      var latestExpirationDates = Moment(latestExpirationDate)
-        .format("YYYY-MM-DD")
-        .toString();
-      var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
-
-      const { UserSubscriptionResponse, UserSubscriptionError } =
-        await userSubscription("1.99", latestExpirationDates, cuttentDate);
+  const userSubscriptions = async (info) => {
+    if (info.latestExpirationDate != null) {
+      if (typeof info.entitlements.active.pro_monthly !== "undefined") {
+        var latestExpirationDates = Moment(info.latestExpirationDate)
+          .format("YYYY-MM-DD")
+          .toString();
+        var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
+        const { UserSubscriptionResponse, UserSubscriptionError } =
+          await userSubscription("1.99", latestExpirationDates, cuttentDate);
+      }
     }
   };
-
   useEffect(() => {
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
     Purchases.syncPurchases();
     Purchases.addPurchaserInfoUpdateListener((info) => {
       // handle any changes to purchaserInfo
-      userSubscriptions(info.latestExpirationDate);
     });
   }, []);
 
