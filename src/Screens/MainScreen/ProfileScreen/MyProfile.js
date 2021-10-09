@@ -70,9 +70,8 @@ import Moment from "moment";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
-
-var temp,
-  temp2 = [];
+var temp = [];
+var temp2 = [];
 const MyProfile = ({ navigation }) => {
   const {
     addCategoryQuestion,
@@ -323,6 +322,8 @@ const MyProfile = ({ navigation }) => {
       setImageOld("");
       setImageAPI("");
       setImageStatus("");
+      setQuestionsData([]);
+      (temp = []), (temp2 = []);
       console.log(
         "User Category Question Response Error  ===>>>",
         UserCategoryQuestionResponse
@@ -339,6 +340,8 @@ const MyProfile = ({ navigation }) => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
+      setQuestionsData([]);
+      (temp = []), (temp2 = []);
       console.log("Question Error ==>>>", addCategoryQuestionError);
       console.log(
         "User Category Question Response Error  ===>>>",
@@ -423,6 +426,8 @@ const MyProfile = ({ navigation }) => {
       setImageAPI("");
       setImageStatus("");
       setIdItem("");
+      setUpdateQuestionData([]);
+      (temp = []), (temp2 = []);
       // console.log(
       //   "User Category Question Response Done  ===>>>",
       //   UserCategoryQuestionResponse
@@ -439,6 +444,8 @@ const MyProfile = ({ navigation }) => {
       setImageAPI("");
       setImageStatus("");
       setIdItem("");
+      setUpdateQuestionData([]);
+      (temp = []), (temp2 = []);
       // console.log("Question Error ==>>>", updateCategoryQuestionError);
       // console.log(
       //   "User Category Question Response Error  ===>>>",
@@ -881,12 +888,14 @@ const MyProfile = ({ navigation }) => {
   };
 
   const userSubscriptions = async (latestExpirationDate) => {
-    const { UserSubscriptionResponse, UserSubscriptionError } =
-      await userSubscription(
-        "1.99",
-        Moment(latestExpirationDate).format("YYYY-MM-DD"),
-        Moment(new Date()).format("YYYY-MM-DD")
-      );
+    if (latestExpirationDate != null) {
+      const { UserSubscriptionResponse, UserSubscriptionError } =
+        await userSubscription(
+          "1.99",
+          Moment(latestExpirationDate).format("YYYY-MM-DD"),
+          Moment(new Date()).format("YYYY-MM-DD")
+        );
+    }
   };
 
   useEffect(() => {
@@ -1119,7 +1128,7 @@ const MyProfile = ({ navigation }) => {
                   ShowBtn={true}
                   key={1}
                   AddNewOnPress={() => {
-                    userCategoryQuestion.length != 5
+                    userCategoryQuestion.length < 5
                       ? AddItemShow(0)
                       : upgradeItem();
                   }}
@@ -1177,7 +1186,7 @@ const MyProfile = ({ navigation }) => {
                   ShowBtn={true}
                   key={1}
                   AddNewOnPress={() => {
-                    userSpecialMoment.length != 2
+                    userCategoryQuestion.length < 2
                       ? AddItemSepShow(0)
                       : upgradeItem();
                   }}

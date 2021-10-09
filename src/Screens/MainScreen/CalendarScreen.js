@@ -166,12 +166,14 @@ const CalendarScreen = () => {
   };
 
   const userSubscriptions = async (latestExpirationDate) => {
-    const { UserSubscriptionResponse, UserSubscriptionError } =
-      await userSubscription(
-        "1.99",
-        Moment(latestExpirationDate).format("YYYY-MM-DD"),
-        Moment(new Date()).format("YYYY-MM-DD")
-      );
+    if (latestExpirationDate != null) {
+      const { UserSubscriptionResponse, UserSubscriptionError } =
+        await userSubscription(
+          "1.99",
+          Moment(latestExpirationDate).format("YYYY-MM-DD"),
+          Moment(new Date()).format("YYYY-MM-DD")
+        );
+    }
   };
 
   useEffect(() => {
@@ -197,20 +199,24 @@ const CalendarScreen = () => {
     // console.log(getFilterSepCat);
   };
 
-  const getFriendCategorySpecialMoments = async () => {
+  const getFriendCategorySpecialMoments = async (date) => {
     const { friendCategorySpeciaResponse, friendCategorySpeciaError } =
-      await getFriendCategorySpecialMoment();
-    if (friendCategorySpeciaResponse.data.StatusCode) {
+      await getFriendCategorySpecialMoment(date);
+    if (friendCategorySpeciaResponse.data.StatusCode == "1") {
       var data = friendCategorySpeciaResponse.data.Result;
+      debugger;
       setCalenderDateFriendList(data);
       const sortedActivities = data.sort(
-        (a, b) => b.user_special_moment_value - a.user_special_moment_value
+        (a, b) =>
+          b.user_special_moment_current_year_value -
+          a.user_special_moment_current_year_value
       );
 
       var objectWithGroupByName = {};
 
       for (var key in sortedActivities) {
-        var dateInfo = sortedActivities[key].user_special_moment_value;
+        var dateInfo =
+          sortedActivities[key].user_special_moment_current_year_value;
         objectWithGroupByName[dateInfo] = {
           customStyles: {
             container: {
@@ -230,8 +236,15 @@ const CalendarScreen = () => {
       console.log(sortedActivities);
     }
   };
+
+  const onChangeDate = (date) => {
+    var dateString = Moment(date.dateString).format("YYYY-MM-DD").toString();
+    getFriendCategorySpecialMoments(dateString);
+  };
+
   useEffect(() => {
-    getFriendCategorySpecialMoments();
+    var dateString = Moment(new Date()).format("YYYY-MM-DD").toString();
+    getFriendCategorySpecialMoments(dateString);
   }, []);
 
   // Close All Item
@@ -413,7 +426,6 @@ const CalendarScreen = () => {
         JSON.stringify(getImageurl),
         "0"
       );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -422,7 +434,6 @@ const CalendarScreen = () => {
       addCategoryspecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      debugger;
       setPrevData({});
       setImage("");
       setImageurl("");
@@ -466,18 +477,14 @@ const CalendarScreen = () => {
       getspecialMomentOtherInfo,
       JSON.stringify(getImageurl)
     );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-    debugger;
-
     if (
       updateCategorySpecialMomentResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      debugger;
       console.log("update Category Special Moment Done");
       getFilterSepCatgories(updateCategorySpecialMomentResponse.data.Result);
       setUserNewSpecialMomentModal(false);
@@ -682,6 +689,7 @@ const CalendarScreen = () => {
                 // onDayLongPress={(day) => { console.log('selected day', day) }}
                 // MarkedDates
                 markingType={"custom"}
+                onMonthChange={(date) => onChangeDate(date)}
                 markedDates={getCalenderDateFriend}
                 // Specify theme properties to override specific styles for calendar parts. Default = {}
                 theme={{

@@ -274,11 +274,12 @@ export const SearchUser = {
 };
 
 export const GetFriendCategorySpecialMoment = {
-  get: async (session) =>
+  get: async (session, data) =>
     await api(
       session,
       `/rest_api/controller_profile/get_friend_category_special_moment`,
-      "get"
+      "post",
+      data
     ),
 };
 
