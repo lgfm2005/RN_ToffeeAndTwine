@@ -93,6 +93,10 @@ const MyProfile = ({ navigation }) => {
   const userCategoryQuestion = useSelector(
     (state) => state.UserCategoryQuestion
   );
+
+  const [categoryQuestionLimit, setCategoryQuestionLimit] = useState(5);
+  const [specialDayLimit, setSpecialDayLimit] = useState(2);
+  const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
   // Payment for upgrade
   const [getupgradeItemModal, setupgradeItemModal] = useState(false);
 
@@ -462,7 +466,6 @@ const MyProfile = ({ navigation }) => {
     console.log("ShowOldItem Id", id);
     console.log("ShowOldItem key", key);
     var questionList = userCategoryQuestion[key];
-    debugger;
     console.log("SquestionList", questionList);
     setImageOld(Image);
     setShowOldQuestion([]);
@@ -674,7 +677,6 @@ const MyProfile = ({ navigation }) => {
     setEditItemSepModal(true);
     setEditSepItem(getspecialMomentName);
     setFinalSepDate(getuserSpecialMomentDate);
-    debugger;
   };
 
   // oldUserSpecialMoment --> 1.Open
@@ -706,7 +708,6 @@ const MyProfile = ({ navigation }) => {
     // setImage(Imageurl);
     setspecialMomentLink(specialMomentLink);
     setspecialMomentOtherInfo(specialMomentOtherInfo);
-    debugger;
   };
 
   //  Show Moment (Select Only one) --- 3.Submit Data
@@ -731,7 +732,6 @@ const MyProfile = ({ navigation }) => {
         JSON.stringify(getImageurl),
         "0"
       );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -740,7 +740,6 @@ const MyProfile = ({ navigation }) => {
       addCategoryspecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      debugger;
       setPrevData({});
       setImage("");
       setImageurl("");
@@ -784,18 +783,14 @@ const MyProfile = ({ navigation }) => {
       getspecialMomentOtherInfo,
       JSON.stringify(getImageurl)
     );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-    debugger;
-
     if (
       updateCategorySpecialMomentResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      debugger;
       console.log("update Category Special Moment Done");
       getFilterSepCatgories(updateCategorySpecialMomentResponse.data.Result);
       setUserNewSpecialMomentModal(false);
@@ -835,15 +830,18 @@ const MyProfile = ({ navigation }) => {
 
   // Payment for upgrade
   const upgradeItem = async () => {
-    const { profileResponse, profileError } = await getProfile();
-    if (profileResponse.data.StatusCode) {
-      var isActive =
-        profileResponse.data.Result[0].user_details[0].user_subscription_status;
-      if (isActive == "1") {
-        AddItemShow(0);
-      } else {
-        setupgradeItemModal(true);
-      }
+    if (userSubscriptionStatus == "1") {
+      AddItemShow(0);
+    } else {
+      setupgradeItemModal(true);
+    }
+  };
+
+  const upgradePayment = async () => {
+    if (userSubscriptionStatus == "1") {
+      AddItemSepShow(0);
+    } else {
+      setupgradeItemModal(true);
     }
   };
 
@@ -900,6 +898,7 @@ const MyProfile = ({ navigation }) => {
         var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
         const { UserSubscriptionResponse, UserSubscriptionError } =
           await userSubscription("1.99", latestExpirationDates, cuttentDate);
+        getProfileLoad();
       }
     }
   };
@@ -926,6 +925,27 @@ const MyProfile = ({ navigation }) => {
 
   useEffect(() => {
     getProfiles();
+  }, []);
+
+  const getProfileLoad = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode == "1") {
+      setCategoryQuestionLimit(
+        profileResponse.data.Result[0].user_details[0].category_question_limit
+      );
+      setUserSubscriptionStatus(
+        profileResponse.data.Result[0].user_details[0].user_subscription_status
+      );
+      setSpecialDayLimit(
+        profileResponse.data.Result[0].user_details[0].special_day_limit
+      );
+    }
+  };
+
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      getProfileLoad();
+    });
   }, []);
 
   return (
@@ -1132,7 +1152,7 @@ const MyProfile = ({ navigation }) => {
                   ShowBtn={true}
                   key={1}
                   AddNewOnPress={() => {
-                    userCategoryQuestion.length < 5
+                    userCategoryQuestion.length < categoryQuestionLimit
                       ? AddItemShow(0)
                       : upgradeItem();
                   }}
@@ -1190,9 +1210,9 @@ const MyProfile = ({ navigation }) => {
                   ShowBtn={true}
                   key={1}
                   AddNewOnPress={() => {
-                    userCategoryQuestion.length < 2
+                    userSpecialMoment.length < specialDayLimit
                       ? AddItemSepShow(0)
-                      : upgradeItem();
+                      : upgradePayment();
                   }}
                 />
               </ScrollView>

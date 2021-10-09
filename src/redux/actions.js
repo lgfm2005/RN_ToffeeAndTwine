@@ -360,7 +360,6 @@ export const useActions = () => {
       } catch (e) {
         addCategoryQuestionError = e;
       }
-      debugger;
       return { addCategoryQuestionResponse, addCategoryQuestionError };
     },
 
