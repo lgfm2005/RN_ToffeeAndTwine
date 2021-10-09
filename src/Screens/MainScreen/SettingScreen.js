@@ -13,11 +13,17 @@ import { POPLinkButton } from "../../Components/Button/Button";
 import Modal from "react-native-modal";
 import TutorialStyle from "../Signup/Tutorial/TutorialStyle";
 import { FONT } from "../../Assets/utils/FONT";
+import Purchases from "react-native-purchases";
+import Moment from "moment";
 
 const SettingScreen = ({ navigation }) => {
-  const { Logout, getSetting, updateSetting, DelectAccount } = useActions();
+  const { Logout, getSetting, updateSetting, DelectAccount, userSubscription } =
+    useActions();
   const [getGiftingSwitch, setGiftingSwitch] = useState(false);
   const [getSpecialMomentsSwitch, setSpecialMomentsSwitch] = useState(false);
+  const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
+  const [planPeriodEnd, setPlanPeriodEnd] = useState("");
+
   const [isFitst, setIsFitst] = useState(false);
 
   const [getDeletedAccountModel, setDeletedAccountModel] = useState(false);
@@ -65,7 +71,14 @@ const SettingScreen = ({ navigation }) => {
 
   const GetSetting = async () => {
     const { response, error } = await getSetting();
-    if (response.data.StatusCode) {
+    if (response.data.StatusCode == "1") {
+      if (response.data.Result.user_subscription_status == "1") {
+        setUserSubscriptionStatus(1);
+        setPlanPeriodEnd(response.data.Result.plan_period_end);
+      } else {
+        setUserSubscriptionStatus(0);
+        setPlanPeriodEnd("");
+      }
       setGiftingSwitch(false);
       if (response.data.Result.isNotifyGifting == "1") {
         setGiftingSwitch(true);
@@ -83,12 +96,77 @@ const SettingScreen = ({ navigation }) => {
   };
   const FinalDeletedAccount = async () => {
     const { DelectAccountResponse, DelectAccountError } = await DelectAccount();
-    if (DelectAccountResponse.data.StatusCode) {
+    if (DelectAccountResponse.data.StatusCode == "1") {
       setDeletedAccountModel(false);
       Logout(), navigation.navigate("MainScreen");
     } else {
     }
   };
+
+  const handleSubmitPayment = async () => {
+    // setLoading(true);
+    // HapticFeedback.trigger("impactLight");
+
+    var currentDate = Moment(new Date(), "DD/MM/YYYY");
+    try {
+      const purchaserInfo1 = await Purchases.getPurchaserInfo();
+      var latestExpirationDates = Moment(
+        purchaserInfo1.latestExpirationDate,
+        "DD/MM/YYYY"
+      );
+
+      var isBefore = currentDate.isBefore(latestExpirationDates);
+      if (!isBefore) {
+        if (
+          typeof purchaserInfo1.entitlements.active.pro_monthly !== "undefined"
+        ) {
+          // Grant user "pro" access
+        }
+        const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
+        const monthlyPackage = offerings.current.monthly;
+        const { purchaserInfo } = await Purchases.purchasePackage(
+          monthlyPackage
+        );
+        const { latestExpirationDate } = purchaserInfo;
+        console.log("latestExpirationDate:", latestExpirationDate);
+      } else {
+      }
+    } catch (e) {
+      console.log("Error:", e);
+      // setLoading(false);
+      // if (e.userCancelled) return;
+      // setError(
+      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
+      // );
+      // setErrorDetails(e.message);
+      // HapticFeedback.trigger("impactHeavy");
+    }
+  };
+
+  const userSubscriptions = async (latestExpirationDate) => {
+    if (latestExpirationDate != null) {
+      var latestExpirationDates = Moment(latestExpirationDate)
+        .format("YYYY-MM-DD")
+        .toString();
+      var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
+
+      const { UserSubscriptionResponse, UserSubscriptionError } =
+        await userSubscription("1.99", latestExpirationDates, cuttentDate);
+
+      GetSetting();
+    }
+  };
+
+  useEffect(() => {
+    Purchases.setDebugLogsEnabled(true);
+    Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
+    Purchases.syncPurchases();
+    Purchases.addPurchaserInfoUpdateListener((info) => {
+      // handle any changes to purchaserInfo
+      userSubscriptions(info.latestExpirationDate);
+    });
+  }, []);
 
   if (!isFitst) {
     GetSetting();
@@ -185,24 +263,35 @@ const SettingScreen = ({ navigation }) => {
                       { color: COLORS.PrimaryLight },
                     ]}
                   >
-                    {AppString.Free}
+                    {userSubscriptionStatus == "1"
+                      ? " $1.99 - Monthly"
+                      : AppString.Free}
                   </Text>
                 </View>
-                <View style={CommonStyle.centerRow}>
+                <TouchableOpacity
+                  disabled={userSubscriptionStatus == "1" ? true : false}
+                  onPress={() => handleSubmitPayment()}
+                  style={CommonStyle.centerRow}
+                >
                   <Text
                     style={[
                       CommonStyle.txtContent,
                       { color: COLORS.PrimaryLight },
                     ]}
                   >
-                    {AppString.Upgrade}
+                    {userSubscriptionStatus == "1" ? "" : AppString.Upgrade}
                     <Text style={{ color: COLORS.gold }}>
                       {" "}
-                      {AppString.UpgradePrice}{" "}
-                    </Text>
-                    {AppString.monthly}
+                      {userSubscriptionStatus == "1"
+                        ? " Next Billing On: " +
+                          Moment(planPeriodEnd)
+                            .format("MMMM DD YYYY")
+                            .toString()
+                        : AppString.UpgradePrice}
+                    </Text>{" "}
+                    {userSubscriptionStatus == "1" ? "" : AppString.monthly}
                   </Text>
-                </View>
+                </TouchableOpacity>
               </View>
             ) : null}
           </View>

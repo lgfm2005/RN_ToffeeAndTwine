@@ -845,6 +845,19 @@ const MyProfile = ({ navigation }) => {
     }
   };
 
+  const upgradePayment = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode) {
+      var isActive =
+        profileResponse.data.Result[0].user_details[0].user_subscription_status;
+      if (isActive == "1") {
+        AddItemSepShow(0);
+      } else {
+        setupgradeItemModal(true);
+      }
+    }
+  };
+
   const handleSubmitPayment = async () => {
     // setLoading(true);
     // HapticFeedback.trigger("impactLight");
@@ -889,12 +902,13 @@ const MyProfile = ({ navigation }) => {
 
   const userSubscriptions = async (latestExpirationDate) => {
     if (latestExpirationDate != null) {
+      var latestExpirationDates = Moment(latestExpirationDate)
+        .format("YYYY-MM-DD")
+        .toString();
+      var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
+
       const { UserSubscriptionResponse, UserSubscriptionError } =
-        await userSubscription(
-          "1.99",
-          Moment(latestExpirationDate).format("YYYY-MM-DD"),
-          Moment(new Date()).format("YYYY-MM-DD")
-        );
+        await userSubscription("1.99", latestExpirationDates, cuttentDate);
     }
   };
 
@@ -1188,7 +1202,7 @@ const MyProfile = ({ navigation }) => {
                   AddNewOnPress={() => {
                     userCategoryQuestion.length < 2
                       ? AddItemSepShow(0)
-                      : upgradeItem();
+                      : upgradePayment();
                   }}
                 />
               </ScrollView>
