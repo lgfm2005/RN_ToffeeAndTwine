@@ -380,10 +380,10 @@ const SignIn = ({ navigation }) => {
                 // onPress={() => handleSignIn(getEmail, getCreatePassword)}
                 // btncheck={isvalidForm()}
                 // btnabled={isvalidForm()}
-                // onPress={() =>
-                //   handleSignIn("kachhadiya101@gmail.com", "123456")
-                // }
-                onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
+                onPress={() =>
+                  handleSignIn("kachhadiya101@gmail.com", "123456")
+                }
+                // onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
                 // onPress={() => handleSignIn("bhavesh@gmail.com", "123456")}
                 // onPress={() =>
                 //   handleSignIn("rshah@universalstreamsolution.com", "123456")

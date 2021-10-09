@@ -323,6 +323,11 @@ const FriendFollowersList = ({ route, navigation }) => {
                     </View>
                   ) : null}
                 </View>
+                {/* <POPLinkButton
+                  buttonName={AppString.Follow}
+                  styleBtn={Mediumbtn}
+                  onPress={() => followUserAction()}
+                /> */}
                 {getFriendStatus == "1" ? (
                   <POPLinkButton
                     buttonName={AppString.Follow}

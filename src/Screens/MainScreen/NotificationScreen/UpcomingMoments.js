@@ -25,27 +25,6 @@ import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
 
-const Data = [
-  {
-    id: 1,
-    Usename: "Jessica Rockwell",
-    Title: "Birthday is on Oct 17.",
-    Image: demodp,
-  },
-  {
-    id: 2,
-    Usename: "Jessica Rockwell",
-    Title: "Birthday is on Oct 17.",
-    Image: demodp,
-  },
-  {
-    id: 3,
-    Usename: "Jessica Rockwell",
-    Title: "Birthday is on Oct 17.",
-    Image: demodp,
-  },
-];
-
 const UpcomingMoments = ({ navigation }) => {
   const { getProfile, getUpcomingMoments } = useActions();
   const [upcomingMomentsList, setUpcomingMomentsList] = useState([]);

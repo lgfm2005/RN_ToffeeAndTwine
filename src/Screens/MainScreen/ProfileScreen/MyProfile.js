@@ -71,8 +71,8 @@ import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
-var temp,
-  temp2 = [];
+var temp = [];
+var temp2 = [];
 const MyProfile = ({ navigation }) => {
   const {
     addCategoryQuestion,

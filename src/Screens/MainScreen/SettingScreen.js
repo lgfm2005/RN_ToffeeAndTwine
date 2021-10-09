@@ -9,6 +9,10 @@ import { MyWhiteStatusbar } from "../../Components/MyStatusBar/MyWhiteStatusbar"
 import { Switch } from "react-native-paper";
 import { COLORS } from "../../Assets/utils/COLORS";
 import { useActions } from "../../redux/actions";
+import { POPLinkButton } from "../../Components/Button/Button";
+import Modal from "react-native-modal";
+import TutorialStyle from "../Signup/Tutorial/TutorialStyle";
+import { FONT } from "../../Assets/utils/FONT";
 
 const SettingScreen = ({ navigation }) => {
   const { Logout, getSetting, updateSetting, DelectAccount } = useActions();
@@ -16,10 +20,15 @@ const SettingScreen = ({ navigation }) => {
   const [getSpecialMomentsSwitch, setSpecialMomentsSwitch] = useState(false);
   const [isFitst, setIsFitst] = useState(false);
 
+  const [getDeletedAccountModel, setDeletedAccountModel] = useState(false);
   const [getNotification, setNotification] = useState(true);
   const [getManageSubscriptions, setManageSubscriptions] = useState(false);
   const [getHelp, setHelp] = useState(false);
   const [getAbout, setAbout] = useState(false);
+
+  const CloseItem = () => {
+    setDeletedAccountModel(false);
+  };
 
   const GiftingToggleSwitch = async () => {
     var getGifting = getGiftingSwitch ? 1 : 0;
@@ -69,9 +78,13 @@ const SettingScreen = ({ navigation }) => {
     }
   };
 
+  const CheckDeletedAccount = () => {
+    setDeletedAccountModel(true);
+  };
   const FinalDeletedAccount = async () => {
     const { DelectAccountResponse, DelectAccountError } = await DelectAccount();
     if (DelectAccountResponse.data.StatusCode) {
+      setDeletedAccountModel(false);
       Logout(), navigation.navigate("MainScreen");
     } else {
     }
@@ -259,9 +272,7 @@ const SettingScreen = ({ navigation }) => {
           </View>
 
           <TouchableOpacity
-            onPress={() => {
-              FinalDeletedAccount();
-            }}
+            onPress={() => CheckDeletedAccount()}
             style={{ paddingBottom: 16 }}
           >
             <Text style={[CommonStyle.txtTitle, { color: COLORS.Primary }]}>
@@ -286,6 +297,38 @@ const SettingScreen = ({ navigation }) => {
             </View>
           </TouchableOpacity>
         </View>
+
+        {/* ----- */}
+
+        {getDeletedAccountModel == true ? (
+          <Modal testID={"modal"} isVisible={getDeletedAccountModel}>
+            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+              <View style={CommonStyle.Row}>
+                <View style={{ width: "100%" }}>
+                  <Text
+                    style={[CommonStyle.txtTitle, { fontFamily: FONT.Gilroy }]}
+                  >
+                    {AppString.ConfirmText}
+                  </Text>
+                </View>
+              </View>
+
+              <View
+                style={[CommonStyle.Row, { justifyContent: "space-between" }]}
+              >
+                <POPLinkButton
+                  buttonName={AppString.Cancel}
+                  onPress={() => CloseItem()}
+                />
+
+                <POPLinkButton
+                  buttonName={AppString.confirm}
+                  onPress={() => CloseItem()}
+                />
+              </View>
+            </View>
+          </Modal>
+        ) : null}
       </SafeAreaView>
     </View>
   );

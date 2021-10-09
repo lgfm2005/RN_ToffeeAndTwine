@@ -340,6 +340,11 @@ const EditProfile = ({ navigation }) => {
             onBackdropPress={() => CloseItem()}
           >
             <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+              <View style={[CommonStyle.centerRow, CommonStyle.p8]}>
+                <Text style={[CommonStyle.txtTitle, CommonStyle.mb16]}>
+                  {AppString.HighlightMoments}
+                </Text>
+              </View>
               <FlatList
                 data={UserSpecialMoment}
                 renderItem={({ item, index }) => RenderItem(item, index)}

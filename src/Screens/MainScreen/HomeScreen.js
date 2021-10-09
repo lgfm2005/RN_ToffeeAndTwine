@@ -63,8 +63,8 @@ import Purchases from "react-native-purchases";
 import { ImageUrl } from "../../Assets/utils/ImageUrl";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
-var temp,
-  temp2 = [];
+var temp = [];
+var temp2 = [];
 var items, list, userData;
 const HomeScreen = () => {
   const {
@@ -584,7 +584,7 @@ const HomeScreen = () => {
       }
     }
   };
-  console.log("userData.userProfileImage:", userData.userProfileImage);
+  // console.log("userData.userProfileImage:", userData.userProfileImage);
   return (
     <View style={CommonStyle.BgColorWhite}>
       <MyBlackStatusbar />
