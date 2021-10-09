@@ -77,15 +77,15 @@ const UpcomingUpGrade = ({ navigation }) => {
 
   const userSubscriptions = async (latestExpirationDate) => {
     if (latestExpirationDate != null) {
+      var latestExpirationDates = Moment(latestExpirationDate)
+        .format("YYYY-MM-DD")
+        .toString();
+      var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
+
       const { UserSubscriptionResponse, UserSubscriptionError } =
-        await userSubscription(
-          "1.99",
-          Moment(latestExpirationDate).format("YYYY-MM-DD"),
-          Moment(new Date()).format("YYYY-MM-DD")
-        );
+        await userSubscription("1.99", latestExpirationDates, cuttentDate);
     }
   };
-
   useEffect(() => {
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
