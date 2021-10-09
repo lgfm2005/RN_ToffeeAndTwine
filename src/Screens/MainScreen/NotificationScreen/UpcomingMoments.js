@@ -58,6 +58,7 @@ const UpcomingMoments = ({ navigation }) => {
       getUpcomingMoment();
     });
   }, []);
+
   const RenderItem = (item, index) => {
     return (
       <View style={[NotificationScreenStyle.FollowerListBg, CommonStyle.mb16]}>

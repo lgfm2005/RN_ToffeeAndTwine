@@ -360,6 +360,7 @@ export const useActions = () => {
       } catch (e) {
         addCategoryQuestionError = e;
       }
+      debugger;
       return { addCategoryQuestionResponse, addCategoryQuestionError };
     },
 
@@ -463,12 +464,10 @@ export const useActions = () => {
       data.append("UserSpecialMomentLink", UserSpecialMomentLink);
       data.append("UserSpecialMomentInfo", UserSpecialMomentInfo);
       data.append("Image", Image);
-      debugger;
       let updateCategorySpecialMomentResponse, updateCategorySpecialMomentError;
       try {
         updateCategorySpecialMomentResponse =
           await API.UpdateCategorySpecialMoment.get(sessions, data);
-        debugger;
         if (updateCategorySpecialMomentResponse.data.StatusCode == "1") {
         } else {
           updateCategorySpecialMomentError =
@@ -653,11 +652,13 @@ export const useActions = () => {
       return { SearchUserResponse, SearchUserError };
     },
 
-    getFriendCategorySpecialMoment: async () => {
+    getFriendCategorySpecialMoment: async (calendarDate) => {
+      var data = new FormData();
+      data.append("CalendarDate", calendarDate);
       let friendCategorySpeciaResponse, friendCategorySpeciaError;
       try {
         friendCategorySpeciaResponse =
-          await API.GetFriendCategorySpecialMoment.get(sessions);
+          await API.GetFriendCategorySpecialMoment.get(sessions, data);
         if (friendCategorySpeciaResponse.data.StatusCode == "1") {
         }
       } catch (e) {

@@ -76,12 +76,14 @@ const UpcomingUpGrade = ({ navigation }) => {
   };
 
   const userSubscriptions = async (latestExpirationDate) => {
-    const { UserSubscriptionResponse, UserSubscriptionError } =
-      await userSubscription(
-        "1.99",
-        Moment(latestExpirationDate).format("YYYY-MM-DD"),
-        Moment(new Date()).format("YYYY-MM-DD")
-      );
+    if (latestExpirationDate != null) {
+      const { UserSubscriptionResponse, UserSubscriptionError } =
+        await userSubscription(
+          "1.99",
+          Moment(latestExpirationDate).format("YYYY-MM-DD"),
+          Moment(new Date()).format("YYYY-MM-DD")
+        );
+    }
   };
 
   useEffect(() => {

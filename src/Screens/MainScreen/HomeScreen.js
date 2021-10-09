@@ -88,12 +88,14 @@ const HomeScreen = () => {
   );
 
   const userSubscriptions = async (latestExpirationDate) => {
-    const { UserSubscriptionResponse, UserSubscriptionError } =
-      await userSubscription(
-        "1.99",
-        Moment(latestExpirationDate).format("YYYY-MM-DD"),
-        Moment(new Date()).format("YYYY-MM-DD")
-      );
+    if (latestExpirationDate != null) {
+      const { UserSubscriptionResponse, UserSubscriptionError } =
+        await userSubscription(
+          "1.99",
+          Moment(latestExpirationDate).format("YYYY-MM-DD"),
+          Moment(new Date()).format("YYYY-MM-DD")
+        );
+    }
   };
 
   useEffect(() => {
@@ -353,6 +355,7 @@ const HomeScreen = () => {
         });
       }
     }
+    debugger;
     // setQuestionsData(temp);
     setUpdateDataModal(false);
     setAddItemShowModal(false);
@@ -373,6 +376,8 @@ const HomeScreen = () => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
+      setQuestionsData([]);
+      (temp = []), (temp2 = []);
       setImageNew("");
       setImageOld("");
       setImageAPI("");
@@ -393,6 +398,8 @@ const HomeScreen = () => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
+      setQuestionsData([]);
+      (temp = []), (temp2 = []);
       console.log("Question Error ==>>>", addCategoryQuestionError);
       console.log(
         "User Category Question Response Error  ===>>>",
@@ -478,6 +485,8 @@ const HomeScreen = () => {
       setImageAPI("");
       setImageStatus("");
       setIdItem("");
+      setUpdateQuestionData([]);
+      (temp = []), (temp2 = []);
       // console.log(
       //   "User Category Question Response Done  ===>>>",
       //   UserCategoryQuestionResponse
@@ -494,6 +503,8 @@ const HomeScreen = () => {
       setImageAPI("");
       setImageStatus("");
       setIdItem("");
+      setUpdateQuestionData([]);
+      (temp = []), (temp2 = []);
       // console.log("Question Error ==>>>", updateCategoryQuestionError);
       // console.log(
       //   "User Category Question Response Error  ===>>>",
@@ -572,11 +583,13 @@ const HomeScreen = () => {
 
   // Payment for upgrade∂ç
   const upgradeItem = async () => {
-    console.log("111");
+    console.log("111", userCategoryQuestion.length);
+    debugger;
     const { profileResponse, profileError } = await getProfile();
     if (profileResponse.data.StatusCode) {
       var isActive =
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
+      debugger;
       if (isActive == "1") {
         AddItemShow(0);
       } else {
@@ -675,7 +688,7 @@ const HomeScreen = () => {
                     ShowBtn={true}
                     key={1}
                     AddNewOnPress={() => {
-                      userCategoryQuestion.length != 5
+                      userCategoryQuestion.length < 5
                         ? AddItemShow(0)
                         : upgradeItem();
                     }}
@@ -729,7 +742,7 @@ const HomeScreen = () => {
                       key={index}
                       DataLength={item.category_id}
                       onPress={() => {
-                        userCategoryQuestion.length != 5
+                        userCategoryQuestion.length < 5
                           ? SelectCategoriesItem(
                               item.category_name,
                               item.Image,
