@@ -225,7 +225,6 @@ const UserProfile = ({ route, navigation }) => {
       userInfo.user_id
     );
     if (followUserResponse.data.StatusCode == "1") {
-      setFriendStatus(1);
       setLoader(false);
     } else {
       setLoader(false);

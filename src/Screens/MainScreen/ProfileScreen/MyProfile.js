@@ -572,9 +572,10 @@ const MyProfile = ({ navigation }) => {
       cropping: true,
       includeBase64: true,
     }).then((image) => {
-      setImageOld(image);
       setImage(image.path);
       setImageurl(image);
+      // setImage(image.path);
+      // setImageurl(image);
       // console.log("image===>", image);
     });
   };
@@ -701,7 +702,7 @@ const MyProfile = ({ navigation }) => {
     setspecialMomentName(specialMomentName);
     setuserSpecialMomentTitle(userSpecialMomentTitle);
     setuserSpecialMomentDate(userSpecialMomentDate);
-    setImageurl(Imageurl);
+    setImage(Imageurl);
     // setImage(Imageurl);
     setspecialMomentLink(specialMomentLink);
     setspecialMomentOtherInfo(specialMomentOtherInfo);
@@ -846,19 +847,6 @@ const MyProfile = ({ navigation }) => {
     }
   };
 
-  const upgradePayment = async () => {
-    const { profileResponse, profileError } = await getProfile();
-    if (profileResponse.data.StatusCode) {
-      var isActive =
-        profileResponse.data.Result[0].user_details[0].user_subscription_status;
-      if (isActive == "1") {
-        AddItemSepShow(0);
-      } else {
-        setupgradeItemModal(true);
-      }
-    }
-  };
-
   const handleSubmitPayment = async () => {
     // setLoading(true);
     // HapticFeedback.trigger("impactLight");
@@ -903,13 +891,12 @@ const MyProfile = ({ navigation }) => {
 
   const userSubscriptions = async (latestExpirationDate) => {
     if (latestExpirationDate != null) {
-      var latestExpirationDates = Moment(latestExpirationDate)
-        .format("YYYY-MM-DD")
-        .toString();
-      var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
-
       const { UserSubscriptionResponse, UserSubscriptionError } =
-        await userSubscription("1.99", latestExpirationDates, cuttentDate);
+        await userSubscription(
+          "1.99",
+          Moment(latestExpirationDate).format("YYYY-MM-DD"),
+          Moment(new Date()).format("YYYY-MM-DD")
+        );
     }
   };
 
@@ -1203,7 +1190,7 @@ const MyProfile = ({ navigation }) => {
                   AddNewOnPress={() => {
                     userCategoryQuestion.length < 2
                       ? AddItemSepShow(0)
-                      : upgradePayment();
+                      : upgradeItem();
                   }}
                 />
               </ScrollView>
@@ -1523,9 +1510,9 @@ const MyProfile = ({ navigation }) => {
                 }}
               >
                 <View style={{ width: "20%" }}>
-                  {getImageurl != "" ? (
+                  {getImage != "" ? (
                     <Image
-                      source={{ uri: getImageurl }}
+                      source={{ uri: getImage }}
                       style={Styles.popupImage}
                     />
                   ) : (
@@ -1619,13 +1606,9 @@ const MyProfile = ({ navigation }) => {
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
-                        <Image
-                          source={{ uri: getImage }}
-                          style={Styles.popupImage}
-                        />
-                        {getImageOld != "" ? (
+                        {getImage != "" ? (
                           <Image
-                            source={{ uri: getImageOld }}
+                            source={{ uri: getImage }}
                             style={Styles.popupImage}
                           />
                         ) : (

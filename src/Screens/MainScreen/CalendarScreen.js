@@ -399,7 +399,8 @@ const CalendarScreen = () => {
     setspecialMomentName(specialMomentName);
     setuserSpecialMomentTitle(userSpecialMomentTitle);
     setuserSpecialMomentDate(userSpecialMomentDate);
-    setImageurl(Imageurl);
+    setImage(Imageurl);
+    // setImageurl(Imageurl);
     setspecialMomentLink(specialMomentLink);
     setspecialMomentOtherInfo(specialMomentOtherInfo);
   };
@@ -815,9 +816,9 @@ const CalendarScreen = () => {
                     }}
                   >
                     <View style={{ width: "20%" }}>
-                      {getImageurl != "" ? (
+                      {getImage != "" ? (
                         <Image
-                          source={{ uri: getImageurl }}
+                          source={{ uri: getImage }}
                           style={Styles.popupImage}
                         />
                       ) : (
