@@ -572,6 +572,7 @@ const MyProfile = ({ navigation }) => {
       cropping: true,
       includeBase64: true,
     }).then((image) => {
+      setImageOld(image);
       setImage(image.path);
       setImageurl(image);
       // console.log("image===>", image);
@@ -1288,7 +1289,7 @@ const MyProfile = ({ navigation }) => {
                         { textAlign: "center", marginTop: 10 },
                       ]}
                     >
-                      {getUpdateDataItem}
+                      m333 {getUpdateDataItem}
                     </Text>
                   </View>
                   <View style={{ width: "20%" }}></View>
@@ -1608,6 +1609,14 @@ const MyProfile = ({ navigation }) => {
                           source={{ uri: getImage }}
                           style={Styles.popupImage}
                         />
+                        {getImageOld != "" ? (
+                          <Image
+                            source={{ uri: getImageOld }}
+                            style={Styles.popupImage}
+                          />
+                        ) : (
+                          <Image source={imgImport} style={Styles.popupImage} />
+                        )}
                       </TouchableOpacity>
                     </View>
                     <View>
@@ -1618,7 +1627,7 @@ const MyProfile = ({ navigation }) => {
                           { textAlign: "center" },
                         ]}
                       >
-                        {getEditSepItem}
+                        m22 {getEditSepItem}
                       </Text>
                     </View>
                     <View style={{ width: "20%" }}></View>

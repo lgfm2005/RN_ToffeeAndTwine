@@ -83,7 +83,7 @@ const SettingScreen = ({ navigation }) => {
   };
   const FinalDeletedAccount = async () => {
     const { DelectAccountResponse, DelectAccountError } = await DelectAccount();
-    if (DelectAccountResponse.data.StatusCode) {
+    if (DelectAccountResponse.data.StatusCode == "1") {
       setDeletedAccountModel(false);
       Logout(), navigation.navigate("MainScreen");
     } else {

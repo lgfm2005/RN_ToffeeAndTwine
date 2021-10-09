@@ -122,33 +122,11 @@ const UserProfile = ({ route, navigation }) => {
     setFavoriteThingsModal(true);
   };
 
-  const followUserAction = async () => {
-    const { followUserResponse, followUserError } = await followUser(
-      userInfo.user_id
-    );
-    setLoader(true);
-    if (followUserResponse.data.StatusCode == "1") {
-      setLoader(false);
-      console.log("followUserResponse ===============>");
-      console.log(followUserResponse);
-    } else {
-      setLoader(false);
-      console.log("followUserError ===============>");
-      console.log(followUserError);
-    }
-  };
   const blockFriendAction = async () => {
     const { blockFriendResponse, blockFriendError } = await blockFriend(
       userInfo.user_id,
       1
     );
-  };
-
-  const removeFollowerFriend = async () => {
-    setLoader(true);
-    const { RemoveFriendResponse, RemoveFriendError } =
-      await RemoveFollowerFriend(userID);
-    setLoader(false);
   };
 
   // Favorite Things
@@ -233,6 +211,43 @@ const UserProfile = ({ route, navigation }) => {
       setFriendSpecialMoments(
         profileResponse.data.Result[0].friend_special_moments
       );
+      console.log("getFriendStatus ====>>", getFriendStatus);
+      setLoader(false);
+    } else {
+      setLoader(false);
+    }
+  };
+
+  // Friend API
+  const FollowAction = async () => {
+    setLoader(true);
+    const { followUserResponse, followUserError } = await followUser(
+      userInfo.user_id
+    );
+    if (followUserResponse.data.StatusCode == "1") {
+      setFriendStatus(1);
+      setLoader(false);
+    } else {
+      setLoader(false);
+    }
+  };
+
+  const UnFollowAction = async () => {
+    setLoader(true);
+    const { UnfollowFriendListResponse, UnfollowFriendListError } =
+      await getUnfollowFriendList(userInfo.user_id);
+    if (UnfollowFriendListResponse.data.StatusCode == "1") {
+      setLoader(false);
+    } else {
+      setLoader(false);
+    }
+  };
+
+  const RemoveAction = async () => {
+    setLoader(true);
+    const { RemoveFriendResponse, RemoveFriendError } =
+      await RemoveFollowerFriend(userInfo.user_id);
+    if (RemoveFriendResponse.data.StatusCode == "1") {
       setLoader(false);
     } else {
       setLoader(false);
@@ -310,7 +325,7 @@ const UserProfile = ({ route, navigation }) => {
               <View style={UserProfileScreenStyle.NameAndEditbg}>
                 <View>
                   <Text style={UserProfileScreenStyle.userName}>
-                    {userInfo.user_fname}
+                    {userInfo.user_fname + " " + userInfo.user_lname}
                   </Text>
                   {getFriendDefaultSpecialMomentText.length > 0 ? (
                     <View style={CommonStyle.alignItemsBaseLine}>
@@ -331,21 +346,27 @@ const UserProfile = ({ route, navigation }) => {
                 </View>
                 {getFriendStatus == "1" ? (
                   <POPLinkButton
-                    buttonName={AppString.Follow}
+                    buttonName={AppString.Remove}
                     styleBtn={Mediumbtn}
-                    onPress={() => followUserAction()}
+                    onPress={() => UnFollowAction()}
                   />
                 ) : getFriendStatus == "2" ? (
                   <POPLinkButton
-                    buttonName={AppString.Following}
-                    // styleBtn={Mediumbtn}
-                    // onPress={() => followUserAction()}
+                    buttonName={AppString.Follow}
+                    styleBtn={Mediumbtn}
+                    onPress={() => FollowAction()}
                   />
-                ) : (
+                ) : getFriendStatus == "3" ? (
                   <POPLinkButton
                     buttonName={AppString.Remove}
                     styleBtn={[Mediumbtn]}
-                    onPress={() => removeFollowerFriend()}
+                    onPress={() => RemoveAction()}
+                  />
+                ) : (
+                  <POPLinkButton
+                    buttonName={AppString.Follow}
+                    styleBtn={Mediumbtn}
+                    onPress={() => FollowAction()}
                   />
                 )}
               </View>
