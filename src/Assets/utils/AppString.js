@@ -133,7 +133,7 @@ export const AppString = {
   Giftit: "Gift it",
   NoThanks: "No, Thanks",
   Select: "Select",
-  ConfirmText: " Are you sure you want to delete your account",
+  ConfirmText: " Are you sure you want to delete your account ?",
   confirm: "Confirm",
   YesNotify: "Yes, Notify",
   Deleteaccount: "Delete account",

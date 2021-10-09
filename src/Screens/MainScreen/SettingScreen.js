@@ -306,7 +306,11 @@ const SettingScreen = ({ navigation }) => {
               <View style={CommonStyle.Row}>
                 <View style={{ width: "100%" }}>
                   <Text
-                    style={[CommonStyle.txtTitle, { fontFamily: FONT.Gilroy }]}
+                    style={[
+                      CommonStyle.txtTitle,
+                      CommonStyle.mb32,
+                      { fontFamily: FONT.Gilroy },
+                    ]}
                   >
                     {AppString.ConfirmText}
                   </Text>
@@ -323,7 +327,7 @@ const SettingScreen = ({ navigation }) => {
 
                 <POPLinkButton
                   buttonName={AppString.confirm}
-                  onPress={() => CloseItem()}
+                  onPress={() => FinalDeletedAccount()}
                 />
               </View>
             </View>
