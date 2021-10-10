@@ -22,8 +22,14 @@ import {
 } from "../../Assets/utils/ShareLink";
 
 const SettingScreen = ({ navigation }) => {
-  const { Logout, getSetting, updateSetting, DelectAccount, userSubscription } =
-    useActions();
+  const {
+    Logout,
+    getSetting,
+    updateSetting,
+    DelectAccount,
+    userSubscription,
+    FinalLogOut,
+  } = useActions();
   const [getGiftingSwitch, setGiftingSwitch] = useState(false);
   const [getSpecialMomentsSwitch, setSpecialMomentsSwitch] = useState(false);
   const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
@@ -105,6 +111,15 @@ const SettingScreen = ({ navigation }) => {
       setDeletedAccountModel(false);
       Logout(), navigation.navigate("MainScreen");
     } else {
+    }
+  };
+  const FinalCheckLogout = async () => {
+    const { FinalLogOutResponse, FinalLogOutError } = await FinalLogOut();
+    if (FinalLogOutResponse.data.StatusCode == "1") {
+      console.log("Logout Checked");
+      Logout(), navigation.navigate("MainScreen");
+    } else {
+      console.log("Logout Error", FinalLogOutError);
     }
   };
   const userSubscriptions = async (info) => {
@@ -374,9 +389,7 @@ const SettingScreen = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              Logout(), navigation.navigate("MainScreen");
-            }}
+            onPress={() => FinalCheckLogout()}
             style={{ paddingBottom: 16 }}
           >
             <View style={CommonStyle.RowSpace}>

@@ -696,7 +696,9 @@ const UserProfile = ({ route, navigation }) => {
                         { marginLeft: 10, marginRight: 10, fontSize: 18 },
                       ]}
                     >
-                      {AppString.planning}
+                      Do you wish to let {userInfo.user_fname}'s friends know
+                      you are planning to get this gift for{" "}
+                      {userInfo.user_fname}?
                     </Text>
                   </View>
 
@@ -741,7 +743,8 @@ const UserProfile = ({ route, navigation }) => {
                       },
                     ]}
                   >
-                    {AppString.FriendsAwesome}
+                    Awesome. {getTitleName} Friends now know you plan to get her{" "}
+                    {userInfo.user_fname} as a gift.
                   </Text>
                 </View>
               </Modal>

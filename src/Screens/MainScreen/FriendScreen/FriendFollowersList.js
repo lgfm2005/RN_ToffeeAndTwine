@@ -79,6 +79,7 @@ const FriendFollowersList = ({ route, navigation }) => {
   const [getFollowerCount, setFollowerCount] = useState(0);
   const [getFollowingCount, setFollowingCount] = useState(0);
   const [getUserName, setUserName] = useState("");
+  const [getFirstName, setFirstName] = useState("");
   const [friendSpecialMoments, setFriendSpecialMoments] = useState([]);
   const [friendCategoryQuestions, setFriendCategoryQuestions] = useState([]);
 
@@ -281,6 +282,7 @@ const FriendFollowersList = ({ route, navigation }) => {
         profileResponse.data.Result[0].user_details[0].user_lname;
       setUserName(name);
 
+      setFirstName(profileResponse.data.Result[0].user_details[0].user_fname);
       setFriendCategoryQuestions(
         profileResponse.data.Result[0].friend_category_questions
       );
@@ -761,7 +763,8 @@ const FriendFollowersList = ({ route, navigation }) => {
                   { marginLeft: 10, marginRight: 10, fontSize: 18 },
                 ]}
               >
-                {AppString.planning}
+                Do you wish to let {getFirstName}'s friends know you are
+                planning to get this gift for {getFirstName}?
               </Text>
             </View>
 

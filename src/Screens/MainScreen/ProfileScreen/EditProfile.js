@@ -23,6 +23,7 @@ import ImagePicker from "react-native-image-crop-picker";
 // Asset
 import {
   imgWhiteEdit,
+  imgEditWhite,
   imgDownArrow,
   imgPlaceHolder,
   imgBackleftWhite,
@@ -257,7 +258,7 @@ const EditProfile = ({ navigation }) => {
               Edit Profile
             </Text>
             <TouchableOpacity onPress={() => ImageChange()}>
-              <Image source={imgWhiteEdit} style={CommonStyle.imgIconSize} />
+              <Image source={imgEditWhite} style={CommonStyle.imgIconSize} />
             </TouchableOpacity>
           </View>
         </LinearGradient>

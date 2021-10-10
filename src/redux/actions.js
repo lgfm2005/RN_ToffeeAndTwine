@@ -803,6 +803,18 @@ export const useActions = () => {
       return { notifyFriendResponse, notifyFriendError };
     },
 
+    FinalLogOut: async () => {
+      let FinalLogOutResponse, FinalLogOutError;
+      try {
+        FinalLogOutResponse = await API.logout.get(sessions);
+        if (FinalLogOutResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        FinalLogOutError = e;
+      }
+      return { FinalLogOutResponse, FinalLogOutError };
+    },
+
     //
   };
 };

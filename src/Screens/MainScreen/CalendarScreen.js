@@ -815,11 +815,11 @@ const CalendarScreen = ({ navigation }) => {
                             >
                               <Image
                                 source={
-                                  item.image == "" ||
-                                  item.image == undefined ||
-                                  item.image == null
+                                  item.user_profile_image == "" ||
+                                  item.user_profile_image == undefined ||
+                                  item.user_profile_image == null
                                     ? imgPlaceHolder
-                                    : { uri: item.image }
+                                    : { uri: item.user_profile_image }
                                 }
                                 style={[
                                   CommonStyle.bottomBarImg,

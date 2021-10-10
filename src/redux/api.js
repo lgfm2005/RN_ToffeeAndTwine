@@ -341,3 +341,8 @@ export const notifyFriend = {
   get: async (session, data) =>
     await api(session, `/rest_api/controller_gift/notify_friend`, "post", data),
 };
+
+export const logout = {
+  get: async (session, data) =>
+    await api(session, `/rest_api/controller_user/logout`, "get"),
+};
