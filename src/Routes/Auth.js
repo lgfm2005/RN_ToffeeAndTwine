@@ -25,15 +25,19 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Auth = ({ navigation }) => {
   const sessions = useSelector((state) => state.session);
-
+  var token = sessions.isAutoLogin ? true : false;
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator
-        initialRouteName={"MainScreen"}
+        initialRouteName={
+          token && sessions.userFname != null ? "Navigation" : "MainScreen"
+        }
         screenOptions={{ headerShown: false, gestureEnabled: false }}
       >
         {/* <Stack.Screen name="Slider" component={Slider} /> */}
-
+        {token && sessions.userFname != null && (
+          <Stack.Screen name="Navigation" component={Navigation} />
+        )}
         <Stack.Screen name="MainScreen" component={MainScreen} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="SignIn" component={SignIn} />
@@ -42,7 +46,7 @@ const Auth = ({ navigation }) => {
         <Stack.Screen name="TutorialThird" component={TutorialThird} />
         <Stack.Screen name="SetPassword" component={SetPassword} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-        <Stack.Screen name="Navigation" component={Navigation} />
+        {/* <Stack.Screen name="Navigation" component={Navigation} /> */}
       </Stack.Navigator>
 
       <FlashMessage
