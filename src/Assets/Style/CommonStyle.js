@@ -343,7 +343,7 @@ export default CommonStyle = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
     height: 400,
-    backgroundColor: "red",
+    // backgroundColor: "red",
   },
   imgmaskbg: {
     position: "absolute",

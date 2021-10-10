@@ -95,6 +95,10 @@ const TutorialFirst = ({ navigation, props, route }) => {
   };
 
   const onSetFirstname = (name) => {
+    if (name.substring(0, 1) == " ") {
+      setFirstName("");
+      return;
+    }
     if (
       name == "" ||
       getLastName == "" ||
@@ -111,6 +115,10 @@ const TutorialFirst = ({ navigation, props, route }) => {
   };
 
   const onSetLastname = (name) => {
+    if (name.substring(0, 1) == " ") {
+      setLastName("");
+      return;
+    }
     if (
       name == "" ||
       getFirstName == "" ||
@@ -229,6 +237,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
                       <FullFormInput
                         buttonName={AppString.EnterFirstName}
                         textChange={(FirstName) => onSetFirstname(FirstName)}
+                        value={getFirstName}
                       />
                     </View>
                     <View style={TutorialStyle.inputHalf}>
@@ -243,6 +252,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
                       <FullFormInput
                         buttonName={AppString.EnterLastName}
                         textChange={(LastName) => onSetLastname(LastName)}
+                        value={getLastName}
                       />
                     </View>
                   </View>

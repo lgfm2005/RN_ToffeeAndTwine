@@ -178,12 +178,13 @@ const MyProfile = ({ navigation }) => {
         userSpecialMoment
       );
       const defaultSpecialMometData = userSpecialMoment.filter((item) => {
-        return item.special_moment_id == "1";
+        return item.default_moment == "1";
       });
       console.log(
         "=========== defaultSpecialMometData =========>",
         defaultSpecialMometData
       );
+
       if (defaultSpecialMometData.length > 0) {
         setDefaultSpecialMometData(defaultSpecialMometData);
       }
@@ -327,6 +328,7 @@ const MyProfile = ({ navigation }) => {
       setImage("");
       setImageurl("");
       setImageNew("");
+      onClearSpecialMoment();
       setImageOld("");
       setImageAPI("");
       setImageStatus("");
@@ -347,6 +349,7 @@ const MyProfile = ({ navigation }) => {
       setImageOld("");
       setImageAPI("");
       setImageStatus("");
+      onClearSpecialMoment();
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
@@ -431,8 +434,7 @@ const MyProfile = ({ navigation }) => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
-      setImage("");
-      setImageurl("");
+      onClearSpecialMoment();
       setImageNew("");
       setImageOld("");
       setImageAPI("");
@@ -451,6 +453,7 @@ const MyProfile = ({ navigation }) => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
+      onClearSpecialMoment();
       setImageNew("");
       setImageOld("");
       setImageAPI("");
@@ -722,6 +725,19 @@ const MyProfile = ({ navigation }) => {
     setspecialMomentOtherInfo(specialMomentOtherInfo);
   };
 
+  const onClearSpecialMoment = () => {
+    setFinalSepDate("");
+    setSpecialMomentId("");
+    setuserSpecialMomentTitle("");
+    setspecialMomentLink("");
+    setspecialMomentOtherInfo("");
+    setImage("");
+    setImageurl("");
+    setImageOld("");
+    setImageNew("");
+    setImageAPI("");
+    setImageStatus("");
+  };
   //  Show Moment (Select Only one) --- 3.Submit Data
   const addNewUserSpecialMoment = async () => {
     setUserNewSpecialMomentModal(false);
@@ -734,6 +750,8 @@ const MyProfile = ({ navigation }) => {
     //   getFinalDataShow(getFinalSepDate);
     //      ;
     // }
+
+    debugger;
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
@@ -755,16 +773,13 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
-      setFinalSepDate("");
+      onClearSpecialMoment();
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setLoader(false);
     } else {
       setLoader(false);
+      onClearSpecialMoment();
       setPrevData({});
       setImage("");
       setImageurl("");
@@ -817,6 +832,7 @@ const MyProfile = ({ navigation }) => {
       setUserOldSpecialMomentModal(false);
       setLoader(false);
       setPrevData({});
+      onClearSpecialMoment();
       setImage("");
       setImageurl("");
       setImageNew("");
@@ -830,6 +846,7 @@ const MyProfile = ({ navigation }) => {
       setUserOldSpecialMomentModal(false);
       setLoader(false);
       setPrevData({});
+      onClearSpecialMoment();
       setImage("");
       setImageurl("");
       setImageNew("");
@@ -958,6 +975,8 @@ const MyProfile = ({ navigation }) => {
   const getProfileLoad = async () => {
     const { profileResponse, profileError } = await getProfile();
     if (profileResponse.data.StatusCode == "1") {
+      setFollowerCount(profileResponse.data.Result[0].follower_count);
+      setFollowingCount(profileResponse.data.Result[0].following_count);
       setCategoryQuestionLimit(
         profileResponse.data.Result[0].user_details[0].category_question_limit
       );
@@ -967,6 +986,15 @@ const MyProfile = ({ navigation }) => {
       setSpecialDayLimit(
         profileResponse.data.Result[0].user_details[0].special_day_limit
       );
+      const defaultSpecialMometData = userSpecialMoment.filter((item) => {
+        return (
+          item.special_moment_id ==
+          profileResponse.data.Result[0].user_details[0].default_special_moment
+        );
+      });
+      if (defaultSpecialMometData.length > 0) {
+        setDefaultSpecialMometData(defaultSpecialMometData);
+      }
     }
   };
 
@@ -1046,19 +1074,20 @@ const MyProfile = ({ navigation }) => {
                     getDefaultSpecialMometData[0].user_special_moment_date !=
                       "" ? (
                       <>
-                        {/* <Image
+                        <Image
                           source={{
                             uri:
-                              ImageUrl.MomentsGray +
-                              getDefaultSpecialMometData[0]
-                                .special_moment_name +
+                              ImageUrl.MomentsWhite +
+                              getDefaultSpecialMometData[0].special_moment_name.replace(
+                                " ",
+                                "%20"
+                              ) +
                               ImageUrl.Png,
                           }}
-                          style={CommonStyle.imgIconSize}
-                        /> */}
-                        <Image
-                          source={imgbirthdayCakeGary}
-                          style={CommonStyle.imgIconSize}
+                          style={[
+                            CommonStyle.imgIconSize,
+                            { tintColor: "gray" },
+                          ]}
                         />
                         <Text
                           style={[
@@ -1586,13 +1615,15 @@ const MyProfile = ({ navigation }) => {
                 }}
               >
                 <View style={{ width: "20%" }}>
-                  {getImage != "" ? (
+                  {getImage == "" ||
+                  getImage == null ||
+                  getImage == undefined ? (
+                    <Image source={imgImport} style={Styles.popupImage} />
+                  ) : (
                     <Image
                       source={{ uri: getImage }}
                       style={Styles.popupImage}
                     />
-                  ) : (
-                    <Image source={imgImport} style={Styles.popupImage} />
                   )}
                 </View>
                 <View style={{ width: "60%" }}>
@@ -1628,6 +1659,7 @@ const MyProfile = ({ navigation }) => {
                   TitleName={"Title"}
                   placeholder={"Title"}
                   value={getuserSpecialMomentTitle}
+                  multiline={true}
                 />
                 <EditShowSimpleView
                   TitleName={"Date"}
@@ -1638,11 +1670,13 @@ const MyProfile = ({ navigation }) => {
                   TitleName={"Link"}
                   placeholder={"Link"}
                   value={getspecialMomentLink}
+                  multiline={true}
                 />
                 <EditShowSimpleView
                   TitleName={"Other Info"}
                   placeholder={"Other Info"}
                   value={getspecialMomentOtherInfo}
+                  multiline={true}
                 />
               </View>
 
@@ -1682,13 +1716,15 @@ const MyProfile = ({ navigation }) => {
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
-                        {getImage != "" ? (
+                        {getImage == "" ||
+                        getImage == null ||
+                        getImage == undefined ? (
+                          <Image source={imgImport} style={Styles.popupImage} />
+                        ) : (
                           <Image
                             source={{ uri: getImage }}
                             style={Styles.popupImage}
                           />
-                        ) : (
-                          <Image source={imgImport} style={Styles.popupImage} />
                         )}
                       </TouchableOpacity>
                     </View>
@@ -1926,10 +1962,16 @@ const MyProfile = ({ navigation }) => {
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
-                        <Image
-                          source={{ uri: getImage }}
-                          style={Styles.popupImage}
-                        />
+                        {getImage == "" ||
+                        getImage == null ||
+                        getImage == undefined ? (
+                          <Image source={imgImport} style={Styles.popupImage} />
+                        ) : (
+                          <Image
+                            source={{ uri: getImage }}
+                            style={Styles.popupImage}
+                          />
+                        )}
                       </TouchableOpacity>
                     </View>
                     <View

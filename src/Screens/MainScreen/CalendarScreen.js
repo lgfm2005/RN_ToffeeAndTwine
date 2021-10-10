@@ -111,7 +111,7 @@ const CalendarScreen = ({ navigation }) => {
 
   const [getDateModal, setDateModal] = useState(false);
   const [getUpdateDateModal, setUpdateDateModal] = useState("");
-  const [getFinalSepDate, setFinalSepDate] = useState();
+  const [getFinalSepDate, setFinalSepDate] = useState("");
   const [date, setDate] = useState(new Date());
 
   const [getFilterSepCat, setFilterSepCat] = useState(specialMoment);
@@ -408,6 +408,17 @@ const CalendarScreen = ({ navigation }) => {
     setspecialMomentOtherInfo(specialMomentOtherInfo);
   };
 
+  const onClearSpecialMoment = () => {
+    setFinalSepDate("");
+    setSpecialMomentId("");
+    setuserSpecialMomentTitle("");
+    setFinalSepDate("");
+    setspecialMomentLink("");
+    setspecialMomentOtherInfo("");
+    setImage("");
+    setImageurl("");
+  };
+
   //  Show Moment (Select Only one) --- 3.Submit Data
   const addNewUserSpecialMoment = async () => {
     setUserNewSpecialMomentModal(false);
@@ -420,6 +431,7 @@ const CalendarScreen = ({ navigation }) => {
     //   getFinalDataShow(getFinalSepDate);
     //      ;
     // }
+    debugger;
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
@@ -442,6 +454,7 @@ const CalendarScreen = ({ navigation }) => {
       setImage("");
       setImageurl("");
       setFinalSepDate("");
+      onClearSpecialMoment();
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
       setLoader(false);
@@ -449,6 +462,7 @@ const CalendarScreen = ({ navigation }) => {
       setLoader(false);
       setPrevData({});
       setImage("");
+      onClearSpecialMoment();
       setImageurl("");
       setFinalSepDate("");
       setUserNewSpecialMomentModal(false);
@@ -496,6 +510,7 @@ const CalendarScreen = ({ navigation }) => {
       setLoader(false);
       setPrevData({});
       setImage("");
+      onClearSpecialMoment();
       setImageurl("");
       setFinalSepDate("");
       setuserSpecialMomentDate("");
@@ -506,6 +521,7 @@ const CalendarScreen = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      onClearSpecialMoment();
       setFinalSepDate("");
       setuserSpecialMomentDate("");
       console.log(
@@ -574,7 +590,6 @@ const CalendarScreen = ({ navigation }) => {
     const { profileResponse, profileError } = await getProfile();
     if (profileResponse.data.StatusCode == "1") {
       var userDetails = profileResponse.data.Result[0].user_details[0];
-      debugger;
       setUserSubscriptionStatus(userDetails.user_subscription_status);
       setSpecialDayLimits(userDetails.special_day_limit);
     }
