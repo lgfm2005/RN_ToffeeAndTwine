@@ -70,6 +70,7 @@ const FriendFollowersList = ({ route, navigation }) => {
     RemoveFollowerFriend,
     blockFriend,
     AddGiftNotication,
+    getUnfollowFriendList,
   } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
@@ -191,22 +192,32 @@ const FriendFollowersList = ({ route, navigation }) => {
   // Friend API
   const FollowAction = async () => {
     setLoader(true);
-    const { followUserResponse, followUserError } = await followUser(userID);
-
+    const { followUserResponse, followUserError } = await followUser(
+      userInfo.user_id
+    );
     if (followUserResponse.data.StatusCode == "1") {
+      setFriendStatus("1");
       setLoader(false);
+      console.log("followUserResponse =====>>>", followUserResponse);
     } else {
       setLoader(false);
+      console.log("followUserError =====>>>", followUserError);
     }
   };
 
   const UnFollowAction = async () => {
     setLoader(true);
     const { UnfollowFriendListResponse, UnfollowFriendListError } =
-      await getUnfollowFriendList(userID);
+      await getUnfollowFriendList(userInfo.user_id);
     if (UnfollowFriendListResponse.data.StatusCode == "1") {
+      setFriendStatus("0");
       setLoader(false);
+      console.log(
+        "UnfollowFriendListResponse =====>>>",
+        UnfollowFriendListResponse
+      );
     } else {
+      console.log("UnfollowFriendListError =====>>>", UnfollowFriendListError);
       setLoader(false);
     }
   };
@@ -214,10 +225,13 @@ const FriendFollowersList = ({ route, navigation }) => {
   const RemoveAction = async () => {
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
-      await RemoveFollowerFriend(userID);
+      await RemoveFollowerFriend(userInfo.user_id);
     if (RemoveFriendResponse.data.StatusCode == "1") {
+      setFriendStatus("0");
+      console.log("RemoveFriendResponse =====>>>", RemoveFriendResponse);
       setLoader(false);
     } else {
+      console.log("RemoveFriendError =====>>>", RemoveFriendError);
       setLoader(false);
     }
   };
@@ -588,9 +602,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                     }
                     style={CommonStyle.popupImage}
                   />
-                ) : (
-                  <Image source={imgImport} style={CommonStyle.popupImage} />
-                )}
+                ) : null}
               </View>
               <View style={{ width: "80%" }}>
                 <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
@@ -649,9 +661,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                       }
                       style={CommonStyle.popupImage}
                     />
-                  ) : (
-                    <Image source={imgImport} style={CommonStyle.popupImage} />
-                  )}
+                  ) : null}
                 </TouchableOpacity>
               </View>
               <View style={{ width: "60%" }}>
@@ -711,9 +721,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                       }
                       style={CommonStyle.popupImage}
                     />
-                  ) : (
-                    <Image source={imgImport} style={CommonStyle.popupImage} />
-                  )}
+                  ) : null}
                 </TouchableOpacity>
               </View>
               <View style={{ width: "60%" }}>

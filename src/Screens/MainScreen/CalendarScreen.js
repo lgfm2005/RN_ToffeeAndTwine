@@ -206,7 +206,6 @@ const CalendarScreen = () => {
       await getFriendCategorySpecialMoment(date);
     if (friendCategorySpeciaResponse.data.StatusCode == "1") {
       var data = friendCategorySpeciaResponse.data.Result;
-      debugger;
       setCalenderDateFriendList(data);
       const sortedActivities = data.sort(
         (a, b) =>
@@ -582,9 +581,10 @@ const CalendarScreen = () => {
               <View style={[CommonStyle.my16, CommonStyle.Row]}>
                 <Image
                   source={
-                    userData.userProfileImage != ""
-                      ? { uri: userData.userProfileImage }
-                      : imgPlaceHolder
+                    userData.userProfileImage == "" ||
+                    userData.userProfileImage == undefined
+                      ? imgPlaceHolder
+                      : { uri: userData.userProfileImage }
                   }
                   style={CommonStyle.ProfileImage}
                 />

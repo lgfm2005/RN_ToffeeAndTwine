@@ -32,12 +32,13 @@ import {
 import CommonStyle from "../../../Assets/Style/CommonStyle";
 import { AppString } from "../../../Assets/utils/AppString";
 import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
-import { FormInput } from "../../../Components/FormInput";
+import { FormInput, FullFormInput } from "../../../Components/FormInput";
 import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
 import { FriendScreenStyle } from "../FriendScreen/FriendScreenStyle";
 import { FilledButton } from "../../../Components/Button/Button";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { ProfileScreenStyle } from "./ProfileScreenStyle";
+import { FONT } from "../../../Assets/utils/FONT";
 
 let UpdateFirstName,
   UpdateLastName,
@@ -178,6 +179,7 @@ const EditProfile = ({ navigation }) => {
     );
 
     if (response.data.StatusCode == "1") {
+      navigation.navigate("MyProfile");
       // console.log("response===>", response.data);
       setLoader(false);
       // navigation.navigate("MyProfile");
@@ -283,24 +285,41 @@ const EditProfile = ({ navigation }) => {
 
             <View style={[CommonStyle.Container, { marginTop: 30 }]}>
               <View style={CommonStyle.formGroup}>
-                <Text style={CommonStyle.formLabel}>{AppString.FirstName}</Text>
-                <FormInput
-                  buttonName={user.userFname}
-                  placeholderTextColor={COLORS.Primary}
-                  textChange={(FirstName) => setFirstName(FirstName)}
-                />
-              </View>
+                <View style={[TutorialStyle.inputWrapper]}>
+                  <View style={TutorialStyle.inputHalf}>
+                    <Text
+                      style={[
+                        CommonStyle.formLabel,
+                        { fontFamily: FONT.Gilroy },
+                      ]}
+                    >
+                      {AppString.FirstName}
+                    </Text>
 
-              <View style={CommonStyle.formGroup}>
-                <Text style={CommonStyle.formLabel}>{AppString.LastName}</Text>
-                <FormInput
-                  // buttonName={AppString.LastName}
-                  buttonName={user.userLname}
-                  placeholderTextColor={COLORS.Primary}
-                  textChange={(LastName) => setLastName(LastName)}
-                />
+                    <FullFormInput
+                      buttonName={user.userFname}
+                      placeholderTextColor={COLORS.Primary}
+                      textChange={(FirstName) => setFirstName(FirstName)}
+                    />
+                  </View>
+                  <View style={TutorialStyle.inputHalf}>
+                    <Text
+                      style={[
+                        CommonStyle.formLabel,
+                        { fontFamily: FONT.Gilroy },
+                      ]}
+                    >
+                      {AppString.LastName}
+                    </Text>
+                    <FullFormInput
+                      // buttonName={AppString.LastName}
+                      buttonName={user.userLname}
+                      placeholderTextColor={COLORS.Primary}
+                      textChange={(LastName) => setLastName(LastName)}
+                    />
+                  </View>
+                </View>
               </View>
-
               <View style={CommonStyle.formGroup}>
                 <Text style={CommonStyle.formLabel}>
                   {AppString.HighlightMoments}

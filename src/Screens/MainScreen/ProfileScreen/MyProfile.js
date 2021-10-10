@@ -462,7 +462,6 @@ const MyProfile = ({ navigation }) => {
     console.log("ShowOldItem Id", id);
     console.log("ShowOldItem key", key);
     var questionList = userCategoryQuestion[key];
-    debugger;
     console.log("SquestionList", questionList);
     setImageOld(Image);
     setShowOldQuestion([]);
@@ -674,7 +673,6 @@ const MyProfile = ({ navigation }) => {
     setEditItemSepModal(true);
     setEditSepItem(getspecialMomentName);
     setFinalSepDate(getuserSpecialMomentDate);
-    debugger;
   };
 
   // oldUserSpecialMoment --> 1.Open
@@ -706,7 +704,6 @@ const MyProfile = ({ navigation }) => {
     // setImage(Imageurl);
     setspecialMomentLink(specialMomentLink);
     setspecialMomentOtherInfo(specialMomentOtherInfo);
-    debugger;
   };
 
   //  Show Moment (Select Only one) --- 3.Submit Data
@@ -731,7 +728,6 @@ const MyProfile = ({ navigation }) => {
         JSON.stringify(getImageurl),
         "0"
       );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -740,7 +736,6 @@ const MyProfile = ({ navigation }) => {
       addCategoryspecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      debugger;
       setPrevData({});
       setImage("");
       setImageurl("");
@@ -784,18 +779,15 @@ const MyProfile = ({ navigation }) => {
       getspecialMomentOtherInfo,
       JSON.stringify(getImageurl)
     );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-    debugger;
 
     if (
       updateCategorySpecialMomentResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      debugger;
       console.log("update Category Special Moment Done");
       getFilterSepCatgories(updateCategorySpecialMomentResponse.data.Result);
       setUserNewSpecialMomentModal(false);
@@ -841,6 +833,19 @@ const MyProfile = ({ navigation }) => {
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
       if (isActive == "1") {
         AddItemShow(0);
+      } else {
+        setupgradeItemModal(true);
+      }
+    }
+  };
+
+  const upgradePayment = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode) {
+      var isActive =
+        profileResponse.data.Result[0].user_details[0].user_subscription_status;
+      if (isActive == "1") {
+        AddItemSepShow(0);
       } else {
         setupgradeItemModal(true);
       }
@@ -973,9 +978,10 @@ const MyProfile = ({ navigation }) => {
           <View style={CommonStyle.imgmask}>
             <ImageBackground
               source={
-                userData.userProfileImage != ""
-                  ? { uri: userData.userProfileImage }
-                  : imgPlaceHolder
+                userData.userProfileImage == "" ||
+                userData.userProfileImage == undefined
+                  ? imgPlaceHolder
+                  : { uri: userData.userProfileImage }
               }
               style={CommonStyle.imgProfileBackground}
             ></ImageBackground>
@@ -1192,7 +1198,7 @@ const MyProfile = ({ navigation }) => {
                   AddNewOnPress={() => {
                     userCategoryQuestion.length < 2
                       ? AddItemSepShow(0)
-                      : upgradeItem();
+                      : upgradePayment();
                   }}
                 />
               </ScrollView>
@@ -1292,7 +1298,7 @@ const MyProfile = ({ navigation }) => {
                         { textAlign: "center", marginTop: 10 },
                       ]}
                     >
-                      m333 {getUpdateDataItem}
+                      {getUpdateDataItem}
                     </Text>
                   </View>
                   <View style={{ width: "20%" }}></View>
@@ -1626,7 +1632,7 @@ const MyProfile = ({ navigation }) => {
                           { textAlign: "center" },
                         ]}
                       >
-                        m22 {getEditSepItem}
+                        {getEditSepItem}
                       </Text>
                     </View>
                     <View style={{ width: "20%" }}></View>

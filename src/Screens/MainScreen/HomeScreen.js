@@ -243,7 +243,6 @@ const HomeScreen = () => {
   const handleSubmitPayment = async () => {
     // setLoading(true);
     // HapticFeedback.trigger("impactLight");
-    debugger;
     var currentDate = Moment(new Date(), "DD/MM/YYYY");
     try {
       const purchaserInfo1 = await Purchases.getPurchaserInfo();
@@ -251,9 +250,7 @@ const HomeScreen = () => {
         purchaserInfo1.latestExpirationDate,
         "DD/MM/YYYY"
       );
-      debugger;
       var isBefore = currentDate.isBefore(latestExpirationDates);
-      debugger;
       if (!isBefore) {
         if (
           typeof purchaserInfo1.entitlements.active.pro_monthly !== "undefined"
@@ -358,7 +355,6 @@ const HomeScreen = () => {
         });
       }
     }
-    debugger;
     // setQuestionsData(temp);
     setUpdateDataModal(false);
     setAddItemShowModal(false);
@@ -587,12 +583,10 @@ const HomeScreen = () => {
   // Payment for upgrade∂ç
   const upgradeItem = async () => {
     console.log("111", userCategoryQuestion.length);
-    debugger;
     const { profileResponse, profileError } = await getProfile();
     if (profileResponse.data.StatusCode) {
       var isActive =
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
-      debugger;
       if (isActive == "1") {
         AddItemShow(0);
       } else {

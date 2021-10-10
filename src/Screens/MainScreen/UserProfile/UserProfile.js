@@ -66,6 +66,7 @@ const UserProfile = ({ route, navigation }) => {
     blockFriend,
     AddGiftNotication,
     RemoveFollowerFriend,
+    getUnfollowFriendList,
   } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
@@ -116,17 +117,20 @@ const UserProfile = ({ route, navigation }) => {
     console.log("===>>>11111");
     setUserBlockModal(true);
   };
-  const FavoriteThings = (favItem) => {
-    console.log("favItem", favItem);
-    setAddNewItem(favItem);
-    setFavoriteThingsModal(true);
-  };
 
   const blockFriendAction = async () => {
+    setLoader(true);
     const { blockFriendResponse, blockFriendError } = await blockFriend(
       userInfo.user_id,
       1
     );
+    debugger;
+    if (blockFriendResponse.data.StatusCode == "1") {
+      debugger;
+      setLoader(false);
+    } else {
+      setLoader(false);
+    }
   };
 
   // Favorite Things
@@ -191,7 +195,7 @@ const UserProfile = ({ route, navigation }) => {
       userInfo.user_id
     );
 
-    if (profileResponse.data.StatusCode) {
+    if (profileResponse.data.StatusCode == "1") {
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
@@ -224,10 +228,17 @@ const UserProfile = ({ route, navigation }) => {
     const { followUserResponse, followUserError } = await followUser(
       userInfo.user_id
     );
+
+    debugger;
     if (followUserResponse.data.StatusCode == "1") {
+      debugger;
+      setFriendStatus("1");
       setLoader(false);
+      console.log("followUserResponse =====>>>", followUserResponse);
     } else {
+      debugger;
       setLoader(false);
+      console.log("followUserError =====>>>", followUserError);
     }
   };
 
@@ -235,9 +246,19 @@ const UserProfile = ({ route, navigation }) => {
     setLoader(true);
     const { UnfollowFriendListResponse, UnfollowFriendListError } =
       await getUnfollowFriendList(userInfo.user_id);
+
+    debugger;
     if (UnfollowFriendListResponse.data.StatusCode == "1") {
+      debugger;
+      setFriendStatus("0");
       setLoader(false);
+      console.log(
+        "UnfollowFriendListResponse =====>>>",
+        UnfollowFriendListResponse
+      );
     } else {
+      debugger;
+      console.log("UnfollowFriendListError =====>>>", UnfollowFriendListError);
       setLoader(false);
     }
   };
@@ -246,9 +267,16 @@ const UserProfile = ({ route, navigation }) => {
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(userInfo.user_id);
+
+    debugger;
     if (RemoveFriendResponse.data.StatusCode == "1") {
+      debugger;
+      setFriendStatus("0");
+      console.log("RemoveFriendResponse =====>>>", RemoveFriendResponse);
       setLoader(false);
     } else {
+      debugger;
+      console.log("RemoveFriendError =====>>>", RemoveFriendError);
       setLoader(false);
     }
   };
@@ -307,9 +335,9 @@ const UserProfile = ({ route, navigation }) => {
           <View style={CommonStyle.imgmask}>
             <ImageBackground
               source={
-                getProfileImage != ""
-                  ? { uri: getProfileImage }
-                  : imgPlaceHolder
+                getProfileImage == "" || getProfileImage == undefined
+                  ? imgPlaceHolder
+                  : { uri: getProfileImage }
               }
               style={[CommonStyle.imgProfileBackground]}
             ></ImageBackground>
@@ -513,12 +541,7 @@ const UserProfile = ({ route, navigation }) => {
                           }
                           style={CommonStyle.popupImage}
                         />
-                      ) : (
-                        <Image
-                          source={imgImport}
-                          style={CommonStyle.popupImage}
-                        />
-                      )}
+                      ) : null}
                     </View>
                     <View style={{ width: "80%" }}>
                       <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
@@ -579,12 +602,7 @@ const UserProfile = ({ route, navigation }) => {
                             }
                             style={CommonStyle.popupImage}
                           />
-                        ) : (
-                          <Image
-                            source={imgImport}
-                            style={CommonStyle.popupImage}
-                          />
-                        )}
+                        ) : null}
                       </TouchableOpacity>
                     </View>
                     <View style={{ width: "60%" }}>
@@ -646,12 +664,7 @@ const UserProfile = ({ route, navigation }) => {
                             }
                             style={CommonStyle.popupImage}
                           />
-                        ) : (
-                          <Image
-                            source={imgImport}
-                            style={CommonStyle.popupImage}
-                          />
-                        )}
+                        ) : null}
                       </TouchableOpacity>
                     </View>
                     <View style={{ width: "60%" }}>
