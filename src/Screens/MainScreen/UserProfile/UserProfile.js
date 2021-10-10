@@ -260,14 +260,11 @@ const UserProfile = ({ route, navigation }) => {
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(userInfo.user_id);
 
-    debugger;
     if (RemoveFriendResponse.data.StatusCode == "1") {
-      debugger;
       setFriendStatus("0");
       console.log("RemoveFriendResponse =====>>>", RemoveFriendResponse);
       setLoader(false);
     } else {
-      debugger;
       console.log("RemoveFriendError =====>>>", RemoveFriendError);
       setLoader(false);
     }

@@ -212,7 +212,6 @@ const SignIn = ({ navigation }) => {
       const tokens = response.data.Result[0].Token;
       const token = { token: tokens };
       var deviceToken = await getToken();
-      debugger;
       await updateNotification(token, deviceToken);
       const { GetCategoryListerror, GetCategoryListresponse } =
         await CategoryList(30, token);
