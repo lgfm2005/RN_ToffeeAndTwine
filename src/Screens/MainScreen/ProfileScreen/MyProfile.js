@@ -324,6 +324,8 @@ const MyProfile = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
+      setImage("");
+      setImageurl("");
       setImageNew("");
       setImageOld("");
       setImageAPI("");
@@ -339,6 +341,8 @@ const MyProfile = ({ navigation }) => {
         UserCategoryQuestionResponse.data.Result
       );
     } else {
+      setImage("");
+      setImageurl("");
       setImageNew("");
       setImageOld("");
       setImageAPI("");
@@ -427,6 +431,8 @@ const MyProfile = ({ navigation }) => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
+      setImage("");
+      setImageurl("");
       setImageNew("");
       setImageOld("");
       setImageAPI("");
@@ -559,6 +565,10 @@ const MyProfile = ({ navigation }) => {
     setPrevData({});
     setImage("");
     setImageurl("");
+    setImageNew("");
+    setImageOld("");
+    setImageAPI("");
+    setImageStatus("");
     setFinalSepDate("");
     setAddItemShowSepModal(false);
     setEditItemSepModal(false);
@@ -745,6 +755,10 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
       setFinalSepDate("");
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       console.log("Add Category Special Moment Done");
@@ -754,6 +768,10 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
       setFinalSepDate("");
       setUserNewSpecialMomentModal(false);
       console.log(
@@ -801,6 +819,10 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
       setFinalSepDate("");
       setuserSpecialMomentDate("");
     } else {
@@ -810,6 +832,10 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
       setFinalSepDate("");
       setuserSpecialMomentDate("");
       console.log(
@@ -1318,7 +1344,7 @@ const MyProfile = ({ navigation }) => {
                 <View style={CommonStyle.Row}>
                   <View style={{ width: "20%" }}>
                     <TouchableOpacity onPress={() => ImageChange()}>
-                      {getImageOld == "" ? (
+                      {getImageOld == "" || getImageOld == undefined ? (
                         <Image source={imgImport} style={Styles.popupImage} />
                       ) : getImageStatus == 0 ? (
                         <Image

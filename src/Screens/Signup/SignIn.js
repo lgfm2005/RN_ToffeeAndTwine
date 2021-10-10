@@ -381,9 +381,9 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                // onPress={() => handleSignIn(getEmail, getCreatePassword)}
-                // btncheck={isvalidForm()}
-                // btnabled={isvalidForm()}
+                onPress={() => handleSignIn(getEmail, getCreatePassword)}
+                btncheck={isvalidForm()}
+                btnabled={isvalidForm()}
                 // onPress={() =>
                 //   handleSignIn("kachhadiya101@gmail.com", "123456")
                 // }
@@ -392,7 +392,7 @@ const SignIn = ({ navigation }) => {
                 // onPress={() =>
                 //   handleSignIn("rshah@universalstreamsolution.com", "123456")
                 // }
-                onPress={() => handleSignIn("uss.jignesh@gmail.com", "123456")}
+                // onPress={() => handleSignIn("uss.jignesh@gmail.com", "123456")}
                 // onPress={() =>
                 //   handleSignIn("amansuri@universalstreamsolution.com", "123456")
                 // }

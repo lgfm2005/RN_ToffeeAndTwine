@@ -67,6 +67,7 @@ const UserProfile = ({ route, navigation }) => {
     AddGiftNotication,
     RemoveFollowerFriend,
     getUnfollowFriendList,
+    NotifyFriend,
   } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
@@ -158,11 +159,29 @@ const UserProfile = ({ route, navigation }) => {
     setNotificationSendModal(false), setAwesomeShowModal(true), setLoader(true);
     const { addgiftnoticationResponse, addgiftnoticatioError } =
       await AddGiftNotication(userInfo.user_id, getCategoryId);
+
     if (addgiftnoticationResponse.data.StatusCode == "1") {
+      var GiftTo = addgiftnoticationResponse.data.Result[0].gift_to;
+      var GiftID = addgiftnoticationResponse.data.Result[0].user_gift_id;
+      console.log("GiftTo ===>", GiftTo);
+      console.log("GiftID ===>", GiftID);
+      const { notifyFriendResponse, notifyFriendError } = await NotifyFriend(
+        GiftTo,
+        GiftID,
+        1
+      );
       console.log("add gift notication Response", addgiftnoticationResponse);
-      setLoader(false);
+      if (notifyFriendResponse.data.StatusCode == "1") {
+        console.log("notify Friend Response", notifyFriendResponse);
+        setLoader(false);
+      } else {
+        setLoader(false);
+        setNotificationSendModal(true);
+        console.log("notify Friend Error", notifyFriendError);
+      }
     } else {
       setLoader(false);
+      setNotificationSendModal(true);
       console.log("add gift notication Error", addgiftnoticatioError);
     }
   };

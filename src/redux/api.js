@@ -336,3 +336,8 @@ export const GetUpcomingMoments = {
       "get"
     ),
 };
+
+export const notifyFriend = {
+  get: async (session, data) =>
+    await api(session, `/rest_api/controller_gift/notify_friend`, "post", data),
+};

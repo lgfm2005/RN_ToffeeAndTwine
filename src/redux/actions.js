@@ -750,7 +750,7 @@ export const useActions = () => {
       return { addgiftnoticationResponse, addgiftnoticatioError };
     },
 
-    DelectAccount: async (GiftTo, CategoryID) => {
+    DelectAccount: async () => {
       let DelectAccountResponse, DelectAccountError;
       try {
         DelectAccountResponse = await API.DelectAccount.get(sessions);
@@ -784,6 +784,23 @@ export const useActions = () => {
         getUpcomingMomentsError = e;
       }
       return { getUpcomingMomentsResponse, getUpcomingMomentsError };
+    },
+
+    NotifyFriend: async (GiftTo, GiftID, NofifyStatus) => {
+      let notifyFriendResponse, notifyFriendError;
+      try {
+        var data = new FormData();
+        data.append("GiftTo", GiftTo);
+        data.append("GiftID", GiftID);
+        data.append("NofifyStatus", NofifyStatus);
+
+        notifyFriendResponse = await API.notifyFriend.get(sessions, data);
+        if (notifyFriendResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        notifyFriendError = e;
+      }
+      return { notifyFriendResponse, notifyFriendError };
     },
 
     //
