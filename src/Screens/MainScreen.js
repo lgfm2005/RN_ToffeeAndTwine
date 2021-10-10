@@ -67,11 +67,11 @@ const MainScreen = ({ navigation }) => {
     GoogleSignin.configure({
       webClientId: AppString.webClientId,
     });
-    var token = sessions.isAutoLogin ? true : false;
-    if (token && sessions.userFname != null) {
-      navigation.navigate("Navigation");
-    }
-    // SignedIn();
+    // var token = sessions.isAutoLogin ? true : false;
+    // if (token && sessions.userFname != null) {
+    //   navigation.navigate("Navigation");
+    // }
+    // // SignedIn();
   }, []);
 
   const onOpened = async (openResult, accountDetails) => {
