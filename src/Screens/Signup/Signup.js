@@ -335,6 +335,10 @@ const Signup = ({ navigation }) => {
     setLoader(false);
   };
 
+  React.useEffect(() => {
+    OneSignal.setAppId("1b61c026-91b6-40fe-ad5d-829673a4817c");
+  }, []);
+
   return (
     <SafeAreaView style={[CommonStyle.MainContainer]}>
       <ScrollView

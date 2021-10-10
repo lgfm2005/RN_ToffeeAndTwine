@@ -1020,6 +1020,16 @@ const MyProfile = ({ navigation }) => {
                     getDefaultSpecialMometData[0].user_special_moment_date !=
                       "" ? (
                       <>
+                        {/* <Image
+                          source={{
+                            uri:
+                              ImageUrl.MomentsGray +
+                              getDefaultSpecialMometData[0]
+                                .special_moment_name +
+                              ImageUrl.Png,
+                          }}
+                          style={CommonStyle.imgIconSize}
+                        /> */}
                         <Image
                           source={imgbirthdayCakeGary}
                           style={CommonStyle.imgIconSize}

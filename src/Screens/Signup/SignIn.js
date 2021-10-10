@@ -75,8 +75,7 @@ const SignIn = ({ navigation }) => {
   }, []);
 
   const getToken = async () => {
-    // const deviceState = await (await OneSignal.getDeviceState()).pushToken;
-    const deviceState = await await OneSignal.getDeviceState().userId;
+    const deviceState = await (await OneSignal.getDeviceState()).userId;
     return deviceState;
   };
 
@@ -202,6 +201,10 @@ const SignIn = ({ navigation }) => {
     return false;
   };
 
+  React.useEffect(() => {
+    OneSignal.setAppId("1b61c026-91b6-40fe-ad5d-829673a4817c");
+  }, []);
+
   const handleSignIn = async (getEmail, getCreatePassword) => {
     setLoader(true);
     const { error, response } = await Login(getEmail, getCreatePassword, "");
@@ -209,6 +212,7 @@ const SignIn = ({ navigation }) => {
       const tokens = response.data.Result[0].Token;
       const token = { token: tokens };
       var deviceToken = await getToken();
+      debugger;
       await updateNotification(token, deviceToken);
       const { GetCategoryListerror, GetCategoryListresponse } =
         await CategoryList(30, token);
@@ -377,9 +381,9 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                onPress={() => handleSignIn(getEmail, getCreatePassword)}
-                btncheck={isvalidForm()}
-                btnabled={isvalidForm()}
+                // onPress={() => handleSignIn(getEmail, getCreatePassword)}
+                // btncheck={isvalidForm()}
+                // btnabled={isvalidForm()}
                 // onPress={() =>
                 //   handleSignIn("kachhadiya101@gmail.com", "123456")
                 // }
@@ -388,7 +392,7 @@ const SignIn = ({ navigation }) => {
                 // onPress={() =>
                 //   handleSignIn("rshah@universalstreamsolution.com", "123456")
                 // }
-                // onPress={() => handleSignIn("uss.jignesh@gmail.com", "12345")}
+                onPress={() => handleSignIn("uss.jignesh@gmail.com", "123456")}
                 // onPress={() =>
                 //   handleSignIn("amansuri@universalstreamsolution.com", "123456")
                 // }
