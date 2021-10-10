@@ -1138,7 +1138,12 @@ const MyProfile = ({ navigation }) => {
                   Moments
                 </Text>
               </View>
-              <View>
+              <TouchableOpacity
+                disabled={getFollowerCount == "0" ? true : false}
+                onPress={() =>
+                  navigation.navigate("NavFriendScreen", { isFollowing: false })
+                }
+              >
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
@@ -1152,8 +1157,13 @@ const MyProfile = ({ navigation }) => {
                 >
                   Followers
                 </Text>
-              </View>
-              <View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={getFollowingCount == "0" ? true : false}
+                onPress={() =>
+                  navigation.navigate("NavFriendScreen", { isFollowing: true })
+                }
+              >
                 <Text
                   style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
                 >
@@ -1167,7 +1177,7 @@ const MyProfile = ({ navigation }) => {
                 >
                   Following
                 </Text>
-              </View>
+              </TouchableOpacity>
             </View>
 
             {/* Favorite Things */}
