@@ -47,7 +47,6 @@ const UpcomingMoments = ({ navigation }) => {
       await getUpcomingMoments();
     if (getUpcomingMomentsResponse.data.StatusCode == "1") {
       var data = getUpcomingMomentsResponse.data.Result;
-      debugger;
       setUpcomingMomentsList(data);
     }
   };

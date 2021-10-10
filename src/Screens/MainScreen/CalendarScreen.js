@@ -49,7 +49,7 @@ import { ImageUrl } from "../../Assets/utils/ImageUrl";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
-const CalendarScreen = () => {
+const CalendarScreen = ({ navigation }) => {
   const {
     deleteUserCategorySpecialDay,
     updateCategorySpecialMoment,
@@ -63,6 +63,8 @@ const CalendarScreen = () => {
   const userData = useSelector((state) => state.session);
   const specialMoment = useSelector((state) => state.specialMoment);
   const userSpecialMoment = useSelector((state) => state.UserSpecialMoment);
+  const [specialDayLimit, setSpecialDayLimits] = useState(2);
+  const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
 
   // Payment for upgrade
   const [getupgradeItemModal, setupgradeItemModal] = useState(false);
@@ -206,7 +208,6 @@ const CalendarScreen = () => {
       await getFriendCategorySpecialMoment(date);
     if (friendCategorySpeciaResponse.data.StatusCode == "1") {
       var data = friendCategorySpeciaResponse.data.Result;
-      debugger;
       setCalenderDateFriendList(data);
       const sortedActivities = data.sort(
         (a, b) =>
@@ -569,6 +570,29 @@ const CalendarScreen = () => {
     }
   };
 
+  const getProfileLoad = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode == "1") {
+      var userDetails = profileResponse.data.Result[0].user_details[0];
+      debugger;
+      setUserSubscriptionStatus(userDetails.user_subscription_status);
+      setSpecialDayLimits(userDetails.special_day_limit);
+    }
+  };
+
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      getProfileLoad();
+    });
+  }, []);
+
+  console.log(
+    "userSubscriptionStatus::",
+    userSubscriptionStatus,
+    userSpecialMoment.length,
+    specialDayLimit
+  );
+
   return (
     <View style={[CommonStyle.BgColorWhite]}>
       <SafeAreaView>
@@ -647,15 +671,23 @@ const CalendarScreen = () => {
                       }
                     />
                   ))}
-                <CalendarList
-                  ShowBtn={true}
-                  key={1}
-                  AddNewOnPress={() => {
-                    userSpecialMoment.length != 2
-                      ? AddItemSepShow(0)
-                      : upgradeItem();
-                  }}
-                />
+
+                <View>
+                  {userSubscriptionStatus == "1" &&
+                  userSpecialMoment.length == specialDayLimit ? (
+                    <View />
+                  ) : (
+                    <CalendarList
+                      ShowBtn={true}
+                      key={1}
+                      AddNewOnPress={() => {
+                        userSpecialMoment.length < specialDayLimit
+                          ? AddItemSepShow(0)
+                          : upgradeItem();
+                      }}
+                    />
+                  )}
+                </View>
               </ScrollView>
             </View>
 

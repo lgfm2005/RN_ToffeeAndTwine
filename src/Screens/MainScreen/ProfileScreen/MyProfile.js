@@ -178,13 +178,15 @@ const MyProfile = ({ navigation }) => {
         userSpecialMoment
       );
       const defaultSpecialMometData = userSpecialMoment.filter((item) => {
-        return item.special_moment_id == userData.defaultSpecialMoment;
+        return item.special_moment_id == "1";
       });
       console.log(
         "=========== defaultSpecialMometData =========>",
         defaultSpecialMometData
       );
-      setDefaultSpecialMometData(defaultSpecialMometData);
+      if (defaultSpecialMometData.length > 0) {
+        setDefaultSpecialMometData(defaultSpecialMometData);
+      }
     }
     getFilterSepCatgories(userSpecialMoment);
     getFilterCatgories(userCategoryQuestion);
@@ -1148,15 +1150,22 @@ const MyProfile = ({ navigation }) => {
                       />
                     );
                   })}
-                <CalendarList
-                  ShowBtn={true}
-                  key={1}
-                  AddNewOnPress={() => {
-                    userCategoryQuestion.length < categoryQuestionLimit
-                      ? AddItemShow(0)
-                      : upgradeItem();
-                  }}
-                />
+                <View>
+                  {userSubscriptionStatus == "1" &&
+                  userCategoryQuestion.length == categoryQuestionLimit ? (
+                    <View />
+                  ) : (
+                    <CalendarList
+                      ShowBtn={true}
+                      key={1}
+                      AddNewOnPress={() => {
+                        userCategoryQuestion.length < categoryQuestionLimit
+                          ? AddItemShow(0)
+                          : upgradeItem();
+                      }}
+                    />
+                  )}
+                </View>
               </ScrollView>
             </View>
 
@@ -1206,15 +1215,23 @@ const MyProfile = ({ navigation }) => {
                       }
                     />
                   ))}
-                <CalendarList
-                  ShowBtn={true}
-                  key={1}
-                  AddNewOnPress={() => {
-                    userSpecialMoment.length < specialDayLimit
-                      ? AddItemSepShow(0)
-                      : upgradePayment();
-                  }}
-                />
+
+                <View>
+                  {userSubscriptionStatus == "1" &&
+                  userSpecialMoment.length == specialDayLimit ? (
+                    <View />
+                  ) : (
+                    <CalendarList
+                      ShowBtn={true}
+                      key={1}
+                      AddNewOnPress={() => {
+                        userSpecialMoment.length < specialDayLimit
+                          ? AddItemSepShow(0)
+                          : upgradePayment();
+                      }}
+                    />
+                  )}
+                </View>
               </ScrollView>
             </View>
           </View>

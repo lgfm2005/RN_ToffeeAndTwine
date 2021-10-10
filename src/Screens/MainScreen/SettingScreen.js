@@ -179,7 +179,7 @@ const SettingScreen = ({ navigation }) => {
       <SafeAreaView style={[CommonStyle.BgColorWhite, { width: "100%" }]}>
         <BackToolbar
           ScreenName={AppString.Settings}
-          onPress={() => navigation.navigate("HomeScreen")}
+          onPress={() => navigation.goBack()}
         />
         <View
           style={[

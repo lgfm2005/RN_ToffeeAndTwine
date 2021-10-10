@@ -686,7 +686,7 @@ const HomeScreen = ({ navigation }) => {
                           index={index}
                           key={index}
                           DataLength={userCategoryQuestion.length}
-                          ShowBtn={true}
+                          ShowBtn={false}
                           onPress={() =>
                             ShowOldItem(
                               item.category_name,
@@ -700,17 +700,23 @@ const HomeScreen = ({ navigation }) => {
                         />
                       );
                     })}
-
-                  <ExploreShareList
-                    ShowBtn={true}
-                    isButtonShow={true}
-                    key={1}
-                    AddNewOnPress={() => {
-                      userCategoryQuestion.length < categoryQuestionLimit
-                        ? AddItemShow(0)
-                        : upgradeItem();
-                    }}
-                  />
+                  <View>
+                    {userSubscriptionStatus == "1" &&
+                    userCategoryQuestion.length == categoryQuestionLimit ? (
+                      <View />
+                    ) : (
+                      <ExploreShareList
+                        ShowBtn={true}
+                        isButtonShow={true}
+                        key={1}
+                        AddNewOnPress={() => {
+                          userCategoryQuestion.length < categoryQuestionLimit
+                            ? AddItemShow(0)
+                            : upgradeItem();
+                        }}
+                      />
+                    )}
+                  </View>
                 </ScrollView>
               </View>
             </View>
