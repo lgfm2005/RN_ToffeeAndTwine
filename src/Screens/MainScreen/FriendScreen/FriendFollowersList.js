@@ -71,6 +71,7 @@ const FriendFollowersList = ({ route, navigation }) => {
     blockFriend,
     AddGiftNotication,
     getUnfollowFriendList,
+    NotifyFriend,
   } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
@@ -144,11 +145,29 @@ const FriendFollowersList = ({ route, navigation }) => {
     setNotificationSendModal(false), setAwesomeShowModal(true), setLoader(true);
     const { addgiftnoticationResponse, addgiftnoticatioError } =
       await AddGiftNotication(userID, getCategoryId);
+
     if (addgiftnoticationResponse.data.StatusCode == "1") {
+      var GiftTo = addgiftnoticationResponse.data.Result[0].gift_to;
+      var GiftID = addgiftnoticationResponse.data.Result[0].user_gift_id;
+      console.log("GiftTo ===>", GiftTo);
+      console.log("GiftID ===>", GiftID);
+      const { notifyFriendResponse, notifyFriendError } = await NotifyFriend(
+        GiftTo,
+        GiftID,
+        1
+      );
       console.log("add gift notication Response", addgiftnoticationResponse);
-      setLoader(false);
+      if (notifyFriendResponse.data.StatusCode == "1") {
+        console.log("notify Friend Response", notifyFriendResponse);
+        setLoader(false);
+      } else {
+        setLoader(false);
+        setNotificationSendModal(true);
+        console.log("notify Friend Error", notifyFriendError);
+      }
     } else {
       setLoader(false);
+      setNotificationSendModal(true);
       console.log("add gift notication Error", addgiftnoticatioError);
     }
   };
@@ -278,8 +297,6 @@ const FriendFollowersList = ({ route, navigation }) => {
     getProfiles();
   }, []);
 
-  console.log("getSpecialMomentImage::", getSpecialMomentImage);
-
   return (
     <View style={CommonStyle.BgColorWhite}>
       <MyBlackStatusbar />
@@ -351,7 +368,6 @@ const FriendFollowersList = ({ route, navigation }) => {
               <View style={FriendScreenStyle.NameAndEditbg}>
                 <View>
                   <Text style={FriendScreenStyle.userName}>{getUserName}</Text>
-                  {/* <Text style={FriendScreenStyle.userName}>{userName}</Text> */}
                   {getFriendDefaultSpecialMomentText.length > 0 ? (
                     <View style={CommonStyle.alignItemsBaseLine}>
                       <Image
@@ -788,7 +804,8 @@ const FriendFollowersList = ({ route, navigation }) => {
                 },
               ]}
             >
-              {AppString.FriendsAwesome}
+              Awesome. {getUserName} Friends now know you plan to get her{" "}
+              {getTitleName} as a gift.
             </Text>
           </View>
         </Modal>

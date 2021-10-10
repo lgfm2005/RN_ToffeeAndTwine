@@ -334,7 +334,7 @@ export default CommonStyle = StyleSheet.create({
     justifyContent: "space-between",
   },
   imgProfileBackground: {
-    width: "100%",
+    width: "101%",
     height: "100%",
     resizeMode: "cover",
   },
@@ -343,8 +343,7 @@ export default CommonStyle = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
     height: 400,
-
-    // backgroundColor: 'red'
+    // backgroundColor: "red",
   },
   imgmaskbg: {
     position: "absolute",

@@ -57,18 +57,14 @@ const EditProfile = ({ navigation }) => {
   const [getHighlightMomentId, setHighlightMomentId] = useState("");
   const [getLoader, setLoader] = useState(false);
 
-  const [getFirstName, setFirstName] = useState("");
-  const [getLastName, setLastName] = useState("");
+  const [getFirstName, setFirstName] = useState(user.userFname);
+  const [getLastName, setLastName] = useState(user.userLname);
   const [getImage, setImage] = useState("");
   const [getImageShow, setImageShow] = useState([]);
 
   const [getImageNew, setImageNew] = useState([]);
   const [getImageAPI, setImageAPI] = useState([]);
 
-  // console.log(
-  //   "user.defaultSpecialMoment>>>>>>>>>>.",
-  //   user.defaultSpecialMoment
-  // );
   useEffect(() => {
     console.log(
       "user.defaultSpecialMoment    ========    22222222",
@@ -250,8 +246,8 @@ const EditProfile = ({ navigation }) => {
           <View
             style={[CommonStyle.ProfileToolbarbg, { alignItems: "center" }]}
           >
-            {/* <TouchableOpacity onPress={() => navigation.goBack()}> */}
-            <TouchableOpacity onPress={() => navigation.push("MyProfile")}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              {/* <TouchableOpacity onPress={() => navigation.push("MyProfile")}> */}
               <Image
                 source={imgBackleftWhite}
                 style={CommonStyle.imgIconSize}

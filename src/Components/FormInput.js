@@ -62,12 +62,13 @@ export const ShowFormInput = ({ buttonName, textChange, ...props }) => {
   );
 };
 
-export const FullFormInput = ({ buttonName, textChange, ...props }) => {
+export const FullFormInput = ({ buttonName, textChange, value, ...props }) => {
   return (
     <TextInput
       style={CommonStyle.formControl}
       placeholder={buttonName}
       onChangeText={textChange}
+      value={value}
       selectionColor={COLORS.Primary}
       placeholderTextColor={COLORS.PrimaryLight}
       {...props}

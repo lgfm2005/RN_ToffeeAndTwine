@@ -325,6 +325,8 @@ const MyProfile = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
+      setImage("");
+      setImageurl("");
       setImageNew("");
       onClearSpecialMoment();
       setImageOld("");
@@ -341,6 +343,8 @@ const MyProfile = ({ navigation }) => {
         UserCategoryQuestionResponse.data.Result
       );
     } else {
+      setImage("");
+      setImageurl("");
       setImageNew("");
       setImageOld("");
       setImageAPI("");
@@ -564,6 +568,10 @@ const MyProfile = ({ navigation }) => {
     setPrevData({});
     setImage("");
     setImageurl("");
+    setImageNew("");
+    setImageOld("");
+    setImageAPI("");
+    setImageStatus("");
     setFinalSepDate("");
     setAddItemShowSepModal(false);
     setEditItemSepModal(false);
@@ -721,13 +729,14 @@ const MyProfile = ({ navigation }) => {
     setFinalSepDate("");
     setSpecialMomentId("");
     setuserSpecialMomentTitle("");
-    setFinalSepDate("");
     setspecialMomentLink("");
     setspecialMomentOtherInfo("");
     setImage("");
     setImageurl("");
     setImageOld("");
     setImageNew("");
+    setImageAPI("");
+    setImageStatus("");
   };
   //  Show Moment (Select Only one) --- 3.Submit Data
   const addNewUserSpecialMoment = async () => {
@@ -773,6 +782,10 @@ const MyProfile = ({ navigation }) => {
       setPrevData({});
       setImage("");
       setImageurl("");
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
       setFinalSepDate("");
       setUserNewSpecialMomentModal(false);
       console.log(
@@ -821,6 +834,10 @@ const MyProfile = ({ navigation }) => {
       onClearSpecialMoment();
       setImage("");
       setImageurl("");
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
       setFinalSepDate("");
       setuserSpecialMomentDate("");
     } else {
@@ -831,6 +848,10 @@ const MyProfile = ({ navigation }) => {
       onClearSpecialMoment();
       setImage("");
       setImageurl("");
+      setImageNew("");
+      setImageOld("");
+      setImageAPI("");
+      setImageStatus("");
       setFinalSepDate("");
       setuserSpecialMomentDate("");
       console.log(
@@ -1361,7 +1382,7 @@ const MyProfile = ({ navigation }) => {
                 <View style={CommonStyle.Row}>
                   <View style={{ width: "20%" }}>
                     <TouchableOpacity onPress={() => ImageChange()}>
-                      {getImageOld == "" ? (
+                      {getImageOld == "" || getImageOld == undefined ? (
                         <Image source={imgImport} style={Styles.popupImage} />
                       ) : getImageStatus == 0 ? (
                         <Image
@@ -1603,13 +1624,15 @@ const MyProfile = ({ navigation }) => {
                 }}
               >
                 <View style={{ width: "20%" }}>
-                  {getImage != "" ? (
+                  {getImage == "" ||
+                  getImage == null ||
+                  getImage == undefined ? (
+                    <Image source={imgImport} style={Styles.popupImage} />
+                  ) : (
                     <Image
                       source={{ uri: getImage }}
                       style={Styles.popupImage}
                     />
-                  ) : (
-                    <Image source={imgImport} style={Styles.popupImage} />
                   )}
                 </View>
                 <View style={{ width: "60%" }}>
@@ -1645,6 +1668,7 @@ const MyProfile = ({ navigation }) => {
                   TitleName={"Title"}
                   placeholder={"Title"}
                   value={getuserSpecialMomentTitle}
+                  multiline={true}
                 />
                 <EditShowSimpleView
                   TitleName={"Date"}
@@ -1655,11 +1679,13 @@ const MyProfile = ({ navigation }) => {
                   TitleName={"Link"}
                   placeholder={"Link"}
                   value={getspecialMomentLink}
+                  multiline={true}
                 />
                 <EditShowSimpleView
                   TitleName={"Other Info"}
                   placeholder={"Other Info"}
                   value={getspecialMomentOtherInfo}
+                  multiline={true}
                 />
               </View>
 
@@ -1699,13 +1725,15 @@ const MyProfile = ({ navigation }) => {
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
-                        {getImage != "" ? (
+                        {getImage == "" ||
+                        getImage == null ||
+                        getImage == undefined ? (
+                          <Image source={imgImport} style={Styles.popupImage} />
+                        ) : (
                           <Image
                             source={{ uri: getImage }}
                             style={Styles.popupImage}
                           />
-                        ) : (
-                          <Image source={imgImport} style={Styles.popupImage} />
                         )}
                       </TouchableOpacity>
                     </View>
@@ -1943,10 +1971,16 @@ const MyProfile = ({ navigation }) => {
                   <View style={CommonStyle.Row}>
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
-                        <Image
-                          source={{ uri: getImage }}
-                          style={Styles.popupImage}
-                        />
+                        {getImage == "" ||
+                        getImage == null ||
+                        getImage == undefined ? (
+                          <Image source={imgImport} style={Styles.popupImage} />
+                        ) : (
+                          <Image
+                            source={{ uri: getImage }}
+                            style={Styles.popupImage}
+                          />
+                        )}
                       </TouchableOpacity>
                     </View>
                     <View
