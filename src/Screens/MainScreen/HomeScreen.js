@@ -66,7 +66,7 @@ const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp = [];
 var temp2 = [];
 var items, list, userData;
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const {
     addCategoryQuestion,
     CategoryList,
@@ -81,6 +81,9 @@ const HomeScreen = () => {
 
   var userData = useSelector((state) => state.session);
   const session = useSelector((state) => state.session);
+  const [categoryQuestionLimit, setCategoryQuestionLimit] = useState(5);
+  const [specialDayLimit, setSpecialDayLimit] = useState(2);
+  const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
 
   const categories = useSelector((state) => state.categories);
   const userCategoryQuestion = useSelector(
@@ -266,8 +269,8 @@ const HomeScreen = () => {
         const { latestExpirationDate } = purchaserInfo;
         userSubscriptions(purchaserInfo);
         console.log("latestExpirationDate:", latestExpirationDate);
-      } else {
       }
+      getProfiles();
       CloseItem();
     } catch (e) {
       console.log("Error:", e);
@@ -582,18 +585,33 @@ const HomeScreen = () => {
 
   // Payment for upgrade∂ç
   const upgradeItem = async () => {
-    console.log("111", userCategoryQuestion.length);
-    const { profileResponse, profileError } = await getProfile();
-    if (profileResponse.data.StatusCode) {
-      var isActive =
-        profileResponse.data.Result[0].user_details[0].user_subscription_status;
-      if (isActive == "1") {
-        AddItemShow(0);
-      } else {
-        setupgradeItemModal(true);
-      }
+    if (userSubscriptionStatus == "1") {
+      AddItemShow(0);
+    } else {
+      setupgradeItemModal(true);
     }
   };
+
+  const getProfiles = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode == "1") {
+      setCategoryQuestionLimit(
+        profileResponse.data.Result[0].user_details[0].category_question_limit
+      );
+      setUserSubscriptionStatus(
+        profileResponse.data.Result[0].user_details[0].user_subscription_status
+      );
+      setSpecialDayLimit(
+        profileResponse.data.Result[0].user_details[0].special_day_limit
+      );
+    }
+  };
+
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      getProfiles();
+    });
+  }, []);
 
   // console.log("userData.userProfileImage:", userData.userProfileImage);
   return (
@@ -682,15 +700,23 @@ const HomeScreen = () => {
                         />
                       );
                     })}
-                  <ExploreShareList
-                    ShowBtn={true}
-                    key={1}
-                    AddNewOnPress={() => {
-                      userCategoryQuestion.length < 5
-                        ? AddItemShow(0)
-                        : upgradeItem();
-                    }}
-                  />
+                  <View>
+                    {userSubscriptionStatus == "1" &&
+                    userCategoryQuestion.length == categoryQuestionLimit ? (
+                      <View />
+                    ) : (
+                      <ExploreShareList
+                        ShowBtn={true}
+                        isButtonShow={true}
+                        key={1}
+                        AddNewOnPress={() => {
+                          userCategoryQuestion.length < categoryQuestionLimit
+                            ? AddItemShow(0)
+                            : upgradeItem();
+                        }}
+                      />
+                    )}
+                  </View>
                 </ScrollView>
               </View>
             </View>
