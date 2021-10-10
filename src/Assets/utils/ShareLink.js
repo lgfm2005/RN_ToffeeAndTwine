@@ -1,4 +1,6 @@
-import { Share } from "react-native";
+import { Share, Linking } from "react-native";
+
+// Share Url
 export const ShareAppLink = async () => {
   try {
     const result = await Share.share({
@@ -19,4 +21,13 @@ export const ShareAppLink = async () => {
   } catch (error) {
     alert(error.message);
   }
+};
+var DataPolicyUrl = "https://www.toffeeandtwine.com/copy-of-terms-conditions";
+var TermsOfServiceUrl = "https://www.toffeeandtwine.com/terms-conditions";
+export const DataPolicy = () => {
+  Linking.openURL(DataPolicyUrl);
+};
+
+export const TermsOfService = () => {
+  Linking.openURL(TermsOfServiceUrl);
 };

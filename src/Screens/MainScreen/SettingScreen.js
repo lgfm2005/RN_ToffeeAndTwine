@@ -15,6 +15,11 @@ import TutorialStyle from "../Signup/Tutorial/TutorialStyle";
 import { FONT } from "../../Assets/utils/FONT";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
+import {
+  DataPolicy,
+  ShareAppLink,
+  TermsOfService,
+} from "../../Assets/utils/ShareLink";
 
 const SettingScreen = ({ navigation }) => {
   const { Logout, getSetting, updateSetting, DelectAccount, userSubscription } =
@@ -335,7 +340,7 @@ const SettingScreen = ({ navigation }) => {
             {getAbout == true ? (
               <View>
                 <View>
-                  <TouchableOpacity onPress={() => {}}>
+                  <TouchableOpacity onPress={() => DataPolicy()}>
                     <Text
                       style={[
                         CommonStyle.txtContent,
@@ -345,7 +350,7 @@ const SettingScreen = ({ navigation }) => {
                       {AppString.AbDataPolicyout}
                     </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => {}}>
+                  <TouchableOpacity onPress={() => TermsOfService()}>
                     <Text
                       style={[
                         CommonStyle.txtContent,
