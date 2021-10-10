@@ -124,9 +124,7 @@ const UserProfile = ({ route, navigation }) => {
       userInfo.user_id,
       1
     );
-    debugger;
     if (blockFriendResponse.data.StatusCode == "1") {
-      debugger;
       setLoader(false);
     } else {
       setLoader(false);
@@ -229,14 +227,11 @@ const UserProfile = ({ route, navigation }) => {
       userInfo.user_id
     );
 
-    debugger;
     if (followUserResponse.data.StatusCode == "1") {
-      debugger;
       setFriendStatus("1");
       setLoader(false);
       console.log("followUserResponse =====>>>", followUserResponse);
     } else {
-      debugger;
       setLoader(false);
       console.log("followUserError =====>>>", followUserError);
     }
@@ -247,9 +242,7 @@ const UserProfile = ({ route, navigation }) => {
     const { UnfollowFriendListResponse, UnfollowFriendListError } =
       await getUnfollowFriendList(userInfo.user_id);
 
-    debugger;
     if (UnfollowFriendListResponse.data.StatusCode == "1") {
-      debugger;
       setFriendStatus("0");
       setLoader(false);
       console.log(
@@ -257,7 +250,6 @@ const UserProfile = ({ route, navigation }) => {
         UnfollowFriendListResponse
       );
     } else {
-      debugger;
       console.log("UnfollowFriendListError =====>>>", UnfollowFriendListError);
       setLoader(false);
     }

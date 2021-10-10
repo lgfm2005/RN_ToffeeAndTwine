@@ -189,6 +189,24 @@ const EditProfile = ({ navigation }) => {
     }
   };
 
+  const onSetFirstNames = (text) => {
+    if (text.substring(0, 1) == " ") {
+      setFirstName("");
+      return;
+    } else {
+      setFirstName(text);
+    }
+  };
+
+  const onSetLastNames = (text) => {
+    if (text.substring(0, 1) == " ") {
+      setLastName("");
+      return;
+    } else {
+      setLastName(text);
+    }
+  };
+
   const RenderItem = (item, index) => {
     return (
       <TouchableOpacity
@@ -299,7 +317,8 @@ const EditProfile = ({ navigation }) => {
                     <FullFormInput
                       buttonName={user.userFname}
                       placeholderTextColor={COLORS.Primary}
-                      textChange={(FirstName) => setFirstName(FirstName)}
+                      value={getFirstName}
+                      textChange={(FirstName) => onSetFirstNames(FirstName)}
                     />
                   </View>
                   <View style={TutorialStyle.inputHalf}>
@@ -313,9 +332,10 @@ const EditProfile = ({ navigation }) => {
                     </Text>
                     <FullFormInput
                       // buttonName={AppString.LastName}
+                      value={getLastName}
                       buttonName={user.userLname}
                       placeholderTextColor={COLORS.Primary}
-                      textChange={(LastName) => setLastName(LastName)}
+                      textChange={(LastName) => onSetLastNames(LastName)}
                     />
                   </View>
                 </View>

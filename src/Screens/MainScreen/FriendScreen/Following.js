@@ -44,8 +44,8 @@ const Following = ({ navigation }) => {
     }
   }, [refreshing]);
 
-  useEffect(async () => {
-    setLoader(true);
+  const getUserFollowingLists = async (isLoader) => {
+    setLoader(isLoader);
     const { UserFollowingListResponse, UserFollowingListError } =
       await getUserFollowingList();
     if (UserFollowingListResponse.data.StatusCode == "1") {
@@ -55,6 +55,15 @@ const Following = ({ navigation }) => {
       setLoader(false);
       console.log("user Follower List Error", UserFollowingListError);
     }
+  };
+  useEffect(async () => {
+    getUserFollowingLists(true);
+  }, []);
+
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      getUserFollowingLists(false);
+    });
   }, []);
 
   const UnFollowFriend = async (Id) => {
