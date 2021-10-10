@@ -96,8 +96,8 @@ const Following = ({ navigation }) => {
 
   const RenderItem = (Data, index) => {
     return (
-      <View style={[FriendScreenStyle.FollowerListBg, CommonStyle.mb16]}>
-        <TouchableOpacity onPress={() => selectFriend(Data.item)}>
+      <TouchableOpacity onPress={() => selectFriend(Data.item)}>
+        <View style={[FriendScreenStyle.FollowerListBg, CommonStyle.mb16]}>
           <View style={FriendScreenStyle.followerTxtIcon}>
             <Image
               source={
@@ -109,21 +109,21 @@ const Following = ({ navigation }) => {
               }
               style={CommonStyle.showProfileImage}
             />
-            <Text style={CommonStyle.txtFrienduserName}>
+            <Text style={[CommonStyle.txtFrienduserName]}>
               {Data.item.user_fname + " " + Data.item.user_lname}
             </Text>
           </View>
-        </TouchableOpacity>
 
-        <View style={FriendScreenStyle.btnBg}>
-          <POPLinkButton
-            buttonName={AppString.UnFollow}
-            onPress={() => UnFollowFriend(Data.item.following_user_id)}
-            styleBtn={Smallbtn}
-            fontStyle={fontsize12}
-          />
+          <View style={FriendScreenStyle.btnBg}>
+            <POPLinkButton
+              buttonName={AppString.UnFollow}
+              onPress={() => UnFollowFriend(Data.item.following_user_id)}
+              styleBtn={Smallbtn}
+              fontStyle={fontsize12}
+            />
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 

@@ -610,6 +610,7 @@ const CalendarScreen = ({ navigation }) => {
 
   return (
     <View style={[CommonStyle.BgColorWhite]}>
+      <MyBlackStatusbar />
       <SafeAreaView>
         <ScrollView
           showsHorizontalScrollIndicator={false}

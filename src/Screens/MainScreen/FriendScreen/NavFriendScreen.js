@@ -15,6 +15,7 @@ import Invite from "./Invite";
 import { FriendsToolbar } from "../../../Components/FriendsToolbar/FriendsToolbar";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -25,7 +26,7 @@ const NavFriendScreen = ({ navigation }) => {
         flex: 1,
         paddingTop: getStatusBarHeight(),
         backgroundColor: COLORS.Secondary,
-        // backgroundColor: 'red',
+        // backgroundColor: "red",
       }}
     >
       <FriendsToolbar onPress={() => navigation.navigate("Search")} />

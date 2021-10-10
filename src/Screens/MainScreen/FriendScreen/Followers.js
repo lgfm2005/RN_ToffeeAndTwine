@@ -22,6 +22,7 @@ import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
+import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 
 const Followers = ({ navigation }) => {
   const { getUserFollowerList, RemoveFollowerFriend } = useActions();
@@ -89,8 +90,18 @@ const Followers = ({ navigation }) => {
   const RenderItem = (Data, index) => {
     return (
       <TouchableOpacity onPress={() => selectFriend(Data.item)}>
-        <View style={[FriendScreenStyle.FollowerListBg, CommonStyle.mb16]}>
-          <View style={FriendScreenStyle.followerTxtIcon}>
+        <View
+          style={[
+            CommonStyle.mb16,
+            {
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingRight: 24,
+            },
+          ]}
+        >
+          <View style={[FriendScreenStyle.followerTxtIcon]}>
             <Image
               source={
                 Data.item.user_profile_image == "" ||
@@ -101,11 +112,11 @@ const Followers = ({ navigation }) => {
               }
               style={CommonStyle.showProfileImage}
             />
-            <Text style={CommonStyle.txtFrienduserName}>
+            <Text style={[CommonStyle.txtFrienduserName, { flex: 0.7 }]}>
               {Data.item.user_fname + " " + Data.item.user_lname}
             </Text>
           </View>
-          <View style={FriendScreenStyle.btnBg}>
+          <View style={[FriendScreenStyle.btnBg, {}]}>
             <POPLinkButton
               buttonName={AppString.Remove}
               onPress={() => RemoveFriend(Data.item.follower_user_id)}

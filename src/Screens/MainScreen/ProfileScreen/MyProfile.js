@@ -1066,7 +1066,9 @@ const MyProfile = ({ navigation }) => {
             <View style={[CommonStyle.my16, CommonStyle.Row]}>
               <View style={ProfileScreenStyle.NameAndEditbg}>
                 <View style={{ width: "80%" }}>
-                  <Text style={[ProfileScreenStyle.userName]}>
+                  <Text
+                    style={[ProfileScreenStyle.userName, { paddingRight: 15 }]}
+                  >
                     {userData.userFname + " " + userData.userLname}
                   </Text>
                   <View style={CommonStyle.alignItemsBaseLine}>
@@ -1107,7 +1109,7 @@ const MyProfile = ({ navigation }) => {
                     ) : null}
                   </View>
                 </View>
-                <View style={{ width: "20%" }}>
+                <View style={{ width: "20%", right: 10 }}>
                   <POPLinkButton
                     buttonName={AppString.Edit}
                     styleBtn={Mediumbtn}
