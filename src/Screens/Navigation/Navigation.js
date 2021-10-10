@@ -119,6 +119,45 @@ function Profile() {
         component={EditProfile}
         options={{ header: () => null }}
       />
+      <Stack.Screen
+        name="NavFriendScreen"
+        component={NavFriendScreen}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="UserProfile"
+        component={UserProfile}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FriendFollowersList"
+        component={FriendFollowersList}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }

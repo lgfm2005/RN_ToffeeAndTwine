@@ -19,7 +19,13 @@ import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusb
 
 const Tab = createMaterialTopTabNavigator();
 
-const NavFriendScreen = ({ navigation }) => {
+const NavFriendScreen = ({ navigation, route }) => {
+  var isFollowings = false;
+  if (route.params) {
+    const { isFollowing } = route.params;
+    isFollowings = isFollowing;
+  }
+
   return (
     <View
       style={{
@@ -31,7 +37,7 @@ const NavFriendScreen = ({ navigation }) => {
     >
       <FriendsToolbar onPress={() => navigation.navigate("Search")} />
       <Tab.Navigator
-        initialRouteName={"Followers"}
+        initialRouteName={isFollowings == true ? "Following" : "Followers"}
         screenOptions={{
           tabBarActiveTintColor: COLORS.Primary,
           tabBarInactiveTintColor: COLORS.PrimaryLight,

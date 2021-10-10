@@ -431,7 +431,6 @@ const CalendarScreen = ({ navigation }) => {
     //   getFinalDataShow(getFinalSepDate);
     //      ;
     // }
-    debugger;
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
@@ -547,7 +546,7 @@ const CalendarScreen = ({ navigation }) => {
     var calenderDateFriendList = [];
     if (dataCategory.length > 0) {
       dataCategory = dataCategory.filter((item) => {
-        return item.user_special_moment_value == dateString;
+        return item.user_special_moment_current_year_value == dateString;
       });
       calenderDateFriendList = dataCategory;
     }
@@ -593,6 +592,8 @@ const CalendarScreen = ({ navigation }) => {
       setUserSubscriptionStatus(userDetails.user_subscription_status);
       setSpecialDayLimits(userDetails.special_day_limit);
     }
+    var dateString = Moment(new Date()).format("YYYY-MM-DD").toString();
+    getFriendCategorySpecialMoments(dateString);
   };
 
   useEffect(() => {
@@ -814,16 +815,24 @@ const CalendarScreen = ({ navigation }) => {
                             >
                               <Image
                                 source={
-                                  item.special_moment_image != null
-                                    ? item.special_moment_image
-                                    : imgPlaceHolder
+                                  item.image == "" ||
+                                  item.image == undefined ||
+                                  item.image == null
+                                    ? imgPlaceHolder
+                                    : { uri: item.image }
                                 }
                                 style={[
                                   CommonStyle.bottomBarImg,
                                   { borderRadius: 34 },
                                 ]}
                               />
-                              <Text style={CommonStyle.txtFrienduserName}>
+                              <Text
+                                multiline={true}
+                                style={[
+                                  CommonStyle.txtFrienduserName,
+                                  { flex: 0.6 },
+                                ]}
+                              >
                                 {item.user_fname + " " + item.user_lname}
                               </Text>
                               <Text
@@ -833,6 +842,8 @@ const CalendarScreen = ({ navigation }) => {
                                   {
                                     color: COLORS.PrimaryLight,
                                     marginLeft: 16,
+                                    paddingRight: 10,
+                                    flex: 0.4,
                                   })
                                 }
                               >

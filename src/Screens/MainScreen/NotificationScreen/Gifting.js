@@ -24,36 +24,6 @@ import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 
-const Data = [
-  {
-    id: 1,
-    UserName: "Jessica Rockwell",
-    Plan: "plans to get",
-    Title: "Heather",
-    SubTitle: "a cup of Coffee.",
-    Time: "15 mins.",
-    Image: demodp,
-  },
-  {
-    id: 2,
-    UserName: "Jessica Rockwell",
-    Plan: "plans to get",
-    Title: "Heather",
-    SubTitle: "a cup of Coffee.",
-    Time: "15 mins.",
-    Image: demodp,
-  },
-  {
-    id: 3,
-    UserName: "Jessica Rockwell",
-    Plan: "plans to get",
-    Title: "Heather",
-    SubTitle: "a cup of Coffee.",
-    Time: "15 mins.",
-    Image: demodp,
-  },
-];
-
 import { useActions } from "../../../redux/actions";
 const Gifting = ({ navigation }) => {
   const [giftingList, setGiftingList] = useState([]);
@@ -108,7 +78,7 @@ const Gifting = ({ navigation }) => {
             ]}
           >
             {" "}
-            {"15 mins."}
+            {item.send_gift_difference}
           </Text>
         </View>
       </View>
