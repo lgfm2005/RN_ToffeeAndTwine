@@ -86,6 +86,7 @@ const MyProfile = ({ navigation }) => {
     updateCategoryQuestion,
     deleteUserCategoryQuestion,
     getProfile,
+    GetSpecialMoment,
     deleteUserCategorySpecialDay,
     updateCategorySpecialMoment,
     getUserCategorySpecialMoment,
@@ -181,12 +182,14 @@ const MyProfile = ({ navigation }) => {
   const [getFollowerCount, setFollowerCount] = useState("0");
   const [getFollowingCount, setFollowingCount] = useState("0");
 
-  useEffect(() => {
+  const updateSpecialMoment = () => {
+    debugger;
     if (userSpecialMoment) {
       console.log(
         "========== userSpecialMoment ==========>",
         userSpecialMoment
       );
+      debugger;
       const defaultSpecialMometData = userSpecialMoment.filter((item) => {
         return item.default_moment == "1";
       });
@@ -197,11 +200,24 @@ const MyProfile = ({ navigation }) => {
 
       if (defaultSpecialMometData.length > 0) {
         setDefaultSpecialMometData(defaultSpecialMometData);
+      } else {
+        setDefaultSpecialMometData([]);
       }
+    }
+    if (userSpecialMoment.length == 0) {
+      setDefaultSpecialMometData([]);
     }
     getFilterSepCatgories(userSpecialMoment);
     getFilterCatgories(userCategoryQuestion);
+  };
+
+  useEffect(() => {
+    updateSpecialMoment();
   }, [userSpecialMoment]);
+
+  useEffect(() => {
+    updateSpecialMoment();
+  }, [userSpecialMoment.length]);
 
   const getFilterCatgories = (data) => {
     var dataCategory = categories;
@@ -594,6 +610,7 @@ const MyProfile = ({ navigation }) => {
       deleteUserCategorySpecialDayResponse,
       deleteUserCategorySpecialDayError,
     } = await deleteUserCategorySpecialDay(DeletedId);
+    await GetSpecialMoment;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
@@ -985,6 +1002,8 @@ const MyProfile = ({ navigation }) => {
         setDefaultSpecialMometData(defaultSpecialMometData);
       }
     }
+    await getUserCategorySpecialMoment();
+    await GetSpecialMoment;
   };
 
   useEffect(() => {

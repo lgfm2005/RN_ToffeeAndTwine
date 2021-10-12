@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Platform, Image, Text, View, TouchableOpacity } from "react-native";
+import {
+  Platform,
+  Image,
+  Text,
+  View,
+  TouchableOpacity,
+  Permission,
+  Linking,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CommonStyle from "../../Assets/Style/CommonStyle";
 import { AppString } from "../../Assets/utils/AppString";
@@ -20,6 +28,7 @@ import {
   ShareAppLink,
   TermsOfService,
 } from "../../Assets/utils/ShareLink";
+import OneSignal from "react-native-onesignal";
 
 const SettingScreen = ({ navigation }) => {
   const {
@@ -47,24 +56,46 @@ const SettingScreen = ({ navigation }) => {
     setDeletedAccountModel(false);
   };
 
-  const GiftingToggleSwitch = async () => {
+  const GiftingToggle = async () => {
     var getGifting = getGiftingSwitch ? 1 : 0;
-    var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
-    const { response, error } = await updateSetting(
-      getGifting,
-      getSpecialMoments
-    );
-
     setGiftingSwitch(!getGiftingSwitch);
+    Permission.response("notification").then((response) => {
+      // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+      this.setState({ photoPermission: response });
+    });
+    var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
+    const { response, error } = await updateSetting(
+      getGifting,
+      getSpecialMoments
+    );
   };
+
+  const registerForPushNotifications = (permission) => {
+    console.log("permission::", permission);
+    if (permission) {
+      GiftingToggle();
+    } else {
+      setGiftingSwitch(false);
+      Linking.openURL("app-settings:");
+    }
+    // console.log("registerForPushNotifications::", permission);
+    // do something with permission value
+  };
+
+  const GiftingToggleSwitch = async () => {
+    OneSignal.promptForPushNotificationsWithUserResponse(
+      registerForPushNotifications
+    );
+  };
+
   const SpecialMomentsToggleSwitch = async () => {
+    setSpecialMomentsSwitch(!getSpecialMomentsSwitch);
     var getGifting = getGiftingSwitch ? 1 : 0;
     var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
     const { response, error } = await updateSetting(
       getGifting,
       getSpecialMoments
     );
-    setSpecialMomentsSwitch(!getSpecialMomentsSwitch);
   };
 
   const Notification = () => {
