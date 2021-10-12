@@ -200,6 +200,24 @@ function Calendar({ navigation }) {
         component={SettingScreen}
         options={{ header: () => null }}
       />
+      <Stack.Screen
+        name="UserProfile"
+        component={UserProfile}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FriendFollowersList"
+        component={FriendFollowersList}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }

@@ -169,6 +169,8 @@ const MyProfile = ({ navigation }) => {
   const [getId, seGetId] = useState("0");
 
   const [getcheck, setCheck] = useState("");
+
+  const [getupgradeMomentsModal, setupgradeMomentsModal] = useState("");
   // set Image Sep
   // const [getImageSepOld, setImageSepOld] = useState("");
   // const [getImageSepNew, setImageSepNew] = useState("");
@@ -226,6 +228,7 @@ const MyProfile = ({ navigation }) => {
     setImageurl("");
     setuserSpecialMomentDate("");
     setQuestionsData([]);
+    setupgradeMomentsModal(false);
     temp = [];
     temp2 = [];
   };
@@ -992,7 +995,7 @@ const MyProfile = ({ navigation }) => {
 
   return (
     <View style={[CommonStyle.BgColorWhite]}>
-      <MyBlackStatusbar />
+      {/* <MyBlackStatusbar /> */}
       <View
         style={{
           position: "absolute",
@@ -2133,6 +2136,52 @@ const MyProfile = ({ navigation }) => {
             </View>
           </Modal>
         ) : null}
+
+        {/* Payment for upgrade  Moments
+        {getupgradeMomentsModal == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getupgradeMomentsModal}
+            onBackdropPress={() => CloseItem()}
+          >
+            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+              <View>
+                <Text
+                  style={[
+                    CommonStyle.txtTitle,
+                    CommonStyle.p16,
+                    { textAlign: "center" },
+                  ]}
+                >
+                  {AppString.UpgradeProfile}
+                </Text>
+              </View>
+
+              <View>
+                <Text
+                  style={
+                    (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
+                  }
+                >
+                  {AppString.txtUpgradecategories1}
+                  <Text style={{ color: COLORS.gold }}>{AppString.price}</Text>
+                  <Text>{AppString.txtUpgrademoments}</Text>
+                </Text>
+              </View>
+              <View style={CommonStyle.centerRow}>
+                <POPOutLinkButton
+                  buttonName={AppString.Later}
+                  onPress={() => CloseItem()}
+                />
+
+                <POPLinkButton
+                  buttonName={AppString.Upgrade}
+                  onPress={() => handleSubmitPayment()}
+                />
+              </View>
+            </View>
+          </Modal>
+        ) : null} */}
       </ScrollView>
       <Spinner visible={getLoader} />
     </View>

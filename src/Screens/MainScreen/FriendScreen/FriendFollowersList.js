@@ -72,6 +72,9 @@ var temp,
   temp2 = [];
 const FriendFollowersList = ({ route, navigation }) => {
   const { userID } = route.params;
+  useEffect(() => {
+    getProfiles();
+  }, []);
   const {
     getProfile,
     followUser,
@@ -209,7 +212,6 @@ const FriendFollowersList = ({ route, navigation }) => {
     console.log("===>>>11111");
     setUserBlockModal(true);
   };
-
   const blockFriendAction = async () => {
     setLoader(true);
     const { blockFriendResponse, blockFriendError } = await blockFriend(
@@ -223,7 +225,9 @@ const FriendFollowersList = ({ route, navigation }) => {
   const FollowAction = async () => {
     setLoader(true);
     const { followUserResponse, followUserError } = await followUser(userID);
+    debugger;
     if (followUserResponse.data.StatusCode == "1") {
+      debugger;
       setFriendStatus("1");
       setLoader(false);
       console.log("followUserResponse =====>>>", followUserResponse);
@@ -237,7 +241,9 @@ const FriendFollowersList = ({ route, navigation }) => {
     setLoader(true);
     const { UnfollowFriendListResponse, UnfollowFriendListError } =
       await getUnfollowFriendList(userID);
+    debugger;
     if (UnfollowFriendListResponse.data.StatusCode == "1") {
+      debugger;
       setFriendStatus("0");
       setLoader(false);
       console.log(
@@ -266,9 +272,8 @@ const FriendFollowersList = ({ route, navigation }) => {
 
   const getProfiles = async () => {
     setLoader(true);
-
-    debugger;
     const { profileResponse, profileError } = await getProfile(userID);
+    debugger;
     if (profileResponse.data.StatusCode) {
       debugger;
       setResult(profileResponse.data.Result[0].user_details);
@@ -310,13 +315,9 @@ const FriendFollowersList = ({ route, navigation }) => {
     }
   };
 
-  useEffect(() => {
-    getProfiles();
-  }, []);
-
   return (
     <View style={CommonStyle.BgColorWhite}>
-      <MyBlackStatusbar />
+      {/* <MyBlackStatusbar /> */}
       <View
         style={{
           position: "absolute",
@@ -347,7 +348,8 @@ const FriendFollowersList = ({ route, navigation }) => {
             ]}
           >
             <TouchableOpacity
-              onPress={() => navigation.navigate("NavFriendScreen")}
+              onPress={() => navigation.goBack()}
+              // onPress={() => navigation.navigate("NavFriendScreen")}
             >
               <Image
                 source={imgBackleftWhite}

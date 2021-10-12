@@ -607,16 +607,18 @@ const CalendarScreen = ({ navigation }) => {
     });
   }, []);
 
-  console.log(
-    "userSubscriptionStatus::",
-    userSubscriptionStatus,
-    userSpecialMoment.length,
-    specialDayLimit
-  );
+  const CalendarOpenProfile = (userSpecialMomentId) => {
+    console.log("userSpecialMomentId ====>", userSpecialMomentId);
+    // userInfo
+    setCalenderDateModal(false);
+    navigation.navigate("FriendFollowersList", {
+      userID: userSpecialMomentId,
+    });
+  };
 
   return (
     <View style={[CommonStyle.BgColorWhite]}>
-      <MyBlackStatusbar />
+      {/* <MyBlackStatusbar /> */}
       <SafeAreaView>
         <ScrollView
           showsHorizontalScrollIndicator={false}
@@ -832,29 +834,37 @@ const CalendarScreen = ({ navigation }) => {
                                   { borderRadius: 34 },
                                 ]}
                               />
-                              <Text
-                                multiline={true}
-                                style={[
-                                  CommonStyle.txtFrienduserName,
-                                  { flex: 0.6 },
-                                ]}
-                              >
-                                {item.user_fname + " " + item.user_lname}
-                              </Text>
-                              <Text
-                                style={
-                                  (CommonStyle.txtFrienduserName,
-                                  CommonStyle.textUpperCase,
-                                  {
-                                    color: COLORS.PrimaryLight,
-                                    marginLeft: 16,
-                                    paddingRight: 10,
-                                    flex: 0.4,
-                                  })
+                              <TouchableOpacity
+                                onPress={() =>
+                                  CalendarOpenProfile(item.user_id)
                                 }
                               >
-                                {item.special_moment_name}
-                              </Text>
+                                <Text
+                                  multiline={true}
+                                  style={[
+                                    CommonStyle.txtFrienduserName,
+                                    { flex: 0.6 },
+                                  ]}
+                                >
+                                  {item.user_fname + " " + item.user_lname}
+                                </Text>
+                              </TouchableOpacity>
+                              <View>
+                                <Text
+                                  style={
+                                    (CommonStyle.txtFrienduserName,
+                                    CommonStyle.textUpperCase,
+                                    {
+                                      color: COLORS.PrimaryLight,
+                                      marginLeft: 16,
+                                      paddingRight: 10,
+                                      flex: 0.4,
+                                    })
+                                  }
+                                >
+                                  {item.special_moment_name}
+                                </Text>
+                              </View>
                             </View>
                           );
                         })
