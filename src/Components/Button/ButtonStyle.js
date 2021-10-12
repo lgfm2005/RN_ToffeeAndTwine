@@ -50,6 +50,12 @@ export const Mediumbtn = {
   marginBottom: 0,
 };
 
+export const UnFollowMediumbtn = {
+  width: 100,
+  height: 40,
+  marginBottom: 0,
+};
+
 export const FrinedFilledButtonStyle = {
   width: 100,
   height: 45,

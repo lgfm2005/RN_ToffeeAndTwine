@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, StatusBar } from "react-native";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -18,6 +18,8 @@ import { NotificationToolbar } from "../../../Components/NotificationToolbar/Not
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
+
+StatusBar.setBarStyle("dark-content", true);
 
 function UpcomingMomentScreen() {
   return (

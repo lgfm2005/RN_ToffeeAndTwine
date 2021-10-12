@@ -51,9 +51,18 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 
-import { ExploreShareList } from "../../Components/AllListVIew/ExploreShareList";
-import { UpgradeCategoriesList } from "../../Components/AllListVIew/UpgradeCategoriesList";
-import { SelectCategoriesList } from "../../Components/AllListVIew/SelectCategoriesList";
+import {
+  Column3ExploreShareList,
+  ExploreShareList,
+} from "../../Components/AllListVIew/ExploreShareList";
+import {
+  Column3UpgradeCategoriesList,
+  UpgradeCategoriesList,
+} from "../../Components/AllListVIew/UpgradeCategoriesList";
+import {
+  PopUpSelectCategoriesList,
+  SelectCategoriesList,
+} from "../../Components/AllListVIew/SelectCategoriesList";
 
 import { MyBlackStatusbar } from "../../Components/MyStatusBar/MyBlackStatusbar";
 import { MyWhiteStatusbar } from "../../Components/MyStatusBar/MyWhiteStatusbar";
@@ -61,6 +70,7 @@ import { FONT } from "../../Assets/utils/FONT";
 import { useActions } from "../../redux/actions";
 import Purchases from "react-native-purchases";
 import { ImageUrl } from "../../Assets/utils/ImageUrl";
+import { AllListViewStyle } from "../../Components/AllListVIew/AllListViewStyle";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp = [];
@@ -111,6 +121,7 @@ const HomeScreen = ({ navigation }) => {
       // handle any changes to purchaserInfo
     });
   }, []);
+
   useEffect(async () => {
     setLoader(true);
     const { GetCategoryListerror, GetCategoryListresponse } =
@@ -230,6 +241,20 @@ const HomeScreen = ({ navigation }) => {
     });
   };
 
+  const onClearCategoriesQue = () => {
+    setImageNew("");
+    setImageOld("");
+    setImageAPI("");
+    setImageStatus("");
+    setQuestions([]);
+    setQuestionsData([]);
+    setShowOldQuestion([]);
+    setUpdateQuestionData([]);
+    setIdItem("");
+    temp = [];
+    temp2 = [];
+    (temp = []), (temp2 = []);
+  };
   // Close All Item
   const CloseItem = () => {
     // setAddNewFreshItemModal(false);
@@ -238,9 +263,7 @@ const HomeScreen = ({ navigation }) => {
     setAddNewItemModal(false);
     setupgradeItemModal(false);
     setUpdateDataModal(false);
-    setQuestionsData([]);
-    temp = [];
-    temp2 = [];
+    onClearCategoriesQue();
   };
 
   const handleSubmitPayment = async () => {
@@ -378,12 +401,7 @@ const HomeScreen = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
-      setQuestionsData([]);
-      (temp = []), (temp2 = []);
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
+      onClearCategoriesQue();
       console.log(
         "User Category Question Response Error  ===>>>",
         UserCategoryQuestionResponse
@@ -393,15 +411,10 @@ const HomeScreen = ({ navigation }) => {
         UserCategoryQuestionResponse.data.Result
       );
     } else {
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
+      onClearCategoriesQue();
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
-      setQuestionsData([]);
-      (temp = []), (temp2 = []);
       console.log("Question Error ==>>>", addCategoryQuestionError);
       console.log(
         "User Category Question Response Error  ===>>>",
@@ -482,13 +495,7 @@ const HomeScreen = ({ navigation }) => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
-      setIdItem("");
-      setUpdateQuestionData([]);
-      (temp = []), (temp2 = []);
+      onClearCategoriesQue();
       // console.log(
       //   "User Category Question Response Done  ===>>>",
       //   UserCategoryQuestionResponse
@@ -500,13 +507,7 @@ const HomeScreen = ({ navigation }) => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
-      setIdItem("");
-      setUpdateQuestionData([]);
-      (temp = []), (temp2 = []);
+      onClearCategoriesQue();
       // console.log("Question Error ==>>>", updateCategoryQuestionError);
       // console.log(
       //   "User Category Question Response Error  ===>>>",
@@ -569,11 +570,13 @@ const HomeScreen = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
+      onClearCategoriesQue();
     } else {
       setUpdateDataModal(false);
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
+      onClearCategoriesQue();
       console.log(
         "deleteUserCategoryQuestion",
         deleteUserCategoryQuestionError
@@ -662,7 +665,7 @@ const HomeScreen = ({ navigation }) => {
               />
 
               {/* Explore Share List */}
-              <View style={{ paddingHorizontal: 15 }}>
+              <View>
                 <ScrollView
                   keyboardShouldPersistTaps={"always"}
                   contentContainerStyle={[
@@ -674,7 +677,8 @@ const HomeScreen = ({ navigation }) => {
                   {userCategoryQuestion.length > 0 &&
                     userCategoryQuestion.map((item, index) => {
                       return (
-                        <ExploreShareList
+                        // <ExploreShareList
+                        <Column3ExploreShareList
                           ImageUrl={{
                             uri:
                               ImageUrl.Categories +
@@ -705,7 +709,7 @@ const HomeScreen = ({ navigation }) => {
                     userCategoryQuestion.length == categoryQuestionLimit ? (
                       <View />
                     ) : (
-                      <ExploreShareList
+                      <Column3ExploreShareList
                         ShowBtn={true}
                         isButtonShow={true}
                         key={1}
@@ -739,7 +743,6 @@ const HomeScreen = ({ navigation }) => {
             <View
               style={{
                 backgroundColor: COLORS.Secondary,
-                paddingHorizontal: 15,
               }}
             >
               <ScrollView
@@ -752,7 +755,8 @@ const HomeScreen = ({ navigation }) => {
               >
                 {getFilterCat.length > 0 &&
                   getFilterCat.map((item, index) => (
-                    <UpgradeCategoriesList
+                    // <UpgradeCategoriesList
+                    <Column3UpgradeCategoriesList
                       ImageUrl={{
                         uri:
                           ImageUrl.Categories +
@@ -788,29 +792,42 @@ const HomeScreen = ({ navigation }) => {
               <Modal
                 testID={"modal"}
                 isVisible={getAddItemShowModal}
+                style={CommonStyle.MainPopStyle}
                 onBackdropPress={() => CloseItem()}
               >
                 <SafeAreaView>
-                  <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
-                    <Text
-                      style={[
-                        CommonStyle.txtTitle,
-                        CommonStyle.pb16,
-                        { textAlign: "center" },
-                      ]}
-                    >
-                      {AppString.SelectCategories}
-                    </Text>
+                  <View
+                    style={[
+                      CommonStyle.p24,
+                      TutorialStyle.popbg,
+                      CommonStyle.HiddenPopStyle,
+                    ]}
+                  >
+                    <View>
+                      <Text
+                        style={[
+                          CommonStyle.txtTitle,
+                          CommonStyle.pb16,
+                          { textAlign: "center" },
+                        ]}
+                      >
+                        {AppString.SelectCategories}
+                      </Text>
+                    </View>
                     <View key={getId}>
                       <ScrollView
                         keyboardShouldPersistTaps={"always"}
+                        bounces={false}
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
                         contentContainerStyle={[
                           MainScreenStyle.scrollItemStyle,
                         ]}
                       >
                         {getFilterCat.length > 0 &&
                           getFilterCat.map((item, index) => (
-                            <SelectCategoriesList
+                            // <SelectCategoriesList
+                            <PopUpSelectCategoriesList
                               ImageUrl={{
                                 uri:
                                   ImageUrl.Categories +
@@ -821,6 +838,7 @@ const HomeScreen = ({ navigation }) => {
                               Id={item.category_id}
                               index={index}
                               key={index}
+                              styleCustom={AllListViewStyle.popUpItemContainer}
                               // DataLength={Data.length}
                               onPress={() =>
                                 SelectCategoriesItem(
@@ -899,6 +917,7 @@ const HomeScreen = ({ navigation }) => {
                               TitleName={item.category_question}
                               buttonName={item.category_placeholder}
                               value={item.question_value}
+                              multiline={true}
                               onChangeText={(value) => {
                                 UpdateQuestionData(
                                   item.user_category_question_id,
@@ -989,6 +1008,7 @@ const HomeScreen = ({ navigation }) => {
                               TitleName={item.category_question}
                               buttonName={item.category_placeholder}
                               value={item.question_value}
+                              multiline={true}
                             />
                           );
                         })}
@@ -1066,6 +1086,7 @@ const HomeScreen = ({ navigation }) => {
                             <SimpleInputEditView
                               TitleName={item.category_question}
                               placeholder={item.category_placeholder}
+                              multiline={true}
                               onChangeText={(value) => {
                                 HandelQuestionData(
                                   item.category_id,

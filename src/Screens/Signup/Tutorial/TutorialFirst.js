@@ -6,6 +6,7 @@ import {
   View,
   Image,
   Dimensions,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -79,6 +80,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
     setModalVisible(false);
   };
   const SaveDatePicker = async () => {
+    Keyboard.dismiss();
     setModalVisible(false);
     setValidationCheck("GetAllData");
     setIsText(false);
@@ -148,19 +150,33 @@ const TutorialFirst = ({ navigation, props, route }) => {
       "",
       tokens
     );
+    debugger;
     const { addCategoryspecialDayerror, addCategoryspecialDayResponse } =
       await addCategoryspecialDay(
         getRadioId,
-        "",
+        null,
         getFinaldate,
-        "",
-        "",
-        "",
+        null,
+        null,
+        null,
         "1",
         tokens
       );
+    // const { addCategoryspecialDayerror, addCategoryspecialDayResponse } =
+    //   await addCategoryspecialDay(
+    //     getRadioId,
+    //     "",
+    //     getFinaldate,
+    //     "",
+    //     "",
+    //     "",
+    //     "1",
+    //     tokens
+    //   );
+    debugger;
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(10, tokens);
+    debugger;
     var listOfCategory = [];
     if (
       GetCategoryListresponse.data.StatusCode == "1" &&

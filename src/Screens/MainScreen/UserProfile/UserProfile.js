@@ -29,7 +29,11 @@ import {
   POPLinkButton,
   POPOutLinkButton,
 } from "../../../Components/Button/Button";
-import { Mediumbtn } from "../../../Components/Button/ButtonStyle";
+import {
+  Mediumbtn,
+  Smallbtn,
+  UnFollowMediumbtn,
+} from "../../../Components/Button/ButtonStyle";
 import { AppString } from "../../../Assets/utils/AppString";
 import { UserProfileScreenStyle } from "./UserProfileScreenStyle";
 import {
@@ -52,11 +56,16 @@ import {
   imgWhiteDot,
 } from "../../../Assets/utils/Image";
 import { MainScreenStyle } from "../MainScreenStyle";
-import { CalendarList } from "../../../Components/AllListVIew/CalendarList";
+import {
+  CalendarList,
+  Column3CalendarList,
+} from "../../../Components/AllListVIew/CalendarList";
 import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
 import { EditShowSimpleView } from "../../../Components/FormInput";
 import { useActions } from "../../../redux/actions";
 import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
+import { ImageUrl } from "../../../Assets/utils/ImageUrl";
+import { FONT } from "../../../Assets/utils/FONT";
 
 const UserProfile = ({ route, navigation }) => {
   const { userInfo } = route.params;
@@ -91,9 +100,13 @@ const UserProfile = ({ route, navigation }) => {
   const [getAddNewItemModal, setAddNewItemModal] = useState("");
   const [getTitleName, setTitleName] = useState("");
   const [getCategoryId, setCategoryId] = useState("");
+  const [getFirstName, setFirstName] = useState("");
+  const [getLastName, setLastName] = useState("");
 
   //SpecialMoment
   const [getSpecialMomentName, setSpecialMomentName] = useState("");
+  const [getSpecialMomentNameProfile, SetSpecialMomentNameProfile] =
+    useState("");
   const [getUserSpecialMomentTitle, setUserSpecialMomentTitle] = useState("");
   const [getUserSpecialMomentDate, setUserSpecialMomentDate] = useState("");
   const [getSpecialMomentLink, setSpecialMomentLink] = useState("");
@@ -217,6 +230,10 @@ const UserProfile = ({ route, navigation }) => {
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
       );
+      SetSpecialMomentNameProfile(
+        profileResponse.data.Result[0].friend_special_moments[0]
+          .special_moment_name
+      );
       setFriendStatus(
         profileResponse.data.Result[0].user_details[0].friend_status
       );
@@ -225,6 +242,9 @@ const UserProfile = ({ route, navigation }) => {
       setFriendDefaultSpecialMomentText(
         profileResponse.data.Result[0].friend_default_special_moment_text
       );
+      setFirstName(profileResponse.data.Result[0].user_details[0].user_fname);
+      setLastName(profileResponse.data.Result[0].user_details[0].user_lname);
+
       setMomentsCount(profileResponse.data.Result[0].special_moment_count);
       setFriendCategoryQuestions(
         profileResponse.data.Result[0].friend_category_questions
@@ -238,14 +258,12 @@ const UserProfile = ({ route, navigation }) => {
       setLoader(false);
     }
   };
-
   // Friend API
   const FollowAction = async () => {
     setLoader(true);
     const { followUserResponse, followUserError } = await followUser(
       userInfo.user_id
     );
-
     if (followUserResponse.data.StatusCode == "1") {
       setFriendStatus("1");
       setLoader(false);
@@ -260,7 +278,6 @@ const UserProfile = ({ route, navigation }) => {
     setLoader(true);
     const { UnfollowFriendListResponse, UnfollowFriendListError } =
       await getUnfollowFriendList(userInfo.user_id);
-
     if (UnfollowFriendListResponse.data.StatusCode == "1") {
       setFriendStatus("0");
       setLoader(false);
@@ -278,7 +295,6 @@ const UserProfile = ({ route, navigation }) => {
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(userInfo.user_id);
-
     if (RemoveFriendResponse.data.StatusCode == "1") {
       setFriendStatus("0");
       console.log("RemoveFriendResponse =====>>>", RemoveFriendResponse);
@@ -294,7 +310,7 @@ const UserProfile = ({ route, navigation }) => {
   }, []);
 
   return (
-    <View style={{ color: COLORS.white }}>
+    <View style={CommonStyle.BgColorWhite}>
       <MyBlackStatusbar />
       <View
         style={{
@@ -314,7 +330,17 @@ const UserProfile = ({ route, navigation }) => {
             "rgba(0,0,0,0.0)",
           ]}
         >
-          <View style={CommonStyle.ProfileToolbarbg}>
+          <View
+            style={[
+              CommonStyle.ProfileToolbarbg,
+              {
+                flex: 1,
+                justifyContent: "space-between",
+                alignItems: "center",
+                bottom: 10,
+              },
+            ]}
+          >
             <TouchableOpacity
               onPress={() => navigation.navigate("NavFriendScreen")}
             >
@@ -325,7 +351,7 @@ const UserProfile = ({ route, navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity onPress={() => UserBlock()}>
               <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
-                Profile
+                {getFirstName + " " + getLastName}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => UserBlock()}>
@@ -365,13 +391,19 @@ const UserProfile = ({ route, navigation }) => {
                   {getFriendDefaultSpecialMomentText.length > 0 ? (
                     <View style={CommonStyle.alignItemsBaseLine}>
                       <Image
-                        source={imgbirthdayCakeGary}
-                        style={CommonStyle.imgIconSize}
+                        // source={imgbirthdayCakeGary}
+                        source={{
+                          uri:
+                            ImageUrl.MomentsGray +
+                            getSpecialMomentNameProfile +
+                            ImageUrl.Png,
+                        }}
+                        style={[CommonStyle.imgIconSize]}
                       />
                       <Text
                         style={[
                           CommonStyle.txtContent,
-                          { color: COLORS.PrimaryLight },
+                          { color: COLORS.PrimaryLight, marginLeft: 10 },
                         ]}
                       >
                         {getFriendDefaultSpecialMomentText}
@@ -381,8 +413,8 @@ const UserProfile = ({ route, navigation }) => {
                 </View>
                 {getFriendStatus == "1" ? (
                   <POPLinkButton
-                    buttonName={AppString.Remove}
-                    styleBtn={Mediumbtn}
+                    buttonName={AppString.UnFollow}
+                    styleBtn={UnFollowMediumbtn}
                     onPress={() => UnFollowAction()}
                   />
                 ) : getFriendStatus == "2" ? (
@@ -409,29 +441,62 @@ const UserProfile = ({ route, navigation }) => {
 
             <View style={[UserProfileScreenStyle.MomentStatus]}>
               <View>
-                <Text style={CommonStyle.txtTitle}>
+                <Text
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
                   {getMomentsCount == 0 ? "--" : getMomentsCount}
                 </Text>
-                <Text style={CommonStyle.txtContent}>Moments</Text>
+                <Text
+                  style={
+                    (CommonStyle.txtContent,
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
+                  }
+                >
+                  Moments
+                </Text>
               </View>
               <View>
-                <Text style={CommonStyle.txtTitle}>
+                <Text
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
                   {" "}
                   {getFollowerCount == "0" ? "--" : getFollowerCount}
                 </Text>
-                <Text style={CommonStyle.txtContent}>Followers</Text>
+                <Text
+                  style={
+                    (CommonStyle.txtContent,
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
+                  }
+                >
+                  Followers
+                </Text>
               </View>
               <View>
-                <Text style={CommonStyle.txtTitle}>
+                <Text
+                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
+                >
                   {" "}
                   {getFollowingCount == "0" ? "--" : getFollowingCount}
                 </Text>
-                <Text style={CommonStyle.txtContent}>Following</Text>
+                <Text
+                  style={
+                    (CommonStyle.txtContent,
+                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
+                  }
+                >
+                  Following
+                </Text>
               </View>
             </View>
 
             <View>
-              <Text style={CommonStyle.txtTitle}>
+              <Text
+                style={[
+                  CommonStyle.txtTitle,
+                  CommonStyle.textUpperCase,
+                  { fontFamily: FONT.NotoSans, marginTop: 40 },
+                ]}
+              >
                 {AppString.FavoriteThings}
               </Text>
               <ScrollView
@@ -442,8 +507,14 @@ const UserProfile = ({ route, navigation }) => {
               >
                 {friendCategoryQuestions.length > 0 &&
                   friendCategoryQuestions.map((item, index) => (
-                    <CalendarList
-                      ImageUrl={imgBook}
+                    // <CalendarList
+                    <Column3CalendarList
+                      ImageUrl={{
+                        uri:
+                          ImageUrl.Categories +
+                          item.category_name +
+                          ImageUrl.Png,
+                      }}
                       ExploreName={item.category_name}
                       Id={item.category_id}
                       index={index}
@@ -469,7 +540,13 @@ const UserProfile = ({ route, navigation }) => {
             </View>
 
             <View>
-              <Text style={CommonStyle.txtTitle}>
+              <Text
+                style={[
+                  CommonStyle.txtTitle,
+                  CommonStyle.textUpperCase,
+                  { fontFamily: FONT.NotoSans, marginTop: 16 },
+                ]}
+              >
                 {AppString.SpecialMoments}
               </Text>
               <ScrollView
@@ -480,8 +557,15 @@ const UserProfile = ({ route, navigation }) => {
               >
                 {friendSpecialMoments.length > 0 &&
                   friendSpecialMoments.map((item, index) => (
-                    <CalendarList
-                      ImageUrl={imgBook}
+                    // <CalendarList
+                    //   ImageUrl={imgBook}
+                    <Column3CalendarList
+                      ImageUrl={{
+                        uri:
+                          ImageUrl.MomentsWhite +
+                          item.special_moment_name.trim() +
+                          ImageUrl.Png,
+                      }}
                       ExploreName={item.special_moment_name}
                       Id={item.special_moment_id}
                       index={index}
@@ -743,7 +827,7 @@ const UserProfile = ({ route, navigation }) => {
                       },
                     ]}
                   >
-                    Awesome. {getTitleName} Friends now know you plan to get her{" "}
+                    Awesome, {getFirstName} Friends now know you plan to get{" "}
                     {userInfo.user_fname} as a gift.
                   </Text>
                 </View>

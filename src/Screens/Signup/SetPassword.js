@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
+  Alert,
 } from "react-native";
 
 // Lib
@@ -47,6 +48,7 @@ const SetPassword = ({ navigation, route }) => {
   const [getOtpCheck, setOtpCheck] = useState("");
   const [verificationCode, setVerificationCode] = useState(VerificationCode);
   const [isVerification, setIsVerification] = useState(false);
+  const [getUserId, setUserId] = useState("");
 
   const [getLoader, setLoader] = useState(false);
 
@@ -77,64 +79,34 @@ const SetPassword = ({ navigation, route }) => {
       setResend(tempResendValue);
       setTimer(60);
       setText("");
-
-      showMessage({
-        message: "Alert",
-        description: response.data.Message,
-        type: "success",
-      });
     } else {
-      showMessage({
-        message: "Alert",
-        description: response.data.Message,
-        type: "danger",
-      });
+      Alert.alert(AppString.AppName, response.data.Message);
     }
   };
 
   const Submit = async () => {
     if (isVerification) {
       if (Validation.removeBadSpaces(getCreatePassword) === "") {
-        showMessage({
-          message: "Please enter Password",
-          type: "danger",
-        });
         return;
       } else if (Validation.removeBadSpaces(getConfirmPassword) === "") {
-        showMessage({
-          message: "Please enter confirm password",
-          type: "danger",
-        });
         return;
       } else if (getConfirmPassword != getCreatePassword) {
-        showMessage({
-          message: "confirm password does not match",
-          type: "danger",
-        });
         return;
       }
 
       setLoader(true);
       const { error, response } = await ChangePassword(
-        1,
+        getUserId,
         getCreatePassword,
         getConfirmPassword
       );
+      debugger;
       setLoader(false);
 
       if (response.data.StatusCode == "1") {
-        showMessage({
-          message: "Alert",
-          description: response.data.Message,
-          type: "success",
-        });
         navigation.navigate("SignIn");
       } else {
-        showMessage({
-          message: "Alert",
-          description: response.data.Message,
-          type: "danger",
-        });
+        Alert.alert(AppString.AppName, response.data.Message);
       }
     } else {
       if (getOtp.length == 6) {
@@ -143,13 +115,10 @@ const SetPassword = ({ navigation, route }) => {
         setLoader(false);
 
         if (response.data.StatusCode == "1") {
+          setUserId(response.data.Result[0].user_id);
           setIsVerification(true);
         } else {
-          showMessage({
-            message: "Alert",
-            description: response.data.Message,
-            type: "danger",
-          });
+          Alert.alert(AppString.AppName, response.data.Message);
         }
       }
     }
@@ -183,7 +152,9 @@ const SetPassword = ({ navigation, route }) => {
 
             <View style={CommonStyle.mb32}>
               <Text style={CommonStyle.txtContent}>
-                {AppString.OTPasswordemailaddress}
+                {/* {AppString.OTPasswordemailaddress} */}
+                We sent you an One Time Password (OTP) in your email address{" "}
+                {getEmail}. Please enter verifciation code to continue.
               </Text>
             </View>
 

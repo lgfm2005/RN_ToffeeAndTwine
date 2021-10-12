@@ -93,15 +93,20 @@ const Followers = ({ navigation }) => {
         <View
           style={[
             CommonStyle.mb16,
+            CommonStyle.Container,
             {
               flexDirection: "row",
-              justifyContent: "space-between",
               alignItems: "center",
-              paddingRight: 24,
+              justifyContent: "space-between",
             },
           ]}
         >
-          <View style={[FriendScreenStyle.followerTxtIcon]}>
+          <View
+            style={[
+              FriendScreenStyle.followerTxtIcon,
+              { width: "70%", paddingRight: 10 },
+            ]}
+          >
             <Image
               source={
                 Data.item.user_profile_image == "" ||
@@ -112,11 +117,21 @@ const Followers = ({ navigation }) => {
               }
               style={CommonStyle.showProfileImage}
             />
-            <Text style={[CommonStyle.txtFrienduserName, { flex: 0.7 }]}>
+            <Text
+              style={[
+                CommonStyle.txtFrienduserName,
+                { flex: 1, flexWrap: "wrap" },
+              ]}
+            >
               {Data.item.user_fname + " " + Data.item.user_lname}
             </Text>
           </View>
-          <View style={[FriendScreenStyle.btnBg, {}]}>
+          <View
+            style={[
+              FriendScreenStyle.btnBg,
+              { width: "30%", justifyContent: "flex-end" },
+            ]}
+          >
             <POPLinkButton
               buttonName={AppString.Remove}
               onPress={() => RemoveFriend(Data.item.follower_user_id)}

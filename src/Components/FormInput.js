@@ -96,6 +96,7 @@ export const SimpleInputEditView = ({
         selectionColor={COLORS.Primary}
         color={value != "" ? COLORS.Primary : COLORS.gray}
         placeholderTextColor={COLORS.gray}
+        multiline={true}
         {...props}
       />
     </View>
@@ -114,6 +115,7 @@ export const EditShowSimpleView = ({
       <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
         {TitleName}
       </Text>
+
       <TextInput
         style={CommonStyle.formSimpleEditView}
         placeholder={buttonName}
@@ -122,6 +124,7 @@ export const EditShowSimpleView = ({
         color={value != "" ? COLORS.Primary : COLORS.gray}
         placeholderTextColor={COLORS.gray}
         editable={false}
+        multiline={true}
         onPress={onPress}
         {...props}
       />

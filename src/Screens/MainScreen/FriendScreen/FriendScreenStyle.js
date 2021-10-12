@@ -15,7 +15,7 @@ export const FriendScreenStyle = StyleSheet.create({
   followerTxtIcon: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   btnBg: {
     flexDirection: "row",

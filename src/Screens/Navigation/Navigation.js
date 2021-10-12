@@ -287,7 +287,7 @@ const Navigation = () => {
           left: 0,
           bottom: 0,
           right: 0,
-          padding: 8,
+          // padding: 8,
         },
         headerShown: false,
         tabBarLabel: () => {
@@ -302,7 +302,7 @@ const Navigation = () => {
           tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={focused ? imgNavOHome : imgNavHome}
-              style={CommonStyle.bottomBarImg}
+              style={[CommonStyle.bottomBarImg]}
             />
           ),
         }}

@@ -1,12 +1,15 @@
 export const AppString = {
   webClientId:
     "746234887774-8v8v0oa4k99ldm9o5s1029fv93v8ofbv.apps.googleusercontent.com",
+  AppName: "Toffee And Twine",
   Signup: "Sign Up",
   Signin: "Sign In",
   GiftThoughtfully: "Gift Thoughtfully",
   EmailAddress: "Email Address",
   InvaildEmail: "Invaild Email",
   Enteremailaddress: "Enter email address",
+  Password: "Password",
+  EnterPassword: "Enter Password",
   CreatePassword: "Create Password",
   InvaildPassword: "Invaild Password",
   InvaildEmailPassword: "Invaild Email/Password",
@@ -130,6 +133,7 @@ export const AppString = {
   UpgradeProfile: "Upgrade Profile",
   txtUpgradecategories1: "Upgrade for ",
   txtUpgradecategories2: " per month to add more than 5 categories.",
+  txtUpgrademoments: " per month to add more than 2 moments.",
   Giftit: "Gift it",
   NoThanks: "No, Thanks",
   Select: "Select",

@@ -53,3 +53,43 @@ export const UpgradeCategoriesList = ({
     </View>
   );
 };
+
+export const Column3UpgradeCategoriesList = ({
+  Id,
+  index,
+  ImageUrl,
+  ExploreName,
+  DataLength,
+  onPress,
+  AddNewOnPress,
+  checkColor,
+  StyleBtnColor,
+  ...props
+}) => {
+  return (
+    <View>
+      <TouchableOpacity onPress={onPress}>
+        <View style={[AllListViewStyle.popUpItemContainer]}>
+          <View>
+            <View
+              style={[
+                checkColor
+                  ? AllListViewStyle.listIconbg
+                  : AllListViewStyle.grayListIconbg,
+              ]}
+            >
+              <Image source={ImageUrl} style={AllListViewStyle.listIcon} />
+            </View>
+          </View>
+          <View>
+            <Text
+              style={[AllListViewStyle.listfont, { fontFamily: FONT.Gilroy }]}
+            >
+              {ExploreName}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+};

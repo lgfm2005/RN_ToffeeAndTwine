@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
+  StatusBar,
 } from "react-native";
 
 // Lib
@@ -51,7 +52,10 @@ import {
   imgBook,
 } from "../../../Assets/utils/Image";
 import { MainScreenStyle } from "../MainScreenStyle";
-import { CalendarList } from "../../../Components/AllListVIew/CalendarList";
+import {
+  CalendarList,
+  Column3CalendarList,
+} from "../../../Components/AllListVIew/CalendarList";
 import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { ProfileToolBar } from "../../../Components/ProfileToolBar/ProfileToolBar";
@@ -59,7 +63,10 @@ import { FONT } from "../../../Assets/utils/FONT";
 import { ShareAppLink } from "../../../Assets/utils/ShareLink";
 import { CalSelectCategoriesList } from "../CalendarScreen/CalSelectCategoriesList";
 import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
-import { SelectCategoriesList } from "../../../Components/AllListVIew/SelectCategoriesList";
+import {
+  PopUpSelectCategoriesList,
+  SelectCategoriesList,
+} from "../../../Components/AllListVIew/SelectCategoriesList";
 import {
   EditShowBtnSimpleView,
   EditShowSimpleView,
@@ -161,6 +168,7 @@ const MyProfile = ({ navigation }) => {
   const [getPrevData, setPrevData] = useState({});
   const [getId, seGetId] = useState("0");
 
+  const [getcheck, setCheck] = useState("");
   // set Image Sep
   // const [getImageSepOld, setImageSepOld] = useState("");
   // const [getImageSepNew, setImageSepNew] = useState("");
@@ -325,15 +333,7 @@ const MyProfile = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       setLoader(false);
-      setImage("");
-      setImageurl("");
-      setImageNew("");
       onClearSpecialMoment();
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
-      setQuestionsData([]);
-      (temp = []), (temp2 = []);
       console.log(
         "User Category Question Response Error  ===>>>",
         UserCategoryQuestionResponse
@@ -343,18 +343,10 @@ const MyProfile = ({ navigation }) => {
         UserCategoryQuestionResponse.data.Result
       );
     } else {
-      setImage("");
-      setImageurl("");
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
       onClearSpecialMoment();
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
-      setQuestionsData([]);
-      (temp = []), (temp2 = []);
       console.log("Question Error ==>>>", addCategoryQuestionError);
       console.log(
         "User Category Question Response Error  ===>>>",
@@ -435,13 +427,6 @@ const MyProfile = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       onClearSpecialMoment();
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
-      setIdItem("");
-      setUpdateQuestionData([]);
-      (temp = []), (temp2 = []);
       // console.log(
       //   "User Category Question Response Done  ===>>>",
       //   UserCategoryQuestionResponse
@@ -705,6 +690,7 @@ const MyProfile = ({ navigation }) => {
     specialMomentOtherInfo,
     Imageurl
   ) => {
+    debugger;
     // console.log("userSpecialMomentId", userSpecialMomentId);
     // console.log("specialMomentId", specialMomentId);
     // console.log("specialMomentName", specialMomentName);
@@ -723,20 +709,26 @@ const MyProfile = ({ navigation }) => {
     // setImage(Imageurl);
     setspecialMomentLink(specialMomentLink);
     setspecialMomentOtherInfo(specialMomentOtherInfo);
+    debugger;
   };
 
   const onClearSpecialMoment = () => {
+    setUpdateQuestionData([]);
     setFinalSepDate("");
     setSpecialMomentId("");
     setuserSpecialMomentTitle("");
     setspecialMomentLink("");
     setspecialMomentOtherInfo("");
+    setPrevData({});
     setImage("");
     setImageurl("");
     setImageOld("");
     setImageNew("");
     setImageAPI("");
     setImageStatus("");
+    setuserSpecialMomentDate("");
+    (temp = []), (temp2 = []);
+    debugger;
   };
   //  Show Moment (Select Only one) --- 3.Submit Data
   const addNewUserSpecialMoment = async () => {
@@ -751,6 +743,24 @@ const MyProfile = ({ navigation }) => {
     //      ;
     // }
 
+    // debugger;
+    // if (
+    //   getuserSpecialMomentTitle == null ||
+    //   getuserSpecialMomentTitle == undefined
+    // ) {
+    //   debugger;
+    //   setuserSpecialMomentTitle("");
+    //   console.log("getuserSpecialMomentTitle ==>", getuserSpecialMomentTitle);
+    //   debugger;
+    // } else if (getspecialMomentLink == null) {
+    //   setspecialMomentLink("");
+    //   console.log("getspecialMomentLink ==>", getspecialMomentLink);
+    //   debugger;
+    // } else if (getspecialMomentOtherInfo == null) {
+    //   setspecialMomentOtherInfo("");
+    //   console.log("getspecialMomentOtherInfo ==>", getspecialMomentOtherInfo);
+    //   debugger;
+    // }
     debugger;
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
@@ -762,32 +772,24 @@ const MyProfile = ({ navigation }) => {
         JSON.stringify(getImageurl),
         "0"
       );
+    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
+    debugger;
     if (
       addCategoryspecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      setPrevData({});
-      setImage("");
-      setImageurl("");
-      onClearSpecialMoment();
+      debugger;
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
+      onClearSpecialMoment();
       console.log("Add Category Special Moment Done");
       setLoader(false);
     } else {
       setLoader(false);
       onClearSpecialMoment();
-      setPrevData({});
-      setImage("");
-      setImageurl("");
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
-      setFinalSepDate("");
       setUserNewSpecialMomentModal(false);
       console.log(
         "NEW addCategoryspecialDayError Error",
@@ -831,30 +833,12 @@ const MyProfile = ({ navigation }) => {
       setUserNewSpecialMomentModal(false);
       setUserOldSpecialMomentModal(false);
       setLoader(false);
-      setPrevData({});
       onClearSpecialMoment();
-      setImage("");
-      setImageurl("");
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
-      setFinalSepDate("");
-      setuserSpecialMomentDate("");
     } else {
       setUserNewSpecialMomentModal(false);
       setUserOldSpecialMomentModal(false);
       setLoader(false);
-      setPrevData({});
       onClearSpecialMoment();
-      setImage("");
-      setImageurl("");
-      setImageNew("");
-      setImageOld("");
-      setImageAPI("");
-      setImageStatus("");
-      setFinalSepDate("");
-      setuserSpecialMomentDate("");
       console.log(
         "updateCategorySpecialMoment Error",
         updateCategorySpecialMomentError
@@ -870,6 +854,8 @@ const MyProfile = ({ navigation }) => {
   const AddItemSepShow = () => {
     setAddItemShowSepModal(true);
     setFinalSepDate("");
+    onClearSpecialMoment();
+    debugger;
   };
   //  --------------------- Special Moment Completed -----------------
 
@@ -1044,6 +1030,7 @@ const MyProfile = ({ navigation }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         bounces={false}
+        style={{ marginBottom: 10 }}
       >
         <View style={CommonStyle.authPage}>
           <View style={CommonStyle.imgmask}>
@@ -1202,7 +1189,8 @@ const MyProfile = ({ navigation }) => {
                 {userCategoryQuestion.length > 0 &&
                   userCategoryQuestion.map((item, index) => {
                     return (
-                      <CalendarList
+                      // <CalendarList
+                      <Column3CalendarList
                         ImageUrl={{
                           uri:
                             ImageUrl.Categories +
@@ -1233,7 +1221,7 @@ const MyProfile = ({ navigation }) => {
                   userCategoryQuestion.length == categoryQuestionLimit ? (
                     <View />
                   ) : (
-                    <CalendarList
+                    <Column3CalendarList
                       ShowBtn={true}
                       key={1}
                       AddNewOnPress={() => {
@@ -1266,7 +1254,8 @@ const MyProfile = ({ navigation }) => {
               >
                 {userSpecialMoment.length > 0 &&
                   userSpecialMoment.map((item, index) => (
-                    <CalendarList
+                    // <CalendarList
+                    <Column3CalendarList
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
@@ -1299,7 +1288,7 @@ const MyProfile = ({ navigation }) => {
                   userSpecialMoment.length == specialDayLimit ? (
                     <View />
                   ) : (
-                    <CalendarList
+                    <Column3CalendarList
                       ShowBtn={true}
                       key={1}
                       AddNewOnPress={() => {
@@ -1320,10 +1309,17 @@ const MyProfile = ({ navigation }) => {
           <Modal
             testID={"modal"}
             isVisible={getAddItemShowModal}
+            style={CommonStyle.MainPopStyle}
             onBackdropPress={() => CloseItem()}
           >
             <SafeAreaView>
-              <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+              <View
+                style={[
+                  CommonStyle.p24,
+                  TutorialStyle.popbg,
+                  CommonStyle.HiddenPopStyle,
+                ]}
+              >
                 <Text
                   style={[
                     CommonStyle.txtTitle,
@@ -1336,11 +1332,14 @@ const MyProfile = ({ navigation }) => {
                 <View key={getId}>
                   <ScrollView
                     keyboardShouldPersistTaps={"always"}
+                    bounces={false}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
                     contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
                   >
                     {getFilterCat.length > 0 &&
                       getFilterCat.map((item, index) => (
-                        <SelectCategoriesList
+                        <PopUpSelectCategoriesList
                           ImageUrl={{
                             uri:
                               ImageUrl.Categories +
@@ -1904,13 +1903,20 @@ const MyProfile = ({ navigation }) => {
           <Modal
             testID={"modal"}
             isVisible={getAddItemShowSepModal}
+            style={CommonStyle.MainPopStyle}
             onBackdropPress={() => CloseSepItem()}
           >
             <KeyboardAvoidingView
               behavior="position"
               keyboardVerticalOffset={keyboardVerticalOffset}
             >
-              <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+              <View
+                style={[
+                  CommonStyle.p24,
+                  TutorialStyle.popbg,
+                  CommonStyle.HiddenPopStyle,
+                ]}
+              >
                 <Text
                   style={[
                     CommonStyle.txtTitle,
@@ -1923,11 +1929,15 @@ const MyProfile = ({ navigation }) => {
                 </Text>
                 <View>
                   <ScrollView
+                    keyboardShouldPersistTaps={"always"}
+                    bounces={false}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
                     contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
                   >
                     {getFilterSepCat.length > 0 &&
                       getFilterSepCat.map((item, index) => (
-                        <SelectCategoriesList
+                        <PopUpSelectCategoriesList
                           ImageUrl={{
                             uri:
                               ImageUrl.MomentsWhite +
@@ -2078,7 +2088,7 @@ const MyProfile = ({ navigation }) => {
           </Modal>
         ) : null}
 
-        {/* Payment for upgrade */}
+        {/* Payment for upgrade  categories*/}
         {getupgradeItemModal == true ? (
           <Modal
             testID={"modal"}
@@ -2091,7 +2101,6 @@ const MyProfile = ({ navigation }) => {
                   style={[
                     CommonStyle.txtTitle,
                     CommonStyle.p16,
-                    CommonStyle.textUpperCase,
                     { textAlign: "center" },
                   ]}
                 >

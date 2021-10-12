@@ -26,7 +26,11 @@ import {
   POPLinkButton,
   POPOutLinkButton,
 } from "../../../Components/Button/Button";
-import { Mediumbtn } from "../../../Components/Button/ButtonStyle";
+import {
+  Mediumbtn,
+  Smallbtn,
+  UnFollowMediumbtn,
+} from "../../../Components/Button/ButtonStyle";
 import { AppString } from "../../../Assets/utils/AppString";
 import {
   imgWhitegift,
@@ -49,7 +53,10 @@ import {
   imgGiftNotification,
 } from "../../../Assets/utils/Image";
 import { MainScreenStyle } from "../MainScreenStyle";
-import { CalendarList } from "../../../Components/AllListVIew/CalendarList";
+import {
+  CalendarList,
+  Column3CalendarList,
+} from "../../../Components/AllListVIew/CalendarList";
 import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { ProfileToolBar } from "../../../Components/ProfileToolBar/ProfileToolBar";
@@ -59,6 +66,7 @@ import { FriendScreenStyle } from "./FriendScreenStyle";
 import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
+import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 
 var temp,
   temp2 = [];
@@ -102,6 +110,8 @@ const FriendFollowersList = ({ route, navigation }) => {
   const [getSpecialMomentImage, setSpecialMomentImage] = useState("");
   const [getUserSpecialMomentId, setUserSpecialMomentId] = useState("");
   const [getSpecialMomentId, setSpecialMomentId] = useState("");
+  const [getSpecialMomentNameProfile, SetSpecialMomentNameProfile] =
+    useState("");
   const [getFriendDefaultSpecialMomentText, setFriendDefaultSpecialMomentText] =
     useState("");
 
@@ -212,9 +222,7 @@ const FriendFollowersList = ({ route, navigation }) => {
   // Friend API
   const FollowAction = async () => {
     setLoader(true);
-    const { followUserResponse, followUserError } = await followUser(
-      userInfo.user_id
-    );
+    const { followUserResponse, followUserError } = await followUser(userID);
     if (followUserResponse.data.StatusCode == "1") {
       setFriendStatus("1");
       setLoader(false);
@@ -228,7 +236,7 @@ const FriendFollowersList = ({ route, navigation }) => {
   const UnFollowAction = async () => {
     setLoader(true);
     const { UnfollowFriendListResponse, UnfollowFriendListError } =
-      await getUnfollowFriendList(userInfo.user_id);
+      await getUnfollowFriendList(userID);
     if (UnfollowFriendListResponse.data.StatusCode == "1") {
       setFriendStatus("0");
       setLoader(false);
@@ -245,7 +253,7 @@ const FriendFollowersList = ({ route, navigation }) => {
   const RemoveAction = async () => {
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
-      await RemoveFollowerFriend(userInfo.user_id);
+      await RemoveFollowerFriend(userID);
     if (RemoveFriendResponse.data.StatusCode == "1") {
       setFriendStatus("0");
       console.log("RemoveFriendResponse =====>>>", RemoveFriendResponse);
@@ -259,23 +267,30 @@ const FriendFollowersList = ({ route, navigation }) => {
   const getProfiles = async () => {
     setLoader(true);
 
+    debugger;
     const { profileResponse, profileError } = await getProfile(userID);
     if (profileResponse.data.StatusCode) {
+      debugger;
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
       );
+      SetSpecialMomentNameProfile(
+        profileResponse.data.Result[0].friend_special_moments[0]
+          .special_moment_name
+      );
+
       setFriendDefaultSpecialMomentText(
         profileResponse.data.Result[0].friend_default_special_moment_text
       );
       setFriendStatus(
         profileResponse.data.Result[0].user_details[0].friend_status
       );
+      debugger;
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
-      setMomentsCount(
-        profileResponse.data.Result[0].user_details[0].default_special_moment
-      );
+      setMomentsCount(profileResponse.data.Result[0].special_moment_count);
+      debugger;
       var name =
         profileResponse.data.Result[0].user_details[0].user_fname +
         " " +
@@ -321,7 +336,15 @@ const FriendFollowersList = ({ route, navigation }) => {
           ]}
         >
           <View
-            style={[CommonStyle.ProfileToolbarbg, { alignItems: "center" }]}
+            style={[
+              CommonStyle.ProfileToolbarbg,
+              {
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "space-between",
+                bottom: 10,
+              },
+            ]}
           >
             <TouchableOpacity
               onPress={() => navigation.navigate("NavFriendScreen")}
@@ -353,9 +376,9 @@ const FriendFollowersList = ({ route, navigation }) => {
           <View style={CommonStyle.imgmask}>
             <ImageBackground
               source={
-                getProfileImage != ""
-                  ? { uri: getProfileImage }
-                  : imgPlaceHolder
+                getProfileImage == "" || getProfileImage == undefined
+                  ? imgPlaceHolder
+                  : { uri: getProfileImage }
               }
               style={[CommonStyle.imgProfileBackground]}
             ></ImageBackground>
@@ -373,13 +396,19 @@ const FriendFollowersList = ({ route, navigation }) => {
                   {getFriendDefaultSpecialMomentText.length > 0 ? (
                     <View style={CommonStyle.alignItemsBaseLine}>
                       <Image
-                        source={imgbirthdayCakeGary}
-                        style={CommonStyle.imgIconSize}
+                        // source={imgbirthdayCakeGary}
+                        source={{
+                          uri:
+                            ImageUrl.MomentsGray +
+                            getSpecialMomentNameProfile +
+                            ImageUrl.Png,
+                        }}
+                        style={[CommonStyle.imgIconSize]}
                       />
                       <Text
                         style={[
                           CommonStyle.txtContent,
-                          { color: COLORS.PrimaryLight },
+                          { color: COLORS.PrimaryLight, marginLeft: 10 },
                         ]}
                       >
                         {getFriendDefaultSpecialMomentText}
@@ -390,12 +419,13 @@ const FriendFollowersList = ({ route, navigation }) => {
                 {getFriendStatus == "1" ? (
                   <POPLinkButton
                     buttonName={AppString.UnFollow}
-                    styleBtn={Mediumbtn}
+                    styleBtn={UnFollowMediumbtn}
                     onPress={() => UnFollowAction()}
                   />
                 ) : getFriendStatus == "2" ? (
                   <POPLinkButton
                     buttonName={AppString.Follow}
+                    // styleBtn={Mediumbtn}
                     styleBtn={Mediumbtn}
                     onPress={() => FollowAction()}
                   />
@@ -481,8 +511,15 @@ const FriendFollowersList = ({ route, navigation }) => {
               >
                 {friendCategoryQuestions.length > 0 &&
                   friendCategoryQuestions.map((item, index) => (
-                    <CalendarList
-                      ImageUrl={imgBook}
+                    // <CalendarList
+                    //   ImageUrl={imgBook}
+                    <Column3CalendarList
+                      ImageUrl={{
+                        uri:
+                          ImageUrl.Categories +
+                          item.category_name +
+                          ImageUrl.Png,
+                      }}
                       ExploreName={item.category_name}
                       Id={item.category_id}
                       index={index}
@@ -528,8 +565,15 @@ const FriendFollowersList = ({ route, navigation }) => {
               >
                 {friendSpecialMoments.length > 0 &&
                   friendSpecialMoments.map((item, index) => (
-                    <CalendarList
-                      ImageUrl={imgBook}
+                    // <CalendarList
+                    //   ImageUrl={imgBook}
+                    <Column3CalendarList
+                      ImageUrl={{
+                        uri:
+                          ImageUrl.MomentsWhite +
+                          item.special_moment_name.trim() +
+                          ImageUrl.Png,
+                      }}
                       ExploreName={item.special_moment_name}
                       Id={item.special_moment_id}
                       index={index}
@@ -807,7 +851,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 },
               ]}
             >
-              Awesome. {getUserName} Friends now know you plan to get her{" "}
+              Awesome, {getFirstName}'s' Friends now know you plan to get{" "}
               {getTitleName} as a gift.
             </Text>
           </View>

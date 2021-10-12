@@ -37,12 +37,18 @@ import {
   POPLinkButton,
   POPOutLinkButton,
 } from "../../Components/Button/Button";
-import { CalendarList } from "../../Components/AllListVIew/CalendarList";
+import {
+  CalendarList,
+  Column3CalendarList,
+} from "../../Components/AllListVIew/CalendarList";
 import { MyBlackStatusbar } from "../../Components/MyStatusBar/MyBlackStatusbar";
 import { FONT } from "../../Assets/utils/FONT";
 import { CalSelectCategoriesList } from "./CalendarScreen/CalSelectCategoriesList";
 import { useActions } from "../../redux/actions";
-import { SelectCategoriesList } from "../../Components/AllListVIew/SelectCategoriesList";
+import {
+  PopUpSelectCategoriesList,
+  SelectCategoriesList,
+} from "../../Components/AllListVIew/SelectCategoriesList";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
 import { ImageUrl } from "../../Assets/utils/ImageUrl";
@@ -412,7 +418,6 @@ const CalendarScreen = ({ navigation }) => {
     setFinalSepDate("");
     setSpecialMomentId("");
     setuserSpecialMomentTitle("");
-    setFinalSepDate("");
     setspecialMomentLink("");
     setspecialMomentOtherInfo("");
     setImage("");
@@ -662,7 +667,8 @@ const CalendarScreen = ({ navigation }) => {
               >
                 {userSpecialMoment.length > 0 &&
                   userSpecialMoment.map((item, index) => (
-                    <CalendarList
+                    // <CalendarList
+                    <Column3CalendarList
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
@@ -1162,13 +1168,20 @@ const CalendarScreen = ({ navigation }) => {
               <Modal
                 testID={"modal"}
                 isVisible={getAddItemShowSepModal}
+                style={CommonStyle.MainPopStyle}
                 onBackdropPress={() => CloseSepItem()}
               >
                 <KeyboardAvoidingView
                   behavior="position"
                   keyboardVerticalOffset={keyboardVerticalOffset}
                 >
-                  <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                  <View
+                    style={[
+                      CommonStyle.p24,
+                      TutorialStyle.popbg,
+                      CommonStyle.HiddenPopStyle,
+                    ]}
+                  >
                     <Text
                       style={[
                         CommonStyle.txtTitle,
@@ -1181,13 +1194,17 @@ const CalendarScreen = ({ navigation }) => {
                     </Text>
                     <View>
                       <ScrollView
+                        keyboardShouldPersistTaps={"always"}
+                        bounces={false}
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
                         contentContainerStyle={[
                           MainScreenStyle.scrollItemStyle,
                         ]}
                       >
                         {getFilterSepCat.length > 0 &&
                           getFilterSepCat.map((item, index) => (
-                            <SelectCategoriesList
+                            <PopUpSelectCategoriesList
                               ImageUrl={{
                                 uri:
                                   ImageUrl.MomentsWhite +

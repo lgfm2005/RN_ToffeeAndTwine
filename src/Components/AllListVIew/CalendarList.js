@@ -60,3 +60,50 @@ export const CalendarList = ({
     </View>
   );
 };
+
+export const Column3CalendarList = ({
+  Id,
+  index,
+  ImageUrl,
+  ExploreName,
+  DataLength,
+  ShowBtn,
+  onPress,
+  AddNewOnPress,
+  ColorCode,
+  ...props
+}) => {
+  return (
+    <View>
+      {false === ShowBtn ? (
+        <TouchableOpacity onPress={onPress}>
+          <View style={[AllListViewStyle.popUpItemContainer]}>
+            <View>
+              <View style={AllListViewStyle.listIconbg}>
+                <Image source={ImageUrl} style={AllListViewStyle.listIcon} />
+              </View>
+            </View>
+            <View>
+              <Text
+                style={[AllListViewStyle.listfont, { fontFamily: FONT.Gilroy }]}
+              >
+                {ExploreName}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={AddNewOnPress}>
+          <View style={AllListViewStyle.popUpItemContainer}>
+            <Image source={imgImport} style={CommonStyle.modulePopupImage} />
+            <Text
+              style={[AllListViewStyle.listfont, { fontFamily: FONT.Gilroy }]}
+            >
+              Add
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+};

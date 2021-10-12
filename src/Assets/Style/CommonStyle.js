@@ -21,6 +21,9 @@ export const baseContainer = {
 export const fontsize12 = {
   fontSize: 12,
 };
+export const fontsize13 = {
+  fontSize: 13,
+};
 export const fontsize14 = {
   fontSize: 14,
 };
@@ -153,16 +156,15 @@ export default CommonStyle = StyleSheet.create({
     // ...mb32
   },
   formSimpleEditView: {
-    width: "50%",
-    height: 46,
-    alignItems: "center",
-    backgroundColor: COLORS.Secondary,
+    width: "70%",
+    // height: 46,
+    // backgroundColor: COLORS.Secondary,
     paddingLeft: 16,
   },
   formSimpletxtEditView: {
     flexDirection: "row",
-    alignItems: "center",
     width: "100%",
+    marginBottom: 16,
   },
   logoImage: {
     width: "100%",
@@ -334,7 +336,7 @@ export default CommonStyle = StyleSheet.create({
     justifyContent: "space-between",
   },
   imgProfileBackground: {
-    width: "101%",
+    width: "105%",
     height: "100%",
     resizeMode: "cover",
   },
@@ -383,5 +385,15 @@ export default CommonStyle = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  MainPopStyle: {
+    maxHeight: "50%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: "50%",
+  },
+  HiddenPopStyle: {
+    overflow: "hidden",
+    paddingBottom: "10%",
   },
 });

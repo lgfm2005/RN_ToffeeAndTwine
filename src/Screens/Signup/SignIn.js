@@ -351,11 +351,9 @@ const SignIn = ({ navigation }) => {
             </View>
 
             <View style={CommonStyle.formGroup}>
-              <Text style={CommonStyle.formLabel}>
-                {AppString.CreatePassword}
-              </Text>
+              <Text style={CommonStyle.formLabel}>{AppString.Password}</Text>
               <ShowFormInput
-                buttonName={AppString.CreatePassword}
+                buttonName={AppString.EnterPassword}
                 textChange={(CreatePassword) =>
                   setCreatePassword(CreatePassword)
                 }
@@ -380,9 +378,9 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                // onPress={() => handleSignIn(getEmail, getCreatePassword)}
-                // btncheck={isvalidForm()}
-                // btnabled={isvalidForm()}
+                onPress={() => handleSignIn(getEmail, getCreatePassword)}
+                btncheck={isvalidForm()}
+                btnabled={isvalidForm()}
                 // onPress={() =>
                 //   handleSignIn("kachhadiya101@gmail.com", "123456")
                 // }
@@ -392,7 +390,7 @@ const SignIn = ({ navigation }) => {
                 //   handleSignIn("rshah@universalstreamsolution.com", "123456")
                 // }
                 // onPress={() => handleSignIn("uss.jignesh@gmail.com", "123456")}
-                onPress={() => handleSignIn("jignesh@noemail.com", "123456")}
+                // onPress={() => handleSignIn("jignesh@noemail.com", "123456")}
                 // onPress={() =>
                 //   handleSignIn("amansuri@universalstreamsolution.com", "123456")
                 // }

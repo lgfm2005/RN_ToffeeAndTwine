@@ -60,21 +60,11 @@ const ForgotPassword = ({ navigation }) => {
     setLoader(false);
 
     if (response.data.StatusCode == "1") {
-      showMessage({
-        message: "Alert",
-        description: response.data.Message,
-        type: "success",
-      });
       navigation.navigate("SetPassword", {
         VerificationCode: response.data.Result[0].VerificationCode,
         getEmail: getEmail,
       });
     } else {
-      showMessage({
-        message: "Alert",
-        description: response.data.Message,
-        type: "danger",
-      });
     }
   };
 
