@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -8,6 +8,7 @@ import {
   Dimensions,
   Keyboard,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
   Platform,
   ScrollView,
 } from "react-native";
@@ -58,6 +59,9 @@ const TutorialFirst = ({ navigation, props, route }) => {
   const [getFinaldate, setFinalDate] = useState("");
   const [date, setDate] = useState(new Date());
 
+  const getFirstNameRef = useRef(null);
+  const getLastNameRef = useRef(null);
+
   const onRadioButtonPress = (idx, momentId) => {
     console.log("Clicked ==>", idx, momentId);
     setRadioId(momentId);
@@ -81,6 +85,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
   };
   const SaveDatePicker = async () => {
     Keyboard.dismiss();
+
     setModalVisible(false);
     setValidationCheck("GetAllData");
     setIsText(false);
@@ -93,6 +98,13 @@ const TutorialFirst = ({ navigation, props, route }) => {
     var DateSubstring =
       date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalDate(DateSubstring);
+    Keyboard.dismiss();
+    if (getFirstNameRef.current) {
+      debugger;
+      getFirstNameRef.current.blur();
+
+      getFirstNameRef.current.blur();
+    }
     console.log("getRadioName ===>>", DateSubstring);
   };
 
@@ -214,138 +226,149 @@ const TutorialFirst = ({ navigation, props, route }) => {
           keyboardShouldPersistTaps={"always"}
           bounces={false}
         >
-          <KeyboardAvoidingView
-            behavior="position"
-            // keyboardVerticalOffset={keyboardVerticalOffset}
-          >
-            <View style={[CommonStyle.Base, { flex: 1 }]}>
-              <Image
-                source={imgGiftTutorialfirst}
-                style={[CommonStyle.imgGiftTutorial, CommonStyle.my16]}
-              />
-              <View style={CommonStyle.Base}>
-                <View style={[CommonStyle.Container, CommonStyle.mb32]}>
-                  <Text
-                    style={[CommonStyle.txtTitle, { fontFamily: FONT.Gilroy }]}
-                  >
-                    {AppString.WelcometoToffeeTwine}
-                  </Text>
-
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { fontFamily: FONT.Gilroy },
-                    ]}
-                  >
-                    {AppString.gifthints}
-                  </Text>
-
-                  <View style={[CommonStyle.mb16, TutorialStyle.inputWrapper]}>
-                    <View style={TutorialStyle.inputHalf}>
-                      <Text
-                        style={[
-                          CommonStyle.formLabel,
-                          { fontFamily: FONT.Gilroy },
-                        ]}
-                      >
-                        {AppString.FirstName}
-                      </Text>
-                      <FullFormInput
-                        buttonName={AppString.EnterFirstName}
-                        textChange={(FirstName) => onSetFirstname(FirstName)}
-                        value={getFirstName}
-                      />
-                    </View>
-                    <View style={TutorialStyle.inputHalf}>
-                      <Text
-                        style={[
-                          CommonStyle.formLabel,
-                          { fontFamily: FONT.Gilroy },
-                        ]}
-                      >
-                        {AppString.LastName}
-                      </Text>
-                      <FullFormInput
-                        buttonName={AppString.EnterLastName}
-                        textChange={(LastName) => onSetLastname(LastName)}
-                        value={getLastName}
-                      />
-                    </View>
-                  </View>
-
-                  <View>
-                    <Text style={CommonStyle.formLabel}>
-                      {AppString.Chooseonespecialday}
-                    </Text>
-                    <View>
-                      <RadioButtonContainer
-                        values={listGetSpecialDay}
-                        onPress={onRadioButtonPress}
-                        isValid={getValidationCheck}
-                        isText={isText}
-                      />
-                    </View>
-                  </View>
-
-                  {isModalVisible == true ? (
-                    <Modal
-                      testID={"modal"}
-                      isVisible={isModalVisible}
-                      onBackdropPress={() => CloseDatePicker()}
+          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <KeyboardAvoidingView
+              behavior="position"
+              keyboardVerticalOffset={0}
+              // keyboardVerticalOffset={keyboardVerticalOffset}
+            >
+              <View style={[CommonStyle.Base, { flex: 1 }]}>
+                <Image
+                  source={imgGiftTutorialfirst}
+                  style={[CommonStyle.imgGiftTutorial, CommonStyle.my16]}
+                />
+                <View style={CommonStyle.Base}>
+                  <View style={[CommonStyle.Container, CommonStyle.mb32]}>
+                    <Text
+                      style={[
+                        CommonStyle.txtTitle,
+                        { fontFamily: FONT.Gilroy },
+                      ]}
                     >
-                      <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                        <View style={TutorialStyle.popView}>
-                          <Image
-                            source={
-                              getRadioId == 1
-                                ? imgBirthdayCake
-                                : imgBirthdayCake
-                            }
-                            style={TutorialStyle.popimg}
-                          />
-                        </View>
+                      {AppString.WelcometoToffeeTwine}
+                    </Text>
 
-                        <View>
-                          <Text
-                            style={[
-                              CommonStyle.txtContent,
-                              { fontFamily: FONT.Gilroy },
-                            ]}
-                          >
-                            {getRadioId == 1
-                              ? AppString.Pleasebirthdaycontinue
-                              : getRadioId == 2
-                              ? AppString.Pleaseanniversarycontinue
-                              : getRadioId == 3
-                              ? AppString.Pleasegraduationcontinue
-                              : AppString.Pleasechristmascontinue}
-                          </Text>
-                        </View>
+                    <Text
+                      style={[
+                        CommonStyle.txtContent,
+                        { fontFamily: FONT.Gilroy },
+                      ]}
+                    >
+                      {AppString.gifthints}
+                    </Text>
 
-                        <DatePicker
-                          mode={"date"}
-                          date={date}
-                          onDateChange={setDate}
+                    <View
+                      style={[CommonStyle.mb16, TutorialStyle.inputWrapper]}
+                    >
+                      <View style={TutorialStyle.inputHalf}>
+                        <Text
+                          style={[
+                            CommonStyle.formLabel,
+                            { fontFamily: FONT.Gilroy },
+                          ]}
+                        >
+                          {AppString.FirstName}
+                        </Text>
+                        <FullFormInput
+                          buttonName={AppString.EnterFirstName}
+                          textChange={(FirstName) => onSetFirstname(FirstName)}
+                          value={getFirstName}
+                          onRef={getFirstNameRef}
                         />
-
-                        <View style={[CommonStyle.centerRow, CommonStyle.mt16]}>
-                          <POPOutLinkButton
-                            buttonName={AppString.Cancel}
-                            onPress={() => CloseDatePicker()}
-                          />
-
-                          <POPLinkButton
-                            buttonName={AppString.Save}
-                            onPress={() => SaveDatePicker()}
-                          />
-                        </View>
                       </View>
-                    </Modal>
-                  ) : null}
+                      <View style={TutorialStyle.inputHalf}>
+                        <Text
+                          style={[
+                            CommonStyle.formLabel,
+                            { fontFamily: FONT.Gilroy },
+                          ]}
+                        >
+                          {AppString.LastName}
+                        </Text>
+                        <FullFormInput
+                          buttonName={AppString.EnterLastName}
+                          textChange={(LastName) => onSetLastname(LastName)}
+                          value={getLastName}
+                        />
+                      </View>
+                    </View>
+
+                    <View>
+                      <Text style={CommonStyle.formLabel}>
+                        {AppString.Chooseonespecialday}
+                      </Text>
+                      <View>
+                        <RadioButtonContainer
+                          values={listGetSpecialDay}
+                          onPress={onRadioButtonPress}
+                          isValid={getValidationCheck}
+                          isText={isText}
+                        />
+                      </View>
+                    </View>
+
+                    {isModalVisible == true ? (
+                      <Modal
+                        testID={"modal"}
+                        isVisible={isModalVisible}
+                        onBackdropPress={() => CloseDatePicker()}
+                      >
+                        <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+                          <View style={TutorialStyle.popView}>
+                            <Image
+                              source={
+                                getRadioId == 1
+                                  ? imgBirthdayCake
+                                  : imgBirthdayCake
+                              }
+                              style={TutorialStyle.popimg}
+                            />
+                          </View>
+
+                          <View>
+                            <Text
+                              style={[
+                                CommonStyle.txtContent,
+                                { fontFamily: FONT.Gilroy },
+                              ]}
+                            >
+                              {getRadioId == 1
+                                ? AppString.Pleasebirthdaycontinue
+                                : getRadioId == 2
+                                ? AppString.Pleaseanniversarycontinue
+                                : getRadioId == 3
+                                ? AppString.Pleasegraduationcontinue
+                                : AppString.Pleasechristmascontinue}
+                            </Text>
+                          </View>
+
+                          <DatePicker
+                            mode={"date"}
+                            date={date}
+                            onDateChange={setDate}
+                          />
+
+                          <View
+                            style={[CommonStyle.centerRow, CommonStyle.mt16]}
+                          >
+                            <POPOutLinkButton
+                              buttonName={AppString.Cancel}
+                              onPress={() => CloseDatePicker()}
+                            />
+
+                            <POPLinkButton
+                              buttonName={AppString.Save}
+                              onPress={() => SaveDatePicker()}
+                            />
+                          </View>
+                        </View>
+                      </Modal>
+                    ) : null}
+                  </View>
                 </View>
               </View>
-            </View>
-          </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
         </ScrollView>
 
         <View style={[TutorialStyle.silderbg, CommonStyle.Container]}>

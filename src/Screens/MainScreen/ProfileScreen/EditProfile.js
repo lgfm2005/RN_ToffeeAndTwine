@@ -89,7 +89,7 @@ const EditProfile = ({ navigation }) => {
       }
     } else {
       const DefultUserSpecialMoment = UserSpecialMoment.filter(
-        (item) => item.special_moment_id == user.defaultSpecialMoment
+        (item) => item.default_moment == "0"
       );
       console.log(
         "DefultUserSpecialMoment==================1111111111111111",
