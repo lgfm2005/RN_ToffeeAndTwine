@@ -339,7 +339,7 @@ const EditProfile = ({ navigation }) => {
               </View>
               <View style={CommonStyle.formGroup}>
                 <Text style={CommonStyle.formLabel}>
-                  {AppString.HighlightMoments}
+                  {AppString.FavoriteMoment}
                 </Text>
 
                 <TouchableOpacity onPress={() => HighlightMomentModel()}>
@@ -378,7 +378,7 @@ const EditProfile = ({ navigation }) => {
             <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
               <View style={[CommonStyle.centerRow, CommonStyle.p8]}>
                 <Text style={[CommonStyle.txtTitle, CommonStyle.mb16]}>
-                  {AppString.HighlightMoments}
+                  {AppString.FavoriteMoment}
                 </Text>
               </View>
               <FlatList

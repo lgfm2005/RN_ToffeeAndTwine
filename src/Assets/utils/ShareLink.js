@@ -6,7 +6,7 @@ export const ShareAppLink = async () => {
     const result = await Share.share({
       title: "Toffee + Twine",
       message:
-        "Download Toffee + Twine App!! Create your own perfect gift profile and share it with your special people!",
+        "Download Toffee + Twine App! Create your own perfect gift profile and share it with your special people!",
       url: "https://apps.apple.com/us/app/toffee-twine/id1530001198",
     });
     if (result.action === Share.sharedAction) {

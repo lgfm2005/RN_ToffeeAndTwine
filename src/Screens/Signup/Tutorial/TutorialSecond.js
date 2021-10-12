@@ -36,7 +36,10 @@ import {
 import { SimpleInputEditView } from "../../../Components/FormInput";
 import BackToolBar from "../../../Components/BackToolBar";
 import { MainScreenStyle } from "../../MainScreen/MainScreenStyle";
-import { UpgradeCategoriesList } from "../../../Components/AllListVIew/UpgradeCategoriesList";
+import {
+  Column3UpgradeCategoriesList,
+  UpgradeCategoriesList,
+} from "../../../Components/AllListVIew/UpgradeCategoriesList";
 import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
@@ -251,7 +254,8 @@ const TutorialSecond = ({ navigation, props, route }) => {
                 contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
               >
                 {getlistOfCategory.map((item, index) => (
-                  <UpgradeCategoriesList
+                  // <UpgradeCategoriesList
+                  <Column3UpgradeCategoriesList
                     ImageUrl={{
                       uri:
                         ImageUrl.Categories + item.Name.trim() + ImageUrl.Png,

@@ -649,7 +649,7 @@ const CalendarScreen = ({ navigation }) => {
                   { fontFamily: FONT.NotoSans },
                 ]}
               >
-                {AppString.ExploreMoments}
+                {AppString.Mymoments}
               </Text>
             </View>
 
@@ -1178,7 +1178,7 @@ const CalendarScreen = ({ navigation }) => {
               <Modal
                 testID={"modal"}
                 isVisible={getAddItemShowSepModal}
-                style={CommonStyle.MainPopStyle}
+                // style={CommonStyle.MainPopStyle}
                 onBackdropPress={() => CloseSepItem()}
               >
                 <KeyboardAvoidingView
@@ -1378,31 +1378,55 @@ const CalendarScreen = ({ navigation }) => {
             >
               <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
                 <View>
+                  <View>
+                    <Text
+                      style={[
+                        CommonStyle.txtTitle,
+                        // CommonStyle.p16,
+                        { paddingBottom: 16, textAlign: "center" },
+                      ]}
+                    >
+                      {AppString.UpgradeProfile}
+                    </Text>
+                  </View>
+
                   <Text
                     style={[
-                      CommonStyle.txtTitle,
-                      CommonStyle.p16,
-                      CommonStyle.textUpperCase,
-                      { textAlign: "center" },
+                      CommonStyle.Row,
+                      CommonStyle.txtContent,
+                      CommonStyle.formLabel,
+                      { lineHeight: 24 },
                     ]}
-                  >
-                    {AppString.UpgradeProfile}
-                  </Text>
-                </View>
-
-                <View>
-                  <Text
-                    style={
-                      (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
-                    }
                   >
                     {AppString.txtUpgradecategories1}
                     <Text style={{ color: COLORS.gold }}>
                       {AppString.price}
                     </Text>
-                    <Text>{AppString.txtUpgradecategories2}</Text>
+                    <Text style={CommonStyle.formLabel}>
+                      {AppString.txtUpgradecategories2}
+                    </Text>
                   </Text>
                 </View>
+
+                <View
+                  style={[
+                    // CommonStyle.my16,
+                    CommonStyle.txtContent,
+                    { lineHeight: 24, marginLeft: 10 },
+                  ]}
+                >
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
+                    {"\u2022"} {AppString.txtUpgradecategoriesp1}
+                  </Text>
+
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 15 }]}>
+                    {"\u2022"} {AppString.txtUpgradecategoriesp2}
+                  </Text>
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 15 }]}>
+                    {"\u2022"} {AppString.txtUpgradecategoriesp3}
+                  </Text>
+                </View>
+
                 <View style={CommonStyle.centerRow}>
                   <POPOutLinkButton
                     buttonName={AppString.Later}

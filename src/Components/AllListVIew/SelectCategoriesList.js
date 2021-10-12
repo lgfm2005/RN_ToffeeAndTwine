@@ -57,7 +57,15 @@ export const PopUpSelectCategoriesList = ({
           <View style={AllListViewStyle.listIconbg}>
             <Image source={ImageUrl} style={AllListViewStyle.listIcon} />
           </View>
-          <Text style={AllListViewStyle.listfont}>{ExploreName}</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={[AllListViewStyle.listfont]}>{ExploreName}</Text>
+          </View>
         </View>
       </TouchableOpacity>
     </View>

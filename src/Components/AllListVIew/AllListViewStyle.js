@@ -76,7 +76,8 @@ export const AllListViewStyle = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     flexWrap: "wrap",
-    // width: 60,
+    width: 100,
+    textAlign: "center",
   },
   popupImage: {
     width: 45,

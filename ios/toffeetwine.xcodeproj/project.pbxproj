@@ -557,7 +557,7 @@
 				CODE_SIGN_ENTITLEMENTS = toffeetwine/toffeetwineDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 80;
+				CURRENT_PROJECT_VERSION = 82;
 				DEVELOPMENT_TEAM = DDC2YY5T7F;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = toffeetwine/Info.plist;
@@ -589,7 +589,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development: Heather Swan (4M9KC9KVVT)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 80;
+				CURRENT_PROJECT_VERSION = 82;
 				DEVELOPMENT_TEAM = DDC2YY5T7F;
 				INFOPLIST_FILE = toffeetwine/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

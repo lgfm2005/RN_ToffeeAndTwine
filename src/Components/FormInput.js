@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
+  Linking,
   TextInput,
   Text,
   Image,
@@ -12,6 +13,20 @@ import CommonStyle from "../Assets/Style/CommonStyle";
 import { COLORS } from "../Assets/utils/COLORS";
 import { FONT } from "../Assets/utils/FONT";
 import { imgEye, imgEyeOff } from "../Assets/utils/Image";
+function isValidURL(string) {
+  var res = string.match(
+    /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%.\+#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.#?&//=]*)/g
+  );
+  return res !== null;
+}
+export const OpenBrowserLink = (UrlLink) => {
+  console.log("https url 1 ==> ", UrlLink, isValidURL(UrlLink));
+  if (isValidURL(UrlLink)) {
+    if (UrlLink.startsWith("http://") || UrlLink.startsWith("http://"))
+      Linking.openURL(UrlLink);
+    else Linking.openURL("http://" + UrlLink);
+  } else Linking.openURL("https://www.google.com/search?q=" + UrlLink);
+};
 
 export const FormInput = ({
   buttonName,
@@ -115,9 +130,41 @@ export const EditShowSimpleView = ({
   textChange,
   onPress,
   value,
+  Link,
   ...props
 }) => {
-  return (
+  return Link ? (
+    <View style={[CommonStyle.formSimpletxtEditView]}>
+      <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
+        {TitleName}
+      </Text>
+      {value === "" ? (
+        <Text
+          style={[
+            CommonStyle.formSimpleEditView,
+            { color: COLORS.gray, width: "100%" },
+          ]}
+        >
+          {buttonName}
+        </Text>
+      ) : (
+        <TouchableOpacity onPress={() => OpenBrowserLink(value)}>
+          <Text
+            style={[CommonStyle.formSimpleEditView, { width: "100%" }]}
+            placeholder={buttonName}
+            value={value}
+            selectionColor={COLORS.Primary}
+            color={value != "" ? COLORS.Primary : COLORS.gray}
+            placeholderTextColor={COLORS.gray}
+            editable={false}
+            multiline={true}
+          >
+            {value}
+          </Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  ) : (
     <View style={[CommonStyle.formSimpletxtEditView]}>
       <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
         {TitleName}

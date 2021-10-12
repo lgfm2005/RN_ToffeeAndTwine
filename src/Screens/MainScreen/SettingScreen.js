@@ -5,7 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Permission,
+  ScrollView,
   Linking,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -225,252 +225,277 @@ const SettingScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={[CommonStyle.BgColorWhite, { width: "100%" }]}>
+    <View style={[CommonStyle.BgColorWhite]}>
       <MyWhiteStatusbar />
-      <SafeAreaView style={[CommonStyle.BgColorWhite, { width: "100%" }]}>
+
+      <SafeAreaView
+        style={[
+          CommonStyle.BgColorWhite,
+          { width: "100%", backgroundColor: COLORS.Secondary },
+        ]}
+      >
         <BackToolbar
           ScreenName={AppString.Settings}
           onPress={() => navigation.goBack()}
         />
-        <View
-          style={[
-            CommonStyle.Base,
-            CommonStyle.p16,
-            CommonStyle.BgColorWhite,
-            { paddingLeft: 24, paddingRight: 24 },
-          ]}
+
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={true}
+          bounces={false}
         >
-          <View style={{ paddingBottom: 16 }}>
-            <View style={CommonStyle.RowSpace}>
-              <Text style={CommonStyle.txtTitle}>
-                {AppString.Notifications}
-              </Text>
+          <View
+            style={[
+              CommonStyle.Base,
+              CommonStyle.p16,
+              CommonStyle.BgColorWhite,
+              { paddingLeft: 24, paddingRight: 24 },
+            ]}
+          >
+            <View style={CommonStyle.paddingBottom20}>
               <TouchableOpacity onPress={() => Notification()}>
-                <Image source={imgDownArrow} style={CommonStyle.imgIconSize} />
-              </TouchableOpacity>
-            </View>
-            {getNotification == true ? (
-              <View>
                 <View style={CommonStyle.RowSpace}>
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { color: COLORS.PrimaryLight },
-                    ]}
-                  >
-                    {AppString.Gifting}
+                  <Text style={CommonStyle.txtTitle}>
+                    {AppString.Notifications}
                   </Text>
-                  <Switch
-                    value={getGiftingSwitch}
-                    onValueChange={GiftingToggleSwitch}
-                    color={COLORS.black}
-                    style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
+                  <Image
+                    source={imgDownArrow}
+                    style={CommonStyle.imgIconSize}
                   />
                 </View>
-                <View style={CommonStyle.RowSpace}>
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { color: COLORS.PrimaryLight },
-                    ]}
-                  >
-                    {AppString.SpecialMoments}
-                  </Text>
-                  <Switch
-                    value={getSpecialMomentsSwitch}
-                    onValueChange={SpecialMomentsToggleSwitch}
-                    color={COLORS.black}
-                    style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
-                  />
-                </View>
-              </View>
-            ) : null}
-          </View>
-
-          <View style={{ paddingBottom: 16 }}>
-            <View style={CommonStyle.RowSpace}>
-              <Text style={CommonStyle.txtTitle}>
-                {AppString.ManageSubscriptions}
-              </Text>
-              <TouchableOpacity onPress={() => ManageSubscriptions()}>
-                <Image source={imgDownArrow} style={CommonStyle.imgIconSize} />
               </TouchableOpacity>
-            </View>
-
-            {getManageSubscriptions == true ? (
-              <View>
-                <View style={CommonStyle.RowSpace}>
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { color: COLORS.PrimaryLight },
-                    ]}
-                  >
-                    {AppString.Current}
-                  </Text>
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { color: COLORS.PrimaryLight },
-                    ]}
-                  >
-                    {userSubscriptionStatus == "1"
-                      ? " $1.99 - Monthly"
-                      : AppString.Free}
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  disabled={userSubscriptionStatus == "1" ? true : false}
-                  onPress={() => handleSubmitPayment()}
-                  style={CommonStyle.centerRow}
-                >
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { color: COLORS.PrimaryLight },
-                    ]}
-                  >
-                    {userSubscriptionStatus == "1" ? "" : AppString.Upgrade}
-                    <Text style={{ color: COLORS.gold }}>
-                      {" "}
-                      {userSubscriptionStatus == "1"
-                        ? " Next Billing On: " +
-                          Moment(planPeriodEnd)
-                            .format("MMMM DD YYYY")
-                            .toString()
-                        : AppString.UpgradePrice}
-                    </Text>{" "}
-                    {userSubscriptionStatus == "1" ? "" : AppString.monthly}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
-          </View>
-
-          <View style={{ paddingBottom: 16 }}>
-            <View style={CommonStyle.RowSpace}>
-              <Text style={CommonStyle.txtTitle}>{AppString.Help}</Text>
-              <TouchableOpacity onPress={() => Help()}>
-                <Image source={imgDownArrow} style={CommonStyle.imgIconSize} />
-              </TouchableOpacity>
-            </View>
-
-            {getHelp == true ? (
-              <View style={{ paddingTop: 5 }}>
-                <View style={CommonStyle.centerRow}>
-                  <Text
-                    style={[
-                      CommonStyle.txtContent,
-                      { color: COLORS.PrimaryLight },
-                    ]}
-                  >
-                    {AppString.customer1}
-                    <Text style={{ color: COLORS.gold }}>
-                      {" "}
-                      {AppString.email}{" "}
-                    </Text>
-                    {AppString.customer2}
-                  </Text>
-                </View>
-              </View>
-            ) : null}
-          </View>
-
-          <View style={{ paddingBottom: 16 }}>
-            <View style={CommonStyle.RowSpace}>
-              <Text style={CommonStyle.txtTitle}>{AppString.About}</Text>
-              <TouchableOpacity onPress={() => About()}>
-                <Image source={imgDownArrow} style={CommonStyle.imgIconSize} />
-              </TouchableOpacity>
-            </View>
-            {getAbout == true ? (
-              <View>
+              {getNotification == true ? (
                 <View>
-                  <TouchableOpacity onPress={() => DataPolicy()}>
+                  <View style={CommonStyle.RowSpace}>
                     <Text
                       style={[
                         CommonStyle.txtContent,
                         { color: COLORS.PrimaryLight },
                       ]}
                     >
-                      {AppString.AbDataPolicyout}
+                      {AppString.Gifting}
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => TermsOfService()}>
+                    <Switch
+                      value={getGiftingSwitch}
+                      onValueChange={GiftingToggleSwitch}
+                      color={COLORS.black}
+                      style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
+                    />
+                  </View>
+                  <View style={CommonStyle.RowSpace}>
                     <Text
                       style={[
                         CommonStyle.txtContent,
                         { color: COLORS.PrimaryLight },
                       ]}
                     >
-                      {AppString.TermsofService}
+                      {AppString.SpecialMoments}
+                    </Text>
+                    <Switch
+                      value={getSpecialMomentsSwitch}
+                      onValueChange={SpecialMomentsToggleSwitch}
+                      color={COLORS.black}
+                      style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
+                    />
+                  </View>
+                </View>
+              ) : null}
+            </View>
+
+            <View style={CommonStyle.paddingBottom20}>
+              <TouchableOpacity onPress={() => ManageSubscriptions()}>
+                <View style={CommonStyle.RowSpace}>
+                  <Text style={CommonStyle.txtTitle}>
+                    {AppString.ManageSubscriptions}
+                  </Text>
+                  <Image
+                    source={imgDownArrow}
+                    style={CommonStyle.imgIconSize}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              {getManageSubscriptions == true ? (
+                <View>
+                  <View style={CommonStyle.RowSpace}>
+                    <Text
+                      style={[
+                        CommonStyle.txtContent,
+                        { color: COLORS.PrimaryLight },
+                      ]}
+                    >
+                      {AppString.Current}
+                    </Text>
+                    <Text
+                      style={[
+                        CommonStyle.txtContent,
+                        { color: COLORS.PrimaryLight },
+                      ]}
+                    >
+                      {userSubscriptionStatus == "1"
+                        ? " $1.99 - Monthly"
+                        : AppString.Free}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    disabled={userSubscriptionStatus == "1" ? true : false}
+                    onPress={() => handleSubmitPayment()}
+                    style={CommonStyle.centerRow}
+                  >
+                    <Text
+                      style={[
+                        CommonStyle.txtContent,
+                        { color: COLORS.PrimaryLight },
+                      ]}
+                    >
+                      {userSubscriptionStatus == "1" ? "" : AppString.Upgrade}
+                      <Text style={{ color: COLORS.gold }}>
+                        {" "}
+                        {userSubscriptionStatus == "1"
+                          ? " Next Billing On: " +
+                            Moment(planPeriodEnd)
+                              .format("MMMM DD YYYY")
+                              .toString()
+                          : AppString.UpgradePrice}
+                      </Text>{" "}
+                      {userSubscriptionStatus == "1" ? "" : AppString.monthly}
                     </Text>
                   </TouchableOpacity>
                 </View>
+              ) : null}
+            </View>
+
+            <View style={CommonStyle.paddingBottom20}>
+              <TouchableOpacity onPress={() => Help()}>
+                <View style={CommonStyle.RowSpace}>
+                  <Text style={CommonStyle.txtTitle}>{AppString.Help}</Text>
+                  <Image
+                    source={imgDownArrow}
+                    style={CommonStyle.imgIconSize}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              {getHelp == true ? (
+                <View style={{ paddingTop: 5 }}>
+                  <View style={CommonStyle.centerRow}>
+                    <Text
+                      style={[
+                        CommonStyle.txtContent,
+                        { color: COLORS.PrimaryLight },
+                      ]}
+                    >
+                      {AppString.customer1}
+                      <Text style={{ color: COLORS.gold }}>
+                        {" "}
+                        {AppString.email}{" "}
+                      </Text>
+                      {AppString.customer2}
+                    </Text>
+                  </View>
+                </View>
+              ) : null}
+            </View>
+
+            <View style={CommonStyle.paddingBottom20}>
+              <TouchableOpacity onPress={() => About()}>
+                <View style={CommonStyle.RowSpace}>
+                  <Text style={CommonStyle.txtTitle}>{AppString.About}</Text>
+                  <Image
+                    source={imgDownArrow}
+                    style={CommonStyle.imgIconSize}
+                  />
+                </View>
+              </TouchableOpacity>
+              {getAbout == true ? (
+                <View>
+                  <View>
+                    <TouchableOpacity onPress={() => DataPolicy()}>
+                      <Text
+                        style={[
+                          CommonStyle.txtContent,
+                          { color: COLORS.PrimaryLight },
+                        ]}
+                      >
+                        {AppString.AbDataPolicyout}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => TermsOfService()}>
+                      <Text
+                        style={[
+                          CommonStyle.txtContent,
+                          { color: COLORS.PrimaryLight },
+                        ]}
+                      >
+                        {AppString.TermsofService}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ) : null}
+            </View>
+
+            <TouchableOpacity
+              onPress={() => CheckDeletedAccount()}
+              style={CommonStyle.paddingBottom20}
+            >
+              <Text style={[CommonStyle.txtTitle, { color: COLORS.Primary }]}>
+                {AppString.Deleteaccount}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => FinalCheckLogout()}
+              style={CommonStyle.paddingBottom20}
+            >
+              <View style={CommonStyle.RowSpace}>
+                <Text style={[CommonStyle.txtTitle, { color: COLORS.Primary }]}>
+                  {AppString.Logout}
+                </Text>
+                <Text
+                  style={[CommonStyle.txtTitle, { color: COLORS.PrimaryLight }]}
+                >
+                  {AppString.Version}
+                </Text>
               </View>
-            ) : null}
+            </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            onPress={() => CheckDeletedAccount()}
-            style={{ paddingBottom: 16 }}
-          >
-            <Text style={[CommonStyle.txtTitle, { color: COLORS.Primary }]}>
-              {AppString.Deleteaccount}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => FinalCheckLogout()}
-            style={{ paddingBottom: 16 }}
-          >
-            <View style={CommonStyle.RowSpace}>
-              <Text style={[CommonStyle.txtTitle, { color: COLORS.Primary }]}>
-                {AppString.Logout}
-              </Text>
-              <Text
-                style={[CommonStyle.txtTitle, { color: COLORS.PrimaryLight }]}
-              >
-                {AppString.Version}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+          {/* ----- */}
 
-        {/* ----- */}
+          {getDeletedAccountModel == true ? (
+            <Modal testID={"modal"} isVisible={getDeletedAccountModel}>
+              <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+                <View style={CommonStyle.Row}>
+                  <View style={{ width: "100%" }}>
+                    <Text
+                      style={[
+                        CommonStyle.txtTitle,
+                        CommonStyle.mb32,
+                        { fontFamily: FONT.Gilroy },
+                      ]}
+                    >
+                      {AppString.ConfirmText}
+                    </Text>
+                  </View>
+                </View>
 
-        {getDeletedAccountModel == true ? (
-          <Modal testID={"modal"} isVisible={getDeletedAccountModel}>
-            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-              <View style={CommonStyle.Row}>
-                <View style={{ width: "100%" }}>
-                  <Text
-                    style={[
-                      CommonStyle.txtTitle,
-                      CommonStyle.mb32,
-                      { fontFamily: FONT.Gilroy },
-                    ]}
-                  >
-                    {AppString.ConfirmText}
-                  </Text>
+                <View
+                  style={[CommonStyle.Row, { justifyContent: "space-between" }]}
+                >
+                  <POPLinkButton
+                    buttonName={AppString.Cancel}
+                    onPress={() => CloseItem()}
+                  />
+
+                  <POPLinkButton
+                    buttonName={AppString.confirm}
+                    onPress={() => FinalDeletedAccount()}
+                  />
                 </View>
               </View>
-
-              <View
-                style={[CommonStyle.Row, { justifyContent: "space-between" }]}
-              >
-                <POPLinkButton
-                  buttonName={AppString.Cancel}
-                  onPress={() => CloseItem()}
-                />
-
-                <POPLinkButton
-                  buttonName={AppString.confirm}
-                  onPress={() => FinalDeletedAccount()}
-                />
-              </View>
-            </View>
-          </Modal>
-        ) : null}
+            </Modal>
+          ) : null}
+        </ScrollView>
       </SafeAreaView>
     </View>
   );

@@ -159,10 +159,24 @@ const Following = ({ navigation }) => {
         <View Style={[CommonStyle.Container]}>
           <View style={FriendScreenStyle.backgroundColor}>
             {!getUserFollowing.length ? (
-              <View style={CommonStyle.ContainerCenter}>
-                <Text style={CommonStyle.txtContent}>
-                  No Following Found.!!!
-                </Text>
+              // <View style={CommonStyle.ContainerCenter}>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 30,
+                }}
+              >
+                <View>
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 0 }]}>
+                    {AppString.currentlyAnyonefollowing}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 0 }]}>
+                    {AppString.InviteFriends}
+                  </Text>
+                </View>
               </View>
             ) : (
               <FlatList

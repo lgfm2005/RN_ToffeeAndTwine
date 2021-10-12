@@ -37,22 +37,13 @@ import {
 import { AppString } from "../../../Assets/utils/AppString";
 import { UserProfileScreenStyle } from "./UserProfileScreenStyle";
 import {
-  imgWhitegift,
   imgUserBlock,
-  demofaceman,
   imgPlaceHolder,
-  iimgprofiledemo3,
-  imgImport,
   imgCheckCircle,
-  profileimgdemo,
+  imgNavNotification,
   imgBackleftWhite,
   imgProfileBackground,
-  imgCoffee,
-  imgDesserts,
-  imgLaptop,
   imgGiftNotification,
-  imgRing,
-  imgBook,
   imgWhiteDot,
 } from "../../../Assets/utils/Image";
 import { MainScreenStyle } from "../MainScreenStyle";
@@ -210,13 +201,56 @@ const UserProfile = ({ route, navigation }) => {
   ) => {
     setFavoriteThingsModal(true);
     setSpecialMomentName(specialMomentName);
-    setUserSpecialMomentTitle(userSpecialMomentTitle);
-    setUserSpecialMomentDate(userSpecialMomentDate);
-    setSpecialMomentLink(specialMomentLink);
-    setSpecialMomentOtherInfo(specialMomentOtherInfo);
+    // setUserSpecialMomentTitle(userSpecialMomentTitle);
+    // setUserSpecialMomentDate(userSpecialMomentDate);
+    // setSpecialMomentLink(specialMomentLink);
+    // setSpecialMomentOtherInfo(specialMomentOtherInfo);
     setSpecialMomentImage(Image);
     setUserSpecialMomentId(userSpecialMomentId);
     setSpecialMomentId(specialMomentId);
+
+    // Title
+    if (
+      userSpecialMomentTitle == null ||
+      userSpecialMomentTitle == "" ||
+      userSpecialMomentTitle == undefined
+    ) {
+      setUserSpecialMomentTitle("-");
+    } else {
+      setUserSpecialMomentTitle(userSpecialMomentTitle);
+    }
+    // Date
+    if (
+      userSpecialMomentDate == null ||
+      userSpecialMomentDate == "" ||
+      userSpecialMomentDate == undefined
+    ) {
+      setUserSpecialMomentDate("-");
+    } else {
+      setUserSpecialMomentDate(userSpecialMomentDate);
+    }
+
+    // Link
+    if (
+      specialMomentLink == null ||
+      specialMomentLink == "" ||
+      specialMomentLink == undefined
+    ) {
+      setSpecialMomentLink("-");
+    } else {
+      setSpecialMomentLink(specialMomentLink);
+    }
+
+    // Link
+    if (
+      specialMomentOtherInfo == null ||
+      specialMomentOtherInfo == "" ||
+      specialMomentOtherInfo == undefined
+    ) {
+      setSpecialMomentOtherInfo("-");
+    } else {
+      setSpecialMomentOtherInfo(specialMomentOtherInfo);
+    }
   };
 
   const getProfiles = async () => {
@@ -664,11 +698,11 @@ const UserProfile = ({ route, navigation }) => {
                   <View
                     style={{ flexDirection: "row", justifyContent: "center" }}
                   >
-                    {/* <ImagePOPLinkButton
-                      buttonName={AppString.Giftit}
-                      buttonImage={imgWhitegift}
-                      onPress={() => SendSpecialMoment()}
-                    /> */}
+                    <ImagePOPLinkButton
+                      buttonName={AppString.Notify}
+                      buttonImage={imgNavNotification}
+                      // onPress={() => SendSpecialMoment()}
+                    />
                   </View>
                 </View>
               </Modal>
@@ -716,7 +750,8 @@ const UserProfile = ({ route, navigation }) => {
                         return (
                           <EditShowSimpleView
                             TitleName={item.category_question}
-                            buttonName={item.category_placeholder}
+                            // buttonName={item.category_placeholder}
+                            buttonName={"-"}
                             value={item.question_value}
                           />
                         );

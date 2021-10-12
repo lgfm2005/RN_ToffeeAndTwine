@@ -128,9 +128,9 @@ const UpcomingUpGrade = ({ navigation }) => {
           <View>
             <View style={CommonStyle.Row}>
               <Text style={CommonStyle.txtContent}>
-                {AppString.Upgradenow}
+                {AppString.txtUpgradecategories1}
                 <Text style={{ color: COLORS.gold }}> {AppString.price} </Text>
-                {AppString.Upgradefriendspecialmoments}
+                {AppString.txtUpgradecategories2}
               </Text>
             </View>
             <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
@@ -138,16 +138,16 @@ const UpcomingUpGrade = ({ navigation }) => {
             </Text>
             <View style={{ paddingLeft: 15 }}>
               <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
-                {"\u2022"} {AppString.Notificationsfriends}
+                {"\u2022"} {AppString.txtUpgradecategoriesp1}
               </Text>
               <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
-                {"\u2022"} {AppString.giftlisthints}
+                {"\u2022"} {AppString.txtUpgradecategoriesp2}
               </Text>
               <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
-                {"\u2022"} {AppString.sharewithfriends}
+                {"\u2022"} {AppString.txtUpgradecategoriesp3}
               </Text>
             </View>
-            <View style={CommonStyle.centerRow}>
+            <View style={[CommonStyle.centerRow, { marginTop: 5 }]}>
               <POPLinkButton
                 buttonName={AppString.Upgrade}
                 onPress={() => UpGradePayment()}

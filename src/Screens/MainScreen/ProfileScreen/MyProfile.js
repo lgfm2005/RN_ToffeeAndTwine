@@ -1198,7 +1198,7 @@ const MyProfile = ({ navigation }) => {
                   { fontFamily: FONT.NotoSans, marginTop: 16 },
                 ]}
               >
-                {AppString.FavoriteThings}
+                {AppString.GiftHints}
               </Text>
 
               {/* Favorite Things List */}
@@ -1331,63 +1331,65 @@ const MyProfile = ({ navigation }) => {
           <Modal
             testID={"modal"}
             isVisible={getAddItemShowModal}
-            style={CommonStyle.MainPopStyle}
+            style={[
+              CommonStyle.MainPopStyle,
+              TutorialStyle.popbg,
+              CommonStyle.HiddenPopStyle,
+              {
+                backgroundColor: "white",
+              },
+            ]}
             onBackdropPress={() => CloseItem()}
           >
-            <SafeAreaView>
-              <View
+            <View style={{ overflow: "hidden" }}>
+              <Text
                 style={[
-                  CommonStyle.p24,
-                  TutorialStyle.popbg,
-                  CommonStyle.HiddenPopStyle,
+                  CommonStyle.txtTitle,
+                  CommonStyle.pb16,
+                  { textAlign: "center" },
                 ]}
               >
-                <Text
-                  style={[
-                    CommonStyle.txtTitle,
-                    CommonStyle.pb16,
-                    { textAlign: "center" },
+                {AppString.SelectCategories}
+              </Text>
+              <View key={getId}>
+                <ScrollView
+                  keyboardShouldPersistTaps={"always"}
+                  bounces={false}
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={[
+                    MainScreenStyle.scrollItemStyle,
+                    { paddingBottom: 50 },
                   ]}
                 >
-                  {AppString.SelectCategories}
-                </Text>
-                <View key={getId}>
-                  <ScrollView
-                    keyboardShouldPersistTaps={"always"}
-                    bounces={false}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
-                  >
-                    {getFilterCat.length > 0 &&
-                      getFilterCat.map((item, index) => (
-                        <PopUpSelectCategoriesList
-                          ImageUrl={{
-                            uri:
-                              ImageUrl.Categories +
-                              item.category_name.trim() +
-                              ImageUrl.Png,
-                          }}
-                          ExploreName={item.category_name}
-                          Id={item.category_id}
-                          index={index}
-                          key={index}
-                          // DataLength={Data.length}
-                          onPress={() =>
-                            SelectCategoriesItem(
-                              item.category_name,
-                              item.Image,
-                              item.category_id,
-                              item.questions,
-                              index
-                            )
-                          }
-                        />
-                      ))}
-                  </ScrollView>
-                </View>
+                  {getFilterCat.length > 0 &&
+                    getFilterCat.map((item, index) => (
+                      <PopUpSelectCategoriesList
+                        ImageUrl={{
+                          uri:
+                            ImageUrl.Categories +
+                            item.category_name.trim() +
+                            ImageUrl.Png,
+                        }}
+                        ExploreName={item.category_name}
+                        Id={item.category_id}
+                        index={index}
+                        key={index}
+                        // DataLength={Data.length}
+                        onPress={() =>
+                          SelectCategoriesItem(
+                            item.category_name,
+                            item.Image,
+                            item.category_id,
+                            item.questions,
+                            index
+                          )
+                        }
+                      />
+                    ))}
+                </ScrollView>
               </View>
-            </SafeAreaView>
+            </View>
           </Modal>
         ) : null}
 
@@ -1925,7 +1927,7 @@ const MyProfile = ({ navigation }) => {
           <Modal
             testID={"modal"}
             isVisible={getAddItemShowSepModal}
-            style={CommonStyle.MainPopStyle}
+            // style={CommonStyle.MainPopStyle}
             onBackdropPress={() => CloseSepItem()}
           >
             <KeyboardAvoidingView
@@ -2122,8 +2124,8 @@ const MyProfile = ({ navigation }) => {
                 <Text
                   style={[
                     CommonStyle.txtTitle,
-                    CommonStyle.p16,
-                    { textAlign: "center" },
+                    // CommonStyle.p16,
+                    { paddingBottom: 16, textAlign: "center" },
                   ]}
                 >
                   {AppString.UpgradeProfile}
@@ -2132,15 +2134,39 @@ const MyProfile = ({ navigation }) => {
 
               <View>
                 <Text
-                  style={
-                    (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
-                  }
+                  style={[
+                    CommonStyle.Row,
+                    CommonStyle.txtContent,
+                    CommonStyle.formLabel,
+                    { lineHeight: 24 },
+                  ]}
                 >
                   {AppString.txtUpgradecategories1}
                   <Text style={{ color: COLORS.gold }}>{AppString.price}</Text>
-                  <Text>{AppString.txtUpgradecategories2}</Text>
+                  <Text style={CommonStyle.formLabel}>
+                    {AppString.txtUpgradecategories2}
+                  </Text>
                 </Text>
               </View>
+              <View
+                style={[
+                  // CommonStyle.my16,
+                  CommonStyle.txtContent,
+                  { lineHeight: 24, marginLeft: 10 },
+                ]}
+              >
+                <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
+                  {"\u2022"} {AppString.txtUpgradecategoriesp1}
+                </Text>
+
+                <Text style={[CommonStyle.txtContent, { lineHeight: 15 }]}>
+                  {"\u2022"} {AppString.txtUpgradecategoriesp2}
+                </Text>
+                <Text style={[CommonStyle.txtContent, { lineHeight: 15 }]}>
+                  {"\u2022"} {AppString.txtUpgradecategoriesp3}
+                </Text>
+              </View>
+
               <View style={CommonStyle.centerRow}>
                 <POPOutLinkButton
                   buttonName={AppString.Later}
@@ -2155,52 +2181,6 @@ const MyProfile = ({ navigation }) => {
             </View>
           </Modal>
         ) : null}
-
-        {/* Payment for upgrade  Moments
-        {getupgradeMomentsModal == true ? (
-          <Modal
-            testID={"modal"}
-            isVisible={getupgradeMomentsModal}
-            onBackdropPress={() => CloseItem()}
-          >
-            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-              <View>
-                <Text
-                  style={[
-                    CommonStyle.txtTitle,
-                    CommonStyle.p16,
-                    { textAlign: "center" },
-                  ]}
-                >
-                  {AppString.UpgradeProfile}
-                </Text>
-              </View>
-
-              <View>
-                <Text
-                  style={
-                    (CommonStyle.Row, CommonStyle.p16, CommonStyle.txtContent)
-                  }
-                >
-                  {AppString.txtUpgradecategories1}
-                  <Text style={{ color: COLORS.gold }}>{AppString.price}</Text>
-                  <Text>{AppString.txtUpgrademoments}</Text>
-                </Text>
-              </View>
-              <View style={CommonStyle.centerRow}>
-                <POPOutLinkButton
-                  buttonName={AppString.Later}
-                  onPress={() => CloseItem()}
-                />
-
-                <POPLinkButton
-                  buttonName={AppString.Upgrade}
-                  onPress={() => handleSubmitPayment()}
-                />
-              </View>
-            </View>
-          </Modal>
-        ) : null} */}
       </ScrollView>
       <Spinner visible={getLoader} />
     </View>

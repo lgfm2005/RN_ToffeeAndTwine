@@ -40,11 +40,7 @@ import {
   imgCheckCircle,
   profileimgdemo,
   imgProfileBackground,
-  imgCoffee,
-  imgDesserts,
-  imgWhiteBirthday,
-  imgWhiteAnniversary,
-  imgWhiteChristmas,
+  imgNavNotification,
   imgWhiteDot,
   imgBook,
   demofaceman,
@@ -199,13 +195,56 @@ const FriendFollowersList = ({ route, navigation }) => {
   ) => {
     setFavoriteThingsModal(true);
     setSpecialMomentName(specialMomentName);
-    setUserSpecialMomentTitle(userSpecialMomentTitle);
-    setUserSpecialMomentDate(userSpecialMomentDate);
-    setSpecialMomentLink(specialMomentLink);
-    setSpecialMomentOtherInfo(specialMomentOtherInfo);
+    // setUserSpecialMomentTitle(userSpecialMomentTitle);
+    // setUserSpecialMomentDate(userSpecialMomentDate);
+    // setSpecialMomentLink(specialMomentLink);
+    // setSpecialMomentOtherInfo(specialMomentOtherInfo);
     setSpecialMomentImage(Image);
     setUserSpecialMomentId(userSpecialMomentId);
     setSpecialMomentId(specialMomentId);
+
+    // Title
+    if (
+      userSpecialMomentTitle == null ||
+      userSpecialMomentTitle == "" ||
+      userSpecialMomentTitle == undefined
+    ) {
+      setUserSpecialMomentTitle("-");
+    } else {
+      setUserSpecialMomentTitle(userSpecialMomentTitle);
+    }
+    // Date
+    if (
+      userSpecialMomentDate == null ||
+      userSpecialMomentDate == "" ||
+      userSpecialMomentDate == undefined
+    ) {
+      setUserSpecialMomentDate("-");
+    } else {
+      setUserSpecialMomentDate(userSpecialMomentDate);
+    }
+
+    // Link
+    if (
+      specialMomentLink == null ||
+      specialMomentLink == "" ||
+      specialMomentLink == undefined
+    ) {
+      setSpecialMomentLink("-");
+    } else {
+      setSpecialMomentLink(specialMomentLink);
+    }
+
+    // Link
+    if (
+      specialMomentOtherInfo == null ||
+      specialMomentOtherInfo == "" ||
+      specialMomentOtherInfo == undefined
+    ) {
+      setSpecialMomentOtherInfo("-");
+    } else {
+      setSpecialMomentOtherInfo(specialMomentOtherInfo);
+    }
   };
 
   const UserBlock = () => {
@@ -273,9 +312,7 @@ const FriendFollowersList = ({ route, navigation }) => {
   const getProfiles = async () => {
     setLoader(true);
     const { profileResponse, profileError } = await getProfile(userID);
-    debugger;
     if (profileResponse.data.StatusCode) {
-      debugger;
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
@@ -291,11 +328,9 @@ const FriendFollowersList = ({ route, navigation }) => {
       setFriendStatus(
         profileResponse.data.Result[0].user_details[0].friend_status
       );
-      debugger;
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
       setMomentsCount(profileResponse.data.Result[0].special_moment_count);
-      debugger;
       var name =
         profileResponse.data.Result[0].user_details[0].user_fname +
         " " +
@@ -668,7 +703,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                   />
                 ) : null}
               </View>
-              <View style={{ width: "80%" }}>
+              <View style={{ width: "80%", alignItems: "center" }}>
                 <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
                   {getSpecialMomentName}
                 </Text>
@@ -695,11 +730,11 @@ const FriendFollowersList = ({ route, navigation }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              {/* <ImagePOPLinkButton
-                      buttonName={AppString.Giftit}
-                      buttonImage={imgWhitegift}
-                      onPress={() => SendSpecialMoment()}
-                    /> */}
+              <ImagePOPLinkButton
+                buttonName={AppString.Notify}
+                buttonImage={imgNavNotification}
+                // onPress={() => SendSpecialMoment()}
+              />
             </View>
           </View>
         </Modal>
@@ -719,7 +754,9 @@ const FriendFollowersList = ({ route, navigation }) => {
                   {getImageNew == "" ? (
                     <Image
                       source={
-                        getImageNew == "" || getImageNew == null
+                        getImageNew == "" ||
+                        getImageNew == null ||
+                        getImageNew == undefined
                           ? imgPlaceHolder
                           : { uri: getImageNew }
                       }
@@ -747,7 +784,8 @@ const FriendFollowersList = ({ route, navigation }) => {
                   return (
                     <EditShowSimpleView
                       TitleName={item.category_question}
-                      buttonName={item.category_placeholder}
+                      // buttonName={item.category_placeholder}
+                      buttonName={"-"}
                       value={item.question_value}
                     />
                   );

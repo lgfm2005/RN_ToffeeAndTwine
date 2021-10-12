@@ -47,10 +47,11 @@ const Followers = ({ navigation }) => {
     }
   }, [refreshing]);
 
-  useEffect(async () => {
+  const getUserFollowers = async () => {
     setLoader(true);
     const { userFollowerListResponse, userFollowerListError } =
       await getUserFollowerList();
+    debugger;
     if (userFollowerListResponse.data.StatusCode == "1") {
       setUserFollower(userFollowerListResponse.data.Result);
       setLoader(false);
@@ -58,6 +59,16 @@ const Followers = ({ navigation }) => {
       setLoader(false);
       console.log("user Follower List Error ===>", userFollowerListError);
     }
+  };
+
+  useEffect(async () => {
+    getUserFollowers();
+  }, []);
+
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      getUserFollowers();
+    });
   }, []);
 
   const RemoveFriend = async (Id) => {
@@ -151,10 +162,24 @@ const Followers = ({ navigation }) => {
         <View Style={[CommonStyle.Container, CommonStyle.pt16]}>
           <View style={FriendScreenStyle.backgroundColor}>
             {!getUserFollower.length ? (
-              <View style={CommonStyle.ContainerCenter}>
-                <Text style={CommonStyle.txtContent}>
-                  No Follower Found.!!!
-                </Text>
+              // <View style={CommonStyle.ContainerCenter}>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 30,
+                }}
+              >
+                <View>
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 0 }]}>
+                    {AppString.currentlyAnyonefollower}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 0 }]}>
+                    {AppString.InviteFriends}
+                  </Text>
+                </View>
               </View>
             ) : (
               <FlatList

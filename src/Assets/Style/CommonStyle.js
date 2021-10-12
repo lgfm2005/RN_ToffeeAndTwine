@@ -387,13 +387,22 @@ export default CommonStyle = StyleSheet.create({
     alignItems: "center",
   },
   MainPopStyle: {
-    maxHeight: "50%",
+    maxHeight: "60%",
     alignItems: "center",
     justifyContent: "center",
     marginVertical: "50%",
+    //marginTop: "25%",
+    //marginBottom: "25%",
+    // backgroundColor: "red",
+    paddingBottom: 50,
+    paddingTop: 50,
+    //overflow: "hidden",
   },
   HiddenPopStyle: {
-    overflow: "hidden",
-    paddingBottom: "10%",
+    //overflow: "hidden",
+    //paddingBottom: "10%",
+  },
+  paddingBottom20: {
+    paddingBottom: 20,
   },
 });
