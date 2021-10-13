@@ -44,11 +44,15 @@ import { useActions } from "../../../redux/actions";
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 
 const TutorialFirst = ({ navigation, props, route }) => {
-  const { listGetSpecialDay, token } = route.params;
+  const { listGetSpecialDay, token, FirstName, LastName } = route.params;
   const { updateProfile, addCategoryspecialDay, CategoryList } = useActions();
 
-  const [getFirstName, setFirstName] = useState("");
-  const [getLastName, setLastName] = useState("");
+  const [getFirstName, setFirstName] = useState(
+    FirstName == "" ? "" : FirstName
+  );
+  debugger;
+  const [getLastName, setLastName] = useState(LastName == "" ? "" : LastName);
+  debugger;
   const [getRadioId, setRadioId] = useState("");
   const [getLoader, setLoader] = useState(false);
 

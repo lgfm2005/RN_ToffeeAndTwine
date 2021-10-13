@@ -104,7 +104,7 @@ const MainScreen = ({ navigation }) => {
     //     String(session.userId);
     //   OneSignal.setExternalUserId("raj12345");
     // }
-    OneSignal.setExternalUserId("raj12345");
+    // OneSignal.setExternalUserId("raj12345");
     OneSignal.setNotificationOpenedHandler((handler) => onOpened(handler));
   }, []);
 
@@ -126,6 +126,7 @@ const MainScreen = ({ navigation }) => {
   };
 
   const socialAuthLogin = async (firstName, lastName, email, type) => {
+    setLoader(true);
     const { error, response } = await socialAuth(
       firstName,
       lastName,
@@ -144,6 +145,7 @@ const MainScreen = ({ navigation }) => {
         const { GetCategoryListerror, GetCategoryListresponse } =
           await CategoryList(30, token);
         if (GetCategoryListresponse.data.StatusCode == "1") {
+          debugger;
           console.log("Category Question Response Done");
         } else {
           console.log(
@@ -155,6 +157,7 @@ const MainScreen = ({ navigation }) => {
         const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
           await getUserCategoryQuestion(token);
         if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+          debugger;
           console.log("User Category Question Response Done");
         } else {
           console.log(
@@ -163,9 +166,10 @@ const MainScreen = ({ navigation }) => {
           );
         }
         if (response.data.StatusCode == "1") {
+          setLoader(false);
+          debugger;
           setTimeout(() => {
             setLoader(false);
-
             navigation.navigate("Navigation");
           }, 1000);
         } else {
@@ -178,9 +182,12 @@ const MainScreen = ({ navigation }) => {
           await GetSpecialMoment(token);
         if (response.data.StatusCode == "1") {
           if (specialMomentResponse.data.StatusCode == "1") {
+            debugger;
             navigation.navigate("TutorialFirst", {
               listGetSpecialDay: specialMomentResponse.data.Result,
               token: tokens,
+              FirstName: firstName,
+              LastName: lastName,
             });
           }
         }
@@ -216,12 +223,22 @@ const MainScreen = ({ navigation }) => {
                     console.log("error:", error);
                     Toast.show("Something went wrong!");
                   } else {
-                    socialAuthLogin(
-                      result.first_name,
-                      result.last_name,
-                      result.email,
-                      "F"
-                    );
+                    if (
+                      result.email == "" ||
+                      result.email == null ||
+                      result.email == undefined
+                    ) {
+                      debugger;
+                      navigation.navigate("Signup");
+                    } else {
+                      debugger;
+                      socialAuthLogin(
+                        result.first_name,
+                        result.last_name,
+                        result.email,
+                        "F"
+                      );
+                    }
                     console.log("result111:", result);
                   }
                 }
@@ -269,12 +286,13 @@ const MainScreen = ({ navigation }) => {
       const userInfo = await GoogleSignin.signIn();
       console.log("User Info Main --> ", userInfo.user);
       socialAuthLogin(
-        userInfo.user.name,
+        userInfo.user.givenName,
         userInfo.user.familyName,
         userInfo.user.email,
         "G"
       );
       setUserInfo(userInfo.user);
+      debugger;
       // navigation.navigate("Navigation");
     } catch (error) {
       console.log("Message", JSON.stringify(error));

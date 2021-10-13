@@ -760,6 +760,12 @@ const FriendFollowersList = ({ route, navigation }) => {
                           ? imgPlaceHolder
                           : { uri: getImageNew }
                       }
+                      // ImageUrl={{
+                      //   uri:
+                      //     ImageUrl.Categories +
+                      //     getTitleName +
+                      //     ImageUrl.Png,
+                      // }}
                       style={CommonStyle.popupImage}
                     />
                   ) : null}

@@ -231,7 +231,7 @@ const SettingScreen = ({ navigation }) => {
       <SafeAreaView
         style={[
           CommonStyle.BgColorWhite,
-          { width: "100%", backgroundColor: COLORS.Secondary },
+          { height: "100%", backgroundColor: COLORS.Secondary },
         ]}
       >
         <BackToolbar

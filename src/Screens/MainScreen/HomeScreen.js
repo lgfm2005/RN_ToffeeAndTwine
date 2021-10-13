@@ -127,6 +127,7 @@ const HomeScreen = ({ navigation }) => {
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(30);
     if (GetCategoryListresponse.data.StatusCode == "1") {
+      debugger;
       // console.log("Category List Response Done");
     } else {
       setLoader(false);
@@ -135,6 +136,7 @@ const HomeScreen = ({ navigation }) => {
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
     if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+      debugger;
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
 
       // console.log(
@@ -152,10 +154,11 @@ const HomeScreen = ({ navigation }) => {
     const { specialMomentResponse, specialMomentError } =
       await GetSpecialMoment();
     if (specialMomentResponse.data.StatusCode == "1") {
+      debugger;
       console.log("special MomentResponse Done");
     } else {
       setLoader(false);
-      console.log(" special Moment Error");
+      console.log(" special Moment Error", specialMomentError);
     }
     const {
       getUserCategorySpecialMomentResponse,
@@ -165,6 +168,7 @@ const HomeScreen = ({ navigation }) => {
       setLoader(false);
     } else {
       if (getUserCategorySpecialMomentResponse.data.StatusCode == "1") {
+        debugger;
         console.log("special User Moment Response Done ");
         setLoader(false);
       } else {

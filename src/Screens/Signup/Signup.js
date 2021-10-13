@@ -148,6 +148,8 @@ const Signup = ({ navigation }) => {
             navigation.navigate("TutorialFirst", {
               listGetSpecialDay: specialMomentResponse.data.Result,
               token: tokens,
+              FirstName: firstName,
+              LastName: lastName,
             });
           }
         }

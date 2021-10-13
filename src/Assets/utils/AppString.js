@@ -146,6 +146,11 @@ export const AppString = {
   txtUpgrademoments: " per month to add more than 2 moments.",
   Giftit: "Gift it",
   NoThanks: "No, Thanks",
+  PhotoPermissionTitle: "Allow access to your photos",
+  PhotoPermissionContent:
+    "This lets you share from the camera roll and enable other features for photo. Go to your settings and tap photos.",
+  NotNow: "Not Now",
+  OpenSettings: "Open Settings",
   Select: "Select",
   ConfirmText: " Are you sure you want to delete your account ?",
   confirm: "Confirm",

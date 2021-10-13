@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Linking,
 } from "react-native";
 
 // Lib
@@ -36,7 +37,11 @@ import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusb
 import { FormInput, FullFormInput } from "../../../Components/FormInput";
 import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
 import { FriendScreenStyle } from "../FriendScreen/FriendScreenStyle";
-import { FilledButton } from "../../../Components/Button/Button";
+import {
+  FilledButton,
+  POPLinkButton,
+  POPOutLinkButton,
+} from "../../../Components/Button/Button";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { ProfileScreenStyle } from "./ProfileScreenStyle";
 import { FONT } from "../../../Assets/utils/FONT";
@@ -53,6 +58,7 @@ const EditProfile = ({ navigation }) => {
 
   const keyboardVerticalOffset = Platform.OS === "ios" ? 0 : 0;
 
+  const [getPhotoPermissionModel, setPhotoPermissionModel] = useState(false);
   const [getHighlightMomentModel, setHighlightMomentModel] = useState(false);
   const [getHighlightMoment, setHighlightMoment] = useState("");
   const [getHighlightMomentId, setHighlightMomentId] = useState("");
@@ -89,17 +95,25 @@ const EditProfile = ({ navigation }) => {
       }
     } else {
       const DefultUserSpecialMoment = UserSpecialMoment.filter(
-        (item) => item.default_moment == "0"
+        // (item) => item.default_moment == "1"
+        (item) => {
+          console.log(
+            "item.default_moment ==================1111111111111111",
+            item.default_moment
+          );
+          return item.default_moment == "1";
+        }
       );
-      console.log(
-        "DefultUserSpecialMoment==================1111111111111111",
-        DefultUserSpecialMoment
-      );
+      // console.log(
+      //   "DefultUserSpecialMoment==================1111111111111111",
+      //   DefultUserSpecialMoment
+      // );
+
       if (DefultUserSpecialMoment.length > 0) {
         UpdateDefaultSpecialMoment =
           DefultUserSpecialMoment[0]["special_moment_name"];
       } else {
-        UpdateDefaultSpecialMoment = "";
+        UpdateDefaultSpecialMoment = "Select Favorite moment";
       }
     }
     setHighlightMoment(UpdateDefaultSpecialMoment);
@@ -107,6 +121,7 @@ const EditProfile = ({ navigation }) => {
 
   const CloseItem = () => {
     setHighlightMomentModel(false);
+    setPhotoPermissionModel(false);
   };
   const HighlightMomentModel = () => {
     if (UpdateDefaultSpecialMoment == "") {
@@ -128,15 +143,25 @@ const EditProfile = ({ navigation }) => {
       // compressImageQuality: 0.8,
       cropping: true,
       includeBase64: true,
-    }).then((image) => {
-      setImageShow(JSON.stringify(image));
-      setImage(image.path);
-      setImageNew(image.path);
-      setImageAPI(JSON.stringify(image));
-      // console.log("image===>", image);
-    });
+    })
+      .then((image) => {
+        setImageShow(JSON.stringify(image));
+        setImage(image.path);
+        setImageNew(image.path);
+        setImageAPI(JSON.stringify(image));
+        // console.log("image===>", image);
+      })
+      .catch((e) => {
+        if (e.message == "User did not grant library permission.") {
+          setPhotoPermissionModel(true);
+        }
+        // alert(e);
+      });
   };
 
+  const GivePermission = () => {
+    Linking.openURL("app-settings:");
+  };
   const APIUpdateProfile = async () => {
     if (getFirstName == "") {
       UpdateFirstName = user.userFname;
@@ -342,21 +367,43 @@ const EditProfile = ({ navigation }) => {
                   {AppString.FavoriteMoment}
                 </Text>
 
-                <TouchableOpacity onPress={() => HighlightMomentModel()}>
+                {UserSpecialMoment.length ? (
+                  <TouchableOpacity onPress={() => HighlightMomentModel()}>
+                    <View
+                      style={[
+                        CommonStyle.formControl,
+                        CommonStyle.RowSpace,
+                        CommonStyle.Row,
+                      ]}
+                    >
+                      <Text>{getHighlightMoment}</Text>
+                      <Image
+                        source={imgDownArrow}
+                        style={CommonStyle.imgIconSize}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                ) : (
                   <View
                     style={[
                       CommonStyle.formControl,
                       CommonStyle.RowSpace,
                       CommonStyle.Row,
+                      {
+                        borderColor: COLORS.SecondaryLight,
+                        // borderWidth: 0,
+                      },
                     ]}
                   >
-                    <Text>{getHighlightMoment}</Text>
-                    <Image
-                      source={imgDownArrow}
-                      style={CommonStyle.imgIconSize}
-                    />
+                    <Text
+                      style={{
+                        color: COLORS.gray,
+                      }}
+                    >
+                      Please add moment first
+                    </Text>
                   </View>
-                </TouchableOpacity>
+                )}
               </View>
 
               <View>
@@ -388,6 +435,38 @@ const EditProfile = ({ navigation }) => {
                   UserSpecialMoment.special_moment_id
                 }
               />
+            </View>
+          </Modal>
+        ) : null}
+
+        {/* Permission photo */}
+        {getPhotoPermissionModel == true ? (
+          <Modal
+            testID={"modal"}
+            isVisible={getPhotoPermissionModel}
+            onBackdropPress={() => CloseItem()}
+          >
+            <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+              <View style={[CommonStyle.p8, CommonStyle.center]}>
+                <Text style={[CommonStyle.txtTitle, CommonStyle.mb16]}>
+                  {AppString.PhotoPermissionTitle}
+                </Text>
+
+                <Text style={[CommonStyle.txtContent, CommonStyle.mb16]}>
+                  {AppString.PhotoPermissionContent}
+                </Text>
+              </View>
+              <View style={CommonStyle.centerRow}>
+                <POPOutLinkButton
+                  buttonName={AppString.NotNow}
+                  onPress={() => CloseItem()}
+                />
+
+                <POPLinkButton
+                  buttonName={AppString.OpenSettings}
+                  onPress={() => GivePermission()}
+                />
+              </View>
             </View>
           </Modal>
         ) : null}

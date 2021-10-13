@@ -523,16 +523,19 @@ export const useActions = () => {
         response = await API.SocialAuth.get(sessions, data);
         if (response.data.StatusCode == "1") {
           var token = response.data.Result.Token;
+          var user_fname = response.data.Result.user_fname;
+          var user_lname = response.data.Result.user_lname;
+          var user_profile_image = response.data.Result.user_profile_image;
           dispatch(
             loginAction({
               token: token,
               userId: "1",
               userIsActive: "",
-              userFname: userFname,
-              userLname: userLname,
+              userFname: user_fname,
+              userLname: user_lname,
+              userProfileImage: user_profile_image,
               userOtp: "43223423",
               defaultSpecialMoment: "",
-              userProfileImage: "",
               isAutoLogin:
                 response.data.Result.IsRegistered == "1" ? true : false,
             })

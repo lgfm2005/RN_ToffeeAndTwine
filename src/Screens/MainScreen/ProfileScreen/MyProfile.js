@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StatusBar,
+  RefreshControl,
 } from "react-native";
 
 // Lib
@@ -172,15 +173,61 @@ const MyProfile = ({ navigation }) => {
   const [getcheck, setCheck] = useState("");
 
   const [getupgradeMomentsModal, setupgradeMomentsModal] = useState("");
-  // set Image Sep
-  // const [getImageSepOld, setImageSepOld] = useState("");
-  // const [getImageSepNew, setImageSepNew] = useState("");
-  // const [getImageSepAPI, setImageSepAPI] = useState("");
-  // const [getImageSepStatus, setImageSepStatus] = useState(0);
 
   const [getMomentsCount, setMomentsCount] = useState(0);
   const [getFollowerCount, setFollowerCount] = useState("0");
   const [getFollowingCount, setFollowingCount] = useState("0");
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  //onRefresh
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode == "1") {
+      console.log("My Profile Get Profile Response");
+
+      setFollowerCount(profileResponse.data.Result[0].follower_count);
+      setFollowingCount(profileResponse.data.Result[0].following_count);
+      setCategoryQuestionLimit(
+        profileResponse.data.Result[0].user_details[0].category_question_limit
+      );
+      setUserSubscriptionStatus(
+        profileResponse.data.Result[0].user_details[0].user_subscription_status
+      );
+      setSpecialDayLimit(
+        profileResponse.data.Result[0].user_details[0].special_day_limit
+      );
+      // const defaultSpecialMometData = userSpecialMoment.filter((item) => {
+      //   return (
+      //     item.special_moment_id ==
+      //     profileResponse.data.Result[0].user_details[0].default_special_moment
+      //   );
+      // });
+      // if (defaultSpecialMometData.length > 0) {
+      //   setDefaultSpecialMometData(defaultSpecialMometData);
+      // }
+    } else {
+      console.log("My Profile Get Profile Error");
+    }
+    const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+      await getUserCategoryQuestion();
+    if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+      console.log("My Profile User Category Question Response");
+    } else {
+      console.log("MyProfile User Category Question Response Error");
+    }
+
+    const { specialMomentResponse, specialMomentError } =
+      await GetSpecialMoment();
+    if (specialMomentResponse.data.StatusCode == "1") {
+      console.log("My Profile special MomentResponse Done");
+    } else {
+      setLoader(false);
+      console.log(" My Profile special Moment Error");
+    }
+
+    setRefreshing(false);
+  }, []);
 
   const updateSpecialMoment = () => {
     debugger;
@@ -1051,7 +1098,10 @@ const MyProfile = ({ navigation }) => {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        bounces={false}
+        // bounces={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         style={{ marginBottom: 10 }}
       >
         <View style={CommonStyle.authPage}>
@@ -1536,6 +1586,11 @@ const MyProfile = ({ navigation }) => {
                           TitleName={item.category_question}
                           buttonName={item.category_placeholder}
                           value={item.question_value}
+                          // Link={
+                          //   item.category_question === "Link" ? true : false
+                          // }
+                          Link={false}
+                          multiline={true}
                         />
                       );
                     })}

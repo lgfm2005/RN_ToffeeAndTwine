@@ -722,7 +722,9 @@ const UserProfile = ({ route, navigation }) => {
                         {getImageNew == "" ? (
                           <Image
                             source={
-                              getImageNew == "" || getImageNew == null
+                              getImageNew == "" ||
+                              getImageNew == null ||
+                              getImageNew == undefined
                                 ? imgPlaceHolder
                                 : { uri: getImageNew }
                             }
