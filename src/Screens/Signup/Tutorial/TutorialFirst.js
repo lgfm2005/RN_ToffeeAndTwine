@@ -50,9 +50,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
   const [getFirstName, setFirstName] = useState(
     FirstName == "" ? "" : FirstName
   );
-  debugger;
   const [getLastName, setLastName] = useState(LastName == "" ? "" : LastName);
-  debugger;
   const [getRadioId, setRadioId] = useState("");
   const [getLoader, setLoader] = useState(false);
 
@@ -104,7 +102,6 @@ const TutorialFirst = ({ navigation, props, route }) => {
     setFinalDate(DateSubstring);
     Keyboard.dismiss();
     if (getFirstNameRef.current) {
-      debugger;
       getFirstNameRef.current.blur();
 
       getFirstNameRef.current.blur();
@@ -166,7 +163,6 @@ const TutorialFirst = ({ navigation, props, route }) => {
       "",
       tokens
     );
-    debugger;
     const { addCategoryspecialDayerror, addCategoryspecialDayResponse } =
       await addCategoryspecialDay(
         getRadioId,
@@ -189,10 +185,8 @@ const TutorialFirst = ({ navigation, props, route }) => {
     //     "1",
     //     tokens
     //   );
-    debugger;
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(10, tokens);
-    debugger;
     var listOfCategory = [];
     if (
       GetCategoryListresponse.data.StatusCode == "1" &&

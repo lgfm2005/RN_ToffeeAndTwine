@@ -16,62 +16,46 @@ import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
 
 // Asset
-import { imgbirthdayCakeGary } from "../../../Assets/utils/Image";
 import CommonStyle from "../../../Assets/Style/CommonStyle";
-import { ToolbarMain } from "../../../Components/ToolbarMain/ToolbarMain";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import {
-  FilledButton,
   ImagePOPLinkButton,
   POPLinkButton,
   POPOutLinkButton,
 } from "../../../Components/Button/Button";
 import {
   Mediumbtn,
-  Smallbtn,
   UnFollowMediumbtn,
 } from "../../../Components/Button/ButtonStyle";
 import { AppString } from "../../../Assets/utils/AppString";
 import {
-  imgWhitegift,
   imgUserBlock,
-  iimgprofiledemo3,
-  imgImport,
   imgCheckCircle,
-  profileimgdemo,
   imgProfileBackground,
   imgNavNotification,
   imgWhiteDot,
-  imgBook,
-  demofaceman,
   imgPlaceHolder,
   imgBackleftWhite,
   imgGiftNotification,
 } from "../../../Assets/utils/Image";
 import { MainScreenStyle } from "../MainScreenStyle";
-import {
-  CalendarList,
-  Column3CalendarList,
-} from "../../../Components/AllListVIew/CalendarList";
-import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
-import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
-import { ProfileToolBar } from "../../../Components/ProfileToolBar/ProfileToolBar";
+import { Column3CalendarList } from "../../../Components/AllListVIew/CalendarList";
 import TutorialStyle from "../../Signup/Tutorial/TutorialStyle";
 import { EditShowSimpleView } from "../../../Components/FormInput";
-import { FriendScreenStyle } from "./FriendScreenStyle";
+import { FriendScreenStyle } from "../FriendScreen/FriendScreenStyle";
 import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 
-var temp,
-  temp2 = [];
-const FriendFollowersList = ({ route, navigation }) => {
+const UserFriendProfile = ({ route, navigation }) => {
   const { userID } = route.params;
-  debugger;
+  console.log("UserFriendProfile check ", userID);
   useEffect(() => {
+    setUserFriendId(userID);
     getProfiles();
   }, []);
+
   const {
     getProfile,
     followUser,
@@ -116,6 +100,8 @@ const FriendFollowersList = ({ route, navigation }) => {
     useState("");
 
   const [getFriendStatus, setFriendStatus] = useState("");
+
+  const [getUserFriendId, setUserFriendId] = useState("");
 
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
   const [getNotificationSendModal, setNotificationSendModal] = useState(false);
@@ -388,11 +374,9 @@ const FriendFollowersList = ({ route, navigation }) => {
                 style={CommonStyle.imgIconSize}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => UserBlock()}>
-              <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
-                {getUserName}
-              </Text>
-            </TouchableOpacity>
+            <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
+              {getUserName}
+            </Text>
             <TouchableOpacity onPress={() => UserBlock()}>
               <Image source={imgWhiteDot} style={CommonStyle.imgIconSize} />
             </TouchableOpacity>
@@ -495,36 +479,66 @@ const FriendFollowersList = ({ route, navigation }) => {
                   Moments
                 </Text>
               </View>
-              <View>
-                <Text
-                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
-                >
-                  {getFollowerCount == "0" ? "--" : getFollowerCount}
-                </Text>
-                <Text
-                  style={[
-                    CommonStyle.txtContent,
-                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
-                  ]}
-                >
-                  Followers
-                </Text>
-              </View>
-              <View>
-                <Text
-                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
-                >
-                  {getFollowingCount == "0" ? "--" : getFollowingCount}
-                </Text>
-                <Text
-                  style={[
-                    CommonStyle.txtContent,
-                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
-                  ]}
-                >
-                  Following
-                </Text>
-              </View>
+
+              <TouchableOpacity
+                disabled={getFollowerCount == "0" ? true : false}
+                onPress={() =>
+                  navigation.navigate("NavUserFriendScreen", {
+                    isFollowing: false,
+                    isUserFollowerFriendId: userID,
+                    isUserFollowingFriendId: userID,
+                  })
+                }
+              >
+                <View>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      { fontFamily: FONT.NotoSans },
+                    ]}
+                  >
+                    {getFollowerCount == "0" ? "--" : getFollowerCount}
+                  </Text>
+                  <Text
+                    style={[
+                      CommonStyle.txtContent,
+                      { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                    ]}
+                  >
+                    Followers
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                disabled={getFollowerCount == "0" ? true : false}
+                onPress={() =>
+                  navigation.navigate("NavUserFriendScreen", {
+                    isFollowing: false,
+                    isUserFollowerFriendId: userID,
+                    isUserFollowingFriendId: userID,
+                  })
+                }
+              >
+                <View>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      { fontFamily: FONT.NotoSans },
+                    ]}
+                  >
+                    {getFollowingCount == "0" ? "--" : getFollowingCount}
+                  </Text>
+                  <Text
+                    style={[
+                      CommonStyle.txtContent,
+                      { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight },
+                    ]}
+                  >
+                    Following
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
 
             <View>
@@ -905,4 +919,4 @@ const FriendFollowersList = ({ route, navigation }) => {
   );
 };
 
-export default FriendFollowersList;
+export default UserFriendProfile;

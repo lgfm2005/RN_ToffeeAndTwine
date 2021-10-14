@@ -582,6 +582,23 @@ export const useActions = () => {
       return { userProfileResponse, userProfileError };
     },
 
+    getUserFollowingFriendList: async (userFriendListID) => {
+      let userFriendListResponse, userFriendListError;
+      try {
+        var data = new FormData();
+        data.append("UserID", userFriendListID);
+        userFriendListResponse = await API.getUserFriendFollowingList.get(
+          sessions,
+          data
+        );
+        if (userFriendListResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        userFriendListError = e;
+      }
+      return { userFriendListResponse, userFriendListError };
+    },
+
     getUserFollowerList: async () => {
       let userFollowerListResponse, userFollowerListError;
       try {

@@ -51,8 +51,12 @@ const Followers = ({ navigation }) => {
     setLoader(true);
     const { userFollowerListResponse, userFollowerListError } =
       await getUserFollowerList();
-    debugger;
+
     if (userFollowerListResponse.data.StatusCode == "1") {
+      console.log(
+        "user Follower List Error ===>",
+        userFollowerListResponse.data.Result
+      );
       setUserFollower(userFollowerListResponse.data.Result);
       setLoader(false);
     } else {
@@ -92,10 +96,11 @@ const Followers = ({ navigation }) => {
     }
   };
   const selectFriend = (item) => {
-    console.log("selectFriend", item);
+    // console.log("selectFriend", item);
     navigation.navigate("FriendFollowersList", {
       userID: item.follower_user_id,
     });
+    debugger;
   };
 
   const RenderItem = (Data, index) => {

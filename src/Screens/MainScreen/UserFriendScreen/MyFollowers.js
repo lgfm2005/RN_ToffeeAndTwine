@@ -24,8 +24,13 @@ import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusb
 import { useActions } from "../../../redux/actions";
 import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 
-const MyFollowers = ({ navigation }) => {
-  const { getUserFollowerList, RemoveFollowerFriend } = useActions();
+const MyFollowers = ({ route, navigation }) => {
+  const { UserFollowerFriendId } = route.params;
+  console.log("=========== UserFollowerFriendId ===============");
+  console.log("MyFollowers  ====>", UserFollowerFriendId);
+  // API get User Following Friend List
+  debugger;
+  const { getUserFollowingFriendList, RemoveFollowerFriend } = useActions();
 
   const [getLoader, setLoader] = useState(false);
   const [getUserFollower, setUserFollower] = useState("");
@@ -34,30 +39,31 @@ const MyFollowers = ({ navigation }) => {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     // setLoader(true);
-    const { userFollowerListResponse, userFollowerListError } =
-      await getUserFollowerList();
-    if (userFollowerListResponse.data.StatusCode == "1") {
-      setUserFollower(userFollowerListResponse.data.Result);
+    const { userFriendListResponse, userFriendListError } =
+      await getUserFollowingFriendList(UserFollowerFriendId);
+    if (userFriendListResponse.data.StatusCode == "1") {
+      console.log("user Follower Response  ===>", userFriendListResponse);
+      setUserFollower(userFriendListResponse.data.Result);
       // setLoader(false);
       setRefreshing(false);
     } else {
       setRefreshing(false);
       // setLoader(false);
-      console.log("user Follower List Error ===>", userFollowerListError);
+      console.log("user Follower List Error ===>", userFriendListError);
     }
   }, [refreshing]);
 
   const getUserFollowers = async () => {
     setLoader(true);
-    const { userFollowerListResponse, userFollowerListError } =
-      await getUserFollowerList();
-    debugger;
-    if (userFollowerListResponse.data.StatusCode == "1") {
-      setUserFollower(userFollowerListResponse.data.Result);
+    const { userFriendListResponse, userFriendListError } =
+      await getUserFollowingFriendList(UserFollowerFriendId);
+    if (userFriendListResponse.data.StatusCode == "1") {
+      console.log("user Follower Response  ===>", userFriendListResponse);
+      setUserFollower(userFriendListResponse.data.Result);
       setLoader(false);
     } else {
       setLoader(false);
-      console.log("user Follower List Error ===>", userFollowerListError);
+      console.log("user Follower List Error ===>", userFriendListError);
     }
   };
 
@@ -92,8 +98,9 @@ const MyFollowers = ({ navigation }) => {
     }
   };
   const selectFriend = (item) => {
-    console.log("selectFriend", item);
-    navigation.navigate("FriendFollowersList", {
+    // console.log("selectFriend", item);
+    debugger;
+    navigation.navigate("UserFriendProfile", {
       userID: item.follower_user_id,
     });
   };

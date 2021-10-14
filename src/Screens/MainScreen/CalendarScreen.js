@@ -1178,67 +1178,64 @@ const CalendarScreen = ({ navigation }) => {
               <Modal
                 testID={"modal"}
                 isVisible={getAddItemShowSepModal}
-                // style={CommonStyle.MainPopStyle}
+                style={[
+                  CommonStyle.MainPopStyle,
+                  TutorialStyle.popbg,
+                  CommonStyle.HiddenPopStyle,
+                  {
+                    paddingHorizontal: 4,
+                  },
+                ]}
                 onBackdropPress={() => CloseSepItem()}
               >
-                <KeyboardAvoidingView
-                  behavior="position"
-                  keyboardVerticalOffset={keyboardVerticalOffset}
-                >
-                  <View
+                <View style={{ overflow: "hidden" }}>
+                  <Text
                     style={[
-                      CommonStyle.p24,
-                      TutorialStyle.popbg,
-                      CommonStyle.HiddenPopStyle,
+                      CommonStyle.txtTitle,
+                      CommonStyle.pb16,
+                      CommonStyle.textUpperCase,
+                      { textAlign: "center" },
                     ]}
                   >
-                    <Text
-                      style={[
-                        CommonStyle.txtTitle,
-                        CommonStyle.pb16,
-                        CommonStyle.textUpperCase,
-                        { textAlign: "center" },
+                    {AppString.SelectMoment}
+                  </Text>
+                  <View>
+                    <ScrollView
+                      keyboardShouldPersistTaps={"always"}
+                      bounces={false}
+                      showsHorizontalScrollIndicator={false}
+                      showsVerticalScrollIndicator={false}
+                      contentContainerStyle={[
+                        MainScreenStyle.scrollItemStyle,
+                        { paddingBottom: 50 },
                       ]}
                     >
-                      {AppString.SelectMoment}
-                    </Text>
-                    <View>
-                      <ScrollView
-                        keyboardShouldPersistTaps={"always"}
-                        bounces={false}
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={[
-                          MainScreenStyle.scrollItemStyle,
-                        ]}
-                      >
-                        {getFilterSepCat.length > 0 &&
-                          getFilterSepCat.map((item, index) => (
-                            <PopUpSelectCategoriesList
-                              ImageUrl={{
-                                uri:
-                                  ImageUrl.MomentsWhite +
-                                  item.special_moment_name.trim() +
-                                  ImageUrl.Png,
-                              }}
-                              ExploreName={item.special_moment_name}
-                              Id={item.special_moment_id}
-                              index={index}
-                              key={index}
-                              DataLength={specialMoment.length}
-                              style={{ width: "23%" }}
-                              onPress={() => {
-                                SelectMoment(
-                                  item.special_moment_name,
-                                  item.special_moment_id
-                                );
-                              }}
-                            />
-                          ))}
-                      </ScrollView>
-                    </View>
+                      {getFilterSepCat.length > 0 &&
+                        getFilterSepCat.map((item, index) => (
+                          <PopUpSelectCategoriesList
+                            ImageUrl={{
+                              uri:
+                                ImageUrl.MomentsWhite +
+                                item.special_moment_name.trim() +
+                                ImageUrl.Png,
+                            }}
+                            ExploreName={item.special_moment_name}
+                            Id={item.special_moment_id}
+                            index={index}
+                            key={index}
+                            DataLength={specialMoment.length}
+                            style={{ width: "23%" }}
+                            onPress={() => {
+                              SelectMoment(
+                                item.special_moment_name,
+                                item.special_moment_id
+                              );
+                            }}
+                          />
+                        ))}
+                    </ScrollView>
                   </View>
-                </KeyboardAvoidingView>
+                </View>
               </Modal>
             ) : null}
 

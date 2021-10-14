@@ -100,7 +100,7 @@ const SetPassword = ({ navigation, route }) => {
         getCreatePassword,
         getConfirmPassword
       );
-      debugger;
+
       setLoader(false);
 
       if (response.data.StatusCode == "1") {

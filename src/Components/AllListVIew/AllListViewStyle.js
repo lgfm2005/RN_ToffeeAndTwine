@@ -26,7 +26,7 @@ export const AllListViewStyle = StyleSheet.create({
     minWidth: "33.33%",
     // marginLeft: "0.5%",
     // marginRight: "0.5%",
-    // backgroundColor: "green",
+    // backgroundColor: "red",
   },
   addItem: {
     borderWidth: 1,

@@ -76,6 +76,7 @@ const SignIn = ({ navigation }) => {
 
   const getToken = async () => {
     const deviceState = await (await OneSignal.getDeviceState()).userId;
+    debugger;
     return deviceState;
   };
 
@@ -214,6 +215,7 @@ const SignIn = ({ navigation }) => {
       const tokens = response.data.Result[0].Token;
       const token = { token: tokens };
       var deviceToken = await getToken();
+      debugger;
       await updateNotification(token, deviceToken);
       const { GetCategoryListerror, GetCategoryListresponse } =
         await CategoryList(30, token);
@@ -380,9 +382,9 @@ const SignIn = ({ navigation }) => {
             <View>
               <FilledButton
                 buttonName={AppString.Signin}
-                onPress={() => handleSignIn(getEmail, getCreatePassword)}
-                btncheck={isvalidForm()}
-                btnabled={isvalidForm()}
+                // onPress={() => handleSignIn(getEmail, getCreatePassword)}
+                // btncheck={isvalidForm()}
+                // btnabled={isvalidForm()}
                 // onPress={() =>
                 //   handleSignIn("kachhadiya101@gmail.com", "123456")
                 // }
@@ -394,9 +396,9 @@ const SignIn = ({ navigation }) => {
                 // onPress={() => handleSignIn("uss.jignesh@gmail.com", "123456")}
                 // onPress={() => handleSignIn("1uss.jignesh@gmail.com", "123456")}
                 // onPress={() => handleSignIn("jignesh@noemail.com", "123456")}
-                // onPress={() =>
-                //   handleSignIn("amansuri@universalstreamsolution.com", "123456")
-                // }
+                onPress={() =>
+                  handleSignIn("amansuri@universalstreamsolution.com", "123456")
+                }
               />
             </View>
           </KeyboardAvoidingView>

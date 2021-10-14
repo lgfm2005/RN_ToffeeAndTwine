@@ -88,7 +88,7 @@ const Following = ({ navigation }) => {
   };
 
   const selectFriend = (item) => {
-    console.log("selectFriend", item);
+    // console.log("selectFriend", item);
     navigation.navigate("FriendFollowersList", {
       userID: item.following_user_id,
     });

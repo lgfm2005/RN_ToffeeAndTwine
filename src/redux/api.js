@@ -244,6 +244,17 @@ export const getFollowingList = {
       "get"
     ),
 };
+
+export const getUserFriendFollowingList = {
+  get: async (session, data) =>
+    await api(
+      session,
+      `/rest_api/controller_friend/get_friend_user_following_list`,
+      "post",
+      data
+    ),
+};
+
 export const getunfollowFriend = {
   get: async (session, data) =>
     await api(

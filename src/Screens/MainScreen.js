@@ -104,7 +104,7 @@ const MainScreen = ({ navigation }) => {
     //     String(session.userId);
     //   OneSignal.setExternalUserId("raj12345");
     // }
-    // OneSignal.setExternalUserId("raj12345");
+    OneSignal.setExternalUserId("raj12345");
     OneSignal.setNotificationOpenedHandler((handler) => onOpened(handler));
   }, []);
 
@@ -145,7 +145,6 @@ const MainScreen = ({ navigation }) => {
         const { GetCategoryListerror, GetCategoryListresponse } =
           await CategoryList(30, token);
         if (GetCategoryListresponse.data.StatusCode == "1") {
-          debugger;
           console.log("Category Question Response Done");
         } else {
           console.log(
@@ -157,7 +156,6 @@ const MainScreen = ({ navigation }) => {
         const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
           await getUserCategoryQuestion(token);
         if (UserCategoryQuestionResponse.data.StatusCode == "1") {
-          debugger;
           console.log("User Category Question Response Done");
         } else {
           console.log(
@@ -167,7 +165,6 @@ const MainScreen = ({ navigation }) => {
         }
         if (response.data.StatusCode == "1") {
           setLoader(false);
-          debugger;
           setTimeout(() => {
             setLoader(false);
             navigation.navigate("Navigation");
@@ -182,7 +179,6 @@ const MainScreen = ({ navigation }) => {
           await GetSpecialMoment(token);
         if (response.data.StatusCode == "1") {
           if (specialMomentResponse.data.StatusCode == "1") {
-            debugger;
             navigation.navigate("TutorialFirst", {
               listGetSpecialDay: specialMomentResponse.data.Result,
               token: tokens,
@@ -228,10 +224,8 @@ const MainScreen = ({ navigation }) => {
                       result.email == null ||
                       result.email == undefined
                     ) {
-                      debugger;
                       navigation.navigate("Signup");
                     } else {
-                      debugger;
                       socialAuthLogin(
                         result.first_name,
                         result.last_name,
@@ -292,7 +286,6 @@ const MainScreen = ({ navigation }) => {
         "G"
       );
       setUserInfo(userInfo.user);
-      debugger;
       // navigation.navigate("Navigation");
     } catch (error) {
       console.log("Message", JSON.stringify(error));

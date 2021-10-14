@@ -230,21 +230,10 @@ const MyProfile = ({ navigation }) => {
   }, []);
 
   const updateSpecialMoment = () => {
-    debugger;
     if (userSpecialMoment) {
-      console.log(
-        "========== userSpecialMoment ==========>",
-        userSpecialMoment
-      );
-      debugger;
       const defaultSpecialMometData = userSpecialMoment.filter((item) => {
         return item.default_moment == "1";
       });
-      console.log(
-        "=========== defaultSpecialMometData =========>",
-        defaultSpecialMometData
-      );
-
       if (defaultSpecialMometData.length > 0) {
         setDefaultSpecialMometData(defaultSpecialMometData);
       } else {
@@ -323,7 +312,6 @@ const MyProfile = ({ navigation }) => {
 
   // All categories Select show  ---> Add Save item
   const SelectCategoriesItem = (Name, Image, id, questions, key) => {
-    console.log(" Select categories ===>>>", Name, Image, id, questions);
     setAddItemShowModal(false);
     // console.log("Key  ===>", key);
     // setAddNewFreshItemModal(true)
@@ -400,14 +388,6 @@ const MyProfile = ({ navigation }) => {
       setAddNewItemModal(false);
       setLoader(false);
       onClearSpecialMoment();
-      console.log(
-        "User Category Question Response Error  ===>>>",
-        UserCategoryQuestionResponse
-      );
-      console.log(
-        "Question Response ==>>>",
-        UserCategoryQuestionResponse.data.Result
-      );
     } else {
       onClearSpecialMoment();
       setAddItemShowModal(false);
@@ -528,7 +508,6 @@ const MyProfile = ({ navigation }) => {
     console.log("ShowOldItem Id", id);
     console.log("ShowOldItem key", key);
     var questionList = userCategoryQuestion[key];
-    console.log("SquestionList", questionList);
     setImageOld(Image);
     setShowOldQuestion([]);
     setTimeout(() => {
@@ -757,7 +736,6 @@ const MyProfile = ({ navigation }) => {
     specialMomentOtherInfo,
     Imageurl
   ) => {
-    debugger;
     // console.log("userSpecialMomentId", userSpecialMomentId);
     // console.log("specialMomentId", specialMomentId);
     // console.log("specialMomentName", specialMomentName);
@@ -776,7 +754,6 @@ const MyProfile = ({ navigation }) => {
     // setImage(Imageurl);
     setspecialMomentLink(specialMomentLink);
     setspecialMomentOtherInfo(specialMomentOtherInfo);
-    debugger;
   };
 
   const onClearSpecialMoment = () => {
@@ -795,7 +772,6 @@ const MyProfile = ({ navigation }) => {
     setImageStatus("");
     setuserSpecialMomentDate("");
     (temp = []), (temp2 = []);
-    debugger;
   };
   //  Show Moment (Select Only one) --- 3.Submit Data
   const addNewUserSpecialMoment = async () => {
@@ -810,25 +786,20 @@ const MyProfile = ({ navigation }) => {
     //      ;
     // }
 
-    // debugger;
     // if (
     //   getuserSpecialMomentTitle == null ||
     //   getuserSpecialMomentTitle == undefined
     // ) {
-    //   debugger;
     //   setuserSpecialMomentTitle("");
     //   console.log("getuserSpecialMomentTitle ==>", getuserSpecialMomentTitle);
-    //   debugger;
     // } else if (getspecialMomentLink == null) {
     //   setspecialMomentLink("");
     //   console.log("getspecialMomentLink ==>", getspecialMomentLink);
-    //   debugger;
     // } else if (getspecialMomentOtherInfo == null) {
     //   setspecialMomentOtherInfo("");
     //   console.log("getspecialMomentOtherInfo ==>", getspecialMomentOtherInfo);
-    //   debugger;
     // }
-    debugger;
+
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
@@ -839,17 +810,14 @@ const MyProfile = ({ navigation }) => {
         JSON.stringify(getImageurl),
         "0"
       );
-    debugger;
     const {
       getUserCategorySpecialMomentResponse,
       getUserCategorySpecialMomentError,
     } = await getUserCategorySpecialMoment();
-    debugger;
     if (
       addCategoryspecialDayResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
-      debugger;
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       onClearSpecialMoment();
       console.log("Add Category Special Moment Done");
@@ -922,7 +890,6 @@ const MyProfile = ({ navigation }) => {
     setAddItemShowSepModal(true);
     setFinalSepDate("");
     onClearSpecialMoment();
-    debugger;
   };
   //  --------------------- Special Moment Completed -----------------
 
@@ -1200,7 +1167,11 @@ const MyProfile = ({ navigation }) => {
               <TouchableOpacity
                 disabled={getFollowerCount == "0" ? true : false}
                 onPress={() =>
-                  navigation.navigate("NavFriendScreen", { isFollowing: false })
+                  navigation.navigate("NavUserFriendScreen", {
+                    isFollowing: false,
+                    isUserFollowerFriendId: userData.userId,
+                    isUserFollowingFriendId: userData.userId,
+                  })
                 }
               >
                 <Text
@@ -1220,7 +1191,11 @@ const MyProfile = ({ navigation }) => {
               <TouchableOpacity
                 disabled={getFollowingCount == "0" ? true : false}
                 onPress={() =>
-                  navigation.navigate("NavFriendScreen", { isFollowing: true })
+                  navigation.navigate("NavUserFriendScreen", {
+                    isFollowing: true,
+                    isUserFollowerFriendId: userData.userId,
+                    isUserFollowingFriendId: userData.userId,
+                  })
                 }
               >
                 <Text
@@ -1386,7 +1361,7 @@ const MyProfile = ({ navigation }) => {
               TutorialStyle.popbg,
               CommonStyle.HiddenPopStyle,
               {
-                backgroundColor: "white",
+                paddingHorizontal: 4,
               },
             ]}
             onBackdropPress={() => CloseItem()}
@@ -1982,65 +1957,63 @@ const MyProfile = ({ navigation }) => {
           <Modal
             testID={"modal"}
             isVisible={getAddItemShowSepModal}
-            // style={CommonStyle.MainPopStyle}
+            style={[
+              CommonStyle.MainPopStyle,
+              TutorialStyle.popbg,
+              CommonStyle.HiddenPopStyle,
+              {
+                paddingHorizontal: 4,
+              },
+            ]}
             onBackdropPress={() => CloseSepItem()}
           >
-            <KeyboardAvoidingView
-              behavior="position"
-              keyboardVerticalOffset={keyboardVerticalOffset}
-            >
-              <View
+            <View style={{ overflow: "hidden" }}>
+              <Text
                 style={[
-                  CommonStyle.p24,
-                  TutorialStyle.popbg,
-                  CommonStyle.HiddenPopStyle,
+                  CommonStyle.txtTitle,
+                  CommonStyle.pb16,
+                  { textAlign: "center" },
                 ]}
               >
-                <Text
-                  style={[
-                    CommonStyle.txtTitle,
-                    CommonStyle.pb16,
-                    CommonStyle.textUpperCase,
-                    { textAlign: "center" },
+                {AppString.SelectMoment}
+              </Text>
+              <View>
+                <ScrollView
+                  keyboardShouldPersistTaps={"always"}
+                  bounces={false}
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={[
+                    MainScreenStyle.scrollItemStyle,
+                    { paddingBottom: 50 },
                   ]}
                 >
-                  {AppString.SelectMoment}
-                </Text>
-                <View>
-                  <ScrollView
-                    keyboardShouldPersistTaps={"always"}
-                    bounces={false}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={[MainScreenStyle.scrollItemStyle]}
-                  >
-                    {getFilterSepCat.length > 0 &&
-                      getFilterSepCat.map((item, index) => (
-                        <PopUpSelectCategoriesList
-                          ImageUrl={{
-                            uri:
-                              ImageUrl.MomentsWhite +
-                              item.special_moment_name.trim() +
-                              ImageUrl.Png,
-                          }}
-                          ExploreName={item.special_moment_name}
-                          Id={item.special_moment_id}
-                          index={index}
-                          key={index}
-                          DataLength={specialMoment.length}
-                          style={{ width: "23%" }}
-                          onPress={() => {
-                            SelectMoment(
-                              item.special_moment_name,
-                              item.special_moment_id
-                            );
-                          }}
-                        />
-                      ))}
-                  </ScrollView>
-                </View>
+                  {getFilterSepCat.length > 0 &&
+                    getFilterSepCat.map((item, index) => (
+                      <PopUpSelectCategoriesList
+                        ImageUrl={{
+                          uri:
+                            ImageUrl.MomentsWhite +
+                            item.special_moment_name.trim() +
+                            ImageUrl.Png,
+                        }}
+                        ExploreName={item.special_moment_name}
+                        Id={item.special_moment_id}
+                        index={index}
+                        key={index}
+                        DataLength={specialMoment.length}
+                        style={{ width: "23%" }}
+                        onPress={() => {
+                          SelectMoment(
+                            item.special_moment_name,
+                            item.special_moment_id
+                          );
+                        }}
+                      />
+                    ))}
+                </ScrollView>
               </View>
-            </KeyboardAvoidingView>
+            </View>
           </Modal>
         ) : null}
 

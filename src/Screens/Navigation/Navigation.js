@@ -36,6 +36,10 @@ import UserProfile from "../MainScreen/UserProfile/UserProfile";
 import NavNotificationScreen from "../MainScreen/NotificationScreen/NavNotificationScreen";
 import NavFriendScreen from "../MainScreen/FriendScreen/NavFriendScreen";
 
+// UserFriendScreen
+import NavUserFriendScreen from "../MainScreen/UserFriendScreen/NavUserFriendScreen";
+import UserFriendProfile from "../MainScreen/UserFriendScreen/UserFriendProfile";
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -132,6 +136,18 @@ function Profile() {
         }}
       />
       <Stack.Screen
+        name="NavUserFriendScreen"
+        component={NavUserFriendScreen}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="Search"
         component={Search}
         options={{
@@ -152,6 +168,15 @@ function Profile() {
       <Stack.Screen
         name="FriendFollowersList"
         component={FriendFollowersList}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="UserFriendProfile"
+        component={UserFriendProfile}
         options={{
           animationEnabled: false,
           header: false,

@@ -24,8 +24,16 @@ import { fontsize14 } from "../../../Assets/Style/CommonStyle";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
 
-const Following = ({ navigation }) => {
-  const { getUnfollowFriendList, getUserFollowingList } = useActions();
+const MyFollowing = ({ route, navigation }) => {
+  const { UserFollowingFriendId } = route.params;
+  console.log("=========== UserFollowingFriend Id ===============");
+  console.log("MyFollowing  ====>", UserFollowingFriendId);
+
+  const {
+    getUserFollowingFriendList,
+    getUnfollowFriendList,
+    getUserFollowingList,
+  } = useActions();
 
   const [getLoader, setLoader] = useState(false);
   const [getUserFollowing, setUserFollowing] = useState("");
@@ -33,10 +41,11 @@ const Following = ({ navigation }) => {
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    const { UserFollowingListResponse, UserFollowingListError } =
-      await getUserFollowingList();
-    if (UserFollowingListResponse.data.StatusCode == "1") {
-      setUserFollowing(UserFollowingListResponse.data.Result);
+    const { userFriendListResponse, userFriendListError } =
+      await getUserFollowingFriendList(UserFollowingFriendId);
+    if (userFriendListResponse.data.StatusCode == "1") {
+      console.log("user Follower List Response", userFriendListResponse);
+      setUserFollowing(userFriendListResponse.data.Result);
       setRefreshing(false);
     } else {
       setRefreshing(false);
@@ -46,14 +55,15 @@ const Following = ({ navigation }) => {
 
   const getUserFollowingLists = async (isLoader) => {
     setLoader(isLoader);
-    const { UserFollowingListResponse, UserFollowingListError } =
-      await getUserFollowingList();
-    if (UserFollowingListResponse.data.StatusCode == "1") {
-      setUserFollowing(UserFollowingListResponse.data.Result);
+    const { userFriendListResponse, userFriendListError } =
+      await getUserFollowingFriendList(UserFollowingFriendId);
+    if (userFriendListResponse.data.StatusCode == "1") {
+      console.log("user Follower List Response", userFriendListResponse);
+      setUserFollowing(userFriendListResponse.data.Result);
       setLoader(false);
     } else {
       setLoader(false);
-      console.log("user Follower List Error", UserFollowingListError);
+      console.log("user Follower List Error", userFriendListError);
     }
   };
   useEffect(async () => {
@@ -88,8 +98,9 @@ const Following = ({ navigation }) => {
   };
 
   const selectFriend = (item) => {
-    console.log("selectFriend", item);
-    navigation.navigate("FriendFollowersList", {
+    debugger;
+    // console.log("selectFriend", item);
+    navigation.navigate("UserFriendProfile", {
       userID: item.following_user_id,
     });
   };
@@ -199,4 +210,4 @@ const Following = ({ navigation }) => {
   );
 };
 
-export default Following;
+export default MyFollowing;

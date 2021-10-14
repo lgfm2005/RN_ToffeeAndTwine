@@ -7,9 +7,9 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { COLORS } from "../../../Assets/utils/COLORS";
 
 // Asset
-import Followers from "./Followers";
-import Following from "./Following";
-import { FriendsToolbar } from "../../../Components/FriendsToolbar/FriendsToolbar";
+import MyFollowers from "./MyFollowers";
+import MyFollowing from "./MyFollowing";
+import { UserFriendsToolbar } from "../../../Components/UserFriendsToolbar/UserFriendsToolbar";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -18,6 +18,9 @@ const NavUserFriendScreen = ({ navigation, route }) => {
   if (route.params) {
     const { isFollowing } = route.params;
     isFollowings = isFollowing;
+    // isUserFollowerFriendIds = isUserFollowerFriendId;
+    // isUserFollowingFriendIds = isUserFollowingFriendId;
+    // debugger;
   }
 
   return (
@@ -29,9 +32,12 @@ const NavUserFriendScreen = ({ navigation, route }) => {
         // backgroundColor: "red",
       }}
     >
-      <FriendsToolbar onPress={() => navigation.navigate("Search")} />
+      <UserFriendsToolbar
+        onPressBack={() => navigation.goBack()}
+        onPressSearch={() => navigation.navigate("Search")}
+      />
       <Tab.Navigator
-        initialRouteName={isFollowings == true ? "Following" : "Followers"}
+        initialRouteName={isFollowings == true ? "MyFollowing" : "MyFollowers"}
         screenOptions={{
           tabBarActiveTintColor: COLORS.Primary,
           tabBarInactiveTintColor: COLORS.PrimaryLight,
@@ -41,8 +47,21 @@ const NavUserFriendScreen = ({ navigation, route }) => {
           borderTopWidth: 0,
         }}
       >
-        <Tab.Screen name="Followers" component={Followers} />
-        <Tab.Screen name="Following" component={Following} />
+        <Tab.Screen
+          name="MyFollowers"
+          component={MyFollowers}
+          initialParams={{
+            UserFollowerFriendId: route.params.isUserFollowerFriendId,
+          }}
+        />
+
+        <Tab.Screen
+          name="MyFollowing"
+          component={MyFollowing}
+          initialParams={{
+            UserFollowingFriendId: route.params.isUserFollowingFriendId,
+          }}
+        />
       </Tab.Navigator>
     </View>
   );
