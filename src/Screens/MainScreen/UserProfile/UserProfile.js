@@ -552,8 +552,7 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {friendCategoryQuestions.length > 0 ? (
-                  friendCategoryQuestions.length > 0 &&
+                {
                   friendCategoryQuestions.map((item, index) => (
                     // <CalendarList
                     <Column3CalendarList
@@ -584,13 +583,12 @@ const UserProfile = ({ route, navigation }) => {
                       // }
                     />
                   ))
-                ) : (
-                  <View style={CommonStyle.centerRow}>
-                    <Text style={CommonStyle.txtContent}>
-                      {AppString.NoGifthintsAddedyet}
-                    </Text>
-                  </View>
-                )}
+                  // <View style={CommonStyle.centerRow}>
+                  //   <Text style={CommonStyle.txtContent}>
+                  //     {AppString.NoGifthintsAddedyet}
+                  //   </Text>
+                  // </View>
+                }
               </ScrollView>
             </View>
 

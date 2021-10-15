@@ -555,11 +555,8 @@ const FriendFollowersList = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {friendCategoryQuestions.length > 0 ? (
-                  friendCategoryQuestions.length > 0 &&
+                {friendCategoryQuestions.length > 0 &&
                   friendCategoryQuestions.map((item, index) => (
-                    // <CalendarList
-                    //   ImageUrl={imgBook}
                     <Column3CalendarList
                       ImageUrl={{
                         uri:
@@ -590,14 +587,13 @@ const FriendFollowersList = ({ route, navigation }) => {
                         // item.questions
                       }
                     />
-                  ))
-                ) : (
-                  <View style={CommonStyle.centerRow}>
+                  ))}
+
+                {/* <View style={CommonStyle.centerRow}>
                     <Text style={CommonStyle.txtContent}>
                       {AppString.NoGifthintsAddedyet}
                     </Text>
-                  </View>
-                )}
+                  </View> */}
               </ScrollView>
             </View>
 
