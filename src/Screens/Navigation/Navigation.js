@@ -39,6 +39,7 @@ import NavFriendScreen from "../MainScreen/FriendScreen/NavFriendScreen";
 // UserFriendScreen
 import NavUserFriendScreen from "../MainScreen/UserFriendScreen/NavUserFriendScreen";
 import UserFriendProfile from "../MainScreen/UserFriendScreen/UserFriendProfile";
+import OneSignal from "react-native-onesignal";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -316,6 +317,14 @@ function Notification() {
 }
 
 const Navigation = () => {
+  React.useEffect(() => {
+    OneSignal.setNotificationOpenedHandler((handler) => onOpened(handler));
+  }, []);
+
+  const onOpened = async (openResult) => {
+    var deviceId = openResult.notification.additionalData;
+    console.log("deviceId", deviceId);
+  };
   return (
     <Tab.Navigator
       screenOptions={{

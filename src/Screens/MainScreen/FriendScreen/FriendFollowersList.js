@@ -316,22 +316,22 @@ const FriendFollowersList = ({ route, navigation }) => {
       );
 
       //SetSpecialMomentNameProfile
-      if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
-        SetSpecialMomentNameProfile(
-          profileResponse.data.Result[0].friend_special_moments[0]
-            .special_moment_name
-        );
-      } else {
-        SetSpecialMomentNameProfile("");
-      }
-      //setFriendSpecialMoments
-      if (profileResponse.data.Result[0].friend_special_moments > 0) {
-        setFriendSpecialMoments(
-          profileResponse.data.Result[0].friend_special_moments
-        );
-      } else {
-        setFriendSpecialMoments("");
-      }
+      // if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
+      // SetSpecialMomentNameProfile(
+      //   profileResponse.data.Result[0].friend_special_moments[0]
+      //     .special_moment_name
+      // );
+      // } else {
+      //   SetSpecialMomentNameProfile("");
+      // }
+
+      SetSpecialMomentNameProfile(
+        profileResponse.data.Result[0].friend_special_moments[0]
+          .special_moment_name
+      );
+      setFriendSpecialMoments(
+        profileResponse.data.Result[0].friend_special_moments
+      );
 
       setFriendDefaultSpecialMomentText(
         profileResponse.data.Result[0].friend_default_special_moment_text
