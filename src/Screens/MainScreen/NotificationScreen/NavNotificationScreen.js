@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, StatusBar } from "react-native";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -18,6 +18,8 @@ import { NotificationToolbar } from "../../../Components/NotificationToolbar/Not
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
+import { useSelector } from "react-redux";
+import { useActions } from "../../../redux/actions";
 
 StatusBar.setBarStyle("dark-content", true);
 
@@ -37,7 +39,24 @@ function UpcomingMomentScreen() {
   );
 }
 
-const NavNotificationScreen = () => {
+const NavNotificationScreen = ({ navigation, route }) => {
+  const { notificationTabEvent } = useActions();
+
+  var notifactionTabEvent = useSelector((state) => state.notifactionTabEvent);
+  const [isGift, setisGiftTab] = useState(
+    notifactionTabEvent.isGiftTab == false ? false : true
+  );
+
+  useEffect(() => {
+    debugger;
+    if (notifactionTabEvent.isGiftTab == false) {
+      debugger;
+      setisGiftTab(false);
+      notificationTabEvent(true);
+    }
+    debugger;
+  }, [notifactionTabEvent.isGiftTab]);
+
   return (
     <View
       style={{
@@ -48,7 +67,7 @@ const NavNotificationScreen = () => {
     >
       <NotificationToolbar />
       <Tab.Navigator
-        initialRouteName={"Gifting"}
+        initialRouteName={isGift ? "Gifting" : "Upcoming Moments"}
         screenOptions={{
           tabBarActiveTintColor: COLORS.Primary,
           tabBarInactiveTintColor: COLORS.PrimaryLight,

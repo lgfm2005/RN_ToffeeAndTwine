@@ -3,6 +3,8 @@ import { Image, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useDispatch, useSelector } from "react-redux";
+import { useActions } from "../../redux/actions";
 
 // Assets
 import CommonStyle from "../../Assets/Style/CommonStyle";
@@ -316,15 +318,34 @@ function Notification() {
   );
 }
 
-const Navigation = () => {
+const Navigation = ({ navigation }) => {
+  const sessions = useSelector((state) => state.session);
+  var token = sessions.isAutoLogin ? true : false;
+  const { notificationTabEvent } = useActions();
+
   React.useEffect(() => {
     OneSignal.setNotificationOpenedHandler((handler) => onOpened(handler));
   }, []);
 
   const onOpened = async (openResult) => {
-    var deviceId = openResult.notification.additionalData;
-    console.log("deviceId", deviceId);
+    if (token && sessions.userFname != null) {
+      var notification = openResult.notification.additionalData;
+      if (notification.activity == "Followers") {
+        navigation.navigate("Friend");
+      } else if (notification.activity == "Gifting") {
+        notificationTabEvent(true);
+        setTimeout(() => {
+          navigation.navigate("Notification", { isGiftTab: true });
+        }, 1000);
+      } else if (notification.activity == "Upcoming Moments") {
+        notificationTabEvent(false);
+        setTimeout(() => {
+          navigation.navigate("Notification", { isGiftTab: false });
+        }, 1000);
+      }
+    }
   };
+
   return (
     <Tab.Navigator
       screenOptions={{
