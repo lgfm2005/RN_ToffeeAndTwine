@@ -23,11 +23,13 @@ import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { fontsize14 } from "../../../Assets/Style/CommonStyle";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
+import { useSelector } from "react-redux";
 
 const MyFollowing = ({ route, navigation }) => {
-  const { UserFollowingFriendId } = route.params;
+  const { UserFollowingFriendId, isMyProfile } = route.params;
   console.log("=========== UserFollowingFriend Id ===============");
   console.log("MyFollowing  ====>", UserFollowingFriendId);
+  const userData = useSelector((state) => state.session);
 
   const {
     getUserFollowingFriendList,
@@ -39,32 +41,55 @@ const MyFollowing = ({ route, navigation }) => {
   const [getUserFollowing, setUserFollowing] = useState("");
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-    const { userFriendListResponse, userFriendListError } =
-      await getUserFollowingFriendList(UserFollowingFriendId);
-    if (userFriendListResponse.data.StatusCode == "1") {
-      console.log("user Follower List Response", userFriendListResponse);
-      setUserFollowing(userFriendListResponse.data.Result);
-      setRefreshing(false);
+  const getDataFollowing = async (isLoad) => {
+    setLoader(isLoad);
+    if (isMyProfile) {
+      const { UserFollowingListResponse, UserFollowingListError } =
+        await getUserFollowingList();
+      if (UserFollowingListResponse.data.StatusCode == "1") {
+        console.log("user Follower Response  ===>", UserFollowingListResponse);
+        setUserFollowing(UserFollowingListResponse.data.Result);
+        setLoader(false);
+      } else {
+        setLoader(false);
+        console.log("user Follower List Error ===>", UserFollowingListError);
+      }
     } else {
-      setRefreshing(false);
-      console.log("user Follower List Error", UserFollowingListError);
+      if (userData.userId == UserFollowingFriendId) {
+        const { UserFollowingListResponse, UserFollowingListError } =
+          await getUserFollowingList();
+        if (UserFollowingListResponse.data.StatusCode == "1") {
+          console.log(
+            "user Follower Response  ===>",
+            UserFollowingListResponse
+          );
+          setUserFollowing(UserFollowingListResponse.data.Result);
+          setLoader(false);
+        } else {
+          setLoader(false);
+          console.log("user Follower List Error ===>", UserFollowingListError);
+        }
+      } else {
+        const { userFriendListResponse, userFriendListError } =
+          await getUserFollowingFriendList(UserFollowingFriendId);
+        if (userFriendListResponse.data.StatusCode == "1") {
+          console.log("user Follower Response  ===>", userFriendListResponse);
+          setUserFollowing(userFriendListResponse.data.Result);
+          setLoader(false);
+        } else {
+          setLoader(false);
+          console.log("user Follower List Error ===>", userFriendListError);
+        }
+      }
     }
+  };
+
+  const onRefresh = React.useCallback(async () => {
+    getDataFollowing(true);
   }, [refreshing]);
 
-  const getUserFollowingLists = async (isLoader) => {
-    setLoader(isLoader);
-    const { userFriendListResponse, userFriendListError } =
-      await getUserFollowingFriendList(UserFollowingFriendId);
-    if (userFriendListResponse.data.StatusCode == "1") {
-      console.log("user Follower List Response", userFriendListResponse);
-      setUserFollowing(userFriendListResponse.data.Result);
-      setLoader(false);
-    } else {
-      setLoader(false);
-      console.log("user Follower List Error", userFriendListError);
-    }
+  const getUserFollowingLists = async (isLoad) => {
+    getDataFollowing(isLoad);
   };
   useEffect(async () => {
     getUserFollowingLists(true);
@@ -98,10 +123,12 @@ const MyFollowing = ({ route, navigation }) => {
   };
 
   const selectFriend = (item) => {
-    debugger;
-    // console.log("selectFriend", item);
-    navigation.navigate("UserFriendProfile", {
-      userID: item.following_user_id,
+    navigation.push("UserFriendProfile", {
+      userID: isMyProfile
+        ? item.following_user_id
+        : item.following_user_id
+        ? item.following_user_id
+        : item.friend_following_user_id,
     });
   };
 
@@ -194,12 +221,12 @@ const MyFollowing = ({ route, navigation }) => {
                 data={getUserFollowing}
                 renderItem={(Data, index) => RenderItem(Data, index)}
                 keyExtractor={(item) => item.id}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
+                // refreshControl={
+                //   <RefreshControl
+                //     refreshing={refreshing}
+                //     onRefresh={onRefresh}
+                //   />
+                // }
               />
             )}
           </View>

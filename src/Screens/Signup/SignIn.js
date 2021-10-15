@@ -45,6 +45,7 @@ import {
   GraphRequestManager,
 } from "react-native-fbsdk";
 import OneSignal from "react-native-onesignal";
+import { OneSignalExternalUserEmail } from "../../Assets/utils/OneSignalExternalUserEmail";
 
 const SignIn = ({ navigation }) => {
   const {
@@ -76,7 +77,6 @@ const SignIn = ({ navigation }) => {
 
   const getToken = async () => {
     const deviceState = await (await OneSignal.getDeviceState()).userId;
-    debugger;
     return deviceState;
   };
 
@@ -119,6 +119,7 @@ const SignIn = ({ navigation }) => {
       const isRegistered = response.data.Result.IsRegistered;
       if (isRegistered == "1") {
         const token = { token: tokens };
+        OneSignalExternalUserEmail(email);
         var deviceToken = await getToken();
         await updateNotification(token, deviceToken);
         const { GetCategoryListerror, GetCategoryListresponse } =
@@ -214,6 +215,7 @@ const SignIn = ({ navigation }) => {
     if (response.data.StatusCode == "1") {
       const tokens = response.data.Result[0].Token;
       const token = { token: tokens };
+      OneSignalExternalUserEmail(getEmail);
       var deviceToken = await getToken();
       debugger;
       await updateNotification(token, deviceToken);
@@ -394,11 +396,11 @@ const SignIn = ({ navigation }) => {
                 //   handleSignIn("rshah@universalstreamsolution.com", "123456")
                 // }
                 // onPress={() => handleSignIn("uss.jignesh@gmail.com", "123456")}
-                // onPress={() => handleSignIn("1uss.jignesh@gmail.com", "123456")}
+                onPress={() => handleSignIn("1uss.jignesh@gmail.com", "123456")}
                 // onPress={() => handleSignIn("jignesh@noemail.com", "123456")}
-                onPress={() =>
-                  handleSignIn("amansuri@universalstreamsolution.com", "123456")
-                }
+                // onPress={() =>
+                //   handleSignIn("amansuri@universalstreamsolution.com", "123456")
+                // }
               />
             </View>
           </KeyboardAvoidingView>

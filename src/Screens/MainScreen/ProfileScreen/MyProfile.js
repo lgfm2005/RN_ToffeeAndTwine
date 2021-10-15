@@ -1171,6 +1171,7 @@ const MyProfile = ({ navigation }) => {
                     isFollowing: false,
                     isUserFollowerFriendId: userData.userId,
                     isUserFollowingFriendId: userData.userId,
+                    isMyProfile: true,
                   })
                 }
               >
@@ -1195,6 +1196,7 @@ const MyProfile = ({ navigation }) => {
                     isFollowing: true,
                     isUserFollowerFriendId: userData.userId,
                     isUserFollowingFriendId: userData.userId,
+                    isMyProfile: true,
                   })
                 }
               >

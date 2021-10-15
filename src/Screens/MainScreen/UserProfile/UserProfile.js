@@ -260,14 +260,30 @@ const UserProfile = ({ route, navigation }) => {
     );
 
     if (profileResponse.data.StatusCode == "1") {
+      debugger;
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
       );
-      SetSpecialMomentNameProfile(
-        profileResponse.data.Result[0].friend_special_moments[0]
-          .special_moment_name
-      );
+
+      //SetSpecialMomentNameProfile
+      if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
+        SetSpecialMomentNameProfile(
+          profileResponse.data.Result[0].friend_special_moments[0]
+            .special_moment_name
+        );
+      } else {
+        SetSpecialMomentNameProfile("");
+      }
+      //setFriendSpecialMoments
+      if (profileResponse.data.Result[0].friend_special_moments > 0) {
+        setFriendSpecialMoments(
+          profileResponse.data.Result[0].friend_special_moments
+        );
+      } else {
+        setFriendSpecialMoments("");
+      }
+
       setFriendStatus(
         profileResponse.data.Result[0].user_details[0].friend_status
       );
@@ -283,10 +299,7 @@ const UserProfile = ({ route, navigation }) => {
       setFriendCategoryQuestions(
         profileResponse.data.Result[0].friend_category_questions
       );
-      setFriendSpecialMoments(
-        profileResponse.data.Result[0].friend_special_moments
-      );
-      console.log("getFriendStatus ====>>", getFriendStatus);
+
       setLoader(false);
     } else {
       setLoader(false);
@@ -539,7 +552,8 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {friendCategoryQuestions.length > 0 &&
+                {friendCategoryQuestions.length > 0 ? (
+                  friendCategoryQuestions.length > 0 &&
                   friendCategoryQuestions.map((item, index) => (
                     // <CalendarList
                     <Column3CalendarList
@@ -569,7 +583,14 @@ const UserProfile = ({ route, navigation }) => {
                       //   //  AddItemShow(index)
                       // }
                     />
-                  ))}
+                  ))
+                ) : (
+                  <View style={CommonStyle.centerRow}>
+                    <Text style={CommonStyle.txtContent}>
+                      {AppString.NoGifthintsAddedyet}
+                    </Text>
+                  </View>
+                )}
               </ScrollView>
             </View>
 

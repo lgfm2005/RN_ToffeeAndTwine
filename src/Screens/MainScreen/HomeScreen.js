@@ -28,12 +28,6 @@ import {
   demodp,
   imgExploreaNShare,
   imgPlaceHolder,
-  imgDesserts,
-  imgFlowers,
-  imgLaptop,
-  imgRing,
-  imgBook,
-  imgCandy,
   imgDelete,
   imgJewelry,
   imgShoes,
@@ -123,7 +117,7 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   useEffect(async () => {
-    setLoader(true);
+    // setLoader(true);
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(30);
     if (GetCategoryListresponse.data.StatusCode == "1") {

@@ -16,11 +16,12 @@ const Tab = createMaterialTopTabNavigator();
 const NavUserFriendScreen = ({ navigation, route }) => {
   var isFollowings = false;
   if (route.params) {
-    const { isFollowing } = route.params;
+    const { isFollowing, isUserFollowerFriendId } = route.params;
     isFollowings = isFollowing;
+    console.log("isFollowings::", isFollowings);
     // isUserFollowerFriendIds = isUserFollowerFriendId;
     // isUserFollowingFriendIds = isUserFollowingFriendId;
-    // debugger;
+    // // debugger;
   }
 
   return (
@@ -52,6 +53,7 @@ const NavUserFriendScreen = ({ navigation, route }) => {
           component={MyFollowers}
           initialParams={{
             UserFollowerFriendId: route.params.isUserFollowerFriendId,
+            isMyProfile: route.params.isMyProfile,
           }}
         />
 
@@ -60,6 +62,7 @@ const NavUserFriendScreen = ({ navigation, route }) => {
           component={MyFollowing}
           initialParams={{
             UserFollowingFriendId: route.params.isUserFollowingFriendId,
+            isMyProfile: route.params.isMyProfile,
           }}
         />
       </Tab.Navigator>

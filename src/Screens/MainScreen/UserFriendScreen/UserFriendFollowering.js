@@ -88,10 +88,12 @@ const UserFriendFollowering = ({ navigation }) => {
   };
 
   const selectFriend = (item) => {
-    debugger;
+    console.log("item::", item);
     // console.log("selectFriend", item);
     navigation.navigate("FriendFollowersList", {
-      userID: item.following_user_id,
+      userID: item.following_user_id
+        ? item.following_user_id
+        : item.friend_following_user_id,
     });
   };
 

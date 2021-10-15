@@ -23,14 +23,24 @@ import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
 import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
+import { useSelector } from "react-redux";
 
 const MyFollowers = ({ route, navigation }) => {
-  const { UserFollowerFriendId } = route.params;
+  const { UserFollowerFriendId, isMyProfile } = route.params;
+  const userData = useSelector((state) => state.session);
+
   console.log("=========== UserFollowerFriendId ===============");
-  console.log("MyFollowers  ====>", UserFollowerFriendId);
+  console.log(
+    "MyFollowers  isMyProfile ====>",
+    UserFollowerFriendId,
+    isMyProfile
+  );
   // API get User Following Friend List
-  debugger;
-  const { getUserFollowingFriendList, RemoveFollowerFriend } = useActions();
+  const {
+    getUserFriendFollowerList,
+    getUserFollowerList,
+    RemoveFollowerFriend,
+  } = useActions();
 
   const [getLoader, setLoader] = useState(false);
   const [getUserFollower, setUserFollower] = useState("");
@@ -40,9 +50,10 @@ const MyFollowers = ({ route, navigation }) => {
     setRefreshing(true);
     // setLoader(true);
     const { userFriendListResponse, userFriendListError } =
-      await getUserFollowingFriendList(UserFollowerFriendId);
+      await getUserFollowerList();
     if (userFriendListResponse.data.StatusCode == "1") {
       console.log("user Follower Response  ===>", userFriendListResponse);
+
       setUserFollower(userFriendListResponse.data.Result);
       // setLoader(false);
       setRefreshing(false);
@@ -52,28 +63,57 @@ const MyFollowers = ({ route, navigation }) => {
       console.log("user Follower List Error ===>", userFriendListError);
     }
   }, [refreshing]);
-
-  const getUserFollowers = async () => {
-    setLoader(true);
-    const { userFriendListResponse, userFriendListError } =
-      await getUserFollowingFriendList(UserFollowerFriendId);
-    if (userFriendListResponse.data.StatusCode == "1") {
-      console.log("user Follower Response  ===>", userFriendListResponse);
-      setUserFollower(userFriendListResponse.data.Result);
-      setLoader(false);
+  const onGetFollowerList = async (isLoad) => {
+    setLoader(isLoad);
+    if (isMyProfile) {
+      const { userFollowerListResponse, userFollowerListError } =
+        await getUserFollowerList();
+      if (userFollowerListResponse.data.StatusCode == "1") {
+        console.log("user Follower Response  ===>", userFollowerListResponse);
+        setUserFollower(userFollowerListResponse.data.Result);
+        setLoader(false);
+      } else {
+        setLoader(false);
+        console.log("user Follower List Error ===>", userFollowerListError);
+      }
     } else {
-      setLoader(false);
-      console.log("user Follower List Error ===>", userFriendListError);
+      if (userData.userId == UserFollowerFriendId) {
+        const { userFollowerListResponse, userFollowerListError } =
+          await getUserFollowerList();
+        if (userFollowerListResponse.data.StatusCode == "1") {
+          console.log("user Follower Response  ===>", userFollowerListResponse);
+          setUserFollower(userFollowerListResponse.data.Result);
+          setLoader(false);
+        } else {
+          setLoader(false);
+          console.log("user Follower List Error ===>", userFollowerListError);
+        }
+      } else {
+        const { userFriendListResponse, userFriendListError } =
+          await getUserFriendFollowerList(UserFollowerFriendId);
+        if (userFriendListResponse.data.StatusCode == "1") {
+          console.log("user Follower Response  ===>", userFriendListResponse);
+          setUserFollower(userFriendListResponse.data.Result);
+          setLoader(false);
+        } else {
+          setLoader(false);
+          console.log("user Follower List Error ===>", userFriendListError);
+        }
+      }
     }
   };
 
+  const getUserFollowersList = async (isLoad) => {
+    onGetFollowerList(isLoad);
+  };
+
   useEffect(async () => {
-    getUserFollowers();
+    getUserFollowersList(true);
   }, []);
 
   useEffect(() => {
     navigation.addListener("focus", () => {
-      getUserFollowers();
+      getUserFollowersList(false);
     });
   }, []);
 
@@ -98,10 +138,13 @@ const MyFollowers = ({ route, navigation }) => {
     }
   };
   const selectFriend = (item) => {
-    // console.log("selectFriend", item);
-    debugger;
-    navigation.navigate("UserFriendProfile", {
-      userID: item.follower_user_id,
+    navigation.push("UserFriendProfile", {
+      userID: isMyProfile
+        ? item.follower_user_id
+        : item.follower_user_id
+        ? item.follower_user_id
+        : item.friend_follower_user_id,
+      isMyProfile: false,
     });
   };
 
@@ -193,12 +236,12 @@ const MyFollowers = ({ route, navigation }) => {
                 data={getUserFollower}
                 renderItem={(Data, index) => RenderItem(Data, index)}
                 keyExtractor={(item) => item.id}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
+                // refreshControl={
+                //   <RefreshControl
+                //     refreshing={refreshing}
+                //     onRefresh={onRefresh}
+                //   />
+                // }
               />
             )}
           </View>

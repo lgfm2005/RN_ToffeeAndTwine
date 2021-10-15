@@ -48,6 +48,7 @@ import {
   GraphRequestManager,
 } from "react-native-fbsdk";
 import OneSignal from "react-native-onesignal";
+import { OneSignalExternalUserEmail } from "../../Assets/utils/OneSignalExternalUserEmail";
 
 const Signup = ({ navigation }) => {
   const {
@@ -112,6 +113,7 @@ const Signup = ({ navigation }) => {
       if (isRegistered == "1") {
         const token = { token: tokens };
         var deviceToken = await getToken();
+        OneSignalExternalUserEmail(email);
         await updateNotification(token, deviceToken);
         const { GetCategoryListerror, GetCategoryListresponse } =
           await CategoryList(30, token);
@@ -319,6 +321,7 @@ const Signup = ({ navigation }) => {
           token: tokens,
         });
       var tokenInfo = { token: tokens };
+      OneSignalExternalUserEmail(getEmail);
       var deviceToken = await getToken();
       await updateNotification(tokenInfo, deviceToken);
       if (signUpresponse.data.StatusCode == "1") {

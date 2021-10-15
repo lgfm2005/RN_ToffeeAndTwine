@@ -45,6 +45,7 @@ import OneSignal from "react-native-onesignal";
 
 import { useActions } from "../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { OneSignalExternalUserEmail } from "../Assets/utils/OneSignalExternalUserEmail";
 
 const MainScreen = ({ navigation }) => {
   if (Platform.OS === "ios") {
@@ -104,7 +105,6 @@ const MainScreen = ({ navigation }) => {
     //     String(session.userId);
     //   OneSignal.setExternalUserId("raj12345");
     // }
-    OneSignal.setExternalUserId("raj12345");
     OneSignal.setNotificationOpenedHandler((handler) => onOpened(handler));
   }, []);
 
@@ -138,6 +138,7 @@ const MainScreen = ({ navigation }) => {
       const isRegistered = response.data.Result.IsRegistered;
       if (isRegistered == "1") {
         const token = { token: tokens };
+        OneSignalExternalUserEmail(email);
         var deviceToken = await getToken();
         await updateNotification(token, deviceToken);
         ///Device Token:- 032e9f8679129d8c8571fffcc8213a673f1de60478f867a10c5bca161abf6764

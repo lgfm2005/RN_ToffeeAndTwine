@@ -587,7 +587,24 @@ export const useActions = () => {
       try {
         var data = new FormData();
         data.append("UserID", userFriendListID);
-        userFriendListResponse = await API.getUserFriendFollowingList.get(
+        userFriendListResponse = await API.GetUserFriendFollowingList.get(
+          sessions,
+          data
+        );
+        if (userFriendListResponse.data.StatusCode == "1") {
+        }
+      } catch (e) {
+        userFriendListError = e;
+      }
+      return { userFriendListResponse, userFriendListError };
+    },
+
+    getUserFriendFollowerList: async (userFriendListID) => {
+      let userFriendListResponse, userFriendListError;
+      try {
+        var data = new FormData();
+        data.append("UserID", userFriendListID);
+        userFriendListResponse = await API.getUserFriendFollowerList.get(
           sessions,
           data
         );

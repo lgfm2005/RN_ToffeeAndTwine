@@ -100,7 +100,6 @@ const Followers = ({ navigation }) => {
     navigation.navigate("FriendFollowersList", {
       userID: item.follower_user_id,
     });
-    debugger;
   };
 
   const RenderItem = (Data, index) => {

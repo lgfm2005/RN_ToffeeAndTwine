@@ -300,10 +300,24 @@ const UserFriendProfile = ({ route, navigation }) => {
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
       );
-      SetSpecialMomentNameProfile(
-        profileResponse.data.Result[0].friend_special_moments[0]
-          .special_moment_name
-      );
+
+      //SetSpecialMomentNameProfile
+      if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
+        SetSpecialMomentNameProfile(
+          profileResponse.data.Result[0].friend_special_moments[0]
+            .special_moment_name
+        );
+      } else {
+        SetSpecialMomentNameProfile("");
+      }
+      //setFriendSpecialMoments
+      if (profileResponse.data.Result[0].friend_special_moments > 0) {
+        setFriendSpecialMoments(
+          profileResponse.data.Result[0].friend_special_moments
+        );
+      } else {
+        setFriendSpecialMoments("");
+      }
 
       setFriendDefaultSpecialMomentText(
         profileResponse.data.Result[0].friend_default_special_moment_text
@@ -324,9 +338,7 @@ const UserFriendProfile = ({ route, navigation }) => {
       setFriendCategoryQuestions(
         profileResponse.data.Result[0].friend_category_questions
       );
-      setFriendSpecialMoments(
-        profileResponse.data.Result[0].friend_special_moments
-      );
+
       setLoader(false);
     } else {
       setLoader(false);
@@ -481,12 +493,17 @@ const UserFriendProfile = ({ route, navigation }) => {
               </View>
 
               <TouchableOpacity
-                disabled={getFollowerCount == "0" ? true : false}
+                disabled={
+                  getFollowerCount == "0" || getFollowerCount == 0
+                    ? true
+                    : false
+                }
                 onPress={() =>
-                  navigation.navigate("NavUserFriendScreen", {
+                  navigation.push("NavUserFriendScreen", {
                     isFollowing: false,
                     isUserFollowerFriendId: userID,
                     isUserFollowingFriendId: userID,
+                    isMyProfile: false,
                   })
                 }
               >
@@ -511,12 +528,13 @@ const UserFriendProfile = ({ route, navigation }) => {
               </TouchableOpacity>
 
               <TouchableOpacity
-                disabled={getFollowerCount == "0" ? true : false}
+                disabled={getFollowingCount == "0" ? true : false}
                 onPress={() =>
-                  navigation.navigate("NavUserFriendScreen", {
-                    isFollowing: false,
+                  navigation.push("NavUserFriendScreen", {
+                    isFollowing: true,
                     isUserFollowerFriendId: userID,
                     isUserFollowingFriendId: userID,
+                    isMyProfile: false,
                   })
                 }
               >
