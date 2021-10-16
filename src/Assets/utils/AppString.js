@@ -155,6 +155,7 @@ export const AppString = {
   ConfirmText: " Are you sure you want to delete your account ?",
   confirm: "Confirm",
   NoGifthintsAddedyet: "No gift hints added yet.",
+  Nospecialmomentsaddedyet: "No special moments added yet.",
   Notify: "Notify",
   YesNotify: "Yes, Notify",
   Deleteaccount: "Delete account",

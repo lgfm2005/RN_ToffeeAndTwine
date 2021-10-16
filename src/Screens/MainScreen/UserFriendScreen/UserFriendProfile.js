@@ -575,10 +575,9 @@ const UserFriendProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {friendCategoryQuestions.length > 0 &&
+                {friendCategoryQuestions.length > 0 ? (
+                  friendCategoryQuestions.length > 0 &&
                   friendCategoryQuestions.map((item, index) => (
-                    // <CalendarList
-                    //   ImageUrl={imgBook}
                     <Column3CalendarList
                       ImageUrl={{
                         uri:
@@ -609,7 +608,14 @@ const UserFriendProfile = ({ route, navigation }) => {
                         // item.questions
                       }
                     />
-                  ))}
+                  ))
+                ) : (
+                  <View style={CommonStyle.centerRow}>
+                    <Text style={CommonStyle.txtContent}>
+                      {AppString.NoGifthintsAddedyet}
+                    </Text>
+                  </View>
+                )}
               </ScrollView>
             </View>
 
@@ -629,10 +635,9 @@ const UserFriendProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {friendSpecialMoments.length > 0 &&
+                {friendSpecialMoments.length > 0 ? (
+                  friendSpecialMoments.length > 0 &&
                   friendSpecialMoments.map((item, index) => (
-                    // <CalendarList
-                    //   ImageUrl={imgBook}
                     <Column3CalendarList
                       ImageUrl={{
                         uri:
@@ -659,7 +664,14 @@ const UserFriendProfile = ({ route, navigation }) => {
                         )
                       }
                     />
-                  ))}
+                  ))
+                ) : (
+                  <View style={CommonStyle.centerRow}>
+                    <Text style={CommonStyle.txtContent}>
+                      {AppString.Nospecialmomentsaddedyet}
+                    </Text>
+                  </View>
+                )}
               </ScrollView>
             </View>
 
