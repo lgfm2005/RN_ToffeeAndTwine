@@ -16,6 +16,9 @@
 		54FD014C245844919E29002D /* PoppinsLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1CD0855642D4781BDE77C0B /* PoppinsLight.ttf */; };
 		6E44A02AFD174479964EF1F0 /* RobotoRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E6C3B10AA1844F1ADFE2E2B /* RobotoRegular.ttf */; };
 		700B18E950D7C218FC97C901 /* libPods-toffeetwine-toffeetwineTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 290BC34CDFE82136E3F17087 /* libPods-toffeetwine-toffeetwineTests.a */; };
+		7765BC3D271ACD98002DA94D /* PaymentSub.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765BC3C271ACD98002DA94D /* PaymentSub.m */; };
+		7765BC3F271AD966002DA94D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7765BC3E271AD966002DA94D /* UIKit.framework */; };
+		7765BC41271AD96D002DA94D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7765BC40271AD96D002DA94D /* QuartzCore.framework */; };
 		77D8805F27101A40004B23B4 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77D8805E27101A40004B23B4 /* StoreKit.framework */; };
 		798B259626FC882C002C39AA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 798B259526FC882C002C39AA /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -47,6 +50,10 @@
 		290BC34CDFE82136E3F17087 /* libPods-toffeetwine-toffeetwineTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-toffeetwine-toffeetwineTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		373F4DC1B6C94F8E90106B4C /* Gilroy.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Gilroy.otf; path = ../assets/fonts/Gilroy.otf; sourceTree = "<group>"; };
 		67D8E58AD7E39C956DA876A4 /* Pods-toffeetwine-toffeetwineTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-toffeetwine-toffeetwineTests.debug.xcconfig"; path = "Target Support Files/Pods-toffeetwine-toffeetwineTests/Pods-toffeetwine-toffeetwineTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7765BC3B271ACD98002DA94D /* PaymentSub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PaymentSub.h; path = toffeetwine/PaymentSub.h; sourceTree = "<group>"; };
+		7765BC3C271ACD98002DA94D /* PaymentSub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PaymentSub.m; path = toffeetwine/PaymentSub.m; sourceTree = "<group>"; };
+		7765BC3E271AD966002DA94D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		7765BC40271AD96D002DA94D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		77D8805E27101A40004B23B4 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		798B259526FC882C002C39AA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		79DEC23D26FF21B900D308BD /* toffeetwineDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = toffeetwineDebug.entitlements; path = toffeetwine/toffeetwineDebug.entitlements; sourceTree = "<group>"; };
@@ -75,7 +82,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7765BC41271AD96D002DA94D /* QuartzCore.framework in Frameworks */,
 				FC3EC67129E57D2A358F5247 /* libPods-toffeetwine.a in Frameworks */,
+				7765BC3F271AD966002DA94D /* UIKit.framework in Frameworks */,
 				77D8805F27101A40004B23B4 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,6 +116,8 @@
 				798B259526FC882C002C39AA /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				7765BC3B271ACD98002DA94D /* PaymentSub.h */,
+				7765BC3C271ACD98002DA94D /* PaymentSub.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -118,6 +129,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7765BC40271AD96D002DA94D /* QuartzCore.framework */,
+				7765BC3E271AD966002DA94D /* UIKit.framework */,
 				77D8805E27101A40004B23B4 /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				857F6DF2E47BA3D83C57A111 /* libPods-toffeetwine.a */,
@@ -481,6 +494,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				CE79A23426FF93D300EBECEE /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				7765BC3D271ACD98002DA94D /* PaymentSub.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

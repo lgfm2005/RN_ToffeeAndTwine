@@ -957,10 +957,12 @@ const MyProfile = ({ navigation }) => {
   const userSubscriptions = async (info) => {
     if (info.latestExpirationDate != null) {
       if (typeof info.entitlements.active.pro_monthly !== "undefined") {
-        var latestExpirationDates = Moment(info.latestExpirationDate)
-          .format("YYYY-MM-DD")
-          .toString();
+        // var latestExpirationDates = Moment(info.latestExpirationDate)
+        //   .format("YYYY-MM-DD")
+        //   .toString();
         var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
+        var latestExpirationDates = Moment(cuttentDate).add(1, "M");
+
         const { UserSubscriptionResponse, UserSubscriptionError } =
           await userSubscription("1.99", latestExpirationDates, cuttentDate);
         getProfileLoad();
