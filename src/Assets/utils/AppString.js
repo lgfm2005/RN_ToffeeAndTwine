@@ -36,7 +36,7 @@ export const AppString = {
     "Please enter your graduation and  save to continue.",
   Pleasechristmascontinue: "Please enter your christmas and  save to continue.",
 
-  FriendSpecialMoments: "MY FRIENDS SPECIAL MOMENTS",
+  FriendSpecialMoments: "MY FRIENDS' SPECIAL MOMENTS",
   Save: "SAVE",
   Edit: "Edit",
   Cancel: "CANCEL",
@@ -127,6 +127,8 @@ export const AppString = {
   FavoriteMoment: "Favorite Moment",
   Updateprofile: "Update profile",
   AbDataPolicyout: "Data Policy",
+  notifySpecialMoment:
+    "We will notify you a day ago for this special moment. Thank you!",
   planning:
     "Do you wish to let your friends know you are planning to get this gift for Heather?",
   FriendsAwesome:

@@ -522,7 +522,6 @@ const FriendFollowersList = ({ route, navigation }) => {
                   {getFriendDefaultSpecialMomentText.length > 0 ? (
                     <View style={CommonStyle.alignItemsBaseLine}>
                       <Image
-                        // source={imgbirthdayCakeGary}
                         source={{
                           uri:
                             ImageUrl.MomentsGray +
@@ -651,21 +650,14 @@ const FriendFollowersList = ({ route, navigation }) => {
                       key={index}
                       DataLength={friendCategoryQuestions.length}
                       ShowBtn={false}
-                      onPress={
-                        () =>
-                          ShowOldItem(
-                            item.category_name,
-                            item.user_category_image,
-                            item.category_id,
-                            index,
-                            item.questions
-                          )
-
-                        // item.category_name,
-                        // item.user_category_image,
-                        // item.category_id,
-                        // index,
-                        // item.questions
+                      onPress={() =>
+                        ShowOldItem(
+                          item.category_name,
+                          item.user_category_image,
+                          item.category_id,
+                          index,
+                          item.questions
+                        )
                       }
                     />
                   ))
@@ -792,17 +784,24 @@ const FriendFollowersList = ({ route, navigation }) => {
           <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
             <View style={CommonStyle.Row}>
               <View style={{ width: "20%" }}>
-                {getImageNew == "" ? (
+                {getSpecialMomentImage == "" ||
+                getSpecialMomentImage == null ||
+                getSpecialMomentImage == undefined ? (
                   <Image
-                    source={
-                      getSpecialMomentImage == "" ||
-                      getSpecialMomentImage == null
-                        ? imgPlaceHolder
-                        : { uri: getSpecialMomentImage }
-                    }
+                    source={{
+                      uri:
+                        ImageUrl.MomentsBlack +
+                        getSpecialMomentName +
+                        ImageUrl.Png,
+                    }}
+                    style={[CommonStyle.popupImage]}
+                  />
+                ) : (
+                  <Image
+                    source={{ uri: getSpecialMomentImage }}
                     style={CommonStyle.popupImage}
                   />
-                ) : null}
+                )}
               </View>
               <View style={{ width: "80%", alignItems: "center" }}>
                 <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
@@ -839,7 +838,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 />
               ) : (
                 <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                  {"Hi... you are notify"}
+                  {AppString.notifySpecialMoment}
                 </Text>
               )}
             </View>
@@ -858,24 +857,21 @@ const FriendFollowersList = ({ route, navigation }) => {
             <View style={CommonStyle.Row}>
               <View style={{ width: "20%" }}>
                 <TouchableOpacity disabled={true}>
-                  {getImageNew == "" ? (
+                  {getImageNew == "" ||
+                  getImageNew == null ||
+                  getImageNew == undefined ? (
                     <Image
-                      source={
-                        getImageNew == "" ||
-                        getImageNew == null ||
-                        getImageNew == undefined
-                          ? imgPlaceHolder
-                          : { uri: getImageNew }
-                      }
-                      // ImageUrl={{
-                      //   uri:
-                      //     ImageUrl.Categories +
-                      //     getTitleName +
-                      //     ImageUrl.Png,
-                      // }}
+                      source={{
+                        uri: ImageUrl.Categories + getTitleName + ImageUrl.Png,
+                      }}
+                      style={[CommonStyle.popupImage, { tintColor: "black" }]}
+                    />
+                  ) : (
+                    <Image
+                      source={{ uri: getImageNew }}
                       style={CommonStyle.popupImage}
                     />
-                  ) : null}
+                  )}
                 </TouchableOpacity>
               </View>
               <View style={{ width: "60%" }}>
@@ -927,16 +923,21 @@ const FriendFollowersList = ({ route, navigation }) => {
             <View style={CommonStyle.Row}>
               <View style={{ width: "20%" }}>
                 <TouchableOpacity disabled={true}>
-                  {getImageNew == "" ? (
+                  {getImageNew == "" ||
+                  getImageNew == null ||
+                  getImageNew == undefined ? (
                     <Image
-                      source={
-                        getImageNew == "" || getImageNew == null
-                          ? imgPlaceHolder
-                          : { uri: getImageNew }
-                      }
+                      source={{
+                        uri: ImageUrl.Categories + getTitleName + ImageUrl.Png,
+                      }}
+                      style={[CommonStyle.popupImage, { tintColor: "black" }]}
+                    />
+                  ) : (
+                    <Image
+                      source={{ uri: getImageNew }}
                       style={CommonStyle.popupImage}
                     />
-                  ) : null}
+                  )}
                 </TouchableOpacity>
               </View>
               <View style={{ width: "60%" }}>

@@ -743,17 +743,24 @@ const UserFriendProfile = ({ route, navigation }) => {
           <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
             <View style={CommonStyle.Row}>
               <View style={{ width: "20%" }}>
-                {getImageNew == "" ? (
+                {getSpecialMomentImage == "" ||
+                getSpecialMomentImage == null ||
+                getSpecialMomentImage == undefined ? (
                   <Image
-                    source={
-                      getSpecialMomentImage == "" ||
-                      getSpecialMomentImage == null
-                        ? imgPlaceHolder
-                        : { uri: getSpecialMomentImage }
-                    }
+                    source={{
+                      uri:
+                        ImageUrl.MomentsBlack +
+                        getSpecialMomentName +
+                        ImageUrl.Png,
+                    }}
+                    style={[CommonStyle.popupImage]}
+                  />
+                ) : (
+                  <Image
+                    source={{ uri: getSpecialMomentImage }}
                     style={CommonStyle.popupImage}
                   />
-                ) : null}
+                )}
               </View>
               <View style={{ width: "80%", alignItems: "center" }}>
                 <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
@@ -803,24 +810,21 @@ const UserFriendProfile = ({ route, navigation }) => {
             <View style={CommonStyle.Row}>
               <View style={{ width: "20%" }}>
                 <TouchableOpacity disabled={true}>
-                  {getImageNew == "" ? (
+                  {getImageNew == "" ||
+                  getImageNew == null ||
+                  getImageNew == undefined ? (
                     <Image
-                      source={
-                        getImageNew == "" ||
-                        getImageNew == null ||
-                        getImageNew == undefined
-                          ? imgPlaceHolder
-                          : { uri: getImageNew }
-                      }
-                      // ImageUrl={{
-                      //   uri:
-                      //     ImageUrl.Categories +
-                      //     getTitleName +
-                      //     ImageUrl.Png,
-                      // }}
+                      source={{
+                        uri: ImageUrl.Categories + getTitleName + ImageUrl.Png,
+                      }}
+                      style={[CommonStyle.popupImage, { tintColor: "black" }]}
+                    />
+                  ) : (
+                    <Image
+                      source={{ uri: getImageNew }}
                       style={CommonStyle.popupImage}
                     />
-                  ) : null}
+                  )}
                 </TouchableOpacity>
               </View>
               <View style={{ width: "60%" }}>
@@ -872,16 +876,21 @@ const UserFriendProfile = ({ route, navigation }) => {
             <View style={CommonStyle.Row}>
               <View style={{ width: "20%" }}>
                 <TouchableOpacity disabled={true}>
-                  {getImageNew == "" ? (
+                  {getImageNew == "" ||
+                  getImageNew == null ||
+                  getImageNew == undefined ? (
                     <Image
-                      source={
-                        getImageNew == "" || getImageNew == null
-                          ? imgPlaceHolder
-                          : { uri: getImageNew }
-                      }
+                      source={{
+                        uri: ImageUrl.Categories + getTitleName + ImageUrl.Png,
+                      }}
+                      style={[CommonStyle.popupImage, { tintColor: "black" }]}
+                    />
+                  ) : (
+                    <Image
+                      source={{ uri: getImageNew }}
                       style={CommonStyle.popupImage}
                     />
-                  ) : null}
+                  )}
                 </TouchableOpacity>
               </View>
               <View style={{ width: "60%" }}>
