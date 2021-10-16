@@ -178,7 +178,7 @@ const SettingScreen = ({ navigation }) => {
           .format("YYYY-MM-DD")
           .toString();
         const { UserSubscriptionResponse, UserSubscriptionError } =
-          await userSubscription("1.99", latestExpirationDates, cuttentDate);
+          await userSubscription("1.99", cuttentDate, latestExpirationDates);
         GetSetting();
         CloseItem();
       }

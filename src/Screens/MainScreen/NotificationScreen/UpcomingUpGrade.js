@@ -90,9 +90,8 @@ const UpcomingUpGrade = ({ navigation }) => {
         var latestExpirationDates = Moment(Moment(cuttentDate).add(1, "M"))
           .format("YYYY-MM-DD")
           .toString();
-
         const { UserSubscriptionResponse, UserSubscriptionError } =
-          await userSubscription("1.99", latestExpirationDates, cuttentDate);
+          await userSubscription("1.99", cuttentDate, latestExpirationDates);
       }
     }
   };
