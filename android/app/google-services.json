@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "746234887774",
+    "project_id": "toffee-and-twine-be148",
+    "storage_bucket": "toffee-and-twine-be148.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746234887774:android:f29fb7d7cdaf81f05ebecf",
+        "android_client_info": {
+          "package_name": "com.toffeetwine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746234887774-ekflaulf48ja9v3v8ggh0v683fnli8ck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.toffeetwine",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "746234887774-8v8v0oa4k99ldm9o5s1029fv93v8ofbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ-s0ta8h4a6alLHOm53icJ94rFXBYo6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746234887774-8v8v0oa4k99ldm9o5s1029fv93v8ofbv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "746234887774-apngusgluepf652jqkn95kc5kb03iod6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.toffeeTwine.apps"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
