@@ -139,7 +139,7 @@ const FriendFollowersList = ({ route, navigation }) => {
 
   const getProfiles = async () => {
     const { profileResponse, profileError } = await getProfile(userID);
-    if (profileResponse.data.StatusCode) {
+    if (profileResponse.data.StatusCode == "1") {
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
       setMomentsCount(

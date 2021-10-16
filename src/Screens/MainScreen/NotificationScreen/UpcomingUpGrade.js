@@ -104,7 +104,7 @@ const UpcomingUpGrade = ({ navigation }) => {
 
   const UpGradePayment = async () => {
     const { profileResponse, profileError } = await getProfile();
-    if (profileResponse.data.StatusCode) {
+    if (profileResponse.data.StatusCode == "1") {
       var isActive =
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
       if (isActive == "0") {

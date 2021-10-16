@@ -47,6 +47,7 @@ import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
+import Purchases from "react-native-purchases";
 
 const UserFriendProfile = ({ route, navigation }) => {
   const { userID } = route.params;
@@ -54,6 +55,7 @@ const UserFriendProfile = ({ route, navigation }) => {
   useEffect(() => {
     setUserFriendId(userID);
     getProfiles();
+    getProfilesLoad();
   }, []);
 
   const {
@@ -64,6 +66,7 @@ const UserFriendProfile = ({ route, navigation }) => {
     AddGiftNotication,
     getUnfollowFriendList,
     NotifyFriend,
+    userSubscription,
   } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
@@ -106,6 +109,7 @@ const UserFriendProfile = ({ route, navigation }) => {
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
   const [getNotificationSendModal, setNotificationSendModal] = useState(false);
   const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
+  const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
 
   const CloseItem = () => {
     setUserBlockModal(false);
@@ -292,32 +296,97 @@ const UserFriendProfile = ({ route, navigation }) => {
     }
   };
 
+  const handleSubmitPayment = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 4000);
+    var currentDate = Moment(new Date(), "DD/MM/YYYY");
+    try {
+      const purchaserInfo1 = await Purchases.getPurchaserInfo();
+      var latestExpirationDates = Moment(
+        purchaserInfo1.latestExpirationDate,
+        "DD/MM/YYYY"
+      );
+
+      var isBefore = currentDate.isBefore(latestExpirationDates);
+      if (!isBefore) {
+        if (
+          typeof purchaserInfo1.entitlements.active.pro_monthly !== "undefined"
+        ) {
+          // Grant user "pro" access
+        }
+        const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
+        const monthlyPackage = offerings.current.monthly;
+        const { purchaserInfo } = await Purchases.purchasePackage(
+          monthlyPackage
+        );
+        const { latestExpirationDate } = purchaserInfo;
+        userSubscriptions(purchaserInfo);
+
+        console.log("latestExpirationDate:", latestExpirationDate);
+      } else {
+      }
+      CloseItem();
+    } catch (e) {
+      console.log("Error:", e);
+      // setLoading(false);
+      // if (e.userCancelled) return;
+      // setError(
+      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
+      // );
+      // setErrorDetails(e.message);
+      // HapticFeedback.trigger("impactHeavy");
+    }
+  };
+
+  const userSubscriptions = async (info) => {
+    if (info.latestExpirationDate != null) {
+      if (typeof info.entitlements.active.pro_monthly !== "undefined") {
+        var latestExpirationDates = Moment(info.latestExpirationDate)
+          .format("YYYY-MM-DD")
+          .toString();
+        var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
+        const { UserSubscriptionResponse, UserSubscriptionError } =
+          await userSubscription("1.99", latestExpirationDates, cuttentDate);
+        getProfilesLoad();
+      }
+    }
+  };
+
+  useEffect(() => {
+    Purchases.setDebugLogsEnabled(true);
+    Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
+    Purchases.syncPurchases();
+    Purchases.addPurchaserInfoUpdateListener((info) => {
+      // handle any changes to purchaserInfo
+    });
+  }, []);
+
   const getProfiles = async () => {
     setLoader(true);
     const { profileResponse, profileError } = await getProfile(userID);
-    if (profileResponse.data.StatusCode) {
+    if ((profileResponse.data.StatusCode = "1")) {
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
       );
 
       //SetSpecialMomentNameProfile
-      if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
-        SetSpecialMomentNameProfile(
-          profileResponse.data.Result[0].friend_special_moments[0]
-            .special_moment_name
-        );
-      } else {
-        SetSpecialMomentNameProfile("");
-      }
+      // if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
+
+      // } else {
+      //   SetSpecialMomentNameProfile("");
+      // }
+      SetSpecialMomentNameProfile(
+        profileResponse.data.Result[0].friend_special_moments[0]
+          .special_moment_name
+      );
       //setFriendSpecialMoments
-      if (profileResponse.data.Result[0].friend_special_moments > 0) {
-        setFriendSpecialMoments(
-          profileResponse.data.Result[0].friend_special_moments
-        );
-      } else {
-        setFriendSpecialMoments("");
-      }
+      setFriendSpecialMoments(
+        profileResponse.data.Result[0].friend_special_moments
+      );
 
       setFriendDefaultSpecialMomentText(
         profileResponse.data.Result[0].friend_default_special_moment_text
@@ -342,6 +411,16 @@ const UserFriendProfile = ({ route, navigation }) => {
       setLoader(false);
     } else {
       setLoader(false);
+    }
+  };
+
+  const getProfilesLoad = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode == "1") {
+      setUserSubscriptionStatus(
+        profileResponse.data.Result[0].user_details[0].user_subscription_status
+      );
+    } else {
     }
   };
 
@@ -759,11 +838,17 @@ const UserFriendProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <ImagePOPLinkButton
-                buttonName={AppString.Notify}
-                buttonImage={imgNavNotification}
-                // onPress={() => SendSpecialMoment()}
-              />
+              {userSubscriptionStatus == "0" ? (
+                <ImagePOPLinkButton
+                  buttonName={AppString.Notify}
+                  buttonImage={imgNavNotification}
+                  onPress={() => handleSubmitPayment()}
+                />
+              ) : (
+                <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
+                  {"Hi... you are notify"}
+                </Text>
+              )}
             </View>
           </View>
         </Modal>
