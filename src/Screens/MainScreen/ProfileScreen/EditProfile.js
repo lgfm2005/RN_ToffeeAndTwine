@@ -299,7 +299,9 @@ const EditProfile = ({ navigation }) => {
             // keyboardVerticalOffset={keyboardVerticalOffset}
           >
             <View style={CommonStyle.imgmask}>
-              {getImageNew == "" ? (
+              {getImageNew == "" ||
+              getImageNew == null ||
+              getImageNew == undefined ? (
                 user.userProfileImage != "" ? (
                   <ImageBackground
                     source={{ uri: user.userProfileImage }}

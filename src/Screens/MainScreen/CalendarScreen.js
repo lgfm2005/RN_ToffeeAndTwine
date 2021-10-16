@@ -164,7 +164,7 @@ const CalendarScreen = ({ navigation }) => {
         console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
-      CloseItem();
+      CloseSepItem();
     } catch (e) {
       console.log("Error:", e);
       // setLoading(false);
@@ -190,6 +190,8 @@ const CalendarScreen = ({ navigation }) => {
 
         const { UserSubscriptionResponse, UserSubscriptionError } =
           await userSubscription("1.99", latestExpirationDates, cuttentDate);
+        CloseSepItem();
+        getProfileLoad();
       }
     }
   };
@@ -842,36 +844,38 @@ const CalendarScreen = ({ navigation }) => {
                                 ]}
                               />
                               <TouchableOpacity
+                                style={{
+                                  flex: 1,
+                                  marginRight: 15,
+                                  justifyContent: "center",
+                                }}
                                 onPress={() =>
                                   CalendarOpenProfile(item.user_id)
                                 }
                               >
                                 <Text
                                   multiline={true}
-                                  style={[
-                                    CommonStyle.txtFrienduserName,
-                                    { flex: 0.6 },
-                                  ]}
+                                  style={[CommonStyle.txtFrienduserName]}
                                 >
                                   {item.user_fname + " " + item.user_lname}
+                                  <Text
+                                    style={
+                                      (CommonStyle.txtFrienduserName,
+                                      CommonStyle.textUpperCase,
+                                      {
+                                        color: COLORS.PrimaryLight,
+                                        marginLeft: 16,
+                                        paddingRight: 10,
+
+                                        flex: 0.4,
+                                      })
+                                    }
+                                  >
+                                    {" "}
+                                    {item.special_moment_name}
+                                  </Text>{" "}
                                 </Text>
                               </TouchableOpacity>
-                              <View>
-                                <Text
-                                  style={
-                                    (CommonStyle.txtFrienduserName,
-                                    CommonStyle.textUpperCase,
-                                    {
-                                      color: COLORS.PrimaryLight,
-                                      marginLeft: 16,
-                                      paddingRight: 10,
-                                      flex: 0.4,
-                                    })
-                                  }
-                                >
-                                  {item.special_moment_name}
-                                </Text>
-                              </View>
                             </View>
                           );
                         })
