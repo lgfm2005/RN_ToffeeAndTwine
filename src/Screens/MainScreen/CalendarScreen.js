@@ -134,7 +134,10 @@ const CalendarScreen = ({ navigation }) => {
   const handleSubmitPayment = async () => {
     // setLoading(true);
     // HapticFeedback.trigger("impactLight");
-
+    setLoader(true);
+    setTimeout(() => {
+      setLoader(false);
+    }, 4000);
     var currentDate = Moment(new Date(), "DD/MM/YYYY");
     try {
       const purchaserInfo1 = await Purchases.getPurchaserInfo();

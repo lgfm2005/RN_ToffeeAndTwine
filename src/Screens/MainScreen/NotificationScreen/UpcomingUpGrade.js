@@ -24,10 +24,12 @@ import { imgInvite, imgcross, imgThankYou } from "../../../Assets/utils/Image";
 import { FilledButton, POPLinkButton } from "../../../Components/Button/Button";
 import { useActions } from "../../../redux/actions";
 import Moment from "moment";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const UpcomingUpGrade = ({ navigation }) => {
   const [getUpgradeModel, setUpgradeModel] = useState(false);
   const { userSubscription, getProfile } = useActions();
+  const [getLoader, setLoader] = useState(false);
 
   const CloseItem = () => {
     setUpgradeModel(false);
@@ -35,9 +37,10 @@ const UpcomingUpGrade = ({ navigation }) => {
   };
 
   const handleSubmitPayment = async () => {
-    // setLoading(true);
-    // HapticFeedback.trigger("impactLight");
-
+    setLoader(true);
+    setTimeout(() => {
+      setLoader(false);
+    }, 4000);
     var currentDate = Moment(new Date(), "DD/MM/YYYY");
     try {
       const purchaserInfo1 = await Purchases.getPurchaserInfo();
@@ -212,6 +215,7 @@ const UpcomingUpGrade = ({ navigation }) => {
           </View>
         </Modal>
       ) : null}
+      <Spinner visible={getLoader} />
     </View>
   );
 };

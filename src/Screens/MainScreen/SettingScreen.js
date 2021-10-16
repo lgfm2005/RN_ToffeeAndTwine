@@ -32,6 +32,7 @@ import {
   TermsOfService,
 } from "../../Assets/utils/ShareLink";
 import OneSignal from "react-native-onesignal";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const SettingScreen = ({ navigation }) => {
   const {
@@ -55,6 +56,7 @@ const SettingScreen = ({ navigation }) => {
   const [getManageSubscriptions, setManageSubscriptions] = useState(false);
   const [getHelp, setHelp] = useState(false);
   const [getAbout, setAbout] = useState(false);
+  const [getLoader, setLoader] = useState(false);
 
   const CloseItem = () => {
     setDeletedAccountModel(false);
@@ -185,7 +187,10 @@ const SettingScreen = ({ navigation }) => {
 
   const handleSubmitPayment = async () => {
     // HapticFeedback.trigger("impactLight");
-
+    setLoader(true);
+    setTimeout(() => {
+      setLoader(false);
+    }, 4000);
     var currentDate = Moment(new Date(), "DD/MM/YYYY");
     try {
       const purchaserInfo1 = await Purchases.getPurchaserInfo();
@@ -590,6 +595,7 @@ const SettingScreen = ({ navigation }) => {
             </Modal>
           ) : null}
         </ScrollView>
+        <Spinner visible={getLoader} />
       </SafeAreaView>
     </View>
   );

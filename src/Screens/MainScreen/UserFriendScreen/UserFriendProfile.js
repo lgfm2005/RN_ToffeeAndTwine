@@ -310,9 +310,9 @@ const UserFriendProfile = ({ route, navigation }) => {
     }
   };
   const handleSubmitPayment = async () => {
-    setLoading(true);
+    setLoader(true);
     setTimeout(() => {
-      setLoading(false);
+      setLoader(false);
     }, 4000);
     var currentDate = Moment(new Date(), "DD/MM/YYYY");
     try {
