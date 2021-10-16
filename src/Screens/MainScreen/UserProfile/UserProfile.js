@@ -266,20 +266,20 @@ const UserProfile = ({ route, navigation }) => {
         profileResponse.data.Result[0].user_details[0].user_profile_image
       );
 
-      //SetSpecialMomentNameProfile
-      // if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
+      // SetSpecialMomentNameProfile
+      if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
+        SetSpecialMomentNameProfile(
+          profileResponse.data.Result[0].friend_special_moments[0]
+            .special_moment_name
+        );
+      } else {
+        SetSpecialMomentNameProfile([]);
+      }
+
       // SetSpecialMomentNameProfile(
       //   profileResponse.data.Result[0].friend_special_moments[0]
       //     .special_moment_name
       // );
-      // } else {
-      //   SetSpecialMomentNameProfile("");
-      // }
-
-      SetSpecialMomentNameProfile(
-        profileResponse.data.Result[0].friend_special_moments[0]
-          .special_moment_name
-      );
 
       //setFriendSpecialMoments
       setFriendSpecialMoments(
@@ -554,34 +554,44 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {friendCategoryQuestions.map((item, index) => (
-                  // <CalendarList
-                  <Column3CalendarList
-                    ImageUrl={{
-                      uri:
-                        ImageUrl.Categories + item.category_name + ImageUrl.Png,
-                    }}
-                    ExploreName={item.category_name}
-                    Id={item.category_id}
-                    index={index}
-                    key={index}
-                    DataLength={friendCategoryQuestions.length}
-                    ShowBtn={false}
-                    onPress={() =>
-                      ShowOldItem(
-                        item.category_name,
-                        item.user_category_image,
-                        item.category_id,
-                        index,
-                        item.questions
-                      )
-                    }
-                    // AddNewOnPress={
-                    //   () => console.log("ddfdf")
-                    //   //  AddItemShow(index)
-                    // }
-                  />
-                ))}
+                {friendCategoryQuestions.length > 0 ? (
+                  friendCategoryQuestions.length > 0 &&
+                  friendCategoryQuestions.map((item, index) => (
+                    <Column3CalendarList
+                      ImageUrl={{
+                        uri:
+                          ImageUrl.Categories +
+                          item.category_name +
+                          ImageUrl.Png,
+                      }}
+                      ExploreName={item.category_name}
+                      Id={item.category_id}
+                      index={index}
+                      key={index}
+                      DataLength={friendCategoryQuestions.length}
+                      ShowBtn={false}
+                      onPress={() =>
+                        ShowOldItem(
+                          item.category_name,
+                          item.user_category_image,
+                          item.category_id,
+                          index,
+                          item.questions
+                        )
+                      }
+                      // AddNewOnPress={
+                      //   () => console.log("ddfdf")
+                      //   //  AddItemShow(index)
+                      // }
+                    />
+                  ))
+                ) : (
+                  <View style={CommonStyle.centerRow}>
+                    <Text style={CommonStyle.txtContent}>
+                      {AppString.NoGifthintsAddedyet}
+                    </Text>
+                  </View>
+                )}
               </ScrollView>
             </View>
 
@@ -601,10 +611,9 @@ const UserProfile = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {friendSpecialMoments.length > 0 &&
+                {friendSpecialMoments.length > 0 ? (
+                  friendSpecialMoments.length > 0 &&
                   friendSpecialMoments.map((item, index) => (
-                    // <CalendarList
-                    //   ImageUrl={imgBook}
                     <Column3CalendarList
                       ImageUrl={{
                         uri:
@@ -631,7 +640,14 @@ const UserProfile = ({ route, navigation }) => {
                         )
                       }
                     />
-                  ))}
+                  ))
+                ) : (
+                  <View style={CommonStyle.centerRow}>
+                    <Text style={CommonStyle.txtContent}>
+                      {AppString.Nospecialmomentsaddedyet}
+                    </Text>
+                  </View>
+                )}
               </ScrollView>
             </View>
 

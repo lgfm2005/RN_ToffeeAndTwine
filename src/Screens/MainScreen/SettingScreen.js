@@ -17,7 +17,10 @@ import { MyWhiteStatusbar } from "../../Components/MyStatusBar/MyWhiteStatusbar"
 import { Switch } from "react-native-paper";
 import { COLORS } from "../../Assets/utils/COLORS";
 import { useActions } from "../../redux/actions";
-import { POPLinkButton } from "../../Components/Button/Button";
+import {
+  POPLinkButton,
+  POPOutLinkButton,
+} from "../../Components/Button/Button";
 import Modal from "react-native-modal";
 import TutorialStyle from "../Signup/Tutorial/TutorialStyle";
 import { FONT } from "../../Assets/utils/FONT";
@@ -46,6 +49,7 @@ const SettingScreen = ({ navigation }) => {
 
   const [isFitst, setIsFitst] = useState(false);
 
+  const [getupgradeItemModel, setupgradeItemModel] = useState(false);
   const [getDeletedAccountModel, setDeletedAccountModel] = useState(false);
   const [getNotification, setNotification] = useState(true);
   const [getManageSubscriptions, setManageSubscriptions] = useState(false);
@@ -54,6 +58,7 @@ const SettingScreen = ({ navigation }) => {
 
   const CloseItem = () => {
     setDeletedAccountModel(false);
+    setupgradeItemModel(false);
   };
 
   const GiftingToggle = async () => {
@@ -89,13 +94,17 @@ const SettingScreen = ({ navigation }) => {
   };
 
   const SpecialMomentsToggleSwitch = async () => {
-    setSpecialMomentsSwitch(!getSpecialMomentsSwitch);
-    var getGifting = getGiftingSwitch ? 1 : 0;
-    var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
-    const { response, error } = await updateSetting(
-      getGifting,
-      getSpecialMoments
-    );
+    if (userSubscriptionStatus == "1") {
+      setSpecialMomentsSwitch(!getSpecialMomentsSwitch);
+      var getGifting = getGiftingSwitch ? 1 : 0;
+      var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
+      const { response, error } = await updateSetting(
+        getGifting,
+        getSpecialMoments
+      );
+    } else {
+      PaymentUpgrade();
+    }
   };
 
   const Notification = () => {
@@ -171,7 +180,6 @@ const SettingScreen = ({ navigation }) => {
   };
 
   const handleSubmitPayment = async () => {
-    // setLoading(true);
     // HapticFeedback.trigger("impactLight");
 
     var currentDate = Moment(new Date(), "DD/MM/YYYY");
@@ -211,6 +219,12 @@ const SettingScreen = ({ navigation }) => {
       // HapticFeedback.trigger("impactHeavy");
     }
   };
+
+  const PaymentUpgrade = () => {
+    setupgradeItemModel(true);
+  };
+
+  const PaymentNow = () => {};
 
   useEffect(() => {
     Purchases.setDebugLogsEnabled(true);
@@ -446,6 +460,7 @@ const SettingScreen = ({ navigation }) => {
                 {AppString.Deleteaccount}
               </Text>
             </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => FinalCheckLogout()}
               style={CommonStyle.paddingBottom20}
@@ -493,6 +508,78 @@ const SettingScreen = ({ navigation }) => {
                   <POPLinkButton
                     buttonName={AppString.confirm}
                     onPress={() => FinalDeletedAccount()}
+                  />
+                </View>
+              </View>
+            </Modal>
+          ) : null}
+
+          {/* Payment for upgrade */}
+          {getupgradeItemModel == true ? (
+            <Modal
+              testID={"modal"}
+              isVisible={getupgradeItemModel}
+              onBackdropPress={() => CloseItem()}
+            >
+              <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+                <View>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      // CommonStyle.p16,
+                      { paddingBottom: 16, textAlign: "center" },
+                    ]}
+                  >
+                    {AppString.UpgradeProfile}
+                  </Text>
+                </View>
+
+                <View>
+                  <Text
+                    style={[
+                      CommonStyle.Row,
+                      CommonStyle.txtContent,
+                      CommonStyle.formLabel,
+                      { lineHeight: 24 },
+                    ]}
+                  >
+                    {AppString.txtUpgradecategories1}
+                    <Text style={{ color: COLORS.gold }}>
+                      {AppString.price}
+                    </Text>
+                    <Text style={CommonStyle.formLabel}>
+                      {AppString.txtUpgradecategories2}
+                    </Text>
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    // CommonStyle.my16,
+                    CommonStyle.txtContent,
+                    { lineHeight: 24, marginLeft: 10 },
+                  ]}
+                >
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 24 }]}>
+                    {"\u2022"} {AppString.txtUpgradecategoriesp1}
+                  </Text>
+
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 15 }]}>
+                    {"\u2022"} {AppString.txtUpgradecategoriesp2}
+                  </Text>
+                  <Text style={[CommonStyle.txtContent, { lineHeight: 15 }]}>
+                    {"\u2022"} {AppString.txtUpgradecategoriesp3}
+                  </Text>
+                </View>
+
+                <View style={CommonStyle.centerRow}>
+                  <POPOutLinkButton
+                    buttonName={AppString.Later}
+                    onPress={() => CloseItem()}
+                  />
+
+                  <POPLinkButton
+                    buttonName={AppString.Upgrade}
+                    onPress={() => handleSubmitPayment()}
                   />
                 </View>
               </View>

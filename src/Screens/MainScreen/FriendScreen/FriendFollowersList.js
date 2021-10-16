@@ -395,6 +395,7 @@ const FriendFollowersList = ({ route, navigation }) => {
         profileResponse.data.Result[0].user_details[0].user_profile_image
       );
 
+      // SetSpecialMomentNameProfile;
       if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
         SetSpecialMomentNameProfile(
           profileResponse.data.Result[0].friend_special_moments[0]
@@ -404,6 +405,10 @@ const FriendFollowersList = ({ route, navigation }) => {
         SetSpecialMomentNameProfile([]);
       }
 
+      // SetSpecialMomentNameProfile(
+      //   profileResponse.data.Result[0].friend_special_moments[0]
+      //     .special_moment_name
+      // );
       setFriendSpecialMoments(
         profileResponse.data.Result[0].friend_special_moments
       );
@@ -630,7 +635,8 @@ const FriendFollowersList = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {friendCategoryQuestions.length > 0 &&
+                {friendCategoryQuestions.length > 0 ? (
+                  friendCategoryQuestions.length > 0 &&
                   friendCategoryQuestions.map((item, index) => (
                     <Column3CalendarList
                       ImageUrl={{
@@ -662,13 +668,14 @@ const FriendFollowersList = ({ route, navigation }) => {
                         // item.questions
                       }
                     />
-                  ))}
-
-                {/* <View style={CommonStyle.centerRow}>
+                  ))
+                ) : (
+                  <View style={CommonStyle.centerRow}>
                     <Text style={CommonStyle.txtContent}>
                       {AppString.NoGifthintsAddedyet}
                     </Text>
-                  </View> */}
+                  </View>
+                )}
               </ScrollView>
             </View>
 
@@ -688,10 +695,9 @@ const FriendFollowersList = ({ route, navigation }) => {
                   CommonStyle.toppadding16,
                 ]}
               >
-                {friendSpecialMoments.length > 0 &&
+                {friendSpecialMoments.length > 0 ? (
+                  friendSpecialMoments.length > 0 &&
                   friendSpecialMoments.map((item, index) => (
-                    // <CalendarList
-                    //   ImageUrl={imgBook}
                     <Column3CalendarList
                       ImageUrl={{
                         uri:
@@ -718,7 +724,14 @@ const FriendFollowersList = ({ route, navigation }) => {
                         )
                       }
                     />
-                  ))}
+                  ))
+                ) : (
+                  <View style={CommonStyle.centerRow}>
+                    <Text style={CommonStyle.txtContent}>
+                      {AppString.Nospecialmomentsaddedyet}
+                    </Text>
+                  </View>
+                )}
               </ScrollView>
             </View>
 
