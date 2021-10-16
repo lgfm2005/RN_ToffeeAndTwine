@@ -38,7 +38,7 @@ const NavUserFriendScreen = ({ navigation, route }) => {
         onPressSearch={() => navigation.navigate("Search")}
       />
       <Tab.Navigator
-        initialRouteName={isFollowings == true ? "MyFollowing" : "MyFollowers"}
+        initialRouteName={isFollowings == true ? "Following" : "Followers"}
         screenOptions={{
           tabBarActiveTintColor: COLORS.Primary,
           tabBarInactiveTintColor: COLORS.PrimaryLight,
@@ -49,7 +49,7 @@ const NavUserFriendScreen = ({ navigation, route }) => {
         }}
       >
         <Tab.Screen
-          name="MyFollowers"
+          name="Followers"
           component={MyFollowers}
           initialParams={{
             UserFollowerFriendId: route.params.isUserFollowerFriendId,
@@ -58,7 +58,7 @@ const NavUserFriendScreen = ({ navigation, route }) => {
         />
 
         <Tab.Screen
-          name="MyFollowing"
+          name="Following"
           component={MyFollowing}
           initialParams={{
             UserFollowingFriendId: route.params.isUserFollowingFriendId,

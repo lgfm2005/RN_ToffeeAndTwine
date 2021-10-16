@@ -47,15 +47,15 @@ import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
-import Purchases from "react-native-purchases";
+import { useSelector } from "react-redux";
 
 const UserFriendProfile = ({ route, navigation }) => {
+  const userData = useSelector((state) => state.session);
   const { userID } = route.params;
-  console.log("UserFriendProfile check ", userID);
+
   useEffect(() => {
     setUserFriendId(userID);
     getProfiles();
-    getProfilesLoad();
   }, []);
 
   const {
@@ -66,7 +66,6 @@ const UserFriendProfile = ({ route, navigation }) => {
     AddGiftNotication,
     getUnfollowFriendList,
     NotifyFriend,
-    userSubscription,
   } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
@@ -109,7 +108,6 @@ const UserFriendProfile = ({ route, navigation }) => {
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
   const [getNotificationSendModal, setNotificationSendModal] = useState(false);
   const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
-  const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
 
   const CloseItem = () => {
     setUserBlockModal(false);
@@ -296,97 +294,32 @@ const UserFriendProfile = ({ route, navigation }) => {
     }
   };
 
-  const handleSubmitPayment = async () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 4000);
-    var currentDate = Moment(new Date(), "DD/MM/YYYY");
-    try {
-      const purchaserInfo1 = await Purchases.getPurchaserInfo();
-      var latestExpirationDates = Moment(
-        purchaserInfo1.latestExpirationDate,
-        "DD/MM/YYYY"
-      );
-
-      var isBefore = currentDate.isBefore(latestExpirationDates);
-      if (!isBefore) {
-        if (
-          typeof purchaserInfo1.entitlements.active.pro_monthly !== "undefined"
-        ) {
-          // Grant user "pro" access
-        }
-        const offerings = await Purchases.getOfferings();
-        console.log("offerings:", offerings);
-        const monthlyPackage = offerings.current.monthly;
-        const { purchaserInfo } = await Purchases.purchasePackage(
-          monthlyPackage
-        );
-        const { latestExpirationDate } = purchaserInfo;
-        userSubscriptions(purchaserInfo);
-
-        console.log("latestExpirationDate:", latestExpirationDate);
-      } else {
-      }
-      CloseItem();
-    } catch (e) {
-      console.log("Error:", e);
-      // setLoading(false);
-      // if (e.userCancelled) return;
-      // setError(
-      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
-      // );
-      // setErrorDetails(e.message);
-      // HapticFeedback.trigger("impactHeavy");
-    }
-  };
-
-  const userSubscriptions = async (info) => {
-    if (info.latestExpirationDate != null) {
-      if (typeof info.entitlements.active.pro_monthly !== "undefined") {
-        var latestExpirationDates = Moment(info.latestExpirationDate)
-          .format("YYYY-MM-DD")
-          .toString();
-        var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
-        const { UserSubscriptionResponse, UserSubscriptionError } =
-          await userSubscription("1.99", latestExpirationDates, cuttentDate);
-        getProfilesLoad();
-      }
-    }
-  };
-
-  useEffect(() => {
-    Purchases.setDebugLogsEnabled(true);
-    Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
-    Purchases.syncPurchases();
-    Purchases.addPurchaserInfoUpdateListener((info) => {
-      // handle any changes to purchaserInfo
-    });
-  }, []);
-
   const getProfiles = async () => {
     setLoader(true);
     const { profileResponse, profileError } = await getProfile(userID);
-    if ((profileResponse.data.StatusCode = "1")) {
+    if (profileResponse.data.StatusCode) {
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
       );
 
       //SetSpecialMomentNameProfile
-      // if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
-
-      // } else {
-      //   SetSpecialMomentNameProfile("");
-      // }
-      SetSpecialMomentNameProfile(
-        profileResponse.data.Result[0].friend_special_moments[0]
-          .special_moment_name
-      );
+      if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
+        SetSpecialMomentNameProfile(
+          profileResponse.data.Result[0].friend_special_moments[0]
+            .special_moment_name
+        );
+      } else {
+        SetSpecialMomentNameProfile("");
+      }
       //setFriendSpecialMoments
-      setFriendSpecialMoments(
-        profileResponse.data.Result[0].friend_special_moments
-      );
+      if (profileResponse.data.Result[0].friend_special_moments > 0) {
+        setFriendSpecialMoments(
+          profileResponse.data.Result[0].friend_special_moments
+        );
+      } else {
+        setFriendSpecialMoments("");
+      }
 
       setFriendDefaultSpecialMomentText(
         profileResponse.data.Result[0].friend_default_special_moment_text
@@ -411,16 +344,6 @@ const UserFriendProfile = ({ route, navigation }) => {
       setLoader(false);
     } else {
       setLoader(false);
-    }
-  };
-
-  const getProfilesLoad = async () => {
-    const { profileResponse, profileError } = await getProfile();
-    if (profileResponse.data.StatusCode == "1") {
-      setUserSubscriptionStatus(
-        profileResponse.data.Result[0].user_details[0].user_subscription_status
-      );
-    } else {
     }
   };
 
@@ -468,9 +391,13 @@ const UserFriendProfile = ({ route, navigation }) => {
             <Text style={[CommonStyle.txtTitle, { color: COLORS.Secondary }]}>
               {getUserName}
             </Text>
-            <TouchableOpacity onPress={() => UserBlock()}>
-              <Image source={imgWhiteDot} style={CommonStyle.imgIconSize} />
-            </TouchableOpacity>
+            {userData.userId != userID ? (
+              <TouchableOpacity onPress={() => UserBlock()}>
+                <Image source={imgWhiteDot} style={CommonStyle.imgIconSize} />
+              </TouchableOpacity>
+            ) : (
+              <View></View>
+            )}
           </View>
         </LinearGradient>
       </View>
@@ -525,31 +452,36 @@ const UserFriendProfile = ({ route, navigation }) => {
                     </View>
                   ) : null}
                 </View>
-                {getFriendStatus == "1" ? (
-                  <POPLinkButton
-                    buttonName={AppString.UnFollow}
-                    styleBtn={UnFollowMediumbtn}
-                    onPress={() => UnFollowAction()}
-                  />
-                ) : getFriendStatus == "2" ? (
-                  <POPLinkButton
-                    buttonName={AppString.Follow}
-                    // styleBtn={Mediumbtn}
-                    styleBtn={Mediumbtn}
-                    onPress={() => FollowAction()}
-                  />
-                ) : getFriendStatus == "3" ? (
-                  <POPLinkButton
-                    buttonName={AppString.Remove}
-                    styleBtn={[Mediumbtn]}
-                    onPress={() => RemoveAction()}
-                  />
+
+                {userData.userId != userID ? (
+                  getFriendStatus == "1" ? (
+                    <POPLinkButton
+                      buttonName={AppString.UnFollow}
+                      styleBtn={UnFollowMediumbtn}
+                      onPress={() => UnFollowAction()}
+                    />
+                  ) : getFriendStatus == "2" ? (
+                    <POPLinkButton
+                      buttonName={AppString.Follow}
+                      // styleBtn={Mediumbtn}
+                      styleBtn={Mediumbtn}
+                      onPress={() => FollowAction()}
+                    />
+                  ) : getFriendStatus == "3" ? (
+                    <POPLinkButton
+                      buttonName={AppString.Remove}
+                      styleBtn={[Mediumbtn]}
+                      onPress={() => RemoveAction()}
+                    />
+                  ) : (
+                    <POPLinkButton
+                      buttonName={AppString.Follow}
+                      styleBtn={Mediumbtn}
+                      onPress={() => FollowAction()}
+                    />
+                  )
                 ) : (
-                  <POPLinkButton
-                    buttonName={AppString.Follow}
-                    styleBtn={Mediumbtn}
-                    onPress={() => FollowAction()}
-                  />
+                  <View />
                 )}
               </View>
             </View>
@@ -850,17 +782,11 @@ const UserFriendProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              {userSubscriptionStatus == "0" ? (
-                <ImagePOPLinkButton
-                  buttonName={AppString.Notify}
-                  buttonImage={imgNavNotification}
-                  onPress={() => handleSubmitPayment()}
-                />
-              ) : (
-                <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                  {"Hi... you are notify"}
-                </Text>
-              )}
+              <ImagePOPLinkButton
+                buttonName={AppString.Notify}
+                buttonImage={imgNavNotification}
+                // onPress={() => SendSpecialMoment()}
+              />
             </View>
           </View>
         </Modal>
