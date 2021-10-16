@@ -49,6 +49,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 import { useSelector } from "react-redux";
 import Purchases from "react-native-purchases";
+import Moment from "moment";
 
 const UserFriendProfile = ({ route, navigation }) => {
   const userData = useSelector((state) => state.session);
@@ -112,6 +113,8 @@ const UserFriendProfile = ({ route, navigation }) => {
   const [getNotificationSendModal, setNotificationSendModal] = useState(false);
   const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
   const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
+  const [getNotifyThankYouPaymentModal, setNotifyThankYouPaymentModal] =
+    useState(false);
 
   const CloseItem = () => {
     setUserBlockModal(false);
@@ -121,6 +124,15 @@ const UserFriendProfile = ({ route, navigation }) => {
     setImageNew("");
     setSpecialMomentImage("");
     setAwesomeShowModal(false);
+    setNotifyThankYouPaymentModal(false);
+  };
+
+  const ThankYouPaymentCheck = () => {
+    setFavoriteThingsModal(false);
+    setNotifyThankYouPaymentModal(true);
+  };
+  const ThankYouPayment = () => {
+    setNotifyThankYouPaymentModal(false);
   };
 
   // Favorite Things
@@ -349,7 +361,9 @@ const UserFriendProfile = ({ route, navigation }) => {
         //   .format("YYYY-MM-DD")
         //   .toString();
         var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
-        var latestExpirationDates = Moment(cuttentDate).add(1, "M");
+        var latestExpirationDates = Moment(Moment(cuttentDate).add(1, "M"))
+          .format("YYYY-MM-DD")
+          .toString();
 
         const { UserSubscriptionResponse, UserSubscriptionError } =
           await userSubscription("1.99", latestExpirationDates, cuttentDate);
@@ -384,25 +398,19 @@ const UserFriendProfile = ({ route, navigation }) => {
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
       );
-
-      //SetSpecialMomentNameProfile
+      // SetSpecialMomentNameProfile;
       if (profileResponse.data.Result[0].friend_special_moments.length > 0) {
         SetSpecialMomentNameProfile(
           profileResponse.data.Result[0].friend_special_moments[0]
             .special_moment_name
         );
       } else {
-        SetSpecialMomentNameProfile("");
-      }
-      //setFriendSpecialMoments
-      if (profileResponse.data.Result[0].friend_special_moments > 0) {
-        setFriendSpecialMoments(
-          profileResponse.data.Result[0].friend_special_moments
-        );
-      } else {
-        setFriendSpecialMoments("");
+        SetSpecialMomentNameProfile([]);
       }
 
+      setFriendSpecialMoments(
+        profileResponse.data.Result[0].friend_special_moments
+      );
       setFriendDefaultSpecialMomentText(
         profileResponse.data.Result[0].friend_default_special_moment_text
       );
@@ -878,9 +886,11 @@ const UserFriendProfile = ({ route, navigation }) => {
                   onPress={() => handleSubmitPayment()}
                 />
               ) : (
-                <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                  {"Hi... you are notify"}
-                </Text>
+                <ImagePOPLinkButton
+                  buttonName={AppString.Notify}
+                  buttonImage={imgNavNotification}
+                  onPress={() => ThankYouPaymentCheck()}
+                />
               )}
             </View>
           </View>
@@ -1049,6 +1059,30 @@ const UserFriendProfile = ({ route, navigation }) => {
               Awesome, {getFirstName}'s' Friends now know you plan to get{" "}
               {getTitleName} as a gift.
             </Text>
+          </View>
+        </Modal>
+      ) : null}
+
+      {/* NotifyThankYouPaymentModal  */}
+      {getNotifyThankYouPaymentModal == true ? (
+        <Modal
+          testID={"modal"}
+          isVisible={getNotifyThankYouPaymentModal}
+          onBackdropPress={() => CloseItem()}
+        >
+          <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+            <View style={CommonStyle.Row}>
+              <Text style={[CommonStyle.txtContent, CommonStyle.p16]}>
+                {AppString.notifySpecialMoment}
+              </Text>
+            </View>
+
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <ImagePOPLinkButton
+                buttonName={AppString.Ok}
+                onPress={() => ThankYouPayment()}
+              />
+            </View>
           </View>
         </Modal>
       ) : null}

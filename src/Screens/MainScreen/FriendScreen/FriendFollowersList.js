@@ -64,6 +64,7 @@ import { useActions } from "../../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 import Purchases from "react-native-purchases";
+import Moment from "moment";
 
 const FriendFollowersList = ({ route, navigation }) => {
   const { userID } = route.params;
@@ -117,7 +118,8 @@ const FriendFollowersList = ({ route, navigation }) => {
   const [getFavoriteThingsModal, setFavoriteThingsModal] = useState(false);
   const [getNotificationSendModal, setNotificationSendModal] = useState(false);
   const [getAwesomeShowModal, setAwesomeShowModal] = useState(false);
-
+  const [getNotifyThankYouPaymentModal, setNotifyThankYouPaymentModal] =
+    useState(false);
   const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
 
   const CloseItem = () => {
@@ -128,6 +130,7 @@ const FriendFollowersList = ({ route, navigation }) => {
     setImageNew("");
     setSpecialMomentImage("");
     setAwesomeShowModal(false);
+    setNotifyThankYouPaymentModal(false);
   };
 
   useEffect(() => {
@@ -135,6 +138,13 @@ const FriendFollowersList = ({ route, navigation }) => {
     getProfilesLoad();
   }, []);
 
+  const ThankYouPaymentCheck = () => {
+    setFavoriteThingsModal(false);
+    setNotifyThankYouPaymentModal(true);
+  };
+  const ThankYouPayment = () => {
+    setNotifyThankYouPaymentModal(false);
+  };
   // Favorite Things
   const ShowOldItem = (Name, Image, CategoryId, key, questions) => {
     temp = [];
@@ -361,7 +371,9 @@ const FriendFollowersList = ({ route, navigation }) => {
         //   .format("YYYY-MM-DD")
         //   .toString();
         var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
-        var latestExpirationDates = Moment(cuttentDate).add(1, "M");
+        var latestExpirationDates = Moment(Moment(cuttentDate).add(1, "M"))
+          .format("YYYY-MM-DD")
+          .toString();
 
         const { UserSubscriptionResponse, UserSubscriptionError } =
           await userSubscription("1.99", latestExpirationDates, cuttentDate);
@@ -407,10 +419,6 @@ const FriendFollowersList = ({ route, navigation }) => {
         SetSpecialMomentNameProfile([]);
       }
 
-      // SetSpecialMomentNameProfile(
-      //   profileResponse.data.Result[0].friend_special_moments[0]
-      //     .special_moment_name
-      // );
       setFriendSpecialMoments(
         profileResponse.data.Result[0].friend_special_moments
       );
@@ -839,9 +847,11 @@ const FriendFollowersList = ({ route, navigation }) => {
                   onPress={() => handleSubmitPayment()}
                 />
               ) : (
-                <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
-                  {AppString.notifySpecialMoment}
-                </Text>
+                <ImagePOPLinkButton
+                  buttonName={AppString.Notify}
+                  buttonImage={imgNavNotification}
+                  onPress={() => ThankYouPaymentCheck()}
+                />
               )}
             </View>
           </View>
@@ -1013,6 +1023,31 @@ const FriendFollowersList = ({ route, navigation }) => {
           </View>
         </Modal>
       ) : null}
+
+      {/* NotifyThankYouPaymentModal  */}
+      {getNotifyThankYouPaymentModal == true ? (
+        <Modal
+          testID={"modal"}
+          isVisible={getNotifyThankYouPaymentModal}
+          onBackdropPress={() => CloseItem()}
+        >
+          <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+            <View style={CommonStyle.Row}>
+              <Text style={[CommonStyle.txtContent, CommonStyle.p16]}>
+                {AppString.notifySpecialMoment}
+              </Text>
+            </View>
+
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <ImagePOPLinkButton
+                buttonName={AppString.Ok}
+                onPress={() => ThankYouPayment()}
+              />
+            </View>
+          </View>
+        </Modal>
+      ) : null}
+
       <Spinner visible={getLoader} />
     </View>
   );

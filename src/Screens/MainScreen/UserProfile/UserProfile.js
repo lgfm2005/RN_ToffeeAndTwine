@@ -57,6 +57,8 @@ import { useActions } from "../../../redux/actions";
 import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 import { FONT } from "../../../Assets/utils/FONT";
+import Purchases from "react-native-purchases";
+import Moment from "moment";
 
 const UserProfile = ({ route, navigation }) => {
   const { userInfo } = route.params;
@@ -68,6 +70,7 @@ const UserProfile = ({ route, navigation }) => {
     RemoveFollowerFriend,
     getUnfollowFriendList,
     NotifyFriend,
+    userSubscription,
   } = useActions();
 
   const [getUserBlockModal, setUserBlockModal] = useState(false);
@@ -108,6 +111,9 @@ const UserProfile = ({ route, navigation }) => {
   const [getFriendDefaultSpecialMomentText, setFriendDefaultSpecialMomentText] =
     useState("");
   const [getFriendStatus, setFriendStatus] = useState("");
+  const [userSubscriptionStatus, setUserSubscriptionStatus] = useState("0");
+  const [getNotifyThankYouPaymentModal, setNotifyThankYouPaymentModal] =
+    useState(false);
 
   const CloseItem = () => {
     setUserBlockModal(false);
@@ -117,7 +123,17 @@ const UserProfile = ({ route, navigation }) => {
     setAddNewItemModal(false);
     setImageNew("");
     setSpecialMomentImage("");
+    setNotifyThankYouPaymentModal(false);
   };
+
+  const ThankYouPaymentCheck = () => {
+    setFavoriteThingsModal(false);
+    setNotifyThankYouPaymentModal(true);
+  };
+  const ThankYouPayment = () => {
+    setNotifyThankYouPaymentModal(false);
+  };
+
   const UserBlock = () => {
     console.log("===>>>11111");
     setUserBlockModal(true);
@@ -354,8 +370,91 @@ const UserProfile = ({ route, navigation }) => {
     }
   };
 
+  const handleSubmitPayment = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 4000);
+    var currentDate = Moment(new Date(), "DD/MM/YYYY");
+    try {
+      const purchaserInfo1 = await Purchases.getPurchaserInfo();
+      var latestExpirationDates = Moment(
+        purchaserInfo1.latestExpirationDate,
+        "DD/MM/YYYY"
+      );
+
+      var isBefore = currentDate.isBefore(latestExpirationDates);
+      if (!isBefore) {
+        if (
+          typeof purchaserInfo1.entitlements.active.pro_monthly !== "undefined"
+        ) {
+          // Grant user "pro" access
+        }
+        const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
+        const monthlyPackage = offerings.current.monthly;
+        const { purchaserInfo } = await Purchases.purchasePackage(
+          monthlyPackage
+        );
+        const { latestExpirationDate } = purchaserInfo;
+        userSubscriptions(purchaserInfo);
+
+        console.log("latestExpirationDate:", latestExpirationDate);
+      } else {
+      }
+      CloseItem();
+    } catch (e) {
+      console.log("Error:", e);
+      // setLoading(false);
+      // if (e.userCancelled) return;
+      // setError(
+      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
+      // );
+      // setErrorDetails(e.message);
+      // HapticFeedback.trigger("impactHeavy");
+    }
+  };
+
+  const userSubscriptions = async (info) => {
+    if (info.latestExpirationDate != null) {
+      if (typeof info.entitlements.active.pro_monthly !== "undefined") {
+        // var latestExpirationDates = Moment(info.latestExpirationDate)
+        //   .format("YYYY-MM-DD")
+        //   .toString();
+        var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
+        var latestExpirationDates = Moment(Moment(cuttentDate).add(1, "M"))
+          .format("YYYY-MM-DD")
+          .toString();
+
+        const { UserSubscriptionResponse, UserSubscriptionError } =
+          await userSubscription("1.99", latestExpirationDates, cuttentDate);
+        getProfilesLoad();
+      }
+    }
+  };
+
+  useEffect(() => {
+    Purchases.setDebugLogsEnabled(true);
+    Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
+    Purchases.syncPurchases();
+    Purchases.addPurchaserInfoUpdateListener((info) => {
+      // handle any changes to purchaserInfo
+    });
+  }, []);
+
+  const getProfilesLoad = async () => {
+    const { profileResponse, profileError } = await getProfile();
+    if (profileResponse.data.StatusCode == "1") {
+      setUserSubscriptionStatus(
+        profileResponse.data.Result[0].user_details[0].user_subscription_status
+      );
+    } else {
+    }
+  };
+
   useEffect(() => {
     getProfiles();
+    getProfilesLoad();
   }, []);
 
   return (
@@ -733,11 +832,19 @@ const UserProfile = ({ route, navigation }) => {
                   <View
                     style={{ flexDirection: "row", justifyContent: "center" }}
                   >
-                    <ImagePOPLinkButton
-                      buttonName={AppString.Notify}
-                      buttonImage={imgNavNotification}
-                      // onPress={() => SendSpecialMoment()}
-                    />
+                    {userSubscriptionStatus == "0" ? (
+                      <ImagePOPLinkButton
+                        buttonName={AppString.Notify}
+                        buttonImage={imgNavNotification}
+                        onPress={() => handleSubmitPayment()}
+                      />
+                    ) : (
+                      <ImagePOPLinkButton
+                        buttonName={AppString.Notify}
+                        buttonImage={imgNavNotification}
+                        onPress={() => ThankYouPaymentCheck()}
+                      />
+                    )}
                   </View>
                 </View>
               </Modal>
@@ -922,6 +1029,32 @@ const UserProfile = ({ route, navigation }) => {
                     Awesome, {getFirstName} Friends now know you plan to get{" "}
                     {userInfo.user_fname} as a gift.
                   </Text>
+                </View>
+              </Modal>
+            ) : null}
+
+            {/* NotifyThankYouPaymentModal  */}
+            {getNotifyThankYouPaymentModal == true ? (
+              <Modal
+                testID={"modal"}
+                isVisible={getNotifyThankYouPaymentModal}
+                onBackdropPress={() => CloseItem()}
+              >
+                <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                  <View style={CommonStyle.Row}>
+                    <Text style={[CommonStyle.txtContent, CommonStyle.p16]}>
+                      {AppString.notifySpecialMoment}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
+                    <ImagePOPLinkButton
+                      buttonName={AppString.Ok}
+                      onPress={() => ThankYouPayment()}
+                    />
+                  </View>
                 </View>
               </Modal>
             ) : null}

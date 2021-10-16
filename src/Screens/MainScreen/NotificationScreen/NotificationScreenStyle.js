@@ -4,8 +4,9 @@ import { COLORS } from "../../../Assets/utils/COLORS";
 export const NotificationScreenStyle = StyleSheet.create({
   FollowerListBg: {
     width: "100%",
-    paddingLeft: 24,
-    paddingRight: 24,
+    paddingLeft: 10,
+    paddingRight: 10,
+    justifyContent: "center",
   },
   followerTxtIcon: {
     flexDirection: "row",

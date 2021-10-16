@@ -101,7 +101,9 @@ const HomeScreen = ({ navigation }) => {
         //   .format("YYYY-MM-DD")
         //   .toString();
         var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
-        var latestExpirationDates = Moment(cuttentDate).add(1, "M");
+        var latestExpirationDates = Moment(Moment(cuttentDate).add(1, "M"))
+          .format("YYYY-MM-DD")
+          .toString();
 
         const { UserSubscriptionResponse, UserSubscriptionError } =
           await userSubscription("1.99", latestExpirationDates, cuttentDate);
@@ -1003,10 +1005,10 @@ const HomeScreen = ({ navigation }) => {
                               TitleName={item.category_question}
                               buttonName={item.category_placeholder}
                               value={item.question_value}
-                              // Link={
-                              //   item.category_question === "Link" ? true : false
-                              // }
-                              Link={false}
+                              Link={
+                                item.category_question === "Link" ? true : false
+                              }
+                              Link={true}
                               multiline={true}
                             />
                           );

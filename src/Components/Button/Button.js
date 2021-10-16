@@ -94,10 +94,12 @@ export const ImagePOPLinkButton = ({
           style={[ButtonStyle.popFilledButtonStyle, { flexDirection: "row" }]}
         >
           <Text style={ButtonStyle.popFilledButtonText}>{buttonName}</Text>
-          <Image
-            source={buttonImage}
-            style={[CommonStyle.imgIconSize, { marginLeft: 10 }]}
-          />
+          {buttonImage && (
+            <Image
+              source={buttonImage}
+              style={[CommonStyle.imgIconSize, { marginLeft: 10 }]}
+            />
+          )}
         </View>
       </View>
     </TouchableOpacity>

@@ -158,6 +158,7 @@ export const AppString = {
   confirm: "Confirm",
   NoGifthintsAddedyet: "No gift hints added yet.",
   Nospecialmomentsaddedyet: "No special moments added yet.",
+  Ok: "OK",
   Notify: "Notify",
   YesNotify: "Yes, Notify",
   Deleteaccount: "Delete account",
