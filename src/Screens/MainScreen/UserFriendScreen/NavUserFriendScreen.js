@@ -15,9 +15,11 @@ const Tab = createMaterialTopTabNavigator();
 
 const NavUserFriendScreen = ({ navigation, route }) => {
   var isFollowings = false;
+  var usename = "";
   if (route.params) {
-    const { isFollowing, isUserFollowerFriendId } = route.params;
+    const { isFollowing, isUserFollowerFriendId, Usename } = route.params;
     isFollowings = isFollowing;
+    usename = Usename;
     console.log("isFollowings::", isFollowings);
     // isUserFollowerFriendIds = isUserFollowerFriendId;
     // isUserFollowingFriendIds = isUserFollowingFriendId;
@@ -34,6 +36,7 @@ const NavUserFriendScreen = ({ navigation, route }) => {
       }}
     >
       <UserFriendsToolbar
+        usename={usename}
         onPressBack={() => navigation.goBack()}
         onPressSearch={() => navigation.navigate("Search")}
       />

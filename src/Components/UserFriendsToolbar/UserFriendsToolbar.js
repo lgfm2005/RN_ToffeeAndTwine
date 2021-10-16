@@ -18,14 +18,14 @@ import { UserFriendsToolbarStyle } from "./UserFriendsToolbarStyle";
 
 // Asset
 
-export const UserFriendsToolbar = ({ onPressBack, onPressSearch }) => {
+export const UserFriendsToolbar = ({ onPressBack, onPressSearch, usename }) => {
   return (
     <View style={[CommonStyle.Container, UserFriendsToolbarStyle.TopToolBar]}>
       <TouchableOpacity onPress={onPressBack}>
         <Image source={imgLeftBack} style={CommonStyle.imgIconSize} />
       </TouchableOpacity>
       <Text style={[CommonStyle.txtTitle, { fontSize: 24 }]}>
-        {AppString.Friends}
+        {usename} {AppString.Friends}
       </Text>
       <TouchableOpacity onPress={onPressSearch}>
         <Image source={imgSearch} style={CommonStyle.imgIconSize} />

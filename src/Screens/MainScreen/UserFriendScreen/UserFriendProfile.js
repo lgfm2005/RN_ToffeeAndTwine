@@ -604,6 +604,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                     isFollowing: false,
                     isUserFollowerFriendId: userID,
                     isUserFollowingFriendId: userID,
+                    Usename: getUserName,
                     isMyProfile: false,
                   })
                 }
@@ -635,6 +636,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                     isFollowing: true,
                     isUserFollowerFriendId: userID,
                     isUserFollowingFriendId: userID,
+                    Usename: getUserName,
                     isMyProfile: false,
                   })
                 }
