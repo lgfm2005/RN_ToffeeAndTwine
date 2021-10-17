@@ -562,14 +562,18 @@ export const useActions = () => {
       if (UserID) {
         data.append("UserID", UserID);
       }
+      debugger;
       let profileResponse, profileError;
       try {
         profileResponse = await API.GetProfile.get(sessions, data);
+        debugger;
         if (profileResponse.data.StatusCode == "1") {
         }
       } catch (e) {
         profileError = e;
       }
+      console.log("sdfdsfs", profileResponse, profileError, sessions);
+      debugger;
       return { profileResponse, profileError };
     },
 

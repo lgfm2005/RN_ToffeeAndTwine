@@ -50,6 +50,7 @@ import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 import { useSelector } from "react-redux";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
+import { trim } from "lodash";
 
 const UserFriendProfile = ({ route, navigation }) => {
   const userData = useSelector((state) => state.session);
@@ -745,7 +746,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
-                          item.special_moment_name.trim() +
+                          trim(item.special_moment_name) +
                           ImageUrl.Png,
                       }}
                       ExploreName={item.special_moment_name}

@@ -65,6 +65,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
+import { trim } from "lodash";
 
 const FriendFollowersList = ({ route, navigation }) => {
   const { userID } = route.params;
@@ -704,7 +705,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
-                          item.special_moment_name.trim() +
+                          trim(item.special_moment_name) +
                           ImageUrl.Png,
                       }}
                       ExploreName={item.special_moment_name}

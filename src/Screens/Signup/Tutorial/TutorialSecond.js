@@ -43,6 +43,7 @@ import {
 import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
+import { trim } from "lodash";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 var temp2 = [];
@@ -257,8 +258,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
                   // <UpgradeCategoriesList
                   <Column3UpgradeCategoriesList
                     ImageUrl={{
-                      uri:
-                        ImageUrl.Categories + item.Name.trim() + ImageUrl.Png,
+                      uri: ImageUrl.Categories + trim(item.Name) + ImageUrl.Png,
                     }}
                     ExploreName={item.Name}
                     checkColor={item.isSelected}

@@ -21,6 +21,7 @@ const api = async (session, endpoint, method = "get", body, contentType) => {
     ...(await createAuthorizationHeader(session)),
     ...(await createApikey()),
     "content-type": contentType || "application/json",
+    "Content-Type": "application/json; charset=utf-8",
   };
 
   if (method === "get" || method === "delete") {

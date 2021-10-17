@@ -52,7 +52,7 @@ import {
 import Purchases from "react-native-purchases";
 import Moment from "moment";
 import { ImageUrl } from "../../Assets/utils/ImageUrl";
-
+import { trim } from "lodash";
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
 const CalendarScreen = ({ navigation }) => {
@@ -683,7 +683,7 @@ const CalendarScreen = ({ navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
-                          item.special_moment_name.trim() +
+                          trim(item.special_moment_name) +
                           ImageUrl.Png,
                       }}
                       ExploreName={item.special_moment_name}
@@ -1227,7 +1227,7 @@ const CalendarScreen = ({ navigation }) => {
                             ImageUrl={{
                               uri:
                                 ImageUrl.MomentsWhite +
-                                item.special_moment_name.trim() +
+                                trim(item.special_moment_name) +
                                 ImageUrl.Png,
                             }}
                             ExploreName={item.special_moment_name}

@@ -156,6 +156,9 @@ const SettingScreen = ({ navigation }) => {
     }
   };
   const FinalCheckLogout = async () => {
+    Logout();
+    navigation.navigate("MainScreen");
+
     OneSignal.removeExternalUserId();
     OneSignal.unsubscribeWhenNotificationsAreDisabled(true);
     const { FinalLogOutResponse, FinalLogOutError } = await FinalLogOut();

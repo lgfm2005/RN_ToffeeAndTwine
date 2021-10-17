@@ -65,6 +65,7 @@ import { useActions } from "../../redux/actions";
 import Purchases from "react-native-purchases";
 import { ImageUrl } from "../../Assets/utils/ImageUrl";
 import { AllListViewStyle } from "../../Components/AllListVIew/AllListViewStyle";
+import { trim } from "lodash";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp = [];
@@ -760,7 +761,7 @@ const HomeScreen = ({ navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.Categories +
-                          item.category_name.trim() +
+                          trim(item.category_name) +
                           ImageUrl.Png,
                       }}
                       // ImageUrl={imgBook}
@@ -831,7 +832,7 @@ const HomeScreen = ({ navigation }) => {
                             ImageUrl={{
                               uri:
                                 ImageUrl.Categories +
-                                item.category_name.trim() +
+                                trim(item.category_name) +
                                 ImageUrl.Png,
                             }}
                             ExploreName={item.category_name}
