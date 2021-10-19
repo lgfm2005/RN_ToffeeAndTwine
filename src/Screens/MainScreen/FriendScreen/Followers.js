@@ -107,6 +107,7 @@ const Followers = ({ navigation }) => {
   };
 
   const RenderItem = (Data, index) => {
+    console.log("adfwefwfwfefwefwefwwwg3", Data);
     return (
       <TouchableOpacity onPress={() => selectFriend(Data.item)}>
         <View

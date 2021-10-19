@@ -199,13 +199,15 @@ const EditProfile = ({ navigation }) => {
       getImageAPI,
       UpdateDefaultSpecialMomentShow
     );
-
+    debugger;
     if (response.data.StatusCode == "1") {
+      debugger;
       navigation.navigate("MyProfile");
       // console.log("response===>", response.data);
       setLoader(false);
       // navigation.navigate("MyProfile");
     } else {
+      debugger;
       setLoader(false);
       console.log("APIUpdateProfile ===>>", error);
     }

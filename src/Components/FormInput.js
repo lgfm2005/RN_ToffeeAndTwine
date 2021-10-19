@@ -110,7 +110,12 @@ export const SimpleInputEditView = ({
     <View
       style={[CommonStyle.formSimpletxtEditView, { alignItems: "stretch" }]}
     >
-      <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
+      <Text
+        style={[
+          CommonStyle.formPopUpLabel,
+          { fontFamily: FONT.Gilroy, marginBottom: 10 },
+        ]}
+      >
         {TitleName}
       </Text>
       <TextInput

@@ -29,7 +29,6 @@ const NavFriendScreen = ({ navigation, route }) => {
     console.log("isFollowings::", isFollowings);
     // isUserFollowerFriendIds = isUserFollowerFriendId;
     // isUserFollowingFriendIds = isUserFollowingFriendId;
-    // // debugger;
   }
 
   return (
@@ -37,8 +36,8 @@ const NavFriendScreen = ({ navigation, route }) => {
       style={{
         flex: 1,
         paddingTop: getStatusBarHeight(),
-        backgroundColor: COLORS.Secondary,
-        // backgroundColor: "red",
+        // backgroundColor: COLORS.Secondary,
+        backgroundColor: "black",
       }}
     >
       <FriendsToolbar onPress={() => navigation.navigate("Search")} />

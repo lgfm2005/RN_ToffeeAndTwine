@@ -53,8 +53,7 @@ import Moment from "moment";
 
 const UserFriendProfile = ({ route, navigation }) => {
   const userData = useSelector((state) => state.session);
-  const { userID } = route.params;
-  debugger;
+  const { userID, MyProfileData } = route.params;
   useEffect(() => {
     {
       userData.userId != userID
@@ -165,9 +164,7 @@ const UserFriendProfile = ({ route, navigation }) => {
     setNotificationSendModal(false), setAwesomeShowModal(true), setLoader(true);
     const { addgiftnoticationResponse, addgiftnoticatioError } =
       await AddGiftNotication(userID, getCategoryId);
-    debugger;
     if (addgiftnoticationResponse.data.StatusCode == "1") {
-      debugger;
       var GiftTo = addgiftnoticationResponse.data.Result[0].gift_to;
       var GiftID = addgiftnoticationResponse.data.Result[0].user_gift_id;
       console.log("GiftTo ===>", GiftTo);
@@ -400,6 +397,7 @@ const UserFriendProfile = ({ route, navigation }) => {
     setLoader(true);
     const { profileResponse, profileError } = await getProfile(userID);
     if (profileResponse.data.StatusCode == "1") {
+      debugger;
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
@@ -549,7 +547,9 @@ const UserFriendProfile = ({ route, navigation }) => {
                   ) : null}
                 </View>
 
-                {userData.userId != userID ? (
+                {MyProfileData == "1" ? (
+                  <View />
+                ) : userData.userId != userID ? (
                   getFriendStatus == "1" ? (
                     <POPLinkButton
                       buttonName={AppString.UnFollow}
@@ -565,11 +565,17 @@ const UserFriendProfile = ({ route, navigation }) => {
                     />
                   ) : getFriendStatus == "3" ? (
                     <POPLinkButton
-                      buttonName={AppString.Remove}
-                      styleBtn={[Mediumbtn]}
-                      onPress={() => RemoveAction()}
+                      buttonName={AppString.UnFollow}
+                      styleBtn={UnFollowMediumbtn}
+                      onPress={() => UnFollowAction()}
                     />
                   ) : (
+                    // ) : getFriendStatus == "3" ? (
+                    //   <POPLinkButton
+                    //     buttonName={AppString.Remove}
+                    //     styleBtn={[Mediumbtn]}
+                    //     onPress={() => RemoveAction()}
+                    //   />
                     <POPLinkButton
                       buttonName={AppString.Follow}
                       styleBtn={Mediumbtn}
@@ -860,11 +866,12 @@ const UserFriendProfile = ({ route, navigation }) => {
                   />
                 )}
               </View>
-              <View style={{ width: "80%", alignItems: "center" }}>
+              <View style={{ width: "60%", alignItems: "center" }}>
                 <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
                   {getSpecialMomentName}
                 </Text>
               </View>
+              <View style={{ width: "20%" }} />
             </View>
 
             <View style={CommonStyle.my16}>

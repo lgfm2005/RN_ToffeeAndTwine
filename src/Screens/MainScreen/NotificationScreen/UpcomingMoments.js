@@ -36,10 +36,8 @@ const UpcomingMoments = ({ navigation }) => {
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
       if (isActive == "1") {
         // navigation.navigate("UpcomingMoments");
-        debugger;
       } else {
         navigation.navigate("UpcomingUpGrade");
-        debugger;
       }
     }
   };

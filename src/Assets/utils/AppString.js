@@ -4,6 +4,8 @@ export const AppString = {
   AppName: "Toffee And Twine",
   Signup: "Sign Up",
   Signin: "Sign In",
+  OneSignalDev: "1b61c026-91b6-40fe-ad5d-829673a4817c",
+  OneSignalProduction: "1b61c026-91b6-40fe-ad5d-829673a4817c",
   GiftThoughtfully: "Gift Thoughtfully",
   EmailAddress: "Email Address",
   InvaildEmail: "Invaild Email",

@@ -76,6 +76,8 @@ const SignIn = ({ navigation }) => {
   }, []);
 
   const getToken = async () => {
+    const devicate = await await OneSignal.getDeviceState();
+    console.log("Data ===================>", devicate);
     const deviceState = await (await OneSignal.getDeviceState()).userId;
     return deviceState;
   };
@@ -217,7 +219,6 @@ const SignIn = ({ navigation }) => {
       const token = { token: tokens };
       OneSignalExternalUserEmail(getEmail);
       var deviceToken = await getToken();
-      debugger;
       await updateNotification(token, deviceToken);
       const { GetCategoryListerror, GetCategoryListresponse } =
         await CategoryList(30, token);

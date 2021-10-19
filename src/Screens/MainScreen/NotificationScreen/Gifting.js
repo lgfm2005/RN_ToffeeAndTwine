@@ -25,6 +25,7 @@ import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useActions } from "../../../redux/actions";
+import { UserProfileScreenStyle } from "../UserProfile/UserProfileScreenStyle";
 
 const Gifting = ({ navigation }) => {
   const [giftingList, setGiftingList] = useState([]);
@@ -32,19 +33,20 @@ const Gifting = ({ navigation }) => {
   const { userSubscription, getNotifyList } = useActions();
 
   const getNotifyLists = async () => {
-    debugger;
     const { getNotifyListResponse, getNotifyListError } = await getNotifyList();
-    debugger;
     if (getNotifyListResponse.data.StatusCode == "1") {
-      debugger;
       setLoader(false);
       var data = getNotifyListResponse.data.Result;
-      debugger;
       setGiftingList(data);
-      debugger;
     } else {
       setLoader(false);
     }
+  };
+
+  const UserProfileScreenStyle = (user_id) => {
+    navigation.navigate("UserFriendProfile", {
+      userID: user_id,
+    });
   };
 
   useEffect(() => {
@@ -90,7 +92,12 @@ const Gifting = ({ navigation }) => {
                     { color: COLORS.PrimaryLight, lineHeight: 24 },
                   ]}
                 >
-                  <Text style={{ color: COLORS.black }}>
+                  <Text
+                    style={{ color: COLORS.black }}
+                    onPress={() =>
+                      UserProfileScreenStyle(item.follower_user_id)
+                    }
+                  >
                     {item.user_fname} {item.user_lname}
                   </Text>
                   {" started following you"}
@@ -144,11 +151,17 @@ const Gifting = ({ navigation }) => {
                     { color: COLORS.PrimaryLight, lineHeight: 24 },
                   ]}
                 >
-                  <Text style={{ color: COLORS.black }}>
+                  <Text
+                    style={{ color: COLORS.black }}
+                    onPress={() => UserProfileScreenStyle(item.gift_by)}
+                  >
                     {item.gift_by_fname} {item.gift_by_lname}
                   </Text>
                   {" plans to get "}
-                  <Text style={{ color: COLORS.black, lineHeight: 24 }}>
+                  <Text
+                    style={{ color: COLORS.black, lineHeight: 24 }}
+                    onPress={() => UserProfileScreenStyle(item.gift_to)}
+                  >
                     {item.gift_to_fname} {item.gift_to_lname}{" "}
                   </Text>
                   {item.category_name}

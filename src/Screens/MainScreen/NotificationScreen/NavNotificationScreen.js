@@ -21,8 +21,6 @@ const Stack = createStackNavigator();
 import { useSelector } from "react-redux";
 import { useActions } from "../../../redux/actions";
 
-StatusBar.setBarStyle("dark-content", true);
-
 function UpcomingMomentScreen() {
   return (
     <Stack.Navigator
@@ -48,13 +46,10 @@ const NavNotificationScreen = ({ navigation, route }) => {
   );
 
   useEffect(() => {
-    debugger;
     if (notifactionTabEvent.isGiftTab == false) {
-      debugger;
       setisGiftTab(false);
       notificationTabEvent(true);
     }
-    debugger;
   }, [notifactionTabEvent.isGiftTab]);
 
   return (
@@ -62,7 +57,8 @@ const NavNotificationScreen = ({ navigation, route }) => {
       style={{
         flex: 1,
         paddingTop: getStatusBarHeight(),
-        backgroundColor: COLORS.Secondary,
+        // backgroundColor: COLORS.Secondary,
+        backgroundColor: "black",
       }}
     >
       <NotificationToolbar />

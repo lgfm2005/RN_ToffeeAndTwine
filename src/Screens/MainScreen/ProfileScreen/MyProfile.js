@@ -95,7 +95,7 @@ const MyProfile = ({ navigation, route }) => {
     userSubscription,
   } = useActions();
 
-  const { UserProfileCheck, userId } = route.params;
+  // const { userId } = route.params;
 
   const userData = useSelector((state) => state.session);
   const specialMoment = useSelector((state) => state.specialMoment);
@@ -182,15 +182,12 @@ const MyProfile = ({ navigation, route }) => {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-  useEffect(() => {
-    debugger;
-    if (UserProfileCheck == "UserProfileCheck") {
-      debugger;
-      navigation.navigate("UserFriendProfile", { userID: userId });
-      debugger;
-    } else {
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (UserProfileCheck == "UserProfileCheck") {
+  //     navigation.navigate("UserFriendProfile", { userID: userId });
+  //   } else {
+  //   }
+  // }, []);
   //onRefresh
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -909,10 +906,8 @@ const MyProfile = ({ navigation, route }) => {
   const upgradeItem = async () => {
     if (userSubscriptionStatus == "1") {
       AddItemShow(0);
-      debugger;
     } else {
       setupgradeItemModal(true);
-      debugger;
     }
   };
 
@@ -925,7 +920,6 @@ const MyProfile = ({ navigation, route }) => {
   };
 
   const handleSubmitPayment = async () => {
-    debugger;
     // setLoading(true);
     // HapticFeedback.trigger("impactLight");
     setLoader(true);
@@ -933,15 +927,12 @@ const MyProfile = ({ navigation, route }) => {
       setLoader(false);
     }, 4000);
     var currentDate = Moment(new Date(), "DD/MM/YYYY");
-    debugger;
     try {
       const purchaserInfo1 = await Purchases.getPurchaserInfo();
-      debugger;
       var latestExpirationDates = Moment(
         purchaserInfo1.latestExpirationDate,
         "DD/MM/YYYY"
       );
-      debugger;
       var isBefore = currentDate.isBefore(latestExpirationDates);
       if (!isBefore) {
         if (
@@ -950,25 +941,20 @@ const MyProfile = ({ navigation, route }) => {
           // Grant user "pro" access
         }
         const offerings = await Purchases.getOfferings();
-        debugger;
         console.log("offerings:", offerings);
         const monthlyPackage = offerings.current.monthly;
-        debugger;
         const { purchaserInfo } = await Purchases.purchasePackage(
           monthlyPackage
         );
         const { latestExpirationDate } = purchaserInfo;
-        debugger;
         userSubscriptions(purchaserInfo);
 
         console.log("latestExpirationDate:", latestExpirationDate);
-        debugger;
       } else {
       }
       CloseItem();
     } catch (e) {
       console.log("Error:", e);
-      debugger;
       // setLoading(false);
       // if (e.userCancelled) return;
       // setError(
@@ -1824,7 +1810,7 @@ const MyProfile = ({ navigation, route }) => {
                         )}
                       </TouchableOpacity>
                     </View>
-                    <View>
+                    <View style={{ width: "60%" }}>
                       <Text
                         style={[
                           CommonStyle.txtTitle,
@@ -1835,7 +1821,7 @@ const MyProfile = ({ navigation, route }) => {
                         {getEditSepItem}
                       </Text>
                     </View>
-                    <View style={{ width: "20%" }}></View>
+                    <View style={{ width: "20%" }} />
                   </View>
                 </View>
                 <View style={CommonStyle.my16}>

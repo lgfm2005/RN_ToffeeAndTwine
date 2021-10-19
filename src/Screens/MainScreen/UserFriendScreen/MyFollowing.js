@@ -129,11 +129,11 @@ const MyFollowing = ({ route, navigation }) => {
         : item.following_user_id
         ? item.following_user_id
         : item.friend_following_user_id,
+      MyProfileData: item.is_my_profile,
     });
   };
 
   const RenderItem = (Data, index) => {
-    debugger;
     return (
       <TouchableOpacity onPress={() => selectFriend(Data.item)}>
         <View
@@ -183,8 +183,8 @@ const MyFollowing = ({ route, navigation }) => {
               ]}
             >
               <POPLinkButton
-                buttonName={AppString.UnFollow}
-                onPress={() => UnFollowFriend(Data.item.following_user_id)}
+                buttonName={AppString.Remove}
+                onPress={() => RemoveFriend(Data.item.follower_user_id)}
                 styleBtn={Smallbtn}
                 fontStyle={fontsize12}
               />

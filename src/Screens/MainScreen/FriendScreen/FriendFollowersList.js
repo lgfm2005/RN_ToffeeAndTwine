@@ -566,11 +566,17 @@ const FriendFollowersList = ({ route, navigation }) => {
                   />
                 ) : getFriendStatus == "3" ? (
                   <POPLinkButton
-                    buttonName={AppString.Remove}
-                    styleBtn={[Mediumbtn]}
-                    onPress={() => RemoveAction()}
+                    buttonName={AppString.UnFollow}
+                    styleBtn={UnFollowMediumbtn}
+                    onPress={() => UnFollowAction()}
                   />
                 ) : (
+                  // ) : getFriendStatus == "3" ? (
+                  // <POPLinkButton
+                  //   buttonName={AppString.Remove}
+                  //   styleBtn={[Mediumbtn]}
+                  //   onPress={() => RemoveAction()}
+                  // />
                   <POPLinkButton
                     buttonName={AppString.Follow}
                     styleBtn={Mediumbtn}
@@ -813,11 +819,12 @@ const FriendFollowersList = ({ route, navigation }) => {
                   />
                 )}
               </View>
-              <View style={{ width: "80%", alignItems: "center" }}>
+              <View style={{ width: "60%", alignItems: "center" }}>
                 <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
                   {getSpecialMomentName}
                 </Text>
               </View>
+              <View style={{ width: "20%" }} />
             </View>
 
             <View style={CommonStyle.my16}>

@@ -103,6 +103,15 @@ function Home({ navigation }) {
         // }}
         options={{ header: () => null }}
       />
+      <Stack.Screen
+        name="UserFriendProfile"
+        component={UserFriendProfile}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -335,6 +344,15 @@ function Notification() {
         name="NavNotificationScreen"
         component={NavNotificationScreen}
       />
+      <Stack.Screen
+        name="UserFriendProfile"
+        component={UserFriendProfile}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -352,14 +370,17 @@ const Navigation = ({ navigation }) => {
     if (token && sessions.userFname != null) {
       var notification = openResult.notification.additionalData;
       var user_id = openResult.notification.additionalData.user_id;
-      debugger;
+      console.log("notification Check Point ====>>>>>>>", notification);
       if (notification.activity == "Followers") {
-        // navigation.navigate("Friend");
-        debugger;
-        navigation.navigate("Profile", {
-          UserProfileCheck: "UserProfileCheck",
-          userId: user_id,
-        });
+        navigation.navigate("Home");
+        // navigation.navigate("Profile");
+        setTimeout(() => {
+          console.log("user_id ===>", user_id);
+          navigation.navigate("UserFriendProfile", {
+            // UserProfileCheck: "UserProfileCheck",
+            userID: user_id,
+          });
+        }, 1000);
       } else if (notification.activity == "Gifting") {
         notificationTabEvent(true);
         setTimeout(() => {

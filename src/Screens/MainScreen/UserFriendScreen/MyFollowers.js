@@ -71,7 +71,6 @@ const MyFollowers = ({ route, navigation }) => {
         await getUserFollowerList();
       if (userFollowerListResponse.data.StatusCode == "1") {
         setUserFollower(userFollowerListResponse.data.Result);
-        debugger;
         setLoader(false);
       } else {
         setLoader(false);
@@ -83,7 +82,6 @@ const MyFollowers = ({ route, navigation }) => {
           await getUserFollowerList();
         if (userFollowerListResponse.data.StatusCode == "1") {
           setUserFollower(userFollowerListResponse.data.Result);
-          debugger;
           setLoader(false);
         } else {
           setLoader(false);
@@ -94,7 +92,6 @@ const MyFollowers = ({ route, navigation }) => {
           await getUserFriendFollowerList(UserFollowerFriendId);
         if (userFriendListResponse.data.StatusCode == "1") {
           setUserFollower(userFriendListResponse.data.Result);
-          debugger;
           setLoader(false);
         } else {
           setLoader(false);
@@ -146,6 +143,7 @@ const MyFollowers = ({ route, navigation }) => {
         ? item.follower_user_id
         : item.friend_follower_user_id,
       isMyProfile: false,
+      MyProfileData: item.is_my_profile,
     });
   };
 

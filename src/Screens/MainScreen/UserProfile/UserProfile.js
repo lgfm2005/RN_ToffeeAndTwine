@@ -276,7 +276,6 @@ const UserProfile = ({ route, navigation }) => {
     );
 
     if (profileResponse.data.StatusCode == "1") {
-      debugger;
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
@@ -573,11 +572,17 @@ const UserProfile = ({ route, navigation }) => {
                   />
                 ) : getFriendStatus == "3" ? (
                   <POPLinkButton
-                    buttonName={AppString.Remove}
-                    styleBtn={[Mediumbtn]}
-                    onPress={() => RemoveAction()}
+                    buttonName={AppString.UnFollow}
+                    styleBtn={UnFollowMediumbtn}
+                    onPress={() => UnFollowAction()}
                   />
                 ) : (
+                  // ) : getFriendStatus == "3" ? (
+                  //   <POPLinkButton
+                  //     buttonName={AppString.Remove}
+                  //     styleBtn={[Mediumbtn]}
+                  //     onPress={() => RemoveAction()}
+                  //   />
                   <POPLinkButton
                     buttonName={AppString.Follow}
                     styleBtn={Mediumbtn}
@@ -803,11 +808,12 @@ const UserProfile = ({ route, navigation }) => {
                         />
                       )}
                     </View>
-                    <View style={{ width: "80%" }}>
+                    <View style={{ width: "60%" }}>
                       <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
                         {getSpecialMomentName}
                       </Text>
                     </View>
+                    <View style={{ width: "20%" }} />
                   </View>
 
                   <View style={CommonStyle.my16}>
