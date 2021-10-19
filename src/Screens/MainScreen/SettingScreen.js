@@ -28,6 +28,7 @@ import Purchases from "react-native-purchases";
 import Moment from "moment";
 import {
   DataPolicy,
+  OpenCancelSubscriptions,
   ShareAppLink,
   TermsOfService,
 } from "../../Assets/utils/ShareLink";
@@ -374,9 +375,8 @@ const SettingScreen = ({ navigation }) => {
                         { color: COLORS.PrimaryLight },
                       ]}
                     >
-                      {userSubscriptionStatus == "1" ? "" : AppString.Upgrade}
+                      {userSubscriptionStatus == "1" ? "" : AppString.Upgrade}{" "}
                       <Text style={{ color: COLORS.gold }}>
-                        {" "}
                         {userSubscriptionStatus == "1"
                           ? " Next Billing On: " +
                             Moment(planPeriodEnd)
@@ -387,6 +387,20 @@ const SettingScreen = ({ navigation }) => {
                       {userSubscriptionStatus == "1" ? "" : AppString.monthly}
                     </Text>
                   </TouchableOpacity>
+
+                  {userSubscriptionStatus == "1" ? (
+                    <View style={{ alignItems: "center" }}>
+                      <TouchableOpacity
+                        onPress={() => OpenCancelSubscriptions()}
+                      >
+                        <Text style={{ color: COLORS.gold }}>
+                          {AppString.CancelSubscriptions}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <View />
+                  )}
                 </View>
               ) : null}
             </View>

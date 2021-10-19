@@ -65,6 +65,7 @@ import { useActions } from "../../redux/actions";
 import Purchases from "react-native-purchases";
 import { ImageUrl } from "../../Assets/utils/ImageUrl";
 import { AllListViewStyle } from "../../Components/AllListVIew/AllListViewStyle";
+import { Column3CalendarList } from "../../Components/AllListVIew/CalendarList";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp = [];
@@ -650,7 +651,7 @@ const HomeScreen = ({ navigation }) => {
                   style={[
                     CommonStyle.txtTitle,
                     CommonStyle.textUpperCase,
-                    { fontFamily: FONT.NotoSans },
+                    { fontFamily: FONT.NotoSans, marginTop: 16 },
                   ]}
                 >
                   {AppString.ExploreShare}
@@ -670,15 +671,15 @@ const HomeScreen = ({ navigation }) => {
                   keyboardShouldPersistTaps={"always"}
                   contentContainerStyle={[
                     MainScreenStyle.scrollItemStyle,
-                    CommonStyle.p8,
-                    { justifyContent: "flex-start" },
+                    CommonStyle.toppadding16,
                   ]}
                 >
                   {userCategoryQuestion.length > 0 &&
                     userCategoryQuestion.map((item, index) => {
                       return (
                         // <ExploreShareList
-                        <Column3ExploreShareList
+                        // <Column3ExploreShareList
+                        <Column3CalendarList
                           ImageUrl={{
                             uri:
                               ImageUrl.Categories +
@@ -797,7 +798,7 @@ const HomeScreen = ({ navigation }) => {
                   TutorialStyle.popbg,
                   CommonStyle.HiddenPopStyle,
                   {
-                    backgroundColor: "white",
+                    paddingHorizontal: 4,
                   },
                 ]}
                 onBackdropPress={() => CloseItem()}
@@ -1010,7 +1011,7 @@ const HomeScreen = ({ navigation }) => {
                               Link={
                                 item.category_question === "Link" ? true : false
                               }
-                              Link={true}
+                              // Link={true}
                               multiline={true}
                             />
                           );

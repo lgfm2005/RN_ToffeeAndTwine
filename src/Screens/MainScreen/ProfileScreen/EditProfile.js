@@ -304,7 +304,13 @@ const EditProfile = ({ navigation }) => {
               getImageNew == undefined ? (
                 user.userProfileImage != "" ? (
                   <ImageBackground
-                    source={{ uri: user.userProfileImage }}
+                    source={
+                      user.userProfileImage == "" ||
+                      user.userProfileImage == undefined
+                        ? imgPlaceHolder
+                        : { uri: user.userProfileImage }
+                    }
+                    // source={{ uri: user.userProfileImage }}
                     style={CommonStyle.imgProfileBackground}
                   ></ImageBackground>
                 ) : (

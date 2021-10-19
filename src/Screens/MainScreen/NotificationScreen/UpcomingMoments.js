@@ -22,6 +22,7 @@ import { NotificationScreenStyle } from "./NotificationScreenStyle";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
+import { AppString } from "../../../Assets/utils/AppString";
 
 const UpcomingMoments = ({ navigation }) => {
   const { getProfile, getUpcomingMoments } = useActions();
@@ -35,8 +36,10 @@ const UpcomingMoments = ({ navigation }) => {
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
       if (isActive == "1") {
         // navigation.navigate("UpcomingMoments");
+        debugger;
       } else {
         navigation.navigate("UpcomingUpGrade");
+        debugger;
       }
     }
   };
@@ -53,7 +56,7 @@ const UpcomingMoments = ({ navigation }) => {
 
   useEffect(() => {
     navigation.addListener("focus", () => {
-      setLoader(true);
+      setLoader(false);
       UpGradePayment();
       getUpcomingMoment();
     });
@@ -101,11 +104,19 @@ const UpcomingMoments = ({ navigation }) => {
       <SafeAreaView>
         <View>
           <View style={NotificationScreenStyle.backgroundColor}>
-            <FlatList
-              data={upcomingMomentsList}
-              renderItem={({ item, index }) => RenderItem(item, index)}
-              keyExtractor={(item) => item.id}
-            />
+            {upcomingMomentsList == null || upcomingMomentsList == undefined ? (
+              <FlatList
+                data={upcomingMomentsList}
+                renderItem={({ item, index }) => RenderItem(item, index)}
+                keyExtractor={(item) => item.id}
+              />
+            ) : (
+              <View style={[CommonStyle.centerRow, CommonStyle.p24]}>
+                <Text style={[CommonStyle.txtContent, { textAlign: "center" }]}>
+                  {AppString.NotificationsMoment}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </SafeAreaView>

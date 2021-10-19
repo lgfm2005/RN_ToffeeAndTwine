@@ -36,7 +36,11 @@ const NavUserFriendScreen = ({ navigation, route }) => {
       }}
     >
       <UserFriendsToolbar
-        usename={usename}
+        usename={
+          usename == "" || usename == null || usename == undefined
+            ? ""
+            : usename + "'s"
+        }
         onPressBack={() => navigation.goBack()}
         onPressSearch={() => navigation.navigate("Search")}
       />

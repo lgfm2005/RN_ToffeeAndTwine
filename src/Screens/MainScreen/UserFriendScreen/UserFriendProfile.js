@@ -54,8 +54,13 @@ import Moment from "moment";
 const UserFriendProfile = ({ route, navigation }) => {
   const userData = useSelector((state) => state.session);
   const { userID } = route.params;
-
+  debugger;
   useEffect(() => {
+    {
+      userData.userId != userID
+        ? console.log("1")
+        : navigation.navigate("MyProfile");
+    }
     setUserFriendId(userID);
     getProfiles();
     getProfilesLoad();
@@ -160,8 +165,9 @@ const UserFriendProfile = ({ route, navigation }) => {
     setNotificationSendModal(false), setAwesomeShowModal(true), setLoader(true);
     const { addgiftnoticationResponse, addgiftnoticatioError } =
       await AddGiftNotication(userID, getCategoryId);
-
+    debugger;
     if (addgiftnoticationResponse.data.StatusCode == "1") {
+      debugger;
       var GiftTo = addgiftnoticationResponse.data.Result[0].gift_to;
       var GiftID = addgiftnoticationResponse.data.Result[0].user_gift_id;
       console.log("GiftTo ===>", GiftTo);
@@ -604,7 +610,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                     isFollowing: false,
                     isUserFollowerFriendId: userID,
                     isUserFollowingFriendId: userID,
-                    Usename: getUserName,
+                    Usename: getFirstName,
                     isMyProfile: false,
                   })
                 }
@@ -636,7 +642,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                     isFollowing: true,
                     isUserFollowerFriendId: userID,
                     isUserFollowingFriendId: userID,
-                    Usename: getUserName,
+                    Usename: getFirstName,
                     isMyProfile: false,
                   })
                 }

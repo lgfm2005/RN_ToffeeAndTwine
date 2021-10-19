@@ -133,6 +133,7 @@ const MyFollowing = ({ route, navigation }) => {
   };
 
   const RenderItem = (Data, index) => {
+    debugger;
     return (
       <TouchableOpacity onPress={() => selectFriend(Data.item)}>
         <View
@@ -172,19 +173,23 @@ const MyFollowing = ({ route, navigation }) => {
             </Text>
           </View>
 
-          <View
-            style={[
-              UserFriendScreenStyle.btnBg,
-              { width: "30%", justifyContent: "flex-end" },
-            ]}
-          >
-            <POPLinkButton
-              buttonName={AppString.UnFollow}
-              onPress={() => UnFollowFriend(Data.item.following_user_id)}
-              styleBtn={Smallbtn}
-              fontStyle={fontsize12}
-            />
-          </View>
+          {Data.item.is_my_profile == "1" ? (
+            <View />
+          ) : (
+            <View
+              style={[
+                UserFriendScreenStyle.btnBg,
+                { width: "30%", justifyContent: "flex-end" },
+              ]}
+            >
+              <POPLinkButton
+                buttonName={AppString.UnFollow}
+                onPress={() => UnFollowFriend(Data.item.following_user_id)}
+                styleBtn={Smallbtn}
+                fontStyle={fontsize12}
+              />
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     );

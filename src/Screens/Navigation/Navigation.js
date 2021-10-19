@@ -299,6 +299,27 @@ function Friend() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="UserFriendProfile"
+        component={UserFriendProfile}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="NavUserFriendScreen"
+        component={NavUserFriendScreen}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -330,8 +351,15 @@ const Navigation = ({ navigation }) => {
   const onOpened = async (openResult) => {
     if (token && sessions.userFname != null) {
       var notification = openResult.notification.additionalData;
+      var user_id = openResult.notification.additionalData.user_id;
+      debugger;
       if (notification.activity == "Followers") {
-        navigation.navigate("Friend");
+        // navigation.navigate("Friend");
+        debugger;
+        navigation.navigate("Profile", {
+          UserProfileCheck: "UserProfileCheck",
+          userId: user_id,
+        });
       } else if (notification.activity == "Gifting") {
         notificationTabEvent(true);
         setTimeout(() => {

@@ -63,14 +63,15 @@ const MyFollowers = ({ route, navigation }) => {
       console.log("user Follower List Error ===>", userFriendListError);
     }
   }, [refreshing]);
+
   const onGetFollowerList = async (isLoad) => {
     setLoader(isLoad);
     if (isMyProfile) {
       const { userFollowerListResponse, userFollowerListError } =
         await getUserFollowerList();
       if (userFollowerListResponse.data.StatusCode == "1") {
-        console.log("user Follower Response  ===>", userFollowerListResponse);
         setUserFollower(userFollowerListResponse.data.Result);
+        debugger;
         setLoader(false);
       } else {
         setLoader(false);
@@ -81,8 +82,8 @@ const MyFollowers = ({ route, navigation }) => {
         const { userFollowerListResponse, userFollowerListError } =
           await getUserFollowerList();
         if (userFollowerListResponse.data.StatusCode == "1") {
-          console.log("user Follower Response  ===>", userFollowerListResponse);
           setUserFollower(userFollowerListResponse.data.Result);
+          debugger;
           setLoader(false);
         } else {
           setLoader(false);
@@ -92,8 +93,8 @@ const MyFollowers = ({ route, navigation }) => {
         const { userFriendListResponse, userFriendListError } =
           await getUserFriendFollowerList(UserFollowerFriendId);
         if (userFriendListResponse.data.StatusCode == "1") {
-          console.log("user Follower Response  ===>", userFriendListResponse);
           setUserFollower(userFriendListResponse.data.Result);
+          debugger;
           setLoader(false);
         } else {
           setLoader(false);
@@ -187,19 +188,24 @@ const MyFollowers = ({ route, navigation }) => {
               {Data.item.user_fname + " " + Data.item.user_lname}
             </Text>
           </View>
-          <View
-            style={[
-              UserFriendScreenStyle.btnBg,
-              { width: "30%", justifyContent: "flex-end" },
-            ]}
-          >
-            <POPLinkButton
-              buttonName={AppString.Remove}
-              onPress={() => RemoveFriend(Data.item.follower_user_id)}
-              styleBtn={Smallbtn}
-              fontStyle={fontsize12}
-            />
-          </View>
+
+          {Data.item.is_my_profile == "1" ? (
+            <View />
+          ) : (
+            <View
+              style={[
+                UserFriendScreenStyle.btnBg,
+                { width: "30%", justifyContent: "flex-end" },
+              ]}
+            >
+              <POPLinkButton
+                buttonName={AppString.Remove}
+                onPress={() => RemoveFriend(Data.item.follower_user_id)}
+                styleBtn={Smallbtn}
+                fontStyle={fontsize12}
+              />
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     );

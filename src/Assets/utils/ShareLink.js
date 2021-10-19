@@ -24,6 +24,7 @@ export const ShareAppLink = async () => {
 };
 var DataPolicyUrl = "https://www.toffeeandtwine.com/copy-of-terms-conditions";
 var TermsOfServiceUrl = "https://www.toffeeandtwine.com/terms-conditions";
+var CancelSubscriptions = "itms-apps://apps.apple.com/account/subscriptions";
 export const DataPolicy = () => {
   Linking.openURL(DataPolicyUrl);
 };
@@ -49,4 +50,11 @@ export const TermsOfService = () => {
 const OpenBrowserLink = (UrlLink) => {
   Linking.openURL(UrlLink);
   // console.log("https url 1 ==> ", url1)
+};
+
+export const OpenCancelSubscriptions = (UrlLink) => {
+  // Linking.openURL(
+  //   "https://apps.apple.com/account/subscriptions"
+  // )
+  Linking.openURL(CancelSubscriptions);
 };

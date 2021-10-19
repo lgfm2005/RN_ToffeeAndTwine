@@ -1,3 +1,4 @@
+import { wrap } from "lodash";
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -106,7 +107,9 @@ export const SimpleInputEditView = ({
   ...props
 }) => {
   return (
-    <View style={[CommonStyle.formSimpletxtEditView]}>
+    <View
+      style={[CommonStyle.formSimpletxtEditView, { alignItems: "stretch" }]}
+    >
       <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
         {TitleName}
       </Text>
@@ -148,24 +151,29 @@ export const EditShowSimpleView = ({
           {buttonName}
         </Text>
       ) : (
-        <TouchableOpacity onPress={() => OpenBrowserLink(value)}>
-          <Text
-            style={[CommonStyle.formSimpleEditView, { width: "100%" }]}
-            placeholder={buttonName}
-            value={value}
-            selectionColor={COLORS.Primary}
-            color={value != "" ? COLORS.Primary : COLORS.gray}
-            placeholderTextColor={COLORS.gray}
-            editable={false}
-            multiline={true}
-          >
-            {value}
-          </Text>
-        </TouchableOpacity>
+        <View
+          style={{ flexDirection: "column", width: "70%", paddingLeft: 16 }}
+        >
+          <TouchableOpacity onPress={() => OpenBrowserLink(value)}>
+            <Text
+              // style={CommonStyle.formSimpleEditView}
+              placeholder={buttonName}
+              value={value}
+              selectionColor={COLORS.Primary}
+              color={value != "" ? COLORS.Primary : COLORS.gray}
+              placeholderTextColor={COLORS.gray}
+              editable={false}
+            >
+              {value}
+            </Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   ) : (
-    <View style={[CommonStyle.formSimpletxtEditView]}>
+    <View
+      style={[CommonStyle.formSimpletxtEditView, { alignItems: "stretch" }]}
+    >
       <Text style={[CommonStyle.formPopUpLabel, { fontFamily: FONT.Gilroy }]}>
         {TitleName}
       </Text>

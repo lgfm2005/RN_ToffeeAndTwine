@@ -89,9 +89,12 @@ const Following = ({ navigation }) => {
 
   const selectFriend = (item) => {
     // console.log("selectFriend", item);
-    navigation.navigate("FriendFollowersList", {
+    navigation.push("UserFriendProfile", {
       userID: item.following_user_id,
     });
+    // navigation.navigate("FriendFollowersList", {
+    //   userID: item.following_user_id,
+    // });
   };
 
   const RenderItem = (Data, index) => {
@@ -158,7 +161,7 @@ const Following = ({ navigation }) => {
       <SafeAreaView>
         <View Style={[CommonStyle.Container]}>
           <View style={FriendScreenStyle.backgroundColor}>
-            {!getUserFollowing.length ? (
+            {getUserFollowing == "" || getUserFollowing == null ? (
               // <View style={CommonStyle.ContainerCenter}>
               <View
                 style={{

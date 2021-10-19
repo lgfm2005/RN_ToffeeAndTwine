@@ -139,6 +139,7 @@ export default CommonStyle = StyleSheet.create({
     fontFamily: FONT.Gilroy,
     fontWeight: "500",
     width: "30%",
+    lineHeight: 16,
   },
   formControl: {
     width: "100%",
@@ -160,6 +161,7 @@ export default CommonStyle = StyleSheet.create({
     // height: 46,
     // backgroundColor: COLORS.Secondary,
     paddingLeft: 16,
+    paddingTop: 0,
   },
   formSimpletxtEditView: {
     flexDirection: "row",

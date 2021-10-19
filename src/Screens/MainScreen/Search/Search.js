@@ -112,14 +112,10 @@ const Search = ({ navigation }) => {
 
         <View style={SearchBarStyle.backgroundColor}>
           {getSearchData == "" ? (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text>No Data Found !!</Text>
+            <View style={CommonStyle.centerRow}>
+              <Text style={CommonStyle.txtContent}>
+                {AppString.NoUsersFound}
+              </Text>
             </View>
           ) : (
             <FlatList
