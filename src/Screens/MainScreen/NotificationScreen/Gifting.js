@@ -193,7 +193,7 @@ const Gifting = ({ navigation }) => {
       <SafeAreaView>
         <View Style={[CommonStyle.Container]}>
           <View style={NotificationScreenStyle.backgroundColor}>
-            {giftingList != "" || giftingList != null ? (
+            {giftingList.length > 0 ? (
               <FlatList
                 data={giftingList}
                 renderItem={({ item, index }) => RenderItem(item, index)}

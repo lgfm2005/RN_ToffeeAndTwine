@@ -608,38 +608,74 @@ const UserProfile = ({ route, navigation }) => {
                   Moments
                 </Text>
               </View>
-              <View>
-                <Text
-                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
-                >
-                  {" "}
-                  {getFollowerCount == "0" ? "--" : getFollowerCount}
-                </Text>
-                <Text
-                  style={
-                    (CommonStyle.txtContent,
-                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
-                  }
-                >
-                  Followers
-                </Text>
-              </View>
-              <View>
-                <Text
-                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
-                >
-                  {" "}
-                  {getFollowingCount == "0" ? "--" : getFollowingCount}
-                </Text>
-                <Text
-                  style={
-                    (CommonStyle.txtContent,
-                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
-                  }
-                >
-                  Following
-                </Text>
-              </View>
+              <TouchableOpacity
+                disabled={
+                  getFollowerCount == "0" || getFollowerCount == 0
+                    ? true
+                    : false
+                }
+                onPress={() =>
+                  navigation.push("NavUserFriendScreen", {
+                    isFollowing: false,
+                    isUserFollowerFriendId: userInfo.user_id,
+                    isUserFollowingFriendId: userInfo.user_id,
+                    Usename: getFirstName,
+                    isMyProfile: false,
+                  })
+                }
+              >
+                <View>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      { fontFamily: FONT.NotoSans },
+                    ]}
+                  >
+                    {" "}
+                    {getFollowerCount == "0" ? "--" : getFollowerCount}
+                  </Text>
+                  <Text
+                    style={
+                      (CommonStyle.txtContent,
+                      { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
+                    }
+                  >
+                    Followers
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={getFollowingCount == "0" ? true : false}
+                onPress={() =>
+                  navigation.push("NavUserFriendScreen", {
+                    isFollowing: true,
+                    isUserFollowerFriendId: userInfo.user_id,
+                    isUserFollowingFriendId: userInfo.user_id,
+                    Usename: getFirstName,
+                    isMyProfile: false,
+                  })
+                }
+              >
+                <View>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      { fontFamily: FONT.NotoSans },
+                    ]}
+                  >
+                    {" "}
+                    {getFollowingCount == "0" ? "--" : getFollowingCount}
+                  </Text>
+                  <Text
+                    style={
+                      (CommonStyle.txtContent,
+                      { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
+                    }
+                  >
+                    Following
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
 
             <View>
@@ -1032,8 +1068,8 @@ const UserProfile = ({ route, navigation }) => {
                       },
                     ]}
                   >
-                    Awesome, {getFirstName} Friends now know you plan to get{" "}
-                    {userInfo.user_fname} as a gift.
+                    Awesome!…, {getFirstName}'s Friends now know you plan to get{" "}
+                    {getTitleName} as a gift.
                   </Text>
                 </View>
               </Modal>

@@ -142,7 +142,6 @@ const MainScreen = ({ navigation }) => {
         var deviceToken = await getToken();
         await updateNotification(token, deviceToken);
         ///Device Token:- 032e9f8679129d8c8571fffcc8213a673f1de60478f867a10c5bca161abf6764
-
         const { GetCategoryListerror, GetCategoryListresponse } =
           await CategoryList(30, token);
         if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -175,10 +174,13 @@ const MainScreen = ({ navigation }) => {
         }
       } else if (isRegistered == "0") {
         const token = { token: tokens };
-
+        OneSignalExternalUserEmail(email);
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
         const { specialMomentResponse, specialMomentError } =
           await GetSpecialMoment(token);
         if (response.data.StatusCode == "1") {
+          setLoader(false);
           if (specialMomentResponse.data.StatusCode == "1") {
             navigation.navigate("TutorialFirst", {
               listGetSpecialDay: specialMomentResponse.data.Result,

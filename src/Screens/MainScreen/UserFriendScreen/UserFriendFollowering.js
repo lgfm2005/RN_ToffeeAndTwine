@@ -23,6 +23,7 @@ import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { fontsize14 } from "../../../Assets/Style/CommonStyle";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
+import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 
 const UserFriendFollowering = ({ navigation }) => {
   const { getUnfollowFriendList, getUserFollowingList } = useActions();

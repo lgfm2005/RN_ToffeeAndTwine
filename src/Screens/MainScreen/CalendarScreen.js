@@ -26,7 +26,12 @@ import TutorialStyle from "../Signup/Tutorial/TutorialStyle";
 import { ToolbarMain } from "../../Components/ToolbarMain/ToolbarMain";
 import { MainScreenStyle } from "./MainScreenStyle";
 import { AppString } from "../../Assets/utils/AppString";
-import { imgPlaceHolder, imgImport, imgDelete } from "../../Assets/utils/Image";
+import {
+  imgPlaceHolder,
+  imgImport,
+  imgDelete,
+  imgNavNotification,
+} from "../../Assets/utils/Image";
 import { COLORS } from "../../Assets/utils/COLORS";
 import {
   EditShowBtnSimpleView,
@@ -34,6 +39,7 @@ import {
   SimpleInputEditView,
 } from "../../Components/FormInput";
 import {
+  ImagePOPLinkButton,
   POPLinkButton,
   POPOutLinkButton,
 } from "../../Components/Button/Button";
@@ -124,10 +130,14 @@ const CalendarScreen = ({ navigation }) => {
 
   const [getPrevData, setPrevData] = useState({});
 
+  const [getNotifyThankYouPaymentModal, setNotifyThankYouPaymentModal] =
+    useState(false);
+
   useEffect(() => {
     if (userSpecialMoment == "") {
       return;
     }
+    getProfileLoad();
     getFilterSepCatgories(userSpecialMoment);
   }, []);
 
@@ -625,6 +635,14 @@ const CalendarScreen = ({ navigation }) => {
     });
   };
 
+  const ThankYouPaymentCheck = () => {
+    setCalenderDateModal(false);
+    setNotifyThankYouPaymentModal(true);
+  };
+  const ThankYouPayment = () => {
+    setNotifyThankYouPaymentModal(false);
+  };
+
   return (
     <View style={[CommonStyle.BgColorWhite]}>
       {/* <MyBlackStatusbar /> */}
@@ -798,27 +816,23 @@ const CalendarScreen = ({ navigation }) => {
                 isVisible={getCalenderDateModal}
                 onBackdropPress={() => CloseSepItem()}
               >
-                <KeyboardAvoidingView
-                  behavior="position"
-                  keyboardVerticalOffset={keyboardVerticalOffset}
-                >
-                  <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                    <View
-                      style={{ flexDirection: "row", justifyContent: "center" }}
+                <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
+                  <View
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
+                    <Text
+                      style={[
+                        CommonStyle.txtTitle,
+                        CommonStyle.textUpperCase,
+                        { textAlign: "center", paddingBottom: 16 },
+                      ]}
                     >
-                      <Text
-                        style={[
-                          CommonStyle.txtTitle,
-                          CommonStyle.textUpperCase,
-                          { textAlign: "center", paddingBottom: 16 },
-                        ]}
-                      >
-                        {Moment(
-                          getCalenderDateItem[0].user_special_moment_value
-                        ).format("MMM DD") + "th"}
-                      </Text>
-                    </View>
-                    {/* <View> */}
+                      {Moment(
+                        getCalenderDateItem[0].user_special_moment_value
+                      ).format("MMM DD") + "th"}
+                    </Text>
+                  </View>
+                  <View>
                     {
                       getCalenderDateItem.length ? (
                         getCalenderDateItem.map((item, index) => {
@@ -884,9 +898,26 @@ const CalendarScreen = ({ navigation }) => {
                       )
                       // null
                     }
-                    {/* </View> */}
+
+                    <View
+                      style={{ flexDirection: "row", justifyContent: "center" }}
+                    >
+                      {userSubscriptionStatus == "0" ? (
+                        <ImagePOPLinkButton
+                          buttonName={AppString.Notify}
+                          buttonImage={imgNavNotification}
+                          onPress={() => handleSubmitPayment()}
+                        />
+                      ) : (
+                        <ImagePOPLinkButton
+                          buttonName={AppString.Notify}
+                          buttonImage={imgNavNotification}
+                          onPress={() => ThankYouPaymentCheck()}
+                        />
+                      )}
+                    </View>
                   </View>
-                </KeyboardAvoidingView>
+                </View>
               </Modal>
             ) : null}
 
@@ -1444,6 +1475,32 @@ const CalendarScreen = ({ navigation }) => {
                   <POPLinkButton
                     buttonName={AppString.Upgrade}
                     onPress={() => handleSubmitPayment()}
+                  />
+                </View>
+              </View>
+            </Modal>
+          ) : null}
+
+          {/* NotifyThankYouPaymentModal  */}
+          {getNotifyThankYouPaymentModal == true ? (
+            <Modal
+              testID={"modal"}
+              isVisible={getNotifyThankYouPaymentModal}
+              onBackdropPress={() => CloseItem()}
+            >
+              <View style={[CommonStyle.p24, TutorialStyle.popbg]}>
+                <View style={CommonStyle.Row}>
+                  <Text style={[CommonStyle.txtContent, CommonStyle.p16]}>
+                    {AppString.notifySpecialMoment}
+                  </Text>
+                </View>
+
+                <View
+                  style={{ flexDirection: "row", justifyContent: "center" }}
+                >
+                  <ImagePOPLinkButton
+                    buttonName={AppString.Ok}
+                    onPress={() => ThankYouPayment()}
                   />
                 </View>
               </View>

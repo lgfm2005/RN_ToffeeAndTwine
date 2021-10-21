@@ -50,16 +50,23 @@ import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 import { useSelector } from "react-redux";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
+import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 
 const UserFriendProfile = ({ route, navigation }) => {
   const userData = useSelector((state) => state.session);
   const { userID, MyProfileData } = route.params;
   useEffect(() => {
-    {
-      userData.userId != userID
-        ? console.log("1")
-        : navigation.navigate("MyProfile");
-    }
+    console.log("UserFriendProfile check point");
+    // {
+    //   MyProfileData == "1"
+    //     ? console.log("1")
+    //     : navigation.navigate("MyProfile");
+    // }
+    // {
+    //   userData.userId != userID
+    //     ? console.log("1")
+    //     : navigation.navigate("MyProfile");
+    // }
     setUserFriendId(userID);
     getProfiles();
     getProfilesLoad();
@@ -397,7 +404,6 @@ const UserFriendProfile = ({ route, navigation }) => {
     setLoader(true);
     const { profileResponse, profileError } = await getProfile(userID);
     if (profileResponse.data.StatusCode == "1") {
-      debugger;
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
@@ -443,7 +449,7 @@ const UserFriendProfile = ({ route, navigation }) => {
 
   return (
     <View style={CommonStyle.BgColorWhite}>
-      {/* <MyBlackStatusbar /> */}
+      <MyBlackStatusbar />
       <View
         style={{
           position: "absolute",
@@ -894,7 +900,9 @@ const UserFriendProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              {userSubscriptionStatus == "0" ? (
+              {MyProfileData == "1" ? (
+                <View />
+              ) : userSubscriptionStatus == "0" ? (
                 <ImagePOPLinkButton
                   buttonName={AppString.Notify}
                   buttonImage={imgNavNotification}
@@ -968,11 +976,15 @@ const UserFriendProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <ImagePOPLinkButton
-                buttonName={AppString.Giftit}
-                buttonImage={imgGiftNotification}
-                onPress={() => Giftit()}
-              />
+              {MyProfileData == "1" ? (
+                <View />
+              ) : (
+                <ImagePOPLinkButton
+                  buttonName={AppString.Giftit}
+                  buttonImage={imgGiftNotification}
+                  onPress={() => Giftit()}
+                />
+              )}
             </View>
           </View>
         </Modal>
@@ -1071,7 +1083,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                 },
               ]}
             >
-              Awesome, {getFirstName}'s' Friends now know you plan to get{" "}
+              Awesome!…, {getFirstName}'s Friends now know you plan to get{" "}
               {getTitleName} as a gift.
             </Text>
           </View>

@@ -62,7 +62,7 @@ const Following = ({ navigation }) => {
 
   useEffect(() => {
     navigation.addListener("focus", () => {
-      getUserFollowingLists(false);
+      getUserFollowingLists(true);
     });
   }, []);
 

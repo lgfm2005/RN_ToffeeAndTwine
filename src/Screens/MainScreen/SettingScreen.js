@@ -100,11 +100,15 @@ const SettingScreen = ({ navigation }) => {
     if (userSubscriptionStatus == "1") {
       setSpecialMomentsSwitch(!getSpecialMomentsSwitch);
       var getGifting = getGiftingSwitch ? 1 : 0;
-      var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
+      // var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
+      var getSpecialMoments = getSpecialMomentsSwitch ? 0 : 1;
       const { response, error } = await updateSetting(
         getGifting,
         getSpecialMoments
       );
+      if (response.data.StatusCode == "1") {
+      } else {
+      }
     } else {
       PaymentUpgrade();
     }
@@ -136,10 +140,9 @@ const SettingScreen = ({ navigation }) => {
       setGiftingSwitch(false);
       if (response.data.Result.isNotifyGifting == "1") {
         setGiftingSwitch(true);
-      } else {
       }
       setSpecialMomentsSwitch(false);
-      if (response.data.Result.isNotifySpecialMoment == " 1") {
+      if (response.data.Result.isNotifySpecialMoment == "1") {
         setSpecialMomentsSwitch(true);
       }
     }
@@ -157,6 +160,8 @@ const SettingScreen = ({ navigation }) => {
     }
   };
   const FinalCheckLogout = async () => {
+    Logout();
+    navigation.navigate("MainScreen");
     OneSignal.removeExternalUserId();
     OneSignal.unsubscribeWhenNotificationsAreDisabled(true);
     const { FinalLogOutResponse, FinalLogOutError } = await FinalLogOut();
@@ -234,9 +239,8 @@ const SettingScreen = ({ navigation }) => {
     setupgradeItemModel(true);
   };
 
-  const PaymentNow = () => {};
-
   useEffect(() => {
+    GetSetting();
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
     Purchases.syncPurchases();

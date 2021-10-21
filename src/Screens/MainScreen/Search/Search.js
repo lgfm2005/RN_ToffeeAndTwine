@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
 } from "react-native";
 
 // Lib
@@ -28,6 +29,7 @@ import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { useActions } from "../../../redux/actions";
+import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 
 const Search = ({ navigation }) => {
   const { SearchUser } = useActions();
@@ -86,7 +88,8 @@ const Search = ({ navigation }) => {
 
   return (
     <SafeAreaView style={CommonStyle.BgColorWhite}>
-      <MyWhiteStatusbar />
+      {/* <SafeAreaView style={{ backgroundColor: "black" }}> */}
+      {/* <MyWhiteStatusbar /> */}
       <View Style={[CommonStyle.Container, CommonStyle.pt16]}>
         <View>
           <SearchBar

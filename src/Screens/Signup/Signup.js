@@ -142,10 +142,13 @@ const Signup = ({ navigation }) => {
         }
       } else if (isRegistered == "0") {
         const token = { token: tokens };
-
+        OneSignalExternalUserEmail(email);
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
         const { specialMomentResponse, specialMomentError } =
           await GetSpecialMoment(token);
         if (response.data.StatusCode == "1") {
+          setLoader(false);
           if (specialMomentResponse.data.StatusCode == "1") {
             navigation.navigate("TutorialFirst", {
               listGetSpecialDay: specialMomentResponse.data.Result,

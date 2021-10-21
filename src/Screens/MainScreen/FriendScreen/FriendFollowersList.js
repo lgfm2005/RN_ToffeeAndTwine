@@ -1024,7 +1024,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 },
               ]}
             >
-              Awesome, {getFirstName}'s' Friends now know you plan to get{" "}
+              Awesome!…, {getFirstName}'s Friends now know you plan to get{" "}
               {getTitleName} as a gift.
             </Text>
           </View>

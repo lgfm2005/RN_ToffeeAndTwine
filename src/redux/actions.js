@@ -720,11 +720,14 @@ export const useActions = () => {
           sessions,
           data
         );
+        debugger;
         if (UserSubscriptionResponse.data.StatusCode == "1") {
         }
       } catch (e) {
+        debugger;
         UserSubscriptionError = e;
       }
+      debugger;
       return { UserSubscriptionResponse, UserSubscriptionError };
     },
 

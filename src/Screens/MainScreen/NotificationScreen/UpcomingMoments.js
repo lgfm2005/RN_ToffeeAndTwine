@@ -43,12 +43,15 @@ const UpcomingMoments = ({ navigation }) => {
   };
 
   const getUpcomingMoment = async () => {
+    setLoader(true);
     const { getUpcomingMomentsResponse, getUpcomingMomentsError } =
       await getUpcomingMoments();
     if (getUpcomingMomentsResponse.data.StatusCode == "1") {
       setLoader(false);
       var data = getUpcomingMomentsResponse.data.Result;
       setUpcomingMomentsList(data);
+    } else {
+      setLoader(false);
     }
   };
 
@@ -98,11 +101,11 @@ const UpcomingMoments = ({ navigation }) => {
 
   return (
     <View>
-      <MyWhiteStatusbar />
+      {/* <MyWhiteStatusbar /> */}
       <SafeAreaView>
         <View>
           <View style={NotificationScreenStyle.backgroundColor}>
-            {upcomingMomentsList == null || upcomingMomentsList == undefined ? (
+            {upcomingMomentsList.length > 0 ? (
               <FlatList
                 data={upcomingMomentsList}
                 renderItem={({ item, index }) => RenderItem(item, index)}

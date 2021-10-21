@@ -82,7 +82,6 @@ const EditProfile = ({ navigation }) => {
       //   "user.defaultSpecialMoment ====  else =====  ",
       //   user.defaultSpecialMoment
       // );
-
       if (
         UserSpecialMoment &&
         UserSpecialMoment[0] &&
@@ -90,6 +89,7 @@ const EditProfile = ({ navigation }) => {
       ) {
         UpdateDefaultSpecialMoment =
           UserSpecialMoment[0]["special_moment_name"];
+        setHighlightMomentId(UserSpecialMoment[0].special_moment_id);
       } else {
         UpdateDefaultSpecialMoment = "";
       }
@@ -112,6 +112,7 @@ const EditProfile = ({ navigation }) => {
       if (DefultUserSpecialMoment.length > 0) {
         UpdateDefaultSpecialMoment =
           DefultUserSpecialMoment[0]["special_moment_name"];
+        setHighlightMomentId(DefultUserSpecialMoment[0].special_moment_id);
       } else {
         UpdateDefaultSpecialMoment = "Select Favorite moment";
       }
@@ -191,7 +192,6 @@ const EditProfile = ({ navigation }) => {
     // console.log("UpdateFirstName ====>>>>", UpdateFirstName);
     // console.log("UpdateLastName ====>>>>", UpdateLastName);
     // console.log("getImageShow ===>", getImageShow);
-
     setLoader(true);
     const { error, response } = await updateProfile(
       UpdateFirstName,
@@ -199,15 +199,12 @@ const EditProfile = ({ navigation }) => {
       getImageAPI,
       UpdateDefaultSpecialMomentShow
     );
-    debugger;
     if (response.data.StatusCode == "1") {
-      debugger;
       navigation.navigate("MyProfile");
       // console.log("response===>", response.data);
       setLoader(false);
       // navigation.navigate("MyProfile");
     } else {
-      debugger;
       setLoader(false);
       console.log("APIUpdateProfile ===>>", error);
     }
