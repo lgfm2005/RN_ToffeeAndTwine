@@ -48,7 +48,7 @@ const UpcomingUpGrade = ({ navigation }) => {
         purchaserInfo1.latestExpirationDate,
         "DD/MM/YYYY"
       );
-
+      debugger;
       var isBefore = currentDate.isBefore(latestExpirationDates);
       if (!isBefore) {
         if (
@@ -56,8 +56,10 @@ const UpcomingUpGrade = ({ navigation }) => {
         ) {
           // Grant user "pro" access
         }
+        debugger;
         const offerings = await Purchases.getOfferings();
         console.log("offerings:", offerings);
+        debugger;
         const monthlyPackage = offerings.current.monthly;
         const { purchaserInfo } = await Purchases.purchasePackage(
           monthlyPackage
@@ -81,17 +83,24 @@ const UpcomingUpGrade = ({ navigation }) => {
   };
 
   const userSubscriptions = async (info) => {
+    debugger;
     if (info.latestExpirationDate != null) {
       if (typeof info.entitlements.active.pro_monthly !== "undefined") {
         // var latestExpirationDates = Moment(info.latestExpirationDate)
         //   .format("YYYY-MM-DD")
         //   .toString();
+        setLoader(true);
+        debugger;
         var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
         var latestExpirationDates = Moment(Moment(cuttentDate).add(1, "M"))
           .format("YYYY-MM-DD")
           .toString();
+        debugger;
         const { UserSubscriptionResponse, UserSubscriptionError } =
           await userSubscription("1.99", cuttentDate, latestExpirationDates);
+        debugger;
+        setLoader(false);
+        setUpgradeModel(true);
       }
     }
   };
@@ -114,9 +123,13 @@ const UpcomingUpGrade = ({ navigation }) => {
       var isActive =
         profileResponse.data.Result[0].user_details[0].user_subscription_status;
       if (isActive == "0") {
-      } else {
-        setUpgradeModel(true);
+        //
+        Purchases.logOut();
+        Purchases.setDebugLogsEnabled(true);
+        Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
+        Purchases.syncPurchases();
         handleSubmitPayment();
+      } else {
       }
     }
   };
@@ -205,7 +218,7 @@ const UpcomingUpGrade = ({ navigation }) => {
                   <View style={CommonStyle.centerRow}>
                     <POPLinkButton
                       buttonName={AppString.continue}
-                      onPress={() => UpGradePayment()}
+                      onPress={() => CloseItem()}
                     />
                   </View>
                 </View>

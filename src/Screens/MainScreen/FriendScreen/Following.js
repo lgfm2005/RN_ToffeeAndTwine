@@ -12,6 +12,9 @@ import {
 } from "react-native";
 // Lib
 import Spinner from "react-native-loading-spinner-overlay";
+import { StackActions } from "@react-navigation/native";
+import { CommonActions } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 
 // Asset
 import CommonStyle, { fontsize12 } from "../../../Assets/Style/CommonStyle";
@@ -62,7 +65,7 @@ const Following = ({ navigation }) => {
 
   useEffect(() => {
     navigation.addListener("focus", () => {
-      getUserFollowingLists(false);
+      getUserFollowingLists(true);
     });
   }, []);
 
@@ -89,9 +92,18 @@ const Following = ({ navigation }) => {
 
   const selectFriend = (item) => {
     // console.log("selectFriend", item);
-    navigation.navigate("FriendFollowersList", {
+    navigation.navigate("UserFriendProfile", {
       userID: item.following_user_id,
     });
+    // navigation.dispatch(
+    //   StackActions.push("FriendFollowersList", {
+    //     userID: item.following_user_id,
+    //   })
+    // );
+
+    // navigation.navigate("FriendFollowersList", {
+    //   userID: item.following_user_id,
+    // });
   };
 
   const RenderItem = (Data, index) => {
@@ -158,7 +170,7 @@ const Following = ({ navigation }) => {
       <SafeAreaView>
         <View Style={[CommonStyle.Container]}>
           <View style={FriendScreenStyle.backgroundColor}>
-            {!getUserFollowing.length ? (
+            {getUserFollowing == "" || getUserFollowing == null ? (
               // <View style={CommonStyle.ContainerCenter}>
               <View
                 style={{

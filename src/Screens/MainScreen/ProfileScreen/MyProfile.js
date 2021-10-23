@@ -76,11 +76,12 @@ import {
 import Purchases from "react-native-purchases";
 import Moment from "moment";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
+import { trim } from "lodash";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp = [];
 var temp2 = [];
-const MyProfile = ({ navigation }) => {
+const MyProfile = ({ navigation, route }) => {
   const {
     addCategoryQuestion,
     getUserCategoryQuestion,
@@ -94,6 +95,8 @@ const MyProfile = ({ navigation }) => {
     addCategoryspecialDay,
     userSubscription,
   } = useActions();
+
+  // const { userId } = route.params;
 
   const userData = useSelector((state) => state.session);
   const specialMoment = useSelector((state) => state.specialMoment);
@@ -179,6 +182,13 @@ const MyProfile = ({ navigation }) => {
   const [getFollowingCount, setFollowingCount] = useState("0");
 
   const [refreshing, setRefreshing] = React.useState(false);
+
+  // useEffect(() => {
+  //   if (UserProfileCheck == "UserProfileCheck") {
+  //     navigation.navigate("UserFriendProfile", { userID: userId });
+  //   } else {
+  //   }
+  // }, []);
   //onRefresh
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -924,7 +934,6 @@ const MyProfile = ({ navigation }) => {
         purchaserInfo1.latestExpirationDate,
         "DD/MM/YYYY"
       );
-
       var isBefore = currentDate.isBefore(latestExpirationDates);
       if (!isBefore) {
         if (
@@ -1250,7 +1259,7 @@ const MyProfile = ({ navigation }) => {
                         ImageUrl={{
                           uri:
                             ImageUrl.Categories +
-                            item.category_name.trim() +
+                            trim(item.category_name) +
                             ImageUrl.Png,
                         }}
                         ExploreName={item.category_name}
@@ -1315,7 +1324,7 @@ const MyProfile = ({ navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
-                          item.special_moment_name.trim() +
+                          trim(item.special_moment_name) +
                           ImageUrl.Png,
                       }}
                       ExploreName={item.special_moment_name}
@@ -1402,7 +1411,7 @@ const MyProfile = ({ navigation }) => {
                         ImageUrl={{
                           uri:
                             ImageUrl.Categories +
-                            item.category_name.trim() +
+                            trim(item.category_name) +
                             ImageUrl.Png,
                         }}
                         ExploreName={item.category_name}
@@ -1802,7 +1811,7 @@ const MyProfile = ({ navigation }) => {
                         )}
                       </TouchableOpacity>
                     </View>
-                    <View>
+                    <View style={{ width: "60%" }}>
                       <Text
                         style={[
                           CommonStyle.txtTitle,
@@ -1813,7 +1822,7 @@ const MyProfile = ({ navigation }) => {
                         {getEditSepItem}
                       </Text>
                     </View>
-                    <View style={{ width: "20%" }}></View>
+                    <View style={{ width: "20%" }} />
                   </View>
                 </View>
                 <View style={CommonStyle.my16}>
@@ -2003,7 +2012,7 @@ const MyProfile = ({ navigation }) => {
                         ImageUrl={{
                           uri:
                             ImageUrl.MomentsWhite +
-                            item.special_moment_name.trim() +
+                            trim(item.special_moment_name) +
                             ImageUrl.Png,
                         }}
                         ExploreName={item.special_moment_name}

@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   RefreshControl,
+  StatusBar,
 } from "react-native";
 
 // Lib
@@ -63,13 +64,13 @@ const MyFollowers = ({ route, navigation }) => {
       console.log("user Follower List Error ===>", userFriendListError);
     }
   }, [refreshing]);
+
   const onGetFollowerList = async (isLoad) => {
-    setLoader(isLoad);
+    setLoader(true);
     if (isMyProfile) {
       const { userFollowerListResponse, userFollowerListError } =
         await getUserFollowerList();
       if (userFollowerListResponse.data.StatusCode == "1") {
-        console.log("user Follower Response  ===>", userFollowerListResponse);
         setUserFollower(userFollowerListResponse.data.Result);
         setLoader(false);
       } else {
@@ -80,23 +81,19 @@ const MyFollowers = ({ route, navigation }) => {
       if (userData.userId == UserFollowerFriendId) {
         const { userFollowerListResponse, userFollowerListError } =
           await getUserFollowerList();
+        setLoader(false);
         if (userFollowerListResponse.data.StatusCode == "1") {
-          console.log("user Follower Response  ===>", userFollowerListResponse);
           setUserFollower(userFollowerListResponse.data.Result);
-          setLoader(false);
         } else {
-          setLoader(false);
           console.log("user Follower List Error ===>", userFollowerListError);
         }
       } else {
         const { userFriendListResponse, userFriendListError } =
           await getUserFriendFollowerList(UserFollowerFriendId);
+        setLoader(false);
         if (userFriendListResponse.data.StatusCode == "1") {
-          console.log("user Follower Response  ===>", userFriendListResponse);
           setUserFollower(userFriendListResponse.data.Result);
-          setLoader(false);
         } else {
-          setLoader(false);
           console.log("user Follower List Error ===>", userFriendListError);
         }
       }
@@ -123,19 +120,7 @@ const MyFollowers = ({ route, navigation }) => {
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(Id);
-    const { userFollowerListResponse, userFollowerListError } =
-      await getUserFollowerList();
-    if (
-      RemoveFriendResponse.data.StatusCode == "1" &&
-      userFollowerListResponse.data.StatusCode == "1"
-    ) {
-      setUserFollower(userFollowerListResponse.data.Result);
-      setLoader(false);
-    } else {
-      console.log("Remove Friend Error", RemoveFriendError);
-      console.log("user Follower List Error", userFollowerListError);
-      setLoader(false);
-    }
+    getUserFollowersList(true);
   };
   const selectFriend = (item) => {
     navigation.push("UserFriendProfile", {
@@ -145,6 +130,7 @@ const MyFollowers = ({ route, navigation }) => {
         ? item.follower_user_id
         : item.friend_follower_user_id,
       isMyProfile: false,
+      MyProfileData: item.is_my_profile,
     });
   };
 
@@ -187,19 +173,52 @@ const MyFollowers = ({ route, navigation }) => {
               {Data.item.user_fname + " " + Data.item.user_lname}
             </Text>
           </View>
-          <View
-            style={[
-              UserFriendScreenStyle.btnBg,
-              { width: "30%", justifyContent: "flex-end" },
-            ]}
-          >
-            <POPLinkButton
-              buttonName={AppString.Remove}
-              onPress={() => RemoveFriend(Data.item.follower_user_id)}
-              styleBtn={Smallbtn}
-              fontStyle={fontsize12}
-            />
-          </View>
+
+          {userData.userId == UserFollowerFriendId && (
+            <View
+              style={[
+                UserFriendScreenStyle.btnBg,
+                { width: "30%", justifyContent: "flex-end" },
+              ]}
+            >
+              <POPLinkButton
+                buttonName={AppString.Remove}
+                onPress={() =>
+                  RemoveFriend(
+                    Data.item.follower_user_id
+                      ? Data.item.follower_user_id
+                      : Data.item.friend_follower_user_id
+                  )
+                }
+                styleBtn={Smallbtn}
+                fontStyle={fontsize12}
+              />
+            </View>
+          )}
+
+          {/* {Data.item.is_my_profile == "1" ? (
+            <View />
+          ) : (
+            <View
+              style={[
+                UserFriendScreenStyle.btnBg,
+                { width: "30%", justifyContent: "flex-end" },
+              ]}
+            >
+              <POPLinkButton
+                buttonName={AppString.Remove}
+                onPress={() =>
+                  RemoveFriend(
+                    Data.item.follower_user_id
+                      ? Data.item.follower_user_id
+                      : Data.item.friend_follower_user_id
+                  )
+                }
+                styleBtn={Smallbtn}
+                fontStyle={fontsize12}
+              />
+            </View>
+          )} */}
         </View>
       </TouchableOpacity>
     );

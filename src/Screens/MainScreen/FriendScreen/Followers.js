@@ -97,12 +97,17 @@ const Followers = ({ navigation }) => {
   };
   const selectFriend = (item) => {
     // console.log("selectFriend", item);
-    navigation.navigate("FriendFollowersList", {
+    navigation.push("UserFriendProfile", {
       userID: item.follower_user_id,
     });
+    console.log("1==========================");
+    // navigation.navigate("FriendFollowersList", {
+    //   userID: item.follower_user_id,
+    // });
   };
 
   const RenderItem = (Data, index) => {
+    console.log("adfwefwfwfefwefwefwwwg3", Data);
     return (
       <TouchableOpacity onPress={() => selectFriend(Data.item)}>
         <View

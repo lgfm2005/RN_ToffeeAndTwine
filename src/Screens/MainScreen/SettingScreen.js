@@ -28,11 +28,14 @@ import Purchases from "react-native-purchases";
 import Moment from "moment";
 import {
   DataPolicy,
+  OpenCancelSubscriptions,
   ShareAppLink,
   TermsOfService,
 } from "../../Assets/utils/ShareLink";
 import OneSignal from "react-native-onesignal";
 import Spinner from "react-native-loading-spinner-overlay";
+
+import VersionInfo from "react-native-version-info";
 
 const SettingScreen = ({ navigation }) => {
   const {
@@ -99,11 +102,15 @@ const SettingScreen = ({ navigation }) => {
     if (userSubscriptionStatus == "1") {
       setSpecialMomentsSwitch(!getSpecialMomentsSwitch);
       var getGifting = getGiftingSwitch ? 1 : 0;
-      var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
+      // var getSpecialMoments = getSpecialMomentsSwitch ? 1 : 0;
+      var getSpecialMoments = getSpecialMomentsSwitch ? 0 : 1;
       const { response, error } = await updateSetting(
         getGifting,
         getSpecialMoments
       );
+      if (response.data.StatusCode == "1") {
+      } else {
+      }
     } else {
       PaymentUpgrade();
     }
@@ -135,10 +142,9 @@ const SettingScreen = ({ navigation }) => {
       setGiftingSwitch(false);
       if (response.data.Result.isNotifyGifting == "1") {
         setGiftingSwitch(true);
-      } else {
       }
       setSpecialMomentsSwitch(false);
-      if (response.data.Result.isNotifySpecialMoment == " 1") {
+      if (response.data.Result.isNotifySpecialMoment == "1") {
         setSpecialMomentsSwitch(true);
       }
     }
@@ -156,6 +162,8 @@ const SettingScreen = ({ navigation }) => {
     }
   };
   const FinalCheckLogout = async () => {
+    Logout();
+    navigation.navigate("MainScreen");
     OneSignal.removeExternalUserId();
     OneSignal.unsubscribeWhenNotificationsAreDisabled(true);
     const { FinalLogOutResponse, FinalLogOutError } = await FinalLogOut();
@@ -233,9 +241,8 @@ const SettingScreen = ({ navigation }) => {
     setupgradeItemModel(true);
   };
 
-  const PaymentNow = () => {};
-
   useEffect(() => {
+    GetSetting();
     Purchases.setDebugLogsEnabled(true);
     Purchases.setup("RGUvSPPiJYGkYZldmAbMRbTyNJrHUlWs");
     Purchases.syncPurchases();
@@ -374,9 +381,8 @@ const SettingScreen = ({ navigation }) => {
                         { color: COLORS.PrimaryLight },
                       ]}
                     >
-                      {userSubscriptionStatus == "1" ? "" : AppString.Upgrade}
+                      {userSubscriptionStatus == "1" ? "" : AppString.Upgrade}{" "}
                       <Text style={{ color: COLORS.gold }}>
-                        {" "}
                         {userSubscriptionStatus == "1"
                           ? " Next Billing On: " +
                             Moment(planPeriodEnd)
@@ -387,6 +393,20 @@ const SettingScreen = ({ navigation }) => {
                       {userSubscriptionStatus == "1" ? "" : AppString.monthly}
                     </Text>
                   </TouchableOpacity>
+
+                  {userSubscriptionStatus == "1" ? (
+                    <View style={{ alignItems: "center" }}>
+                      <TouchableOpacity
+                        onPress={() => OpenCancelSubscriptions()}
+                      >
+                        <Text style={{ color: COLORS.gold }}>
+                          {AppString.CancelSubscriptions}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <View />
+                  )}
                 </View>
               ) : null}
             </View>
@@ -481,7 +501,8 @@ const SettingScreen = ({ navigation }) => {
                 <Text
                   style={[CommonStyle.txtTitle, { color: COLORS.PrimaryLight }]}
                 >
-                  {AppString.Version}
+                  {/* {AppString.Version} */}
+                  {VersionInfo.appVersion}
                 </Text>
               </View>
             </TouchableOpacity>

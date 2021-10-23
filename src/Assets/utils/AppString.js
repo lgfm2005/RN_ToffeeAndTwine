@@ -4,6 +4,8 @@ export const AppString = {
   AppName: "Toffee And Twine",
   Signup: "Sign Up",
   Signin: "Sign In",
+  OneSignalDev: "1b61c026-91b6-40fe-ad5d-829673a4817c",
+  OneSignalProduction: "1b61c026-91b6-40fe-ad5d-829673a4817c",
   GiftThoughtfully: "Gift Thoughtfully",
   EmailAddress: "Email Address",
   InvaildEmail: "Invaild Email",
@@ -39,6 +41,7 @@ export const AppString = {
   FriendSpecialMoments: "MY FRIENDS' SPECIAL MOMENTS",
   Save: "SAVE",
   Edit: "Edit",
+  MyProfile: "My Profile",
   Cancel: "CANCEL",
   Almostthere: "Almost there!",
   Specialmoment:
@@ -72,7 +75,7 @@ export const AppString = {
   Skip: "Skip",
   Finalstep: "Final step!",
   Invitespeciallove:
-    "Invite your friends and loved ones to see your gift hints and special moments.",
+    "Invite your friends' and loved ones to see your gift hints and special moments.",
   Invite: "INVITE",
   OneTimePassword:
     "Enter your email address and we’ll send you a One Time Password (OTP) to recover your password.",
@@ -126,23 +129,26 @@ export const AppString = {
   HighlightMoments: "Highlight Moments",
   FavoriteMoment: "Favorite Moment",
   Updateprofile: "Update profile",
+  CancelSubscriptions: "Cancel Subscriptions",
   AbDataPolicyout: "Data Policy",
+  NoUsersFound: "No users found",
   notifySpecialMoment:
-    "We will notify you a day ago for this special moment. Thank you!",
+    "You will be notified twice. 1 day and 1 week before the special moment",
   planning:
     "Do you wish to let your friends know you are planning to get this gift for Heather?",
   FriendsAwesome:
     "Awesome. Heather’s Friends now know you plan to get her coffee as a gift.",
   TermsofService: "Terms of Service",
   Giftit: "Gift it",
+  NotificationsMoment: "You currently have no notifications at this moment.",
   UpgradeProfile: "Upgrade Profile",
   txtUpgradecategories1: "Upgrade now for ",
   currentlyAnyonefollowing: "You’re currently not following anyone.",
   currentlyAnyonefollower: "Currently no one following you.",
   InviteFriends: "Click “Invite” to add friends and loved ones.",
   txtUpgradecategories2:
-    " to get notified of your friend's and loved one’s special moments",
-  txtUpgradecategoriesp1: "Automatic Notifications of friend's moments",
+    " to get notified of your friends' and loved one’s special moments",
+  txtUpgradecategoriesp1: "Automatic Notifications of friends' moments",
   txtUpgradecategoriesp2: "Add up to 15 gift hints",
   txtUpgradecategoriesp3: "Add up to 5 special moments",
   txtUpgrademoments: " per month to add more than 2 moments.",
@@ -163,5 +169,5 @@ export const AppString = {
   YesNotify: "Yes, Notify",
   Deleteaccount: "Delete account",
   Logout: "Logout",
-  Version: "V 1.1.0",
+  Version: "V 2.0.0",
 };

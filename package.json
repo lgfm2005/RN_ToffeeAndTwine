@@ -30,7 +30,6 @@
     "react-native-custom-radio-group": "^1.0.1",
     "react-native-date-picker": "^4.1.0",
     "react-native-elements": "^3.4.2",
-    "react-native-fbsdk": "^3.0.0",
     "react-native-fix-image": "^2.1.0",
     "react-native-flash-message": "^0.2.0",
     "react-native-gesture-handler": "^1.10.3",
@@ -51,6 +50,7 @@
     "react-native-status-bar-height": "^2.6.0",
     "react-native-tab-view": "^3.1.1",
     "react-native-vector-icons": "^8.1.0",
+    "react-native-version-info": "^1.1.1",
     "react-redux": "^7.2.4",
     "react-spring": "^9.1.2",
     "redux": "^4.1.0",
@@ -67,6 +67,7 @@
     "babel-jest": "^27.1.0",
     "eslint": "^7.32.0",
     "jest": "^27.1.0",
+    "jetifier": "^2.0.0",
     "metro-react-native-babel-preset": "^0.66.2",
     "react-native-codegen": "^0.0.7",
     "react-test-renderer": "17.0.2"

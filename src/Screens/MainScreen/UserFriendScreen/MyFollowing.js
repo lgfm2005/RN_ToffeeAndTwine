@@ -9,6 +9,7 @@ import {
   RefreshControl,
   Platform,
   ScrollView,
+  StatusBar,
 } from "react-native";
 // Lib
 import Spinner from "react-native-loading-spinner-overlay";
@@ -19,7 +20,10 @@ import { demodp, imgPlaceHolder } from "../../../Assets/utils/Image";
 import { AppString, Remove } from "../../../Assets/utils/AppString";
 import { FilledButton, POPLinkButton } from "../../../Components/Button/Button";
 import { UserFriendScreenStyle } from "./UserFriendScreenStyle";
-import { Smallbtn } from "../../../Components/Button/ButtonStyle";
+import {
+  Smallbtn,
+  UnFollowMediumbtn,
+} from "../../../Components/Button/ButtonStyle";
 import { fontsize14 } from "../../../Assets/Style/CommonStyle";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
@@ -32,23 +36,36 @@ const MyFollowing = ({ route, navigation }) => {
   const userData = useSelector((state) => state.session);
 
   const {
+    RemoveFollowerFriend,
     getUserFollowingFriendList,
     getUnfollowFriendList,
     getUserFollowingList,
   } = useActions();
 
-  const [getLoader, setLoader] = useState(false);
+  const [getLoader, setLoader] = useState(true);
   const [getUserFollowing, setUserFollowing] = useState("");
   const [refreshing, setRefreshing] = React.useState(false);
 
+  const [getMyFriendsList, setMyFriendsList] = useState("");
+  const [getFriendFollowing, setFriendFollowing] = useState("");
+
   const getDataFollowing = async (isLoad) => {
+    console.log(
+      "userData.userId == UserFollowingFriendId",
+      userData.userId,
+      UserFollowingFriendId
+    );
     setLoader(isLoad);
     if (isMyProfile) {
       const { UserFollowingListResponse, UserFollowingListError } =
         await getUserFollowingList();
       if (UserFollowingListResponse.data.StatusCode == "1") {
-        console.log("user Follower Response  ===>", UserFollowingListResponse);
+        console.log(
+          "user Follower Response  ===>",
+          UserFollowingListResponse.data.Result
+        );
         setUserFollowing(UserFollowingListResponse.data.Result);
+        setMyFriendsList("1");
         setLoader(false);
       } else {
         setLoader(false);
@@ -60,11 +77,12 @@ const MyFollowing = ({ route, navigation }) => {
           await getUserFollowingList();
         if (UserFollowingListResponse.data.StatusCode == "1") {
           console.log(
-            "user Follower Response  ===>",
+            "user Follower Response My profile ===>",
             UserFollowingListResponse
           );
           setUserFollowing(UserFollowingListResponse.data.Result);
           setLoader(false);
+          setMyFriendsList("1");
         } else {
           setLoader(false);
           console.log("user Follower List Error ===>", UserFollowingListError);
@@ -72,12 +90,12 @@ const MyFollowing = ({ route, navigation }) => {
       } else {
         const { userFriendListResponse, userFriendListError } =
           await getUserFollowingFriendList(UserFollowingFriendId);
+        setLoader(false);
+        setMyFriendsList("0");
+        debugger;
         if (userFriendListResponse.data.StatusCode == "1") {
-          console.log("user Follower Response  ===>", userFriendListResponse);
           setUserFollowing(userFriendListResponse.data.Result);
-          setLoader(false);
         } else {
-          setLoader(false);
           console.log("user Follower List Error ===>", userFriendListError);
         }
       }
@@ -97,29 +115,26 @@ const MyFollowing = ({ route, navigation }) => {
 
   useEffect(() => {
     navigation.addListener("focus", () => {
-      getUserFollowingLists(false);
+      getUserFollowingLists(true);
     });
   }, []);
 
+  const RemoveFriend = async (Id) => {
+    console.log("Remove Friend  ====>>>>", Id);
+    setLoader(true);
+    const { RemoveFriendResponse, RemoveFriendError } =
+      await RemoveFollowerFriend(Id);
+    debugger;
+    getDataFollowing(true);
+  };
+
   const UnFollowFriend = async (Id) => {
-    console.log("RemoveFriend", Id);
+    console.log("UnFollowFriend ", Id);
 
     setLoader(true);
     const { UnfollowFriendListResponse, UnfollowFriendListError } =
       await getUnfollowFriendList(Id);
-    const { UserFollowingListResponse, UserFollowingListError } =
-      await getUserFollowingList();
-    if (
-      UnfollowFriendListResponse.data.StatusCode == "1" &&
-      UserFollowingListResponse.data.StatusCode == "1"
-    ) {
-      setUserFollowing(UnfollowFriendListResponse.data.Result);
-      setLoader(false);
-    } else {
-      console.log("Remove Friend Error", UnfollowFriendListError);
-      console.log("user Follower List Error", UserFollowingListError);
-      setLoader(false);
-    }
+    getDataFollowing(true);
   };
 
   const selectFriend = (item) => {
@@ -129,6 +144,7 @@ const MyFollowing = ({ route, navigation }) => {
         : item.following_user_id
         ? item.following_user_id
         : item.friend_following_user_id,
+      MyProfileData: item.is_my_profile,
     });
   };
 
@@ -172,31 +188,71 @@ const MyFollowing = ({ route, navigation }) => {
             </Text>
           </View>
 
-          <View
-            style={[
-              UserFriendScreenStyle.btnBg,
-              { width: "30%", justifyContent: "flex-end" },
-            ]}
-          >
-            <POPLinkButton
-              buttonName={AppString.UnFollow}
-              onPress={() => UnFollowFriend(Data.item.following_user_id)}
-              styleBtn={Smallbtn}
-              fontStyle={fontsize12}
-            />
-          </View>
+          {Data.item.is_my_profile == "1" ? (
+            <View />
+          ) : (
+            <View
+              style={[
+                UserFriendScreenStyle.btnBg,
+                { width: "30%", justifyContent: "flex-end" },
+              ]}
+            >
+              {userData.userId == UserFollowingFriendId && (
+                <POPLinkButton
+                  buttonName={AppString.UnFollow}
+                  onPress={() =>
+                    UnFollowFriend(
+                      Data.item.following_user_id
+                        ? Data.item.following_user_id
+                        : Data.item.friend_following_user_id
+                    )
+                  }
+                  styleBtn={Smallbtn}
+                  fontStyle={fontsize12}
+                />
+              )}
+
+              {/* {userData.userId == UserFollowingFriendId && (
+                <POPLinkButton
+                  buttonName={AppString.Remove}
+                  onPress={() =>
+                    RemoveFriend(
+                      Data.item.following_user_id
+                        ? Data.item.following_user_id
+                        : Data.item.friend_following_user_id
+                    )
+                  }
+                  styleBtn={Smallbtn}
+                  fontStyle={fontsize12}
+                />
+              ) : (
+                <POPLinkButton
+                  buttonName={AppString.UnFollow}
+                  onPress={() =>
+                    UnFollowFriend(
+                      Data.item.following_user_id
+                        ? Data.item.following_user_id
+                        : Data.item.friend_following_user_id
+                    )
+                  }
+                  styleBtn={Smallbtn}
+                  fontStyle={fontsize12}
+                />
+              )} */}
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     );
   };
-
   return (
     <View>
-      <MyWhiteStatusbar />
+      <StatusBar barStyle="dark-content" />
+      {/* <MyWhiteStatusbar /> */}
       <SafeAreaView>
         <View Style={[CommonStyle.Container]}>
           <View style={UserFriendScreenStyle.backgroundColor}>
-            {!getUserFollowing.length ? (
+            {getUserFollowing.length == 0 && getLoader == false ? (
               // <View style={CommonStyle.ContainerCenter}>
               <View
                 style={{
@@ -206,14 +262,16 @@ const MyFollowing = ({ route, navigation }) => {
                 }}
               >
                 <View>
-                  <Text style={[CommonStyle.txtContent, { lineHeight: 0 }]}>
-                    {AppString.currentlyAnyonefollowing}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={[CommonStyle.txtContent, { lineHeight: 0 }]}>
-                    {AppString.InviteFriends}
-                  </Text>
+                  <View>
+                    <Text style={[CommonStyle.txtContent, { lineHeight: 0 }]}>
+                      {AppString.currentlyAnyonefollowing}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={[CommonStyle.txtContent, { lineHeight: 0 }]}>
+                      {AppString.InviteFriends}
+                    </Text>
+                  </View>
                 </View>
               </View>
             ) : (

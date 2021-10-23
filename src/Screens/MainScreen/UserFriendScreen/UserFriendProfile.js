@@ -50,12 +50,24 @@ import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 import { useSelector } from "react-redux";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
+import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
+import { trim } from "lodash";
 
 const UserFriendProfile = ({ route, navigation }) => {
   const userData = useSelector((state) => state.session);
-  const { userID } = route.params;
-
+  const { userID, MyProfileData } = route.params;
   useEffect(() => {
+    console.log("UserFriendProfile check point");
+    // {
+    //   MyProfileData == "1"
+    //     ? console.log("1")
+    //     : navigation.navigate("MyProfile");
+    // }
+    // {
+    //   userData.userId != userID
+    //     ? console.log("1")
+    //     : navigation.navigate("MyProfile");
+    // }
     setUserFriendId(userID);
     getProfiles();
     getProfilesLoad();
@@ -160,7 +172,6 @@ const UserFriendProfile = ({ route, navigation }) => {
     setNotificationSendModal(false), setAwesomeShowModal(true), setLoader(true);
     const { addgiftnoticationResponse, addgiftnoticatioError } =
       await AddGiftNotication(userID, getCategoryId);
-
     if (addgiftnoticationResponse.data.StatusCode == "1") {
       var GiftTo = addgiftnoticationResponse.data.Result[0].gift_to;
       var GiftID = addgiftnoticationResponse.data.Result[0].user_gift_id;
@@ -439,7 +450,7 @@ const UserFriendProfile = ({ route, navigation }) => {
 
   return (
     <View style={CommonStyle.BgColorWhite}>
-      {/* <MyBlackStatusbar /> */}
+      <MyBlackStatusbar />
       <View
         style={{
           position: "absolute",
@@ -543,7 +554,9 @@ const UserFriendProfile = ({ route, navigation }) => {
                   ) : null}
                 </View>
 
-                {userData.userId != userID ? (
+                {MyProfileData == "1" ? (
+                  <View />
+                ) : userData.userId != userID ? (
                   getFriendStatus == "1" ? (
                     <POPLinkButton
                       buttonName={AppString.UnFollow}
@@ -559,11 +572,17 @@ const UserFriendProfile = ({ route, navigation }) => {
                     />
                   ) : getFriendStatus == "3" ? (
                     <POPLinkButton
-                      buttonName={AppString.Remove}
-                      styleBtn={[Mediumbtn]}
-                      onPress={() => RemoveAction()}
+                      buttonName={AppString.UnFollow}
+                      styleBtn={UnFollowMediumbtn}
+                      onPress={() => UnFollowAction()}
                     />
                   ) : (
+                    // ) : getFriendStatus == "3" ? (
+                    //   <POPLinkButton
+                    //     buttonName={AppString.Remove}
+                    //     styleBtn={[Mediumbtn]}
+                    //     onPress={() => RemoveAction()}
+                    //   />
                     <POPLinkButton
                       buttonName={AppString.Follow}
                       styleBtn={Mediumbtn}
@@ -604,7 +623,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                     isFollowing: false,
                     isUserFollowerFriendId: userID,
                     isUserFollowingFriendId: userID,
-                    Usename: getUserName,
+                    Usename: getFirstName,
                     isMyProfile: false,
                   })
                 }
@@ -636,7 +655,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                     isFollowing: true,
                     isUserFollowerFriendId: userID,
                     isUserFollowingFriendId: userID,
-                    Usename: getUserName,
+                    Usename: getFirstName,
                     isMyProfile: false,
                   })
                 }
@@ -745,7 +764,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
-                          item.special_moment_name.trim() +
+                          trim(item.special_moment_name) +
                           ImageUrl.Png,
                       }}
                       ExploreName={item.special_moment_name}
@@ -854,11 +873,12 @@ const UserFriendProfile = ({ route, navigation }) => {
                   />
                 )}
               </View>
-              <View style={{ width: "80%", alignItems: "center" }}>
+              <View style={{ width: "60%", alignItems: "center" }}>
                 <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
                   {getSpecialMomentName}
                 </Text>
               </View>
+              <View style={{ width: "20%" }} />
             </View>
 
             <View style={CommonStyle.my16}>
@@ -881,7 +901,9 @@ const UserFriendProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              {userSubscriptionStatus == "0" ? (
+              {MyProfileData == "1" ? (
+                <View />
+              ) : userSubscriptionStatus == "0" ? (
                 <ImagePOPLinkButton
                   buttonName={AppString.Notify}
                   buttonImage={imgNavNotification}
@@ -955,11 +977,15 @@ const UserFriendProfile = ({ route, navigation }) => {
             </View>
 
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <ImagePOPLinkButton
-                buttonName={AppString.Giftit}
-                buttonImage={imgGiftNotification}
-                onPress={() => Giftit()}
-              />
+              {MyProfileData == "1" ? (
+                <View />
+              ) : (
+                <ImagePOPLinkButton
+                  buttonName={AppString.Giftit}
+                  buttonImage={imgGiftNotification}
+                  onPress={() => Giftit()}
+                />
+              )}
             </View>
           </View>
         </Modal>
@@ -1058,7 +1084,7 @@ const UserFriendProfile = ({ route, navigation }) => {
                 },
               ]}
             >
-              Awesome, {getFirstName}'s' Friends now know you plan to get{" "}
+              Awesome!…, {getFirstName}'s Friends now know you plan to get{" "}
               {getTitleName} as a gift.
             </Text>
           </View>

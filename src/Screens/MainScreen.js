@@ -33,12 +33,12 @@ import {
   statusCodes,
 } from "react-native-google-signin";
 
-import {
-  AccessToken,
-  LoginManager,
-  GraphRequest,
-  GraphRequestManager,
-} from "react-native-fbsdk";
+// import {
+//   AccessToken,
+//   LoginManager,
+//   GraphRequest,
+//   GraphRequestManager,
+// } from "react-native-fbsdk";
 
 import Spinner from "react-native-loading-spinner-overlay";
 import OneSignal from "react-native-onesignal";
@@ -142,7 +142,6 @@ const MainScreen = ({ navigation }) => {
         var deviceToken = await getToken();
         await updateNotification(token, deviceToken);
         ///Device Token:- 032e9f8679129d8c8571fffcc8213a673f1de60478f867a10c5bca161abf6764
-
         const { GetCategoryListerror, GetCategoryListresponse } =
           await CategoryList(30, token);
         if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -175,10 +174,13 @@ const MainScreen = ({ navigation }) => {
         }
       } else if (isRegistered == "0") {
         const token = { token: tokens };
-
+        OneSignalExternalUserEmail(email);
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
         const { specialMomentResponse, specialMomentError } =
           await GetSpecialMoment(token);
         if (response.data.StatusCode == "1") {
+          setLoader(false);
           if (specialMomentResponse.data.StatusCode == "1") {
             navigation.navigate("TutorialFirst", {
               listGetSpecialDay: specialMomentResponse.data.Result,
@@ -193,65 +195,65 @@ const MainScreen = ({ navigation }) => {
   };
 
   const fbSignIn = async () => {
-    LoginManager.logInWithPermissions(["email", "public_profile"]).then(
-      function (result) {
-        console.log("result", result);
-        if (result.isCancelled) {
-          // Toast.show("Login cancelled")
-        } else {
-          AccessToken.getCurrentAccessToken()
-            .then((data) => {
-              console.log(data);
-              // Create a graph request asking for user information with a callback to handle the response.
-              const infoRequest = new GraphRequest(
-                "/me",
-                {
-                  httpMethod: "GET",
-                  version: "v10.0",
-                  parameters: {
-                    fields: {
-                      string:
-                        "id,name,first_name,last_name,email,picture.type(large)",
-                    },
-                  },
-                },
-                (error, result) => {
-                  if (error) {
-                    console.log("error:", error);
-                    Toast.show("Something went wrong!");
-                  } else {
-                    if (
-                      result.email == "" ||
-                      result.email == null ||
-                      result.email == undefined
-                    ) {
-                      navigation.navigate("Signup");
-                    } else {
-                      socialAuthLogin(
-                        result.first_name,
-                        result.last_name,
-                        result.email,
-                        "F"
-                      );
-                    }
-                    console.log("result111:", result);
-                  }
-                }
-              );
-              // Start the graph request.
-              new GraphRequestManager().addRequest(infoRequest).start();
-            })
-            .catch((error) => {
-              console.log("error: ", error);
-              Toast.show("Something went wrong!");
-            });
-        }
-      },
-      function (error) {
-        console.log("Login fail with error: " + error);
-        Toast.show("Something went wrong!");
-      }
-    );
+    // LoginManager.logInWithPermissions(["email", "public_profile"]).then(
+    //   function (result) {
+    //     console.log("result", result);
+    //     if (result.isCancelled) {
+    //       // Toast.show("Login cancelled")
+    //     } else {
+    //       AccessToken.getCurrentAccessToken()
+    //         .then((data) => {
+    //           console.log(data);
+    //           // Create a graph request asking for user information with a callback to handle the response.
+    //           const infoRequest = new GraphRequest(
+    //             "/me",
+    //             {
+    //               httpMethod: "GET",
+    //               version: "v10.0",
+    //               parameters: {
+    //                 fields: {
+    //                   string:
+    //                     "id,name,first_name,last_name,email,picture.type(large)",
+    //                 },
+    //               },
+    //             },
+    //             (error, result) => {
+    //               if (error) {
+    //                 console.log("error:", error);
+    //                 Toast.show("Something went wrong!");
+    //               } else {
+    //                 if (
+    //                   result.email == "" ||
+    //                   result.email == null ||
+    //                   result.email == undefined
+    //                 ) {
+    //                   navigation.navigate("Signup");
+    //                 } else {
+    //                   socialAuthLogin(
+    //                     result.first_name,
+    //                     result.last_name,
+    //                     result.email,
+    //                     "F"
+    //                   );
+    //                 }
+    //                 console.log("result111:", result);
+    //               }
+    //             }
+    //           );
+    //           // Start the graph request.
+    //           new GraphRequestManager().addRequest(infoRequest).start();
+    //         })
+    //         .catch((error) => {
+    //           console.log("error: ", error);
+    //           Toast.show("Something went wrong!");
+    //         });
+    //     }
+    //   },
+    //   function (error) {
+    //     console.log("Login fail with error: " + error);
+    //     Toast.show("Something went wrong!");
+    //   }
+    // );
   };
 
   const getCurrentUserInfo = async () => {

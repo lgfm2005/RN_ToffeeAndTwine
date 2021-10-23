@@ -41,12 +41,12 @@ import { isEmailValid } from "../../utils";
 import Validation from "../../utils/validation";
 import { showMessage } from "react-native-flash-message";
 import { isEmail } from "../../Components/EmailCheck";
-import {
-  AccessToken,
-  LoginManager,
-  GraphRequest,
-  GraphRequestManager,
-} from "react-native-fbsdk";
+// import {
+//   AccessToken,
+//   LoginManager,
+//   GraphRequest,
+//   GraphRequestManager,
+// } from "react-native-fbsdk";
 import OneSignal from "react-native-onesignal";
 import { OneSignalExternalUserEmail } from "../../Assets/utils/OneSignalExternalUserEmail";
 
@@ -142,10 +142,13 @@ const Signup = ({ navigation }) => {
         }
       } else if (isRegistered == "0") {
         const token = { token: tokens };
-
+        OneSignalExternalUserEmail(email);
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
         const { specialMomentResponse, specialMomentError } =
           await GetSpecialMoment(token);
         if (response.data.StatusCode == "1") {
+          setLoader(false);
           if (specialMomentResponse.data.StatusCode == "1") {
             navigation.navigate("TutorialFirst", {
               listGetSpecialDay: specialMomentResponse.data.Result,
@@ -223,57 +226,57 @@ const Signup = ({ navigation }) => {
   };
 
   const fbSignIn = async () => {
-    LoginManager.logInWithPermissions(["email", "public_profile"]).then(
-      function (result) {
-        console.log("result", result);
-        if (result.isCancelled) {
-          // Toast.show("Login cancelled")
-        } else {
-          AccessToken.getCurrentAccessToken()
-            .then((data) => {
-              console.log(data);
-              // Create a graph request asking for user information with a callback to handle the response.
-              const infoRequest = new GraphRequest(
-                "/me",
-                {
-                  httpMethod: "GET",
-                  version: "v10.0",
-                  parameters: {
-                    fields: {
-                      string:
-                        "id,name,first_name,last_name,email,picture.type(large)",
-                    },
-                  },
-                },
-                (error, result) => {
-                  if (error) {
-                    console.log("error:", error);
-                    Toast.show("Something went wrong!");
-                  } else {
-                    console.log("result:", result);
-                    socialAuthLogin(
-                      result.first_name,
-                      result.last_name,
-                      result.email,
-                      "F"
-                    );
-                  }
-                }
-              );
-              // Start the graph request.
-              new GraphRequestManager().addRequest(infoRequest).start();
-            })
-            .catch((error) => {
-              console.log("error: ", error);
-              Toast.show("Something went wrong!");
-            });
-        }
-      },
-      function (error) {
-        console.log("Login fail with error: " + error);
-        Toast.show("Something went wrong!");
-      }
-    );
+    // LoginManager.logInWithPermissions(["email", "public_profile"]).then(
+    //   function (result) {
+    //     console.log("result", result);
+    //     if (result.isCancelled) {
+    //       // Toast.show("Login cancelled")
+    //     } else {
+    //       AccessToken.getCurrentAccessToken()
+    //         .then((data) => {
+    //           console.log(data);
+    //           // Create a graph request asking for user information with a callback to handle the response.
+    //           const infoRequest = new GraphRequest(
+    //             "/me",
+    //             {
+    //               httpMethod: "GET",
+    //               version: "v10.0",
+    //               parameters: {
+    //                 fields: {
+    //                   string:
+    //                     "id,name,first_name,last_name,email,picture.type(large)",
+    //                 },
+    //               },
+    //             },
+    //             (error, result) => {
+    //               if (error) {
+    //                 console.log("error:", error);
+    //                 Toast.show("Something went wrong!");
+    //               } else {
+    //                 console.log("result:", result);
+    //                 socialAuthLogin(
+    //                   result.first_name,
+    //                   result.last_name,
+    //                   result.email,
+    //                   "F"
+    //                 );
+    //               }
+    //             }
+    //           );
+    //           // Start the graph request.
+    //           new GraphRequestManager().addRequest(infoRequest).start();
+    //         })
+    //         .catch((error) => {
+    //           console.log("error: ", error);
+    //           Toast.show("Something went wrong!");
+    //         });
+    //     }
+    //   },
+    //   function (error) {
+    //     console.log("Login fail with error: " + error);
+    //     Toast.show("Something went wrong!");
+    //   }
+    // );
   };
 
   const isvalidForm = () => {

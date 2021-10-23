@@ -22,6 +22,7 @@ import { NotificationScreenStyle } from "./NotificationScreenStyle";
 import { COLORS } from "../../../Assets/utils/COLORS";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
+import { AppString } from "../../../Assets/utils/AppString";
 
 const UpcomingMoments = ({ navigation }) => {
   const { getProfile, getUpcomingMoments } = useActions();
@@ -42,18 +43,21 @@ const UpcomingMoments = ({ navigation }) => {
   };
 
   const getUpcomingMoment = async () => {
+    setLoader(true);
     const { getUpcomingMomentsResponse, getUpcomingMomentsError } =
       await getUpcomingMoments();
     if (getUpcomingMomentsResponse.data.StatusCode == "1") {
       setLoader(false);
       var data = getUpcomingMomentsResponse.data.Result;
       setUpcomingMomentsList(data);
+    } else {
+      setLoader(false);
     }
   };
 
   useEffect(() => {
     navigation.addListener("focus", () => {
-      setLoader(true);
+      setLoader(false);
       UpGradePayment();
       getUpcomingMoment();
     });
@@ -97,15 +101,23 @@ const UpcomingMoments = ({ navigation }) => {
 
   return (
     <View>
-      <MyWhiteStatusbar />
+      {/* <MyWhiteStatusbar /> */}
       <SafeAreaView>
         <View>
           <View style={NotificationScreenStyle.backgroundColor}>
-            <FlatList
-              data={upcomingMomentsList}
-              renderItem={({ item, index }) => RenderItem(item, index)}
-              keyExtractor={(item) => item.id}
-            />
+            {upcomingMomentsList.length > 0 ? (
+              <FlatList
+                data={upcomingMomentsList}
+                renderItem={({ item, index }) => RenderItem(item, index)}
+                keyExtractor={(item) => item.id}
+              />
+            ) : (
+              <View style={[CommonStyle.centerRow, CommonStyle.p24]}>
+                <Text style={[CommonStyle.txtContent, { textAlign: "center" }]}>
+                  {AppString.NotificationsMoment}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </SafeAreaView>

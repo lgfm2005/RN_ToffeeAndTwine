@@ -5,6 +5,7 @@ import { COLORS } from "../../Assets/utils/COLORS";
 export const UserFriendsToolbarStyle = StyleSheet.create({
   TopToolBar: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: COLORS.white,
     paddingTop: 10,

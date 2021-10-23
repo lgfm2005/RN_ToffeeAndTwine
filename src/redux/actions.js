@@ -14,6 +14,8 @@ import { showMessage } from "react-native-flash-message";
 import OneSignal from "react-native-onesignal";
 
 import { useDispatch, useSelector } from "react-redux";
+import ApiConstants from "./apiConstants";
+import axios from "axios";
 
 const loginAction = createAction(LOGIN);
 const logoutAction = createAction(LOGOUT);
@@ -166,6 +168,7 @@ export const useActions = () => {
       if (tokens) {
         session = tokens;
       }
+      debugger;
 
       var urlImage = "";
       if (!ImageUrl.length == 0) {
@@ -177,14 +180,16 @@ export const useActions = () => {
       } else {
         urlImage = sessions.userProfileImage;
       }
+      debugger;
       var data = new FormData();
       data.append("FName", userFname);
       data.append("LName", userLname);
-      data.append("Image", ImageUrl);
+      data.append("Image", ImageUrl.length == 0 ? "" : ImageUrl);
       data.append("DefaultSpecialMoment", DefaultSpecialMoment);
       let response, error;
       try {
         response = await API.UpdateProfile.UpdateProfile(data, session);
+        debugger;
         if (response.data.StatusCode == "1") {
           dispatch(
             loginAction({
@@ -200,11 +205,14 @@ export const useActions = () => {
             })
           );
         } else {
+          debugger;
           error = response.data.Message;
         }
       } catch (e) {
+        debugger;
         error = e;
       }
+      debugger;
       return { response, error };
     },
     CategoryList: async (LimitRecord, tokens) => {
@@ -217,7 +225,7 @@ export const useActions = () => {
       data.append("LimitRecord", LimitRecord);
       try {
         GetCategoryListresponse = await API.GetCategories.categories(
-          data,
+          LimitRecord ? data : {},
           session
         );
         if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -562,12 +570,31 @@ export const useActions = () => {
       if (UserID) {
         data.append("UserID", UserID);
       }
+      //  ;
+      // var data2222 = await axios(
+      //   ApiConstants.BASE_URL_DEV + "/rest_api/controller_profile/get_profile",
+      //   {
+      //     method: "post",
+      //     headers: {
+      //       "Content-type": "Application/json",
+      //       Accept: "Application/json",
+      //       Authorization: `Bearer ${sessions.token}`,
+      //       api_key: `AIzMzWBGoZ8Pq4QRKLcwDCG3-jPY278wxT8nMz9`,
+      //     },
+      //     data: {},
+      //   }
+      // );
+      // console.log("data2222::", data2222);
       let profileResponse, profileError;
       try {
-        profileResponse = await API.GetProfile.get(sessions, data);
+        profileResponse = await API.GetProfile.get(
+          sessions,
+          UserID ? data : {}
+        );
         if (profileResponse.data.StatusCode == "1") {
         }
       } catch (e) {
+        console.log("error", e);
         profileError = e;
       }
       return { profileResponse, profileError };
@@ -595,7 +622,7 @@ export const useActions = () => {
         data.append("UserID", userFriendListID);
         userFriendListResponse = await API.GetUserFriendFollowingList.get(
           sessions,
-          data
+          userFriendListID ? data : {}
         );
         if (userFriendListResponse.data.StatusCode == "1") {
         }
@@ -612,7 +639,7 @@ export const useActions = () => {
         data.append("UserID", userFriendListID);
         userFriendListResponse = await API.getUserFriendFollowerList.get(
           sessions,
-          data
+          userFriendListID ? data : {}
         );
         if (userFriendListResponse.data.StatusCode == "1") {
         }
@@ -653,7 +680,7 @@ export const useActions = () => {
         data.append("FriendUserID", FriendUserID);
         UnfollowFriendListResponse = await API.getunfollowFriend.get(
           sessions,
-          data
+          FriendUserID ? data : {}
         );
         if (UnfollowFriendListResponse.data.StatusCode == "1") {
         }
@@ -670,7 +697,7 @@ export const useActions = () => {
         data.append("FriendUserID", FriendUserID);
         RemoveFriendResponse = await API.RemoveFollowerFriend.get(
           sessions,
-          data
+          FriendUserID ? data : {}
         );
         if (RemoveFriendResponse.data.StatusCode == "1") {
         }
@@ -700,7 +727,10 @@ export const useActions = () => {
       let friendCategorySpeciaResponse, friendCategorySpeciaError;
       try {
         friendCategorySpeciaResponse =
-          await API.GetFriendCategorySpecialMoment.get(sessions, data);
+          await API.GetFriendCategorySpecialMoment.get(
+            sessions,
+            calendarDate ? data : {}
+          );
         if (friendCategorySpeciaResponse.data.StatusCode == "1") {
         }
       } catch (e) {
@@ -735,7 +765,7 @@ export const useActions = () => {
         data.append("UserNotificationID", UserNotificationID);
         updateNotificationResponse = await API.UpdateNotification.get(
           token,
-          data
+          UserNotificationID ? data : {}
         );
         if (updateNotificationResponse.data.StatusCode == "1") {
         }
@@ -750,7 +780,10 @@ export const useActions = () => {
       try {
         var data = new FormData();
         data.append("FriendRequestTo", friendRequestTo);
-        followUserResponse = await API.FollowUser.get(sessions, data);
+        followUserResponse = await API.FollowUser.get(
+          sessions,
+          friendRequestTo ? data : {}
+        );
         if (followUserResponse.data.StatusCode == "1") {
         }
       } catch (e) {

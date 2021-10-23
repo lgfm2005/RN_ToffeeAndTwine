@@ -103,6 +103,15 @@ function Home({ navigation }) {
         // }}
         options={{ header: () => null }}
       />
+      <Stack.Screen
+        name="UserFriendProfile"
+        component={UserFriendProfile}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -299,6 +308,27 @@ function Friend() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="UserFriendProfile"
+        component={UserFriendProfile}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="NavUserFriendScreen"
+        component={NavUserFriendScreen}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -313,6 +343,15 @@ function Notification() {
       <Stack.Screen
         name="NavNotificationScreen"
         component={NavNotificationScreen}
+      />
+      <Stack.Screen
+        name="UserFriendProfile"
+        component={UserFriendProfile}
+        options={{
+          animationEnabled: false,
+          header: false,
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );
@@ -330,8 +369,18 @@ const Navigation = ({ navigation }) => {
   const onOpened = async (openResult) => {
     if (token && sessions.userFname != null) {
       var notification = openResult.notification.additionalData;
+      var user_id = openResult.notification.additionalData.user_id;
+      console.log("notification Check Point ====>>>>>>>", notification);
       if (notification.activity == "Followers") {
-        navigation.navigate("Friend");
+        // navigation.navigate("Home");
+        navigation.navigate("Profile");
+        setTimeout(() => {
+          console.log("user_id ===>", user_id);
+          navigation.navigate("UserFriendProfile", {
+            // UserProfileCheck: "UserProfileCheck",
+            userID: user_id,
+          });
+        }, 1000);
       } else if (notification.activity == "Gifting") {
         notificationTabEvent(true);
         setTimeout(() => {

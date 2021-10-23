@@ -43,6 +43,7 @@ import {
 import { FONT } from "../../../Assets/utils/FONT";
 import { useActions } from "../../../redux/actions";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
+import { trim } from "lodash";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 5 : 0;
 var temp2 = [];
@@ -257,8 +258,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
                   // <UpgradeCategoriesList
                   <Column3UpgradeCategoriesList
                     ImageUrl={{
-                      uri:
-                        ImageUrl.Categories + item.Name.trim() + ImageUrl.Png,
+                      uri: ImageUrl.Categories + trim(item.Name) + ImageUrl.Png,
                     }}
                     ExploreName={item.Name}
                     checkColor={item.isSelected}
@@ -278,7 +278,9 @@ const TutorialSecond = ({ navigation, props, route }) => {
                   keyboardVerticalOffset={keyboardVerticalOffset}
                 >
                   <View style={[CommonStyle.p16, TutorialStyle.popbg]}>
-                    <View style={CommonStyle.Row}>
+                    <View
+                      style={[CommonStyle.Row, { justifyContent: "center" }]}
+                    >
                       <View style={{ width: "20%" }}>
                         <TouchableOpacity onPress={() => ImageChange()}>
                           {getImage != "" ? (
@@ -294,16 +296,21 @@ const TutorialSecond = ({ navigation, props, route }) => {
                           )}
                         </TouchableOpacity>
                       </View>
-                      <View style={{ width: "80%" }}>
+                      <View style={{ width: "60%" }}>
                         <Text
                           style={[
                             CommonStyle.txtTitle,
-                            { fontFamily: FONT.Gilroy },
+                            {
+                              fontFamily: FONT.Gilroy,
+                              textAlign: "center",
+                              marginTop: 10,
+                            },
                           ]}
                         >
                           {getModalName}
                         </Text>
                       </View>
+                      <View style={{ width: "20%" }} />
                     </View>
 
                     <View style={CommonStyle.my16}>

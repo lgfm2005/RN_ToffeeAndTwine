@@ -21,9 +21,9 @@ const NavUserFriendScreen = ({ navigation, route }) => {
     isFollowings = isFollowing;
     usename = Usename;
     console.log("isFollowings::", isFollowings);
+    console.log("isUserFollowerFriendId::", isUserFollowerFriendId);
     // isUserFollowerFriendIds = isUserFollowerFriendId;
     // isUserFollowingFriendIds = isUserFollowingFriendId;
-    // // debugger;
   }
 
   return (
@@ -36,7 +36,11 @@ const NavUserFriendScreen = ({ navigation, route }) => {
       }}
     >
       <UserFriendsToolbar
-        usename={usename}
+        usename={
+          usename == "" || usename == null || usename == undefined
+            ? ""
+            : usename + "'s"
+        }
         onPressBack={() => navigation.goBack()}
         onPressSearch={() => navigation.navigate("Search")}
       />

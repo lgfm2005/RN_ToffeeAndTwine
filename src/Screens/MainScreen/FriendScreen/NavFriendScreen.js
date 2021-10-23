@@ -21,9 +21,14 @@ const Tab = createMaterialTopTabNavigator();
 
 const NavFriendScreen = ({ navigation, route }) => {
   var isFollowings = false;
+  var usename = "";
   if (route.params) {
-    const { isFollowing } = route.params;
+    const { isFollowing, isUserFollowerFriendId, Usename } = route.params;
     isFollowings = isFollowing;
+    usename = Usename;
+    console.log("isFollowings::", isFollowings);
+    // isUserFollowerFriendIds = isUserFollowerFriendId;
+    // isUserFollowingFriendIds = isUserFollowingFriendId;
   }
 
   return (
@@ -31,8 +36,8 @@ const NavFriendScreen = ({ navigation, route }) => {
       style={{
         flex: 1,
         paddingTop: getStatusBarHeight(),
-        backgroundColor: COLORS.Secondary,
-        // backgroundColor: "red",
+        // backgroundColor: COLORS.Secondary,
+        backgroundColor: "black",
       }}
     >
       <FriendsToolbar onPress={() => navigation.navigate("Search")} />

@@ -59,6 +59,7 @@ import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 import { FONT } from "../../../Assets/utils/FONT";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
+import { trim } from "lodash";
 
 const UserProfile = ({ route, navigation }) => {
   const { userInfo } = route.params;
@@ -276,7 +277,6 @@ const UserProfile = ({ route, navigation }) => {
     );
 
     if (profileResponse.data.StatusCode == "1") {
-      debugger;
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
         profileResponse.data.Result[0].user_details[0].user_profile_image
@@ -573,11 +573,17 @@ const UserProfile = ({ route, navigation }) => {
                   />
                 ) : getFriendStatus == "3" ? (
                   <POPLinkButton
-                    buttonName={AppString.Remove}
-                    styleBtn={[Mediumbtn]}
-                    onPress={() => RemoveAction()}
+                    buttonName={AppString.UnFollow}
+                    styleBtn={UnFollowMediumbtn}
+                    onPress={() => UnFollowAction()}
                   />
                 ) : (
+                  // ) : getFriendStatus == "3" ? (
+                  //   <POPLinkButton
+                  //     buttonName={AppString.Remove}
+                  //     styleBtn={[Mediumbtn]}
+                  //     onPress={() => RemoveAction()}
+                  //   />
                   <POPLinkButton
                     buttonName={AppString.Follow}
                     styleBtn={Mediumbtn}
@@ -603,38 +609,74 @@ const UserProfile = ({ route, navigation }) => {
                   Moments
                 </Text>
               </View>
-              <View>
-                <Text
-                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
-                >
-                  {" "}
-                  {getFollowerCount == "0" ? "--" : getFollowerCount}
-                </Text>
-                <Text
-                  style={
-                    (CommonStyle.txtContent,
-                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
-                  }
-                >
-                  Followers
-                </Text>
-              </View>
-              <View>
-                <Text
-                  style={[CommonStyle.txtTitle, { fontFamily: FONT.NotoSans }]}
-                >
-                  {" "}
-                  {getFollowingCount == "0" ? "--" : getFollowingCount}
-                </Text>
-                <Text
-                  style={
-                    (CommonStyle.txtContent,
-                    { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
-                  }
-                >
-                  Following
-                </Text>
-              </View>
+              <TouchableOpacity
+                disabled={
+                  getFollowerCount == "0" || getFollowerCount == 0
+                    ? true
+                    : false
+                }
+                onPress={() =>
+                  navigation.push("NavUserFriendScreen", {
+                    isFollowing: false,
+                    isUserFollowerFriendId: userInfo.user_id,
+                    isUserFollowingFriendId: userInfo.user_id,
+                    Usename: getFirstName,
+                    isMyProfile: false,
+                  })
+                }
+              >
+                <View>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      { fontFamily: FONT.NotoSans },
+                    ]}
+                  >
+                    {" "}
+                    {getFollowerCount == "0" ? "--" : getFollowerCount}
+                  </Text>
+                  <Text
+                    style={
+                      (CommonStyle.txtContent,
+                      { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
+                    }
+                  >
+                    Followers
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={getFollowingCount == "0" ? true : false}
+                onPress={() =>
+                  navigation.push("NavUserFriendScreen", {
+                    isFollowing: true,
+                    isUserFollowerFriendId: userInfo.user_id,
+                    isUserFollowingFriendId: userInfo.user_id,
+                    Usename: getFirstName,
+                    isMyProfile: false,
+                  })
+                }
+              >
+                <View>
+                  <Text
+                    style={[
+                      CommonStyle.txtTitle,
+                      { fontFamily: FONT.NotoSans },
+                    ]}
+                  >
+                    {" "}
+                    {getFollowingCount == "0" ? "--" : getFollowingCount}
+                  </Text>
+                  <Text
+                    style={
+                      (CommonStyle.txtContent,
+                      { fontFamily: FONT.Gilroy, color: COLORS.PrimaryLight })
+                    }
+                  >
+                    Following
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
 
             <View>
@@ -717,7 +759,7 @@ const UserProfile = ({ route, navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
-                          item.special_moment_name.trim() +
+                          trim(item.special_moment_name) +
                           ImageUrl.Png,
                       }}
                       ExploreName={item.special_moment_name}
@@ -803,11 +845,12 @@ const UserProfile = ({ route, navigation }) => {
                         />
                       )}
                     </View>
-                    <View style={{ width: "80%" }}>
+                    <View style={{ width: "60%" }}>
                       <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
                         {getSpecialMomentName}
                       </Text>
                     </View>
+                    <View style={{ width: "20%" }} />
                   </View>
 
                   <View style={CommonStyle.my16}>
@@ -1026,8 +1069,8 @@ const UserProfile = ({ route, navigation }) => {
                       },
                     ]}
                   >
-                    Awesome, {getFirstName} Friends now know you plan to get{" "}
-                    {userInfo.user_fname} as a gift.
+                    Awesome!…, {getFirstName}'s Friends now know you plan to get{" "}
+                    {getTitleName} as a gift.
                   </Text>
                 </View>
               </Modal>

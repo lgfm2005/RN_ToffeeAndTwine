@@ -65,6 +65,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { ImageUrl } from "../../../Assets/utils/ImageUrl";
 import Purchases from "react-native-purchases";
 import Moment from "moment";
+import { trim } from "lodash";
 
 const FriendFollowersList = ({ route, navigation }) => {
   const { userID } = route.params;
@@ -566,11 +567,17 @@ const FriendFollowersList = ({ route, navigation }) => {
                   />
                 ) : getFriendStatus == "3" ? (
                   <POPLinkButton
-                    buttonName={AppString.Remove}
-                    styleBtn={[Mediumbtn]}
-                    onPress={() => RemoveAction()}
+                    buttonName={AppString.UnFollow}
+                    styleBtn={UnFollowMediumbtn}
+                    onPress={() => UnFollowAction()}
                   />
                 ) : (
+                  // ) : getFriendStatus == "3" ? (
+                  // <POPLinkButton
+                  //   buttonName={AppString.Remove}
+                  //   styleBtn={[Mediumbtn]}
+                  //   onPress={() => RemoveAction()}
+                  // />
                   <POPLinkButton
                     buttonName={AppString.Follow}
                     styleBtn={Mediumbtn}
@@ -704,7 +711,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
-                          item.special_moment_name.trim() +
+                          trim(item.special_moment_name) +
                           ImageUrl.Png,
                       }}
                       ExploreName={item.special_moment_name}
@@ -813,11 +820,12 @@ const FriendFollowersList = ({ route, navigation }) => {
                   />
                 )}
               </View>
-              <View style={{ width: "80%", alignItems: "center" }}>
+              <View style={{ width: "60%", alignItems: "center" }}>
                 <Text style={[CommonStyle.txtTitle, CommonStyle.p16]}>
                   {getSpecialMomentName}
                 </Text>
               </View>
+              <View style={{ width: "20%" }} />
             </View>
 
             <View style={CommonStyle.my16}>
@@ -1017,7 +1025,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                 },
               ]}
             >
-              Awesome, {getFirstName}'s' Friends now know you plan to get{" "}
+              Awesome!…, {getFirstName}'s Friends now know you plan to get{" "}
               {getTitleName} as a gift.
             </Text>
           </View>

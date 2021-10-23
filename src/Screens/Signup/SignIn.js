@@ -38,12 +38,12 @@ import { useActions } from "../../redux/actions";
 import Spinner from "react-native-loading-spinner-overlay";
 import { ButtonStyle } from "../../Components/Button/ButtonStyle";
 import { isEmailValid } from "../../utils";
-import {
-  AccessToken,
-  LoginManager,
-  GraphRequest,
-  GraphRequestManager,
-} from "react-native-fbsdk";
+// import {
+//   AccessToken,
+//   LoginManager,
+//   GraphRequest,
+//   GraphRequestManager,
+// } from "react-native-fbsdk";
 import OneSignal from "react-native-onesignal";
 import { OneSignalExternalUserEmail } from "../../Assets/utils/OneSignalExternalUserEmail";
 
@@ -76,6 +76,8 @@ const SignIn = ({ navigation }) => {
   }, []);
 
   const getToken = async () => {
+    const devicate = await await OneSignal.getDeviceState();
+    console.log("Data ===================>", devicate);
     const deviceState = await (await OneSignal.getDeviceState()).userId;
     return deviceState;
   };
@@ -149,10 +151,13 @@ const SignIn = ({ navigation }) => {
         }
       } else if (isRegistered == "0") {
         const token = { token: tokens };
-
+        OneSignalExternalUserEmail(email);
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
         const { specialMomentResponse, specialMomentError } =
           await GetSpecialMoment(token);
         if (response.data.StatusCode == "1") {
+          setLoader(false);
           if (specialMomentResponse.data.StatusCode == "1") {
             navigation.navigate("TutorialFirst", {
               listGetSpecialDay: specialMomentResponse.data.Result,
@@ -217,7 +222,6 @@ const SignIn = ({ navigation }) => {
       const token = { token: tokens };
       OneSignalExternalUserEmail(getEmail);
       var deviceToken = await getToken();
-      debugger;
       await updateNotification(token, deviceToken);
       const { GetCategoryListerror, GetCategoryListresponse } =
         await CategoryList(30, token);
@@ -272,57 +276,57 @@ const SignIn = ({ navigation }) => {
   };
 
   const fbSignIn = async () => {
-    LoginManager.logInWithPermissions(["email", "public_profile"]).then(
-      function (result) {
-        console.log("result", result);
-        if (result.isCancelled) {
-          // Toast.show("Login cancelled")
-        } else {
-          AccessToken.getCurrentAccessToken()
-            .then((data) => {
-              console.log(data);
-              // Create a graph request asking for user information with a callback to handle the response.
-              const infoRequest = new GraphRequest(
-                "/me",
-                {
-                  httpMethod: "GET",
-                  version: "v10.0",
-                  parameters: {
-                    fields: {
-                      string:
-                        "id,name,first_name,last_name,email,picture.type(large)",
-                    },
-                  },
-                },
-                (error, result) => {
-                  if (error) {
-                    console.log("error:", error);
-                    Toast.show("Something went wrong!");
-                  } else {
-                    socialAuthLogin(
-                      result.first_name,
-                      result.last_name,
-                      result.email,
-                      "F"
-                    );
-                    console.log("result:", result);
-                  }
-                }
-              );
-              // Start the graph request.
-              new GraphRequestManager().addRequest(infoRequest).start();
-            })
-            .catch((error) => {
-              console.log("error: ", error);
-              Toast.show("Something went wrong!");
-            });
-        }
-      },
-      function (error) {
-        console.log("Login fail with error: " + error);
-        Toast.show("Something went wrong!");
-      }
-    );
+    // LoginManager.logInWithPermissions(["email", "public_profile"]).then(
+    //   function (result) {
+    //     console.log("result", result);
+    //     if (result.isCancelled) {
+    //       // Toast.show("Login cancelled")
+    //     } else {
+    //       AccessToken.getCurrentAccessToken()
+    //         .then((data) => {
+    //           console.log(data);
+    //           // Create a graph request asking for user information with a callback to handle the response.
+    //           const infoRequest = new GraphRequest(
+    //             "/me",
+    //             {
+    //               httpMethod: "GET",
+    //               version: "v10.0",
+    //               parameters: {
+    //                 fields: {
+    //                   string:
+    //                     "id,name,first_name,last_name,email,picture.type(large)",
+    //                 },
+    //               },
+    //             },
+    //             (error, result) => {
+    //               if (error) {
+    //                 console.log("error:", error);
+    //                 Toast.show("Something went wrong!");
+    //               } else {
+    //                 socialAuthLogin(
+    //                   result.first_name,
+    //                   result.last_name,
+    //                   result.email,
+    //                   "F"
+    //                 );
+    //                 console.log("result:", result);
+    //               }
+    //             }
+    //           );
+    //           // Start the graph request.
+    //           new GraphRequestManager().addRequest(infoRequest).start();
+    //         })
+    //         .catch((error) => {
+    //           console.log("error: ", error);
+    //           Toast.show("Something went wrong!");
+    //         });
+    //     }
+    //   },
+    //   function (error) {
+    //     console.log("Login fail with error: " + error);
+    //     Toast.show("Something went wrong!");
+    //   }
+    // );
   };
 
   return (
@@ -390,7 +394,7 @@ const SignIn = ({ navigation }) => {
                 // onPress={() =>
                 //   handleSignIn("kachhadiya101@gmail.com", "123456")
                 // }
-                // onPress={() => handleSignIn("uss.hitesh@gmail.com", "123456")}
+                // onPress={() => handleSignIn("uss.hitesh@gmail.com", "1234567")}
                 // onPress={() => handleSignIn("bhavesh@gmail.com", "123456")}
                 // onPress={() =>
                 //   handleSignIn("rshah@universalstreamsolution.com", "123456")
