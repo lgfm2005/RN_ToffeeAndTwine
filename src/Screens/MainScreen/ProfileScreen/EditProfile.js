@@ -73,7 +73,15 @@ const EditProfile = ({ navigation }) => {
   const [getImageAPI, setImageAPI] = useState([]);
 
   useEffect(() => {
+    console.log(
+      "user.defaultSpecialMoment    ========    22222222",
+      user.defaultSpecialMoment
+    );
     if (user.defaultSpecialMoment == 0) {
+      // console.log(
+      //   "user.defaultSpecialMoment ====  else =====  ",
+      //   user.defaultSpecialMoment
+      // );
       if (
         UserSpecialMoment &&
         UserSpecialMoment[0] &&
@@ -86,9 +94,20 @@ const EditProfile = ({ navigation }) => {
         UpdateDefaultSpecialMoment = "";
       }
     } else {
-      const DefultUserSpecialMoment = UserSpecialMoment.filter((item) => {
-        return item.default_moment == "1";
-      });
+      const DefultUserSpecialMoment = UserSpecialMoment.filter(
+        // (item) => item.default_moment == "1"
+        (item) => {
+          console.log(
+            "item.default_moment ==================1111111111111111",
+            item.default_moment
+          );
+          return item.default_moment == "1";
+        }
+      );
+      // console.log(
+      //   "DefultUserSpecialMoment==================1111111111111111",
+      //   DefultUserSpecialMoment
+      // );
 
       if (DefultUserSpecialMoment.length > 0) {
         UpdateDefaultSpecialMoment =
@@ -131,6 +150,7 @@ const EditProfile = ({ navigation }) => {
         setImage(image.path);
         setImageNew(image.path);
         setImageAPI(JSON.stringify(image));
+        // console.log("image===>", image);
       })
       .catch((e) => {
         if (e.message == "User did not grant library permission.") {
@@ -157,10 +177,21 @@ const EditProfile = ({ navigation }) => {
     }
     if (getHighlightMomentId == "") {
       UpdateDefaultSpecialMomentShow = user.defaultSpecialMoment;
+      console.log(
+        "UpdateDefaultSpecialMomentShow",
+        UpdateDefaultSpecialMomentShow
+      );
     } else {
       UpdateDefaultSpecialMomentShow = getHighlightMomentId;
+      console.log(
+        "UpdateDefaultSpecialMomentShow",
+        UpdateDefaultSpecialMomentShow
+      );
     }
 
+    // console.log("UpdateFirstName ====>>>>", UpdateFirstName);
+    // console.log("UpdateLastName ====>>>>", UpdateLastName);
+    // console.log("getImageShow ===>", getImageShow);
     setLoader(true);
     const { error, response } = await updateProfile(
       UpdateFirstName,
@@ -170,10 +201,12 @@ const EditProfile = ({ navigation }) => {
     );
     if (response.data.StatusCode == "1") {
       navigation.navigate("MyProfile");
+      // console.log("response===>", response.data);
       setLoader(false);
       // navigation.navigate("MyProfile");
     } else {
       setLoader(false);
+      console.log("APIUpdateProfile ===>>", error);
     }
   };
 

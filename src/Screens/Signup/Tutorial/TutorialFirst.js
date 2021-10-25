@@ -65,6 +65,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
   const getLastNameRef = useRef(null);
 
   const onRadioButtonPress = (idx, momentId) => {
+    console.log("Clicked ==>", idx, momentId);
     setRadioId(momentId);
     setModalVisible(true);
   };
@@ -93,6 +94,9 @@ const TutorialFirst = ({ navigation, props, route }) => {
     if (getFirstName == "" || getLastName == "") {
       setValidationCheck("");
     }
+    console.log("getFirstName ===>>", getFirstName);
+    console.log("getLastName ===>>", getLastName);
+    console.log("getRadioId ===>>", getRadioId);
     var DateSubstring =
       date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
     setFinalDate(DateSubstring);
@@ -102,6 +106,7 @@ const TutorialFirst = ({ navigation, props, route }) => {
 
       getFirstNameRef.current.blur();
     }
+    console.log("getRadioName ===>>", DateSubstring);
   };
 
   const onSetFirstname = (name) => {
@@ -148,6 +153,8 @@ const TutorialFirst = ({ navigation, props, route }) => {
   const SubmitData = async () => {
     setLoader(true);
     const tokens = { token: token };
+    console.log("TutorialFirst tokens ========>", tokens);
+    // console.log("tokens ========>", gfegfegfegr);
 
     const { error, response } = await updateProfile(
       getFirstName,

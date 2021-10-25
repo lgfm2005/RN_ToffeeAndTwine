@@ -81,6 +81,7 @@ const CalendarScreen = ({ navigation }) => {
   // Payment for upgrade
   const [getupgradeItemModal, setupgradeItemModal] = useState(false);
 
+  // console.log("specialMoment ===>", specialMoment);
   // CalenderDate
   const [getLoader, setLoader] = useState(false);
 
@@ -163,16 +164,19 @@ const CalendarScreen = ({ navigation }) => {
           // Grant user "pro" access
         }
         const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
         const monthlyPackage = offerings.current.monthly;
         const { purchaserInfo } = await Purchases.purchasePackage(
           monthlyPackage
         );
         const { latestExpirationDate } = purchaserInfo;
         userSubscriptions(purchaserInfo);
+        console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
       CloseSepItem();
     } catch (e) {
+      console.log("Error:", e);
       // setLoading(false);
       // if (e.userCancelled) return;
       // setError(
@@ -221,6 +225,7 @@ const CalendarScreen = ({ navigation }) => {
       });
     }
     setFilterSepCat(dataCategory);
+    // console.log(getFilterSepCat);
   };
 
   const getFriendCategorySpecialMoments = async (date) => {
@@ -256,6 +261,7 @@ const CalendarScreen = ({ navigation }) => {
       if (objectWithGroupByName) {
         setCalenderDateFriend(objectWithGroupByName);
       }
+      console.log(sortedActivities);
     }
   };
 
@@ -296,6 +302,7 @@ const CalendarScreen = ({ navigation }) => {
     }).then((image) => {
       setImage(image.path);
       setImageurl(image);
+      // console.log("image===>", image);
     });
   };
 
@@ -316,6 +323,7 @@ const CalendarScreen = ({ navigation }) => {
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
+      console.log("Add Category Special Moment Done");
       setUserOldSpecialMomentModal(false);
       setFinalSepDate("");
       setuserSpecialMomentDate("");
@@ -325,6 +333,14 @@ const CalendarScreen = ({ navigation }) => {
       setuserSpecialMomentDate("");
       setLoader(false);
       setUserOldSpecialMomentModal(false);
+      console.log(
+        "NEW deleteUserCategorySpecialDay Error",
+        deleteUserCategorySpecialDayError
+      );
+      console.log(
+        "NEW getUserCategorySpecialMoment Error",
+        getUserCategorySpecialMomentError
+      );
     }
   };
 
@@ -338,6 +354,8 @@ const CalendarScreen = ({ navigation }) => {
   //  Show Moment (Select Only one) --- 2.Select Moment
   const AddNewItemSepShow = (specialMomentName, specialMomentId) => {
     setUserNewSpecialMomentModal(true);
+    // console.log("specialMomentName", specialMomentName);
+    // console.log("specialMomentId", specialMomentId);
     setUserNewSpecialMomentItem(specialMomentName);
     setSpecialMomentId(specialMomentId);
   };
@@ -395,6 +413,14 @@ const CalendarScreen = ({ navigation }) => {
     specialMomentOtherInfo,
     Imageurl
   ) => {
+    // console.log("userSpecialMomentId", userSpecialMomentId);
+    // console.log("specialMomentId", specialMomentId);
+    // console.log("specialMomentName", specialMomentName);
+    // console.log("userSpecialMomentTitle", userSpecialMomentTitle);
+    // console.log("userSpecialMomentDate", userSpecialMomentDate);
+    // console.log("specialMomentLink", specialMomentLink);
+    // console.log("specialMomentOtherInfo", specialMomentOtherInfo);
+    // console.log("Imageurl", Imageurl);
     setUserOldSpecialMomentModal(true);
     setuserSpecialMomentId(userSpecialMomentId);
     setSpecialMomentId(specialMomentId);
@@ -453,6 +479,7 @@ const CalendarScreen = ({ navigation }) => {
       setFinalSepDate("");
       onClearSpecialMoment();
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
+      console.log("Add Category Special Moment Done");
       setLoader(false);
     } else {
       setLoader(false);
@@ -462,6 +489,14 @@ const CalendarScreen = ({ navigation }) => {
       setImageurl("");
       setFinalSepDate("");
       setUserNewSpecialMomentModal(false);
+      console.log(
+        "NEW addCategoryspecialDayError Error",
+        addCategoryspecialDayError
+      );
+      console.log(
+        "NEW getUserCategorySpecialMomentError Error",
+        getUserCategorySpecialMomentError
+      );
     }
   };
 
@@ -491,6 +526,7 @@ const CalendarScreen = ({ navigation }) => {
       updateCategorySpecialMomentResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
+      console.log("update Category Special Moment Done");
       getFilterSepCatgories(updateCategorySpecialMomentResponse.data.Result);
       setUserNewSpecialMomentModal(false);
       setUserOldSpecialMomentModal(false);
@@ -511,6 +547,14 @@ const CalendarScreen = ({ navigation }) => {
       onClearSpecialMoment();
       setFinalSepDate("");
       setuserSpecialMomentDate("");
+      console.log(
+        "updateCategorySpecialMoment Error",
+        updateCategorySpecialMomentError
+      );
+      console.log(
+        "getUserCategorySpecialMoment Error",
+        getUserCategorySpecialMomentError
+      );
     }
   };
 
@@ -535,6 +579,19 @@ const CalendarScreen = ({ navigation }) => {
       setCalenderDateItem(calenderDateFriendList);
       setCalenderDateModal(true);
     }
+
+    // Object.keys(CalenderDate).forEach(function (key) {
+    //   // setCalenderDateModal(true)
+    //   // CalenderDate[key][date.dateString]["dots"]
+    //   // console.log("===>>>", CalenderDate[key][date.dateString])
+    //   if (CalenderDate[key][date.dateString] != null) {
+    //     setCalenderDateItem(CalenderDate[key][date.dateString]["dots"]);
+    //     setCalenderDateModal(true);
+    //     console.log("True");
+    //   } else {
+    //     console.log("False");
+    //   }
+    // });
   };
 
   // Payment for upgrade
@@ -570,6 +627,7 @@ const CalendarScreen = ({ navigation }) => {
   }, []);
 
   const CalendarOpenProfile = (userSpecialMomentId) => {
+    console.log("userSpecialMomentId ====>", userSpecialMomentId);
     // userInfo
     setCalenderDateModal(false);
     navigation.navigate("FriendFollowersList", {

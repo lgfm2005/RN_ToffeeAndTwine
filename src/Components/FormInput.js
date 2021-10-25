@@ -21,6 +21,7 @@ function isValidURL(string) {
   return res !== null;
 }
 export const OpenBrowserLink = (UrlLink) => {
+  console.log("https url 1 ==> ", UrlLink, isValidURL(UrlLink));
   if (isValidURL(UrlLink)) {
     if (UrlLink.startsWith("http://") || UrlLink.startsWith("http://"))
       Linking.openURL(UrlLink);

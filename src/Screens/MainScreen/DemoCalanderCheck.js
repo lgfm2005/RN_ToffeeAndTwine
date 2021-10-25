@@ -122,6 +122,7 @@ const CalendarScreen = () => {
   const userData = useSelector((state) => state.session);
   const specialMoment = useSelector((state) => state.specialMoment);
   const userSpecialMoment = useSelector((state) => state.UserSpecialMoment);
+  // console.log("specialMoment ===>", specialMoment);
   // CalenderDate
   const [getLoader, setLoader] = useState(false);
   const [getFirstName, setFirstName] = useState("");
@@ -189,6 +190,7 @@ const CalendarScreen = () => {
       // });
     }
     setFilterSepCat(dataCategory);
+    // console.log(getFilterSepCat);
   };
 
   // Close All Item
@@ -210,6 +212,7 @@ const CalendarScreen = () => {
     }).then((image) => {
       setImage(image.path);
       setImageurl(image);
+      console.log("image===>", image);
     });
   };
 
@@ -238,6 +241,14 @@ const CalendarScreen = () => {
       setLoader(false);
     } else {
       setUserOldSpecialMomentModal(true);
+      console.log(
+        "NEW CategorySpecialMoment Error",
+        deleteUserCategorySpecialDayError
+      );
+      console.log(
+        "NEW CategorySpecialMoment Error",
+        getUserCategorySpecialMomentError
+      );
     }
   };
 
@@ -250,6 +261,8 @@ const CalendarScreen = () => {
   //  Show Moment (Select Only one) --- 2.Select Moment
   const AddNewItemSepShow = (specialMomentName, specialMomentId) => {
     setUserNewSpecialMomentModal(true);
+    console.log("specialMomentName", specialMomentName);
+    console.log("specialMomentId", specialMomentId);
     setUserNewSpecialMomentItem(specialMomentName);
     setUserNewSpecialMomenIdItem(specialMomentId);
   };
@@ -278,9 +291,18 @@ const CalendarScreen = () => {
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
+      console.log("Add Category Special Moment Done");
       setLoader(false);
     } else {
       setUserNewSpecialMomentModal(true);
+      console.log(
+        "NEW CategorySpecialMoment Error",
+        addCategoryspecialDayError
+      );
+      console.log(
+        "NEW CategorySpecialMoment Error",
+        getUserCategorySpecialMomentError
+      );
     }
   };
 
@@ -314,6 +336,14 @@ const CalendarScreen = () => {
     specialMomentOtherInfo,
     Imageurl
   ) => {
+    // console.log("userSpecialMomentId", userSpecialMomentId);
+    // console.log("specialMomentId", specialMomentId);
+    // console.log("specialMomentName", specialMomentName);
+    // console.log("userSpecialMomentTitle", userSpecialMomentTitle);
+    // console.log("userSpecialMomentDate", userSpecialMomentDate);
+    // console.log("specialMomentLink", specialMomentLink);
+    // console.log("specialMomentOtherInfo", specialMomentOtherInfo);
+    // console.log("Imageurl", Imageurl);
     setUserOldSpecialMomentModal(true);
     setuserSpecialMomentId(userSpecialMomentId);
     setspecialMomentName(specialMomentName);
@@ -350,11 +380,20 @@ const CalendarScreen = () => {
       updateCategorySpecialMomentResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse
     ) {
+      console.log("update Category Special Moment Done");
       getFilterSepCatgories(updateCategorySpecialMomentResponse.data.Result);
       setUserNewSpecialMomentModal(false);
       setUserOldSpecialMomentModal(false);
       setLoader(false);
     } else {
+      console.log(
+        "updateCategorySpecialMoment Error",
+        updateCategorySpecialMomentError
+      );
+      console.log(
+        "getUserCategorySpecialMoment Error",
+        getUserCategorySpecialMomentError
+      );
     }
   };
 
@@ -363,13 +402,22 @@ const CalendarScreen = () => {
   };
 
   const CalendarModule = (date) => {
+    // console.log("date 1 ==>", date.dateString)
+
+    // console.log("date.dateString 2 ==>", getCalenderDateItem)
+
+    // console.log("Show", getCalenderDateItem == null)
+
     Object.keys(CalenderDate).forEach(function (key) {
       // setCalenderDateModal(true)
       // CalenderDate[key][date.dateString]["dots"]
+      // console.log("===>>>", CalenderDate[key][date.dateString])
       if (CalenderDate[key][date.dateString] != null) {
         setCalenderDateItem(CalenderDate[key][date.dateString]["dots"]);
         setCalenderDateModal(true);
+        console.log("True");
       } else {
+        console.log("False");
       }
     });
   };

@@ -81,12 +81,15 @@ const SettingScreen = ({ navigation }) => {
   };
 
   const registerForPushNotifications = (permission) => {
+    console.log("permission::", permission);
     if (permission) {
       GiftingToggle();
     } else {
       setGiftingSwitch(false);
       Linking.openURL("app-settings:");
     }
+    // console.log("registerForPushNotifications::", permission);
+    // do something with permission value
   };
 
   const GiftingToggleSwitch = async () => {
@@ -165,9 +168,11 @@ const SettingScreen = ({ navigation }) => {
     OneSignal.unsubscribeWhenNotificationsAreDisabled(true);
     const { FinalLogOutResponse, FinalLogOutError } = await FinalLogOut();
     if (FinalLogOutResponse.data.StatusCode == "1") {
+      console.log("Logout Checked");
       Logout();
       navigation.navigate("MainScreen");
     } else {
+      console.log("Logout Error", FinalLogOutError);
     }
   };
   const userSubscriptions = async (info) => {
@@ -210,15 +215,18 @@ const SettingScreen = ({ navigation }) => {
           // Grant user "pro" access
         }
         const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
         const monthlyPackage = offerings.current.monthly;
         const { purchaserInfo } = await Purchases.purchasePackage(
           monthlyPackage
         );
         const { latestExpirationDate } = purchaserInfo;
         userSubscriptions(purchaserInfo);
+        console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
     } catch (e) {
+      console.log("Error:", e);
       // setLoading(false);
       // if (e.userCancelled) return;
       // setError(

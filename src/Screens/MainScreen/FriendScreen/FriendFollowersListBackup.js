@@ -108,9 +108,11 @@ const FriendFollowersList = ({ route, navigation }) => {
     setAwesomeShowModal(false);
   };
   const UserBlock = () => {
+    console.log("===>>>11111");
     setUserBlockModal(true);
   };
   const FavoriteThings = (favItem) => {
+    console.log("favItem", favItem);
     setAddNewItem(favItem);
     setFavoriteThingsModal(true);
   };
@@ -161,6 +163,21 @@ const FriendFollowersList = ({ route, navigation }) => {
   // Select Item Categories --> Open
   const ShowOldItem = (Name, Image, id, key, questions) => {
     temp = [];
+    console.log("ShowOldItem Name", Name);
+    console.log("ShowOldItem Image", Image);
+    console.log("ShowOldItem Id", id);
+    console.log("ShowOldItem key", key);
+
+    // var questionList = userCategoryQuestion[key];
+    // console.log("SquestionList", questionList);
+    // setImageOld(Image);
+    // setShowOldQuestion([]);
+    // setTimeout(() => {
+    //   setShowOldQuestion(questions);
+    //   setAddNewItemModal(true);
+    //   setAddNewItem(Name);
+    //   setIdItem(id);
+    // }, 1000);
   };
 
   useEffect(() => {
@@ -342,7 +359,10 @@ const FriendFollowersList = ({ route, navigation }) => {
                           item.questions
                         )
                       }
-
+                      // AddNewOnPress={
+                      //   () => console.log("ddfdf")
+                      //   //  AddItemShow(index)
+                      // }
                     />
                   ))}
               </ScrollView>
@@ -385,7 +405,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                         console.log("ddfdf")
                       }
                       AddNewOnPress={
-                        // () => console.log("ddfdf")
+                        () => console.log("ddfdf")
                         //  AddItemShow(index)
                       }
                     />

@@ -38,14 +38,18 @@ export const TermsOfService = () => {
 //   if (DataString === "https://") {
 //       const url1 = scannerData.replace("https://", "")
 //       Linking.openURL(`https://${url1}`)
+//       // console.log("https url 1 ==> ", url1)
 //   } else if (DataString === "http://w") {
 //       const url2 = scannerData.replace("http://", "")
 //       Linking.openURL(`http://${url2}`)
+//       // console.log("https url 2 ==> ", url2)
 //   } else {
+//       // console.log("https url 3 ==> ", scannerData)
 //       Linking.openURL(`https://${scannerData}`)
 //   }
 const OpenBrowserLink = (UrlLink) => {
   Linking.openURL(UrlLink);
+  // console.log("https url 1 ==> ", url1)
 };
 
 export const OpenCancelSubscriptions = (UrlLink) => {

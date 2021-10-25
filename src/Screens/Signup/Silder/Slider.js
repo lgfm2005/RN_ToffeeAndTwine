@@ -37,11 +37,13 @@ const Slider = ({ navigation, props }) => {
   };
 
   const NavigationSlider = () => {
+    console.log("Lol");
     navigation.push("Navigation");
   };
 
   const Checks1 = () => {
     sets1(true);
+    console.log(" date picker data saved ");
   };
 
   const { currentPage: pageIndex } = sliderState;

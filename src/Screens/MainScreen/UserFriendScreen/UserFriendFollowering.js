@@ -41,6 +41,7 @@ const UserFriendFollowering = ({ navigation }) => {
       setRefreshing(false);
     } else {
       setRefreshing(false);
+      console.log("user Follower List Error", UserFollowingListError);
     }
   }, [refreshing]);
 
@@ -53,6 +54,7 @@ const UserFriendFollowering = ({ navigation }) => {
       setLoader(false);
     } else {
       setLoader(false);
+      console.log("user Follower List Error", UserFollowingListError);
     }
   };
   useEffect(async () => {
@@ -66,6 +68,8 @@ const UserFriendFollowering = ({ navigation }) => {
   }, []);
 
   const UnFollowFriend = async (Id) => {
+    console.log("RemoveFriend", Id);
+
     setLoader(true);
     const { UnfollowFriendListResponse, UnfollowFriendListError } =
       await getUnfollowFriendList(Id);
@@ -78,11 +82,15 @@ const UserFriendFollowering = ({ navigation }) => {
       setUserFollowing(UnfollowFriendListResponse.data.Result);
       setLoader(false);
     } else {
+      console.log("Remove Friend Error", UnfollowFriendListError);
+      console.log("user Follower List Error", UserFollowingListError);
       setLoader(false);
     }
   };
 
   const selectFriend = (item) => {
+    console.log("item::", item);
+    // console.log("selectFriend", item);
     navigation.navigate("FriendFollowersList", {
       userID: item.following_user_id
         ? item.following_user_id

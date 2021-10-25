@@ -31,6 +31,8 @@ import { useSelector } from "react-redux";
 
 const MyFollowing = ({ route, navigation }) => {
   const { UserFollowingFriendId, isMyProfile } = route.params;
+  console.log("=========== UserFollowingFriend Id ===============");
+  console.log("MyFollowing  ====>", UserFollowingFriendId);
   const userData = useSelector((state) => state.session);
 
   const {
@@ -48,36 +50,53 @@ const MyFollowing = ({ route, navigation }) => {
   const [getFriendFollowing, setFriendFollowing] = useState("");
 
   const getDataFollowing = async (isLoad) => {
+    console.log(
+      "userData.userId == UserFollowingFriendId",
+      userData.userId,
+      UserFollowingFriendId
+    );
     setLoader(isLoad);
     if (isMyProfile) {
       const { UserFollowingListResponse, UserFollowingListError } =
         await getUserFollowingList();
       if (UserFollowingListResponse.data.StatusCode == "1") {
+        console.log(
+          "user Follower Response  ===>",
+          UserFollowingListResponse.data.Result
+        );
         setUserFollowing(UserFollowingListResponse.data.Result);
         setMyFriendsList("1");
         setLoader(false);
       } else {
         setLoader(false);
+        console.log("user Follower List Error ===>", UserFollowingListError);
       }
     } else {
       if (userData.userId == UserFollowingFriendId) {
         const { UserFollowingListResponse, UserFollowingListError } =
           await getUserFollowingList();
         if (UserFollowingListResponse.data.StatusCode == "1") {
+          console.log(
+            "user Follower Response My profile ===>",
+            UserFollowingListResponse
+          );
           setUserFollowing(UserFollowingListResponse.data.Result);
           setLoader(false);
           setMyFriendsList("1");
         } else {
           setLoader(false);
+          console.log("user Follower List Error ===>", UserFollowingListError);
         }
       } else {
         const { userFriendListResponse, userFriendListError } =
           await getUserFollowingFriendList(UserFollowingFriendId);
         setLoader(false);
         setMyFriendsList("0");
+        debugger;
         if (userFriendListResponse.data.StatusCode == "1") {
           setUserFollowing(userFriendListResponse.data.Result);
         } else {
+          console.log("user Follower List Error ===>", userFriendListError);
         }
       }
     }
@@ -101,13 +120,17 @@ const MyFollowing = ({ route, navigation }) => {
   }, []);
 
   const RemoveFriend = async (Id) => {
+    console.log("Remove Friend  ====>>>>", Id);
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(Id);
+    debugger;
     getDataFollowing(true);
   };
 
   const UnFollowFriend = async (Id) => {
+    console.log("UnFollowFriend ", Id);
+
     setLoader(true);
     const { UnfollowFriendListResponse, UnfollowFriendListError } =
       await getUnfollowFriendList(Id);

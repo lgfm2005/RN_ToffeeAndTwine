@@ -193,6 +193,8 @@ const MyProfile = ({ navigation, route }) => {
     setRefreshing(true);
     const { profileResponse, profileError } = await getProfile();
     if (profileResponse.data.StatusCode == "1") {
+      console.log("My Profile Get Profile Response");
+
       setFollowerCount(profileResponse.data.Result[0].follower_count);
       setFollowingCount(profileResponse.data.Result[0].following_count);
       setCategoryQuestionLimit(
@@ -204,19 +206,33 @@ const MyProfile = ({ navigation, route }) => {
       setSpecialDayLimit(
         profileResponse.data.Result[0].user_details[0].special_day_limit
       );
+      // const defaultSpecialMometData = userSpecialMoment.filter((item) => {
+      //   return (
+      //     item.special_moment_id ==
+      //     profileResponse.data.Result[0].user_details[0].default_special_moment
+      //   );
+      // });
+      // if (defaultSpecialMometData.length > 0) {
+      //   setDefaultSpecialMometData(defaultSpecialMometData);
+      // }
     } else {
+      console.log("My Profile Get Profile Error");
     }
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
     if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+      console.log("My Profile User Category Question Response");
     } else {
+      console.log("MyProfile User Category Question Response Error");
     }
 
     const { specialMomentResponse, specialMomentError } =
       await GetSpecialMoment();
     if (specialMomentResponse.data.StatusCode == "1") {
+      console.log("My Profile special MomentResponse Done");
     } else {
       setLoader(false);
+      console.log(" My Profile special Moment Error");
     }
 
     setRefreshing(false);
@@ -258,6 +274,7 @@ const MyProfile = ({ navigation, route }) => {
       });
     }
     setFilterCat(dataCategory);
+    // console.log(getFilterCat);
   };
 
   // Close All Item
@@ -284,22 +301,29 @@ const MyProfile = ({ navigation, route }) => {
       cropping: true,
       includeBase64: true,
     }).then((image) => {
+      // setImage(image.path);
+      // setImageurl(image);
+
       setImageAPI(image);
       setImageNew(image.path);
       setImage(image.path);
       setImageStatus(1);
+      // console.log("image===>", image);
     });
   };
 
   // All categories Select show (Show All Item)
   const AddItemShow = () => {
     temp = [];
+    console.log("All categories Select show (Show All Item)");
     setAddItemShowModal(true);
   };
 
   // All categories Select show  ---> Add Save item
   const SelectCategoriesItem = (Name, Image, id, questions, key) => {
     setAddItemShowModal(false);
+    // console.log("Key  ===>", key);
+    // setAddNewFreshItemModal(true)
     AddNewFreshItem(Name, Image, id, questions);
   };
 
@@ -312,10 +336,18 @@ const MyProfile = ({ navigation, route }) => {
       key,
     };
     setQuestionsData(temp);
+    // console.log("setQuestionsData ====>>>>", getQuestionsData);
   };
 
   // Add --> Select Categories --> New Item
   const AddNewFreshItem = (Name, Image, id, questions) => {
+    console.log(
+      "Select Categories --> New Item ===>>>",
+      Name,
+      Image,
+      id,
+      questions
+    );
     setAddNewItemModal(false);
     setEditItemModal(true);
     setAddNewItem(Name);
@@ -370,6 +402,11 @@ const MyProfile = ({ navigation, route }) => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
+      console.log("Question Error ==>>>", addCategoryQuestionError);
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        UserCategoryQuestionError
+      );
     }
     setLoader(false);
   };
@@ -445,6 +482,11 @@ const MyProfile = ({ navigation, route }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       onClearSpecialMoment();
+      // console.log(
+      //   "User Category Question Response Done  ===>>>",
+      //   UserCategoryQuestionResponse
+      // );
+      // console.log("Question Response ==>>>", updateCategoryQuestionResponse);
     } else {
       setLoader(false);
       setUpdateDataModal(false);
@@ -459,12 +501,21 @@ const MyProfile = ({ navigation, route }) => {
       setIdItem("");
       setUpdateQuestionData([]);
       (temp = []), (temp2 = []);
+      // console.log("Question Error ==>>>", updateCategoryQuestionError);
+      // console.log(
+      //   "User Category Question Response Error  ===>>>",
+      //   GetCategoryListerror
+      // );
     }
   };
 
   // Select Item Categories --> Open
   const ShowOldItem = (Name, Image, id, key, questions) => {
     temp = [];
+    console.log("ShowOldItem Name", Name);
+    console.log("ShowOldItem Image", Image);
+    console.log("ShowOldItem Id", id);
+    console.log("ShowOldItem key", key);
     var questionList = userCategoryQuestion[key];
     setImageOld(Image);
     setShowOldQuestion([]);
@@ -516,6 +567,7 @@ const MyProfile = ({ navigation, route }) => {
       UserCategoryQuestionResponse.data.StatusCode == "1"
     ) {
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
+      console.log("Add Category Special Moment Done");
       setUpdateDataModal(false);
       setAddItemShowModal(false);
       setEditItemModal(false);
@@ -526,7 +578,13 @@ const MyProfile = ({ navigation, route }) => {
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
+      console.log(
+        "deleteUserCategoryQuestion",
+        deleteUserCategoryQuestionError
+      );
+      console.log("UserCategoryQuestionError", UserCategoryQuestionError);
     }
+    console.log("fewf", getIdItem);
   };
 
   // ------------------ Explore Share List Completed ----------------
@@ -541,6 +599,7 @@ const MyProfile = ({ navigation, route }) => {
       });
     }
     setFilterSepCat(dataCategory);
+    // console.log(getFilterSepCat);
   };
 
   // Close All Item
@@ -572,6 +631,9 @@ const MyProfile = ({ navigation, route }) => {
     }).then((image) => {
       setImage(image.path);
       setImageurl(image);
+      // setImage(image.path);
+      // setImageurl(image);
+      // console.log("image===>", image);
     });
   };
 
@@ -593,6 +655,7 @@ const MyProfile = ({ navigation, route }) => {
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
+      console.log("Add Category Special Moment Done");
       setUserOldSpecialMomentModal(false);
       setFinalSepDate("");
       setuserSpecialMomentDate("");
@@ -602,6 +665,14 @@ const MyProfile = ({ navigation, route }) => {
       setuserSpecialMomentDate("");
       setLoader(false);
       setUserOldSpecialMomentModal(false);
+      console.log(
+        "NEW deleteUserCategorySpecialDay Error",
+        deleteUserCategorySpecialDayError
+      );
+      console.log(
+        "NEW getUserCategorySpecialMoment Error",
+        getUserCategorySpecialMomentError
+      );
     }
   };
 
@@ -615,6 +686,8 @@ const MyProfile = ({ navigation, route }) => {
   //  Show Moment (Select Only one) --- 2.Select Moment
   const AddNewItemSepShow = (specialMomentName, specialMomentId) => {
     setUserNewSpecialMomentModal(true);
+    // console.log("specialMomentName", specialMomentName);
+    // console.log("specialMomentId", specialMomentId);
     setUserNewSpecialMomentItem(specialMomentName);
     setSpecialMomentId(specialMomentId);
   };
@@ -672,6 +745,14 @@ const MyProfile = ({ navigation, route }) => {
     specialMomentOtherInfo,
     Imageurl
   ) => {
+    // console.log("userSpecialMomentId", userSpecialMomentId);
+    // console.log("specialMomentId", specialMomentId);
+    // console.log("specialMomentName", specialMomentName);
+    // console.log("userSpecialMomentTitle", userSpecialMomentTitle);
+    // console.log("userSpecialMomentDate", userSpecialMomentDate);
+    // console.log("specialMomentLink", specialMomentLink);
+    // console.log("specialMomentOtherInfo", specialMomentOtherInfo);
+    // console.log("Imageurl", Imageurl);
     setUserOldSpecialMomentModal(true);
     setuserSpecialMomentId(userSpecialMomentId);
     setSpecialMomentId(specialMomentId);
@@ -706,6 +787,28 @@ const MyProfile = ({ navigation, route }) => {
     setUserNewSpecialMomentModal(false);
     setLoader(true);
 
+    // if (!getFinalSepDate) {
+    //   getFinalDataShow("");
+    //      ;
+    // } else {
+    //   getFinalDataShow(getFinalSepDate);
+    //      ;
+    // }
+
+    // if (
+    //   getuserSpecialMomentTitle == null ||
+    //   getuserSpecialMomentTitle == undefined
+    // ) {
+    //   setuserSpecialMomentTitle("");
+    //   console.log("getuserSpecialMomentTitle ==>", getuserSpecialMomentTitle);
+    // } else if (getspecialMomentLink == null) {
+    //   setspecialMomentLink("");
+    //   console.log("getspecialMomentLink ==>", getspecialMomentLink);
+    // } else if (getspecialMomentOtherInfo == null) {
+    //   setspecialMomentOtherInfo("");
+    //   console.log("getspecialMomentOtherInfo ==>", getspecialMomentOtherInfo);
+    // }
+
     const { addCategoryspecialDayResponse, addCategoryspecialDayError } =
       await addCategoryspecialDay(
         getSpecialMomentId,
@@ -726,11 +829,20 @@ const MyProfile = ({ navigation, route }) => {
     ) {
       getFilterSepCatgories(getUserCategorySpecialMomentResponse.data.Result);
       onClearSpecialMoment();
+      console.log("Add Category Special Moment Done");
       setLoader(false);
     } else {
       setLoader(false);
       onClearSpecialMoment();
       setUserNewSpecialMomentModal(false);
+      console.log(
+        "NEW addCategoryspecialDayError Error",
+        addCategoryspecialDayError
+      );
+      console.log(
+        "NEW getUserCategorySpecialMomentError Error",
+        getUserCategorySpecialMomentError
+      );
     }
   };
 
@@ -760,6 +872,7 @@ const MyProfile = ({ navigation, route }) => {
       updateCategorySpecialMomentResponse.data.StatusCode == "1" &&
       getUserCategorySpecialMomentResponse.data.StatusCode == "1"
     ) {
+      console.log("update Category Special Moment Done");
       getFilterSepCatgories(updateCategorySpecialMomentResponse.data.Result);
       setUserNewSpecialMomentModal(false);
       setUserOldSpecialMomentModal(false);
@@ -770,6 +883,14 @@ const MyProfile = ({ navigation, route }) => {
       setUserOldSpecialMomentModal(false);
       setLoader(false);
       onClearSpecialMoment();
+      console.log(
+        "updateCategorySpecialMoment Error",
+        updateCategorySpecialMomentError
+      );
+      console.log(
+        "getUserCategorySpecialMoment Error",
+        getUserCategorySpecialMomentError
+      );
     }
   };
 
@@ -820,16 +941,28 @@ const MyProfile = ({ navigation, route }) => {
           // Grant user "pro" access
         }
         const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
         const monthlyPackage = offerings.current.monthly;
         const { purchaserInfo } = await Purchases.purchasePackage(
           monthlyPackage
         );
         const { latestExpirationDate } = purchaserInfo;
         userSubscriptions(purchaserInfo);
+
+        console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
       CloseItem();
-    } catch (e) {}
+    } catch (e) {
+      console.log("Error:", e);
+      // setLoading(false);
+      // if (e.userCancelled) return;
+      // setError(
+      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
+      // );
+      // setErrorDetails(e.message);
+      // HapticFeedback.trigger("impactHeavy");
+    }
   };
 
   const userSubscriptions = async (info) => {

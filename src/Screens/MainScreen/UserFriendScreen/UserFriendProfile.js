@@ -56,6 +56,17 @@ const UserFriendProfile = ({ route, navigation }) => {
   const userData = useSelector((state) => state.session);
   const { userID, MyProfileData } = route.params;
   useEffect(() => {
+    console.log("UserFriendProfile check point");
+    // {
+    //   MyProfileData == "1"
+    //     ? console.log("1")
+    //     : navigation.navigate("MyProfile");
+    // }
+    // {
+    //   userData.userId != userID
+    //     ? console.log("1")
+    //     : navigation.navigate("MyProfile");
+    // }
     setUserFriendId(userID);
     getProfiles();
     getProfilesLoad();
@@ -138,6 +149,12 @@ const UserFriendProfile = ({ route, navigation }) => {
   // Favorite Things
   const ShowOldItem = (Name, Image, CategoryId, key, questions) => {
     temp = [];
+    console.log("ShowOldItem Name", Name);
+    console.log("ShowOldItem Image", Image);
+    console.log("ShowOldItem Id", CategoryId);
+    console.log("ShowOldItem key", key);
+    console.log("ShowOldItem questions", questions);
+
     setImageNew(Image);
     setShowOldQuestion(questions);
     setAddNewItemModal(true);
@@ -157,20 +174,26 @@ const UserFriendProfile = ({ route, navigation }) => {
     if (addgiftnoticationResponse.data.StatusCode == "1") {
       var GiftTo = addgiftnoticationResponse.data.Result[0].gift_to;
       var GiftID = addgiftnoticationResponse.data.Result[0].user_gift_id;
+      console.log("GiftTo ===>", GiftTo);
+      console.log("GiftID ===>", GiftID);
       const { notifyFriendResponse, notifyFriendError } = await NotifyFriend(
         GiftTo,
         GiftID,
         1
       );
+      console.log("add gift notication Response", addgiftnoticationResponse);
       if (notifyFriendResponse.data.StatusCode == "1") {
+        console.log("notify Friend Response", notifyFriendResponse);
         setLoader(false);
       } else {
         setLoader(false);
         setNotificationSendModal(true);
+        console.log("notify Friend Error", notifyFriendError);
       }
     } else {
       setLoader(false);
       setNotificationSendModal(true);
+      console.log("add gift notication Error", addgiftnoticatioError);
     }
   };
 
@@ -240,6 +263,7 @@ const UserFriendProfile = ({ route, navigation }) => {
   };
 
   const UserBlock = () => {
+    console.log("===>>>11111");
     setUserBlockModal(true);
   };
   const blockFriendAction = async () => {
@@ -258,8 +282,10 @@ const UserFriendProfile = ({ route, navigation }) => {
     if (followUserResponse.data.StatusCode == "1") {
       setFriendStatus("1");
       setLoader(false);
+      console.log("followUserResponse =====>>>", followUserResponse);
     } else {
       setLoader(false);
+      console.log("followUserError =====>>>", followUserError);
     }
   };
 
@@ -270,7 +296,12 @@ const UserFriendProfile = ({ route, navigation }) => {
     if (UnfollowFriendListResponse.data.StatusCode == "1") {
       setFriendStatus("0");
       setLoader(false);
+      console.log(
+        "UnfollowFriendListResponse =====>>>",
+        UnfollowFriendListResponse
+      );
     } else {
+      console.log("UnfollowFriendListError =====>>>", UnfollowFriendListError);
       setLoader(false);
     }
   };
@@ -281,8 +312,10 @@ const UserFriendProfile = ({ route, navigation }) => {
       await RemoveFollowerFriend(userID);
     if (RemoveFriendResponse.data.StatusCode == "1") {
       setFriendStatus("0");
+      console.log("RemoveFriendResponse =====>>>", RemoveFriendResponse);
       setLoader(false);
     } else {
+      console.log("RemoveFriendError =====>>>", RemoveFriendError);
       setLoader(false);
     }
   };
@@ -307,16 +340,28 @@ const UserFriendProfile = ({ route, navigation }) => {
           // Grant user "pro" access
         }
         const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
         const monthlyPackage = offerings.current.monthly;
         const { purchaserInfo } = await Purchases.purchasePackage(
           monthlyPackage
         );
         const { latestExpirationDate } = purchaserInfo;
         userSubscriptions(purchaserInfo);
+
+        console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
       CloseItem();
-    } catch (e) {}
+    } catch (e) {
+      console.log("Error:", e);
+      // setLoading(false);
+      // if (e.userCancelled) return;
+      // setError(
+      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
+      // );
+      // setErrorDetails(e.message);
+      // HapticFeedback.trigger("impactHeavy");
+    }
   };
 
   const userSubscriptions = async (info) => {

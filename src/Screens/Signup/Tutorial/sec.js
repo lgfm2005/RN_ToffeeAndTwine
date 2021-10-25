@@ -128,6 +128,7 @@ const TutorialSecond = ({ navigation, props }) => {
       cropping: true,
     }).then((image) => {
       setImage(image.path);
+      console.log("image===>", image.path);
     });
   };
 

@@ -126,21 +126,35 @@ const HomeScreen = ({ navigation }) => {
     const { GetCategoryListerror, GetCategoryListresponse } =
       await CategoryList(30);
     if (GetCategoryListresponse.data.StatusCode == "1") {
+      // console.log("Category List Response Done");
     } else {
       setLoader(false);
+      // console.log("Category List Error", GetCategoryListerror);
     }
     const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
       await getUserCategoryQuestion();
     if (UserCategoryQuestionResponse.data.StatusCode == "1") {
       getFilterCatgories(UserCategoryQuestionResponse.data.Result);
+
+      // console.log(
+      //   "User Category Question Response Done  ===>>>",
+      //   UserCategoryQuestionResponse
+      // );
     } else {
       setLoader(false);
+
+      // console.log(
+      //   "User Category Question Response Error  ===>>>",
+      //   GetCategoryListerror
+      // );
     }
     const { specialMomentResponse, specialMomentError } =
       await GetSpecialMoment();
     if (specialMomentResponse.data.StatusCode == "1") {
+      console.log("special MomentResponse Done");
     } else {
       setLoader(false);
+      console.log(" special Moment Error", specialMomentError);
     }
     const {
       getUserCategorySpecialMomentResponse,
@@ -150,9 +164,14 @@ const HomeScreen = ({ navigation }) => {
       setLoader(false);
     } else {
       if (getUserCategorySpecialMomentResponse.data.StatusCode == "1") {
+        console.log("special User Moment Response Done ");
         setLoader(false);
       } else {
         setLoader(false);
+        console.log(
+          " special User Moment Response Error",
+          getUserCategorySpecialMomentError
+        );
       }
     }
   }, []);
@@ -203,6 +222,7 @@ const HomeScreen = ({ navigation }) => {
       });
     }
     setFilterCat(dataCategory);
+    // console.log(getFilterCat);
   };
 
   const ImageChange = () => {
@@ -216,6 +236,7 @@ const HomeScreen = ({ navigation }) => {
       setImageNew(image.path);
       setImage(image.path);
       setImageStatus(1);
+      // console.log("image===>", image);
     });
   };
 
@@ -264,27 +285,41 @@ const HomeScreen = ({ navigation }) => {
           // Grant user "pro" access
         }
         const offerings = await Purchases.getOfferings();
+        console.log("offerings:", offerings);
         const monthlyPackage = offerings.current.monthly;
         const { purchaserInfo } = await Purchases.purchasePackage(
           monthlyPackage
         );
         const { latestExpirationDate } = purchaserInfo;
         userSubscriptions(purchaserInfo);
+        console.log("latestExpirationDate:", latestExpirationDate);
       }
       getProfiles();
       CloseItem();
-    } catch (e) { }
+    } catch (e) {
+      console.log("Error:", e);
+      // setLoading(false);
+      // if (e.userCancelled) return;
+      // setError(
+      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
+      // );
+      // setErrorDetails(e.message);
+      // HapticFeedback.trigger("impactHeavy");
+    }
   };
 
   // All categories Select show (Show All Item)
   const AddItemShow = () => {
     temp = [];
+    console.log("All categories Select show (Show All Item)");
     setAddItemShowModal(true);
   };
 
   // All categories Select show  ---> Add Save item
   const SelectCategoriesItem = (Name, Image, id, questions, key) => {
+    console.log(" Select categories ===>>>", Name, Image, id, questions);
     setAddItemShowModal(false);
+    // console.log("Key  ===>", key);
     // setAddNewFreshItemModal(true)
     AddNewFreshItem(Name, Image, id, questions);
   };
@@ -309,10 +344,18 @@ const HomeScreen = ({ navigation }) => {
       key,
     };
     setQuestionsData(temp);
+    console.log("setQuestionsData ====>>>>", getQuestionsData);
   };
 
   // Add --> Select Categories --> New Item
   const AddNewFreshItem = (Name, Image, id, questions) => {
+    console.log(
+      "Select Categories --> New Item ===>>>",
+      Name,
+      Image,
+      id,
+      questions
+    );
     setAddNewItemModal(false);
     setEditItemModal(true);
     setAddNewItem(Name);
@@ -360,11 +403,24 @@ const HomeScreen = ({ navigation }) => {
       setAddNewItemModal(false);
       setLoader(false);
       onClearCategoriesQue();
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        UserCategoryQuestionResponse
+      );
+      console.log(
+        "Question Response ==>>>",
+        UserCategoryQuestionResponse.data.Result
+      );
     } else {
       onClearCategoriesQue();
       setAddItemShowModal(false);
       setEditItemModal(false);
       setAddNewItemModal(false);
+      console.log("Question Error ==>>>", addCategoryQuestionError);
+      console.log(
+        "User Category Question Response Error  ===>>>",
+        UserCategoryQuestionError
+      );
     }
     setLoader(false);
   };
@@ -441,6 +497,11 @@ const HomeScreen = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       onClearCategoriesQue();
+      // console.log(
+      //   "User Category Question Response Done  ===>>>",
+      //   UserCategoryQuestionResponse
+      // );
+      // console.log("Question Response ==>>>", updateCategoryQuestionResponse);
     } else {
       setLoader(false);
       setUpdateDataModal(false);
@@ -448,13 +509,23 @@ const HomeScreen = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       onClearCategoriesQue();
+      // console.log("Question Error ==>>>", updateCategoryQuestionError);
+      // console.log(
+      //   "User Category Question Response Error  ===>>>",
+      //   GetCategoryListerror
+      // );
     }
   };
 
   // Select Item Categories --> Open
   const ShowOldItem = (Name, Image, id, key, questions) => {
     temp = [];
+    console.log("ShowOldItem Name", Name);
+    console.log("ShowOldItem Image", Image);
+    console.log("ShowOldItem Id", id);
+    console.log("ShowOldItem key", key);
     var questionList = userCategoryQuestion[key];
+    console.log("SquestionList", questionList);
     setImageOld(Image);
     setShowOldQuestion([]);
     setTimeout(() => {
@@ -507,7 +578,13 @@ const HomeScreen = ({ navigation }) => {
       setEditItemModal(false);
       setAddNewItemModal(false);
       onClearCategoriesQue();
+      console.log(
+        "deleteUserCategoryQuestion",
+        deleteUserCategoryQuestionError
+      );
+      console.log("UserCategoryQuestionError", UserCategoryQuestionError);
     }
+    console.log("fewf", getIdItem);
   };
 
   // Payment for upgrade∂ç
@@ -540,6 +617,7 @@ const HomeScreen = ({ navigation }) => {
     });
   }, []);
 
+  // console.log("userData.userProfileImage:", userData.userProfileImage);
   return (
     <View style={CommonStyle.BgColorWhite}>
       <MyBlackStatusbar />
@@ -556,7 +634,7 @@ const HomeScreen = ({ navigation }) => {
                 <Image
                   source={
                     userData.userProfileImage == "" ||
-                      userData.userProfileImage == undefined
+                    userData.userProfileImage == undefined
                       ? imgPlaceHolder
                       : { uri: userData.userProfileImage }
                   }
@@ -623,13 +701,13 @@ const HomeScreen = ({ navigation }) => {
                               item.questions
                             )
                           }
-                        // AddNewOnPress={() => AddItemShow(index)}
+                          // AddNewOnPress={() => AddItemShow(index)}
                         />
                       );
                     })}
                   <View>
                     {userSubscriptionStatus == "1" &&
-                      userCategoryQuestion.length == categoryQuestionLimit ? (
+                    userCategoryQuestion.length == categoryQuestionLimit ? (
                       <View />
                     ) : (
                       <Column3ExploreShareList
@@ -683,7 +761,7 @@ const HomeScreen = ({ navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.Categories +
-                          item.category_name +
+                          item.category_name.trim() +
                           ImageUrl.Png,
                       }}
                       // ImageUrl={imgBook}
@@ -695,16 +773,16 @@ const HomeScreen = ({ navigation }) => {
                       onPress={() => {
                         userCategoryQuestion.length < 5
                           ? SelectCategoriesItem(
-                            item.category_name,
-                            item.Image,
-                            item.category_id,
-                            item.questions,
-                            index
-                          )
+                              item.category_name,
+                              item.Image,
+                              item.category_id,
+                              item.questions,
+                              index
+                            )
                           : upgradeItem();
                       }}
-                    // onPress={() => upgradeItem()}
-                    // AddNewOnPress={() => upgradeItem()}
+                      // onPress={() => upgradeItem()}
+                      // AddNewOnPress={() => upgradeItem()}
                     />
                   ))}
               </ScrollView>

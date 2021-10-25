@@ -43,6 +43,7 @@ const Followers = ({ navigation }) => {
     } else {
       setRefreshing(false);
       // setLoader(false);
+      console.log("user Follower List Error ===>", userFollowerListError);
     }
   }, [refreshing]);
 
@@ -52,10 +53,15 @@ const Followers = ({ navigation }) => {
       await getUserFollowerList();
 
     if (userFollowerListResponse.data.StatusCode == "1") {
+      console.log(
+        "user Follower List Error ===>",
+        userFollowerListResponse.data.Result
+      );
       setUserFollower(userFollowerListResponse.data.Result);
       setLoader(false);
     } else {
       setLoader(false);
+      console.log("user Follower List Error ===>", userFollowerListError);
     }
   };
 
@@ -70,6 +76,8 @@ const Followers = ({ navigation }) => {
   }, []);
 
   const RemoveFriend = async (Id) => {
+    console.log("Remove Friend  ====>>>>", Id);
+
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(Id);
@@ -82,19 +90,24 @@ const Followers = ({ navigation }) => {
       setUserFollower(userFollowerListResponse.data.Result);
       setLoader(false);
     } else {
+      console.log("Remove Friend Error", RemoveFriendError);
+      console.log("user Follower List Error", userFollowerListError);
       setLoader(false);
     }
   };
   const selectFriend = (item) => {
+    // console.log("selectFriend", item);
     navigation.push("UserFriendProfile", {
       userID: item.follower_user_id,
     });
+    console.log("1==========================");
     // navigation.navigate("FriendFollowersList", {
     //   userID: item.follower_user_id,
     // });
   };
 
   const RenderItem = (Data, index) => {
+    console.log("adfwefwfwfefwefwefwwwg3", Data);
     return (
       <TouchableOpacity onPress={() => selectFriend(Data.item)}>
         <View
