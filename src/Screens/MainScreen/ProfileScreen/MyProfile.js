@@ -1091,7 +1091,7 @@ const MyProfile = ({ navigation, route }) => {
             <ImageBackground
               source={
                 userData.userProfileImage == "" ||
-                userData.userProfileImage == undefined
+                  userData.userProfileImage == undefined
                   ? imgPlaceHolder
                   : { uri: userData.userProfileImage }
               }
@@ -1114,7 +1114,7 @@ const MyProfile = ({ navigation, route }) => {
                   </Text>
                   <View style={CommonStyle.alignItemsBaseLine}>
                     {getDefaultSpecialMometData.length > 0 &&
-                    getDefaultSpecialMometData[0].user_special_moment_date !=
+                      getDefaultSpecialMometData[0].user_special_moment_date !=
                       "" ? (
                       <>
                         <Image
@@ -1276,13 +1276,13 @@ const MyProfile = ({ navigation, route }) => {
                             item.questions
                           )
                         }
-                        // AddNewOnPress={() => AddItemShow(index)}
+                      // AddNewOnPress={() => AddItemShow(index)}
                       />
                     );
                   })}
                 <View>
                   {userSubscriptionStatus == "1" &&
-                  userCategoryQuestion.length == categoryQuestionLimit ? (
+                    userCategoryQuestion.length == categoryQuestionLimit ? (
                     <View />
                   ) : (
                     <Column3CalendarList
@@ -1349,7 +1349,7 @@ const MyProfile = ({ navigation, route }) => {
 
                 <View>
                   {userSubscriptionStatus == "1" &&
-                  userSpecialMoment.length == specialDayLimit ? (
+                    userSpecialMoment.length == specialDayLimit ? (
                     <View />
                   ) : (
                     <Column3CalendarList
@@ -1698,8 +1698,8 @@ const MyProfile = ({ navigation, route }) => {
               >
                 <View style={{ width: "20%" }}>
                   {getImage == "" ||
-                  getImage == null ||
-                  getImage == undefined ? (
+                    getImage == null ||
+                    getImage == undefined ? (
                     <Image source={imgImport} style={Styles.popupImage} />
                   ) : (
                     <Image
@@ -1799,8 +1799,8 @@ const MyProfile = ({ navigation, route }) => {
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
                         {getImage == "" ||
-                        getImage == null ||
-                        getImage == undefined ? (
+                          getImage == null ||
+                          getImage == undefined ? (
                           <Image source={imgImport} style={Styles.popupImage} />
                         ) : (
                           <Image
@@ -1844,8 +1844,8 @@ const MyProfile = ({ navigation, route }) => {
                       getFinalSepDate
                         ? getFinalSepDate
                         : getuserSpecialMomentDate
-                        ? getuserSpecialMomentDate
-                        : "Date"
+                          ? getuserSpecialMomentDate
+                          : "Date"
                     }
                     buttonCheck={getuserSpecialMomentDate == "" ? false : true}
                     onPress={() => UpdateEnterDate()}
@@ -2054,8 +2054,8 @@ const MyProfile = ({ navigation, route }) => {
                     <View style={{ width: "20%" }}>
                       <TouchableOpacity onPress={() => ImageSepChange()}>
                         {getImage == "" ||
-                        getImage == null ||
-                        getImage == undefined ? (
+                          getImage == null ||
+                          getImage == undefined ? (
                           <Image source={imgImport} style={Styles.popupImage} />
                         ) : (
                           <Image
@@ -2105,8 +2105,8 @@ const MyProfile = ({ navigation, route }) => {
                       getFinalSepDate
                         ? getFinalSepDate
                         : getuserSpecialMomentDate
-                        ? getuserSpecialMomentDate
-                        : "Date"
+                          ? getuserSpecialMomentDate
+                          : "Date"
                     }
                     buttonCheck={getuserSpecialMomentDate == "" ? false : true}
                     onPress={() => EnterDate()}

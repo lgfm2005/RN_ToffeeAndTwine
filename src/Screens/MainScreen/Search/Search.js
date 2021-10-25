@@ -14,14 +14,14 @@ import {
 
 // Lib
 // import {Searchbar} from 'react-native-paper';
-import { SearchBar } from "react-native-elements";
+import { SearchBar, Icon } from "react-native-elements";
 import Spinner from "react-native-loading-spinner-overlay";
 // Asset
 import CommonStyle, {
   fontsize10,
   fontsize12,
 } from "../../../Assets/Style/CommonStyle";
-import { demodp, imgPlaceHolder } from "../../../Assets/utils/Image";
+import { demodp, imgPlaceHolder, imgSearch } from "../../../Assets/utils/Image";
 import { AppString, Remove } from "../../../Assets/utils/AppString";
 import { FilledButton } from "../../../Components/Button/Button";
 import { SearchBarStyle } from "./SearchBarStyle";
@@ -87,7 +87,7 @@ const Search = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={CommonStyle.BgColorWhite}>
+    <SafeAreaView style={[CommonStyle.BgColorWhite, { marginTop: Platform.OS == 'ios' ? 0 : 20 }]}>
       {/* <SafeAreaView style={{ backgroundColor: "black" }}> */}
       {/* <MyWhiteStatusbar /> */}
       <View Style={[CommonStyle.Container, CommonStyle.pt16]}>
@@ -98,6 +98,11 @@ const Search = ({ navigation }) => {
             value={getSearchQuery}
             platform="ios"
             autoFocus
+            searchIcon={
+              <Image
+                source={imgSearch}
+                style={CommonStyle.imgIconSize} />
+            }
             // onCancel={() => navigation.navigate("NavFriendScreen")}
             onCancel={() => navigation.goBack()}
             containerStyle={{

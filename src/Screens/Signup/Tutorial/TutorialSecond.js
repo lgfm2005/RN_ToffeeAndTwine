@@ -16,6 +16,7 @@ import {
 import ImagePicker from "react-native-image-crop-picker";
 import Modal from "react-native-modal";
 import Spinner from "react-native-loading-spinner-overlay";
+import { trim } from "lodash";
 
 // Asset
 import { AppString } from "../../../Assets/utils/AppString";
@@ -257,8 +258,7 @@ const TutorialSecond = ({ navigation, props, route }) => {
                   // <UpgradeCategoriesList
                   <Column3UpgradeCategoriesList
                     ImageUrl={{
-                      uri:
-                        ImageUrl.Categories + item.Name.trim() + ImageUrl.Png,
+                      uri: ImageUrl.Categories + trim(item.Name) + ImageUrl.Png,
                     }}
                     ExploreName={item.Name}
                     checkColor={item.isSelected}

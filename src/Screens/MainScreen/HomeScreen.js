@@ -66,6 +66,8 @@ import Purchases from "react-native-purchases";
 import { ImageUrl } from "../../Assets/utils/ImageUrl";
 import { AllListViewStyle } from "../../Components/AllListVIew/AllListViewStyle";
 import { Column3CalendarList } from "../../Components/AllListVIew/CalendarList";
+import { trim } from "lodash";
+
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 var temp = [];
@@ -634,7 +636,7 @@ const HomeScreen = ({ navigation }) => {
                 <Image
                   source={
                     userData.userProfileImage == "" ||
-                    userData.userProfileImage == undefined
+                      userData.userProfileImage == undefined
                       ? imgPlaceHolder
                       : { uri: userData.userProfileImage }
                   }
@@ -701,13 +703,13 @@ const HomeScreen = ({ navigation }) => {
                               item.questions
                             )
                           }
-                          // AddNewOnPress={() => AddItemShow(index)}
+                        // AddNewOnPress={() => AddItemShow(index)}
                         />
                       );
                     })}
                   <View>
                     {userSubscriptionStatus == "1" &&
-                    userCategoryQuestion.length == categoryQuestionLimit ? (
+                      userCategoryQuestion.length == categoryQuestionLimit ? (
                       <View />
                     ) : (
                       <Column3ExploreShareList
@@ -761,7 +763,7 @@ const HomeScreen = ({ navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.Categories +
-                          item.category_name.trim() +
+                          trim(item.category_name) +
                           ImageUrl.Png,
                       }}
                       // ImageUrl={imgBook}
@@ -773,16 +775,16 @@ const HomeScreen = ({ navigation }) => {
                       onPress={() => {
                         userCategoryQuestion.length < 5
                           ? SelectCategoriesItem(
-                              item.category_name,
-                              item.Image,
-                              item.category_id,
-                              item.questions,
-                              index
-                            )
+                            item.category_name,
+                            item.Image,
+                            item.category_id,
+                            item.questions,
+                            index
+                          )
                           : upgradeItem();
                       }}
-                      // onPress={() => upgradeItem()}
-                      // AddNewOnPress={() => upgradeItem()}
+                    // onPress={() => upgradeItem()}
+                    // AddNewOnPress={() => upgradeItem()}
                     />
                   ))}
               </ScrollView>
@@ -832,7 +834,7 @@ const HomeScreen = ({ navigation }) => {
                             ImageUrl={{
                               uri:
                                 ImageUrl.Categories +
-                                item.category_name.trim() +
+                                trim(item.category_name) +
                                 ImageUrl.Png,
                             }}
                             ExploreName={item.category_name}

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 // Lib
 import Spinner from "react-native-loading-spinner-overlay";
+import { trim } from "lodash";
 
 // Asset
 import CommonStyle, { fontsize12 } from "../../../Assets/Style/CommonStyle";
@@ -121,8 +122,8 @@ const UserFriendFollowering = ({ navigation }) => {
             <Image
               source={
                 Data.item.user_profile_image == "" ||
-                Data.item.user_profile_image == null ||
-                Data.item.user_profile_image == undefined
+                  Data.item.user_profile_image == null ||
+                  Data.item.user_profile_image == undefined
                   ? imgPlaceHolder
                   : { uri: Data.item.user_profile_image }
               }

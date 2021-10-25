@@ -14,6 +14,7 @@ import {
 // Lib
 import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
+import { trim } from "lodash";
 
 // Asset
 import { imgbirthdayCakeGary } from "../../../Assets/utils/Image";
@@ -483,7 +484,7 @@ const FriendFollowersList = ({ route, navigation }) => {
           >
             <TouchableOpacity
               onPress={() => navigation.goBack()}
-              // onPress={() => navigation.navigate("NavFriendScreen")}
+            // onPress={() => navigation.navigate("NavFriendScreen")}
             >
               <Image
                 source={imgBackleftWhite}
@@ -710,7 +711,7 @@ const FriendFollowersList = ({ route, navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
-                          item.special_moment_name.trim() +
+                          trim(item.special_moment_name) +
                           ImageUrl.Png,
                       }}
                       ExploreName={item.special_moment_name}
@@ -801,8 +802,8 @@ const FriendFollowersList = ({ route, navigation }) => {
             <View style={CommonStyle.Row}>
               <View style={{ width: "20%" }}>
                 {getSpecialMomentImage == "" ||
-                getSpecialMomentImage == null ||
-                getSpecialMomentImage == undefined ? (
+                  getSpecialMomentImage == null ||
+                  getSpecialMomentImage == undefined ? (
                   <Image
                     source={{
                       uri:
@@ -877,8 +878,8 @@ const FriendFollowersList = ({ route, navigation }) => {
               <View style={{ width: "20%" }}>
                 <TouchableOpacity disabled={true}>
                   {getImageNew == "" ||
-                  getImageNew == null ||
-                  getImageNew == undefined ? (
+                    getImageNew == null ||
+                    getImageNew == undefined ? (
                     <Image
                       source={{
                         uri: ImageUrl.Categories + getTitleName + ImageUrl.Png,
@@ -943,8 +944,8 @@ const FriendFollowersList = ({ route, navigation }) => {
               <View style={{ width: "20%" }}>
                 <TouchableOpacity disabled={true}>
                   {getImageNew == "" ||
-                  getImageNew == null ||
-                  getImageNew == undefined ? (
+                    getImageNew == null ||
+                    getImageNew == undefined ? (
                     <Image
                       source={{
                         uri: ImageUrl.Categories + getTitleName + ImageUrl.Png,

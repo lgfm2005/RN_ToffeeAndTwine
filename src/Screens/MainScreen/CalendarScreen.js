@@ -58,6 +58,8 @@ import {
 import Purchases from "react-native-purchases";
 import Moment from "moment";
 import { ImageUrl } from "../../Assets/utils/ImageUrl";
+import { trim } from "lodash";
+
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 10 : 0;
 
@@ -658,7 +660,7 @@ const CalendarScreen = ({ navigation }) => {
                 <Image
                   source={
                     userData.userProfileImage == "" ||
-                    userData.userProfileImage == undefined
+                      userData.userProfileImage == undefined
                       ? imgPlaceHolder
                       : { uri: userData.userProfileImage }
                   }
@@ -701,7 +703,7 @@ const CalendarScreen = ({ navigation }) => {
                       ImageUrl={{
                         uri:
                           ImageUrl.MomentsWhite +
-                          item.special_moment_name.trim() +
+                          trim(item.special_moment_name) +
                           ImageUrl.Png,
                       }}
                       ExploreName={item.special_moment_name}
@@ -727,7 +729,7 @@ const CalendarScreen = ({ navigation }) => {
 
                 <View>
                   {userSubscriptionStatus == "1" &&
-                  userSpecialMoment.length == specialDayLimit ? (
+                    userSpecialMoment.length == specialDayLimit ? (
                     <View />
                   ) : (
                     <CalendarList
@@ -847,8 +849,8 @@ const CalendarScreen = ({ navigation }) => {
                               <Image
                                 source={
                                   item.user_profile_image == "" ||
-                                  item.user_profile_image == undefined ||
-                                  item.user_profile_image == null
+                                    item.user_profile_image == undefined ||
+                                    item.user_profile_image == null
                                     ? imgPlaceHolder
                                     : { uri: item.user_profile_image }
                                 }
@@ -875,7 +877,7 @@ const CalendarScreen = ({ navigation }) => {
                                   <Text
                                     style={
                                       (CommonStyle.txtFrienduserName,
-                                      CommonStyle.textUpperCase,
+                                        CommonStyle.textUpperCase,
                                       {
                                         color: COLORS.PrimaryLight,
                                         marginLeft: 16,
@@ -1084,8 +1086,8 @@ const CalendarScreen = ({ navigation }) => {
                           getFinalSepDate
                             ? getFinalSepDate
                             : getuserSpecialMomentDate
-                            ? getuserSpecialMomentDate
-                            : "Date"
+                              ? getuserSpecialMomentDate
+                              : "Date"
                         }
                         buttonCheck={
                           getuserSpecialMomentDate == "" ? false : true
@@ -1258,7 +1260,7 @@ const CalendarScreen = ({ navigation }) => {
                             ImageUrl={{
                               uri:
                                 ImageUrl.MomentsWhite +
-                                item.special_moment_name.trim() +
+                                trim(item.special_moment_name) +
                                 ImageUrl.Png,
                             }}
                             ExploreName={item.special_moment_name}
@@ -1353,8 +1355,8 @@ const CalendarScreen = ({ navigation }) => {
                           getFinalSepDate
                             ? getFinalSepDate
                             : getuserSpecialMomentDate
-                            ? getuserSpecialMomentDate
-                            : "Date"
+                              ? getuserSpecialMomentDate
+                              : "Date"
                         }
                         buttonCheck={
                           getuserSpecialMomentDate == "" ? false : true

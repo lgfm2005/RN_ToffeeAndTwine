@@ -1,10 +1,12 @@
 import { Alert, Platform, Dimensions } from "react-native";
 import { hideMessage, showMessage } from "react-native-flash-message";
+import { trim } from "lodash";
+
 const { width } = Dimensions.get("window");
 export const isEmailValid = (email) => {
   let pattern =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return pattern.test(String(email.trim()).toLowerCase());
+  return pattern.test(String(trim(email)).toLowerCase());
 };
 
 export const isAndroid = () => Platform.OS === "android";

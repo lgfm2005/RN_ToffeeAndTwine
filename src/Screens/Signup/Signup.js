@@ -58,6 +58,7 @@ const Signup = ({ navigation }) => {
     CategoryList,
     getUserCategoryQuestion,
     socialAuth,
+    socialAppleAuth,
     GetSpecialMoment,
     updateNotification,
   } = useActions();
@@ -210,51 +211,51 @@ const Signup = ({ navigation }) => {
   };
 
   const fbSignIn = async () => {
-    LoginManager.logInWithPermissions(["email", "public_profile"]).then(
-      function (result) {
-        if (result.isCancelled) {
-          // Toast.show("Login cancelled")
-        } else {
-          AccessToken.getCurrentAccessToken()
-            .then((data) => {
-              // Create a graph request asking for user information with a callback to handle the response.
-              const infoRequest = new GraphRequest(
-                "/me",
-                {
-                  httpMethod: "GET",
-                  version: "v10.0",
-                  parameters: {
-                    fields: {
-                      string:
-                        "id,name,first_name,last_name,email,picture.type(large)",
-                    },
-                  },
-                },
-                (error, result) => {
-                  if (error) {
-                    Toast.show("Something went wrong!");
-                  } else {
-                    socialAuthLogin(
-                      result.first_name,
-                      result.last_name,
-                      result.email,
-                      "F"
-                    );
-                  }
-                }
-              );
-              // Start the graph request.
-              new GraphRequestManager().addRequest(infoRequest).start();
-            })
-            .catch((error) => {
-              Toast.show("Something went wrong!");
-            });
-        }
-      },
-      function (error) {
-        Toast.show("Something went wrong!");
-      }
-    );
+    // LoginManager.logInWithPermissions(["email", "public_profile"]).then(
+    //   function (result) {
+    //     if (result.isCancelled) {
+    //       // Toast.show("Login cancelled")
+    //     } else {
+    //       AccessToken.getCurrentAccessToken()
+    //         .then((data) => {
+    //           // Create a graph request asking for user information with a callback to handle the response.
+    //           const infoRequest = new GraphRequest(
+    //             "/me",
+    //             {
+    //               httpMethod: "GET",
+    //               version: "v10.0",
+    //               parameters: {
+    //                 fields: {
+    //                   string:
+    //                     "id,name,first_name,last_name,email,picture.type(large)",
+    //                 },
+    //               },
+    //             },
+    //             (error, result) => {
+    //               if (error) {
+    //                 Toast.show("Something went wrong!");
+    //               } else {
+    //                 socialAuthLogin(
+    //                   result.first_name,
+    //                   result.last_name,
+    //                   result.email,
+    //                   "F"
+    //                 );
+    //               }
+    //             }
+    //           );
+    //           // Start the graph request.
+    //           new GraphRequestManager().addRequest(infoRequest).start();
+    //         })
+    //         .catch((error) => {
+    //           Toast.show("Something went wrong!");
+    //         });
+    //     }
+    //   },
+    //   function (error) {
+    //     Toast.show("Something went wrong!");
+    //   }
+    // );
   };
 
   const isvalidForm = () => {
