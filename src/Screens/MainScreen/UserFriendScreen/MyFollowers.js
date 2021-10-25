@@ -30,12 +30,6 @@ const MyFollowers = ({ route, navigation }) => {
   const { UserFollowerFriendId, isMyProfile } = route.params;
   const userData = useSelector((state) => state.session);
 
-  console.log("=========== UserFollowerFriendId ===============");
-  console.log(
-    "MyFollowers  isMyProfile ====>",
-    UserFollowerFriendId,
-    isMyProfile
-  );
   // API get User Following Friend List
   const {
     getUserFriendFollowerList,
@@ -53,15 +47,12 @@ const MyFollowers = ({ route, navigation }) => {
     const { userFriendListResponse, userFriendListError } =
       await getUserFollowerList();
     if (userFriendListResponse.data.StatusCode == "1") {
-      console.log("user Follower Response  ===>", userFriendListResponse);
-
       setUserFollower(userFriendListResponse.data.Result);
       // setLoader(false);
       setRefreshing(false);
     } else {
       setRefreshing(false);
       // setLoader(false);
-      console.log("user Follower List Error ===>", userFriendListError);
     }
   }, [refreshing]);
 
@@ -75,7 +66,6 @@ const MyFollowers = ({ route, navigation }) => {
         setLoader(false);
       } else {
         setLoader(false);
-        console.log("user Follower List Error ===>", userFollowerListError);
       }
     } else {
       if (userData.userId == UserFollowerFriendId) {
@@ -85,7 +75,6 @@ const MyFollowers = ({ route, navigation }) => {
         if (userFollowerListResponse.data.StatusCode == "1") {
           setUserFollower(userFollowerListResponse.data.Result);
         } else {
-          console.log("user Follower List Error ===>", userFollowerListError);
         }
       } else {
         const { userFriendListResponse, userFriendListError } =
@@ -94,7 +83,6 @@ const MyFollowers = ({ route, navigation }) => {
         if (userFriendListResponse.data.StatusCode == "1") {
           setUserFollower(userFriendListResponse.data.Result);
         } else {
-          console.log("user Follower List Error ===>", userFriendListError);
         }
       }
     }
@@ -115,8 +103,6 @@ const MyFollowers = ({ route, navigation }) => {
   }, []);
 
   const RemoveFriend = async (Id) => {
-    console.log("Remove Friend  ====>>>>", Id);
-
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(Id);

@@ -27,10 +27,8 @@ export const validatePassword = (pass) => {
 export const allLetter = (inputtxt) => {
   var letters = /^[A-Za-z]+$/;
   if (inputtxt.match(letters)) {
-    console.log("true");
     return true;
   } else {
-    console.log("False");
     return false;
   }
 };

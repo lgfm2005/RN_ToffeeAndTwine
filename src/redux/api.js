@@ -46,6 +46,7 @@ const api = async (session, endpoint, method = "get", body, contentType) => {
 //     ),
 // };
 
+
 export const User = {
   login: async (data, session) =>
     await api(session, "/rest_api/controller_user/login", "post", data),
@@ -216,6 +217,11 @@ export const GetSetting = {
 export const SocialAuth = {
   get: async (session, data) =>
     await api(session, `/rest_api/controller_user/social_auth`, "post", data),
+};
+
+export const AppleLogin = {
+  get: async (session, data) =>
+    await api(session, "/rest_api/controller_user/social_auth_apple", "post", data),
 };
 
 // Raj

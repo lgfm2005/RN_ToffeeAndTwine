@@ -66,3 +66,5 @@ export const imgWhiteChristmas = require("../Image/imgWhiteChristmas.png");
 export const imgWhiteAnniversary = require("../Image/imgWhiteAnniversary.png");
 export const demofaceman = require("../Image/demofaceman.jpg");
 export const imgEditWhite = require("../Image/imgEditWhite.png");
+export const imgApple = require("../Image/imgApple.png");
+

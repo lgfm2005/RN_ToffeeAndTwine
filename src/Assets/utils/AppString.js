@@ -169,5 +169,5 @@ export const AppString = {
   YesNotify: "Yes, Notify",
   Deleteaccount: "Delete account",
   Logout: "Logout",
-  Version: "V 1.1.0",
+  Version: "V 2.0.0",
 };

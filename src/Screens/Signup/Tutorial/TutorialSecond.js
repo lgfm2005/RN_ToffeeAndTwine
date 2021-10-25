@@ -114,7 +114,6 @@ const TutorialSecond = ({ navigation, props, route }) => {
     }).then((image) => {
       setImageAPI(image);
       setImage(image.path);
-      console.log("image===>", image.path);
     });
   };
 
@@ -175,45 +174,11 @@ const TutorialSecond = ({ navigation, props, route }) => {
       items = list[getIndexIcon];
       items.isSelected = true;
       list[getIndexIcon] = items;
-
-      console.log("Question Response ==>>>", addCategoryQuestionResponse);
     } else {
       setModalVisible(false);
-      console.log("Question Error ==>>>", addCategoryQuestionError);
     }
     setLoader(false);
   };
-
-  // const SubmitData = async () => {
-  //   setModalVisible(false);
-  //   setLoader(true);
-
-  //   getQuestionsData.map((item) => {
-  //     data.append("IsFirst", 0);
-  //     data.append("CategoryID[]", item.categoryId);
-  //     data.append("CategoryQuestionID[]", item.categoryQuestionId);
-  //     data.append("CategoryQuestionValue[]", item.value);
-  //   });
-
-  //   // API
-  //   const { addCategoryQuestionError, addCategoryQuestionResponse } =
-  //     await addCategoryQuestion(tokens, data);
-  //   if (addCategoryQuestionResponse.data.StatusCode == "1") {
-  //     setModalVisible(false);
-
-  //     // List Icon COLOR Change
-  //     list = getlistOfCategory;
-  //     items = list[getIndexIcon];
-  //     items.isSelected = true;
-  //     list[getIndexIcon] = items;
-
-  //     console.log("Question Response ==>>>", addCategoryQuestionResponse);
-  //   } else {
-  //     setModalVisible(true);
-  //     console.log("Question Error ==>>>", addCategoryQuestionError);
-  //   }
-  //   setLoader(false);
-  // };
 
   return (
     <SafeAreaView style={CommonStyle.BgColorWhite}>

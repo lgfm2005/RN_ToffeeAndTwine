@@ -40,26 +40,19 @@ const Search = ({ navigation }) => {
 
   const onChangeSearch = async (query) => {
     setSearchQuery(query);
-    console.log("Remove Friend  ====>>>>", query);
     if (query.length > 2) {
       // setLoader(true);
       const { SearchUserResponse, SearchUserError } = await SearchUser(query);
       if (SearchUserResponse.data.StatusCode == "1") {
         setSearchData(SearchUserResponse.data.Result);
-        console.log(
-          "Search Data Response ===>",
-          typeof SearchUserResponse.data.Result
-        );
         // setLoader(false);
       } else {
         // setLoader(false);
-        console.log("Search Data Error ===>", SearchUserError);
       }
     }
   };
 
   const OpenUserProfile = (userInfo) => {
-    // console.log("OpenUserProfile", userInfo);
     navigation.navigate("UserProfile", { userInfo: userInfo });
   };
 

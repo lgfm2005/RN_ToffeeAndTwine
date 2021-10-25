@@ -16,6 +16,7 @@ import {
 import {
   imgToffeeTwineLogo,
   imgGift,
+  imgApple,
   imgGoogle,
   imgFacebook,
 } from "../Assets/utils/Image";
@@ -40,6 +41,9 @@ import {
   GraphRequestManager,
 } from "react-native-fbsdk";
 
+import { appleAuth } from "@invertase/react-native-apple-authentication";
+
+
 import Spinner from "react-native-loading-spinner-overlay";
 import OneSignal from "react-native-onesignal";
 
@@ -62,6 +66,7 @@ const MainScreen = ({ navigation }) => {
     socialAuth,
     GetSpecialMoment,
     updateNotification,
+    socialAppleAuth
   } = useActions();
 
   useEffect(() => {
@@ -80,7 +85,6 @@ const MainScreen = ({ navigation }) => {
   };
 
   const registerForPushNotifications = (permission) => {
-    // console.log("registerForPushNotifications::", permission);
     // do something with permission value
   };
 
@@ -120,7 +124,6 @@ const MainScreen = ({ navigation }) => {
       // Set User Info if user is already signed in
       getCurrentUserInfo();
     } else {
-      console.log("Please Login");
     }
     setGettingLoginStatus(false);
   };
@@ -147,10 +150,6 @@ const MainScreen = ({ navigation }) => {
         if (GetCategoryListresponse.data.StatusCode == "1") {
           console.log("Category Question Response Done");
         } else {
-          console.log(
-            "User Category Question Response Error  ===>>>",
-            GetCategoryListerror
-          );
         }
 
         const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
@@ -158,10 +157,6 @@ const MainScreen = ({ navigation }) => {
         if (UserCategoryQuestionResponse.data.StatusCode == "1") {
           console.log("User Category Question Response Done");
         } else {
-          console.log(
-            "User Category Question Response Error  ===>>>",
-            GetCategoryListerror
-          );
         }
         if (response.data.StatusCode == "1") {
           setLoader(false);
@@ -197,13 +192,11 @@ const MainScreen = ({ navigation }) => {
   const fbSignIn = async () => {
     LoginManager.logInWithPermissions(["email", "public_profile"]).then(
       function (result) {
-        console.log("result", result);
         if (result.isCancelled) {
           // Toast.show("Login cancelled")
         } else {
           AccessToken.getCurrentAccessToken()
             .then((data) => {
-              console.log(data);
               // Create a graph request asking for user information with a callback to handle the response.
               const infoRequest = new GraphRequest(
                 "/me",
@@ -219,7 +212,6 @@ const MainScreen = ({ navigation }) => {
                 },
                 (error, result) => {
                   if (error) {
-                    console.log("error:", error);
                     Toast.show("Something went wrong!");
                   } else {
                     if (
@@ -236,7 +228,6 @@ const MainScreen = ({ navigation }) => {
                         "F"
                       );
                     }
-                    console.log("result111:", result);
                   }
                 }
               );
@@ -244,13 +235,11 @@ const MainScreen = ({ navigation }) => {
               new GraphRequestManager().addRequest(infoRequest).start();
             })
             .catch((error) => {
-              console.log("error: ", error);
               Toast.show("Something went wrong!");
             });
         }
       },
       function (error) {
-        console.log("Login fail with error: " + error);
         Toast.show("Something went wrong!");
       }
     );
@@ -259,15 +248,12 @@ const MainScreen = ({ navigation }) => {
   const getCurrentUserInfo = async () => {
     try {
       let info = await GoogleSignin.signInSilently();
-      console.log("User Info --> ", info);
       setUserInfo(info);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_REQUIRED) {
         alert("User has not signed in yet");
-        console.log("User has not signed in yet");
       } else {
         alert("Unable to get user's info");
-        console.log("Unable to get user's info");
       }
     }
   };
@@ -281,7 +267,6 @@ const MainScreen = ({ navigation }) => {
         showPlayServicesUpdateDialog: true,
       });
       const userInfo = await GoogleSignin.signIn();
-      console.log("User Info Main --> ", userInfo.user);
       socialAuthLogin(
         userInfo.user.givenName,
         userInfo.user.familyName,
@@ -291,7 +276,6 @@ const MainScreen = ({ navigation }) => {
       setUserInfo(userInfo.user);
       // navigation.navigate("Navigation");
     } catch (error) {
-      console.log("Message", JSON.stringify(error));
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         alert("User Cancelled the Login Flow");
       } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -304,7 +288,123 @@ const MainScreen = ({ navigation }) => {
     }
   };
 
-  const Facebook = () => {};
+  const Facebook = () => { };
+
+  const ApplesocialLogin = async (Email, UserAppleId, Fname, Lname, Type) => {
+    setLoader(true);
+    const { error, response } = await socialAppleAuth(
+      Email,
+      UserAppleId,
+      Fname,
+      Lname,
+      Type
+    );
+
+    if (response.data.StatusCode == "1") {
+
+      const tokens = response.data.Result.Token;
+
+      const isRegistered = response.data.Result.IsRegistered;
+
+      if (isRegistered == "1") {
+
+        const token = { token: tokens };
+        OneSignalExternalUserEmail(Email);
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
+        const { GetCategoryListerror, GetCategoryListresponse } =
+          await CategoryList(30, token);
+
+        if (GetCategoryListresponse.data.StatusCode == "1") {
+
+          console.log("Category Question Response Done");
+        } else {
+        }
+
+        const { UserCategoryQuestionError, UserCategoryQuestionResponse } =
+          await getUserCategoryQuestion(token);
+
+        if (UserCategoryQuestionResponse.data.StatusCode == "1") {
+
+          console.log("User Category Question Response Done");
+        } else {
+        }
+        if (response.data.StatusCode == "1") {
+
+          setLoader(false);
+          setTimeout(() => {
+            setLoader(false);
+            navigation.navigate("Navigation");
+          }, 1000);
+        } else {
+          setLoader(false);
+        }
+      } else if (isRegistered == "0") {
+
+        const token = { token: tokens };
+        OneSignalExternalUserEmail(Email);
+        var deviceToken = await getToken();
+        await updateNotification(token, deviceToken);
+        const { specialMomentResponse, specialMomentError } =
+          await GetSpecialMoment(token);
+
+        if (response.data.StatusCode == "1") {
+
+          setLoader(false);
+          if (specialMomentResponse.data.StatusCode == "1") {
+
+            navigation.navigate("TutorialFirst", {
+              listGetSpecialDay: specialMomentResponse.data.Result,
+              token: tokens,
+              FirstName: Fname,
+              LastName: Lname,
+            });
+          }
+        }
+      }
+    }
+  };
+
+
+  const onAppleButtonPress = async () => {
+
+    // performs login request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
+
+
+    // get current authentication state for user
+    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+    const credentialState = await appleAuth.getCredentialStateForUser(
+      appleAuthRequestResponse.user
+    );
+
+    // use credentialState response to ensure the user is authenticated
+    if (credentialState === appleAuth.State.AUTHORIZED) {
+      // user is authenticated
+
+      console.log(appleAuthRequestResponse);
+
+      console.log(appleAuthRequestResponse.email);
+
+      console.log(appleAuthRequestResponse.user);
+
+      console.log(appleAuthRequestResponse.fullName.givenName);
+
+      console.log(appleAuthRequestResponse.fullName.familyName);
+
+      ApplesocialLogin(
+        appleAuthRequestResponse.email,
+        appleAuthRequestResponse.user,
+        appleAuthRequestResponse.fullName.givenName,
+        appleAuthRequestResponse.fullName.familyName,
+        "A"
+      )
+    }
+  };
+
 
   // const _signOut = async () => {
   //   setGettingLoginStatus(true);
@@ -422,6 +522,12 @@ const MainScreen = ({ navigation }) => {
                 style={Styles.iconbg}
               >
                 <Image source={imgFacebook} style={Styles.icon} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => onAppleButtonPress()}
+                style={Styles.iconbg}
+              >
+                <Image source={imgApple} style={Styles.icon} />
               </TouchableOpacity>
             </View>
           </View>

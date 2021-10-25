@@ -48,7 +48,6 @@ const UpcomingUpGrade = ({ navigation }) => {
         purchaserInfo1.latestExpirationDate,
         "DD/MM/YYYY"
       );
-      debugger;
       var isBefore = currentDate.isBefore(latestExpirationDates);
       if (!isBefore) {
         if (
@@ -56,49 +55,31 @@ const UpcomingUpGrade = ({ navigation }) => {
         ) {
           // Grant user "pro" access
         }
-        debugger;
         const offerings = await Purchases.getOfferings();
-        console.log("offerings:", offerings);
-        debugger;
         const monthlyPackage = offerings.current.monthly;
         const { purchaserInfo } = await Purchases.purchasePackage(
           monthlyPackage
         );
         const { latestExpirationDate } = purchaserInfo;
         userSubscriptions(purchaserInfo);
-
-        console.log("latestExpirationDate:", latestExpirationDate);
       } else {
       }
-    } catch (e) {
-      console.log("Error:", e);
-      // setLoading(false);
-      // if (e.userCancelled) return;
-      // setError(
-      //   "Something went wrong.\nPlease restart the app and start the purchase process again.",
-      // );
-      // setErrorDetails(e.message);
-      // HapticFeedback.trigger("impactHeavy");
-    }
+    } catch (e) {}
   };
 
   const userSubscriptions = async (info) => {
-    debugger;
     if (info.latestExpirationDate != null) {
       if (typeof info.entitlements.active.pro_monthly !== "undefined") {
         // var latestExpirationDates = Moment(info.latestExpirationDate)
         //   .format("YYYY-MM-DD")
         //   .toString();
         setLoader(true);
-        debugger;
         var cuttentDate = Moment(new Date()).format("YYYY-MM-DD").toString();
         var latestExpirationDates = Moment(Moment(cuttentDate).add(1, "M"))
           .format("YYYY-MM-DD")
           .toString();
-        debugger;
         const { UserSubscriptionResponse, UserSubscriptionError } =
           await userSubscription("1.99", cuttentDate, latestExpirationDates);
-        debugger;
         setLoader(false);
         setUpgradeModel(true);
       }

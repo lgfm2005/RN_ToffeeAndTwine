@@ -370,12 +370,10 @@ const Navigation = ({ navigation }) => {
     if (token && sessions.userFname != null) {
       var notification = openResult.notification.additionalData;
       var user_id = openResult.notification.additionalData.user_id;
-      console.log("notification Check Point ====>>>>>>>", notification);
       if (notification.activity == "Followers") {
         // navigation.navigate("Home");
         navigation.navigate("Profile");
         setTimeout(() => {
-          console.log("user_id ===>", user_id);
           navigation.navigate("UserFriendProfile", {
             // UserProfileCheck: "UserProfileCheck",
             userID: user_id,

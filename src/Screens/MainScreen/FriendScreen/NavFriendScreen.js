@@ -26,9 +26,6 @@ const NavFriendScreen = ({ navigation, route }) => {
     const { isFollowing, isUserFollowerFriendId, Usename } = route.params;
     isFollowings = isFollowing;
     usename = Usename;
-    console.log("isFollowings::", isFollowings);
-    // isUserFollowerFriendIds = isUserFollowerFriendId;
-    // isUserFollowingFriendIds = isUserFollowingFriendId;
   }
 
   return (

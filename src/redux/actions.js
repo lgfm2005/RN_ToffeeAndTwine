@@ -384,7 +384,6 @@ export const useActions = () => {
         data.append("UserCategoryQuestionID[]", item.categoryQuestionId);
         data.append("CategoryQuestionValue[]", item.value);
       });
-      // console.log("getUpdateQuestionData   ====>>>>", getIdItem);
       data.append("CategoryID", getIdItem);
       data.append("Image", JSON.stringify(ImageDataurl));
       let updateCategoryQuestionResponse, updateCategoryQuestionError;
@@ -419,10 +418,6 @@ export const useActions = () => {
         }
       } catch (e) {
         getUserCategorySpecialMomentError = e;
-        console.log(
-          "getUserCategorySpecialMomentError::",
-          getUserCategorySpecialMomentError
-        );
         dispatch(userSpecialMoment([]));
       }
 
@@ -517,6 +512,88 @@ export const useActions = () => {
       return { response, error };
     },
 
+    // socialAppleAuth: async (Email, UserAppleId, Fname, Lname, Type) => {
+    //   var data = new FormData();
+    //   data.append("Email", Email);
+    //   data.append("UserAppleId", UserAppleId);
+    //   data.append("Fname", Fname);
+    //   data.append("Lname", Lname);
+    //   data.append("Type", Type);
+    //   debugger
+    //   let response, error;
+    //   try {
+    //     response = await API.AppleLogin.get(sessions, data);
+    //     debugger
+    //     if (response.data.StatusCode == "1") {
+    //       debugger
+    //       var token = response.data.Result.Token;
+    //       var user_fname = response.data.Result.user_fname;
+    //       var user_lname = response.data.Result.user_lname;
+    //       var user_profile_image = response.data.Result.user_profile_image;
+    //       debugger
+    //       dispatch(
+    //         loginAction({
+    //           token: token,
+    //           userId: "1",
+    //           userIsActive: "",
+    //           userFname: user_fname,
+    //           userLname: user_lname,
+    //           userProfileImage: user_profile_image,
+    //           userOtp: "43223423",
+    //           defaultSpecialMoment: "",
+    //           isAutoLogin:
+    //             response.data.Result.IsRegistered == "1" ? true : false,
+    //         })
+    //       );
+    //     } else {
+    //       error = response.data.Message;
+    //       debugger
+    //     }
+    //   } catch (e) {
+    //     error = e;
+    //     debugger
+    //   }
+    //   return { response, error };
+    // },
+
+    socialAppleAuth: async (Email, UserAppleId, Fname, Lname, Type) => {
+      var data = new FormData();
+      data.append("Email", Email);
+      data.append("UserAppleId", UserAppleId);
+      data.append("Fname", Fname);
+      data.append("Lname", Lname);
+      data.append("Type", Type);
+      let response, error;
+      try {
+        response = await API.AppleLogin.get(sessions, data);
+        if (response.data.StatusCode == "1") {
+          var token = response.data.Result.Token;
+          var user_fname = response.data.Result.user_fname;
+          var user_lname = response.data.Result.user_lname;
+          var user_profile_image = response.data.Result.user_profile_image;
+          dispatch(
+            loginAction({
+              token: token,
+              userId: "1",
+              userIsActive: "",
+              userFname: user_fname,
+              userLname: user_lname,
+              userProfileImage: user_profile_image,
+              userOtp: "43223423",
+              defaultSpecialMoment: "",
+              isAutoLogin:
+                response.data.Result.IsRegistered == "1" ? true : false,
+            })
+          );
+        } else {
+          error = response.data.Message;
+        }
+      } catch (e) {
+        error = e;
+      }
+      return { response, error };
+    },
+    //
     socialAuth: async (userFname, userLname, Email, Type) => {
       var data = new FormData();
       data.append("Fname", userFname);
@@ -720,14 +797,11 @@ export const useActions = () => {
           sessions,
           data
         );
-        debugger;
         if (UserSubscriptionResponse.data.StatusCode == "1") {
         }
       } catch (e) {
-        debugger;
         UserSubscriptionError = e;
       }
-      debugger;
       return { UserSubscriptionResponse, UserSubscriptionError };
     },
 

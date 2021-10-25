@@ -64,7 +64,6 @@ const UpcomingMoments = ({ navigation }) => {
   }, []);
 
   const RenderItem = (item, index) => {
-    console.log("Imafe", item);
     return (
       <View style={[NotificationScreenStyle.FollowerListBg, CommonStyle.mb16]}>
         <View style={[{ alignItems: "center", flexDirection: "row" }]}>
