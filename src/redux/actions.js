@@ -7,6 +7,7 @@ import {
   CATEGORIES,
   LOGOUT,
   NOTIFICATION_TAB_EVENT,
+  NAVIGATIONIS,
 } from "./types";
 import { createAction } from "redux-actions";
 import * as API from "./api";
@@ -24,6 +25,7 @@ const userCategoryQuestion = createAction(USERCATEGORYQUESTION);
 const SpecialMoment = createAction(SPECIALMOMENT);
 const userSpecialMoment = createAction(USERSPECIALMOMENT);
 const notificationTab = createAction(NOTIFICATION_TAB_EVENT);
+const navigationTab = createAction(NAVIGATIONIS);
 
 // const getSpecialDay = createAction(GETSPECIALDAY);
 
@@ -68,6 +70,10 @@ export const useActions = () => {
     // Logout
     Logout: async () => {
       dispatch(logoutAction());
+    },
+    // navigationTabs
+    navigationTabs: async (item) => {
+      dispatch(navigationTab(item));
     },
 
     notificationTabEvent: async (isTab) => {

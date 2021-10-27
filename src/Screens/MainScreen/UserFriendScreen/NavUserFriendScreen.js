@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Text, View, StyleSheet, StatusBar } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Lib
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -54,6 +55,7 @@ const NavUserFriendScreen = ({ navigation, route }) => {
           },
           borderTopWidth: 0,
         }}
+        type={""}
       >
         <Tab.Screen
           name="Followers"

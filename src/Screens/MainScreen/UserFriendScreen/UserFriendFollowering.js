@@ -158,7 +158,7 @@ const UserFriendFollowering = ({ navigation }) => {
 
   return (
     <View>
-      <MyWhiteStatusbar />
+      {/* <MyWhiteStatusbar /> */}
       <SafeAreaView>
         <View Style={[CommonStyle.Container]}>
           <View style={UserFriendScreenStyle.backgroundColor}>

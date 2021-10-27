@@ -6,6 +6,7 @@ import UserCategoryQuestion from "./UserCategoryQuestion";
 import specialMoment from "./specialMoment";
 import UserSpecialMoment from "./UserSpecialMoment";
 import notifactionTabEvent from "./notifactionTabEvent";
+import navigationFollow from "./navigationFollow";
 
 export default combineReducers({
   session,
@@ -15,4 +16,5 @@ export default combineReducers({
   specialMoment,
   UserSpecialMoment,
   notifactionTabEvent,
+  navigationFollow,
 });

@@ -309,15 +309,6 @@ function Friend() {
         }}
       />
       <Stack.Screen
-        name="UserFriendProfile"
-        component={UserFriendProfile}
-        options={{
-          animationEnabled: false,
-          header: false,
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
         name="NavUserFriendScreen"
         component={NavUserFriendScreen}
         options={{
@@ -326,6 +317,16 @@ function Friend() {
           headerShown: false,
         }}
         screenOptions={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="UserFriendProfile"
+        component={UserFriendProfile}
+        options={{
+          animationEnabled: false,
+          header: false,
           headerShown: false,
         }}
       />

@@ -5,7 +5,6 @@ import {
   Text,
   View,
   Image,
-  TouchableOpacity,
   RefreshControl,
   Platform,
   ScrollView,
@@ -26,9 +25,13 @@ import { Smallbtn } from "../../../Components/Button/ButtonStyle";
 import { fontsize14 } from "../../../Assets/Style/CommonStyle";
 import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusbar";
 import { useActions } from "../../../redux/actions";
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const Following = ({ navigation }) => {
-  const { getUnfollowFriendList, getUserFollowingList } = useActions();
+const Following = ({ navigation, onPressFollowingTab }) => {
+  const { getUnfollowFriendList, getUserFollowingList, navigationTabs } =
+    useActions();
+  // const navigation = useNavigation();
 
   const [getLoader, setLoader] = useState(false);
   const [getUserFollowing, setUserFollowing] = useState("");
@@ -91,7 +94,14 @@ const Following = ({ navigation }) => {
   };
 
   const selectFriend = (item) => {
+    console.log("item", item);
     // console.log("selectFriend", item);
+    // navigationTabs({
+    //   isFollowing: "isFollowing",
+    //   userID: item.following_user_id,
+    //   isFriend: false,
+    // });
+    // onPressFollowingTab({ userID: item.following_user_id });
     navigation.navigate("UserFriendProfile", {
       userID: item.following_user_id,
     });
