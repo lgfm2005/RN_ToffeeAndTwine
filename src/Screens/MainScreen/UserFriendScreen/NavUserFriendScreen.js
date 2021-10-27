@@ -12,8 +12,8 @@ import MyFollowing from "./MyFollowing";
 import { UserFriendsToolbar } from "../../../Components/UserFriendsToolbar/UserFriendsToolbar";
 import { useNavigation } from "@react-navigation/native";
 
-// import DynamicTabView from "react-native-top-tabs";
-// const size = Dimensions.get("window").width;
+import DynamicTabView from "react-native-top-tabs";
+const size = Dimensions.get("window").width;
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -32,25 +32,34 @@ const NavUserFriendScreen = ({ route }) => {
     // isUserFollowingFriendIds = isUserFollowingFriendId;
   }
 
-  // const renderTab = (item, index) => {
-  //   if (index == 0) {
-  //     return <MyFollowers 
-  //     navigation={navigation}
-  //     initialParams={{
-  //       UserFollowerFriendId: route.params.isUserFollowerFriendId,
-  //       isMyProfile: route.params.isMyProfile,
-  //     }}
-  //      />;
-  //   }
-  //   if (index == 1) {
-  //     return <MyFollowing 
-  //     navigation={navigation}
-  //       initialParams={{
-  //             UserFollowerFriendId: route.params.isUserFollowerFriendId,
-  //             isMyProfile: route.params.isMyProfile,
-  //           }} />;
-  //   }
-  // };
+  const renderTab = (item, index) => {
+    if (index == 0) {
+      return (
+        <MyFollowers
+          navigation={navigation}
+          UserFollowerFriendId={route.params.isUserFollowerFriendId}
+          isMyProfile={route.params.isMyProfile}
+          initialParams={{
+            UserFollowerFriendId: route.params.isUserFollowerFriendId,
+            isMyProfile: route.params.isMyProfile,
+          }}
+        />
+      );
+    }
+    if (index == 1) {
+      return (
+        <MyFollowing
+          navigation={navigation}
+          UserFollowingFriendId={route.params.isUserFollowingFriendId}
+          isMyProfile={route.params.isMyProfile}
+          initialParams={{
+            UserFollowingFriendId: route.params.isUserFollowingFriendId,
+            isMyProfile: route.params.isMyProfile,
+          }}
+        />
+      );
+    }
+  };
 
   return (
     <View
@@ -101,58 +110,56 @@ const NavUserFriendScreen = ({ route }) => {
           />
         </Tab.Navigator>
       ) : (
-        <Tab.Navigator
-          initialRouteName={isFollowings == true ? "Following" : "Followers"}
-          screenOptions={{
-            tabBarActiveTintColor: COLORS.Primary,
-            tabBarInactiveTintColor: COLORS.PrimaryLight,
-            tabBarIndicatorStyle: {
-              backgroundColor: COLORS.Primary,
-            },
-            borderTopWidth: 0,
-          }}
-        >
-          <Tab.Screen
-            name="Followers"
-            component={MyFollowers}
-            initialParams={{
-              UserFollowerFriendId: route.params.isUserFollowerFriendId,
-              isMyProfile: route.params.isMyProfile,
-            }}
-          />
-
-          <Tab.Screen
-            name="Following"
-            component={MyFollowing}
-            initialParams={{
-              UserFollowingFriendId: route.params.isUserFollowingFriendId,
-              isMyProfile: route.params.isMyProfile,
-            }}
-          />
-        </Tab.Navigator>
-        // <DynamicTabView
-        //   data={[
-        //     { title: "MyFollowers", key: "MyFollowers" },
-        //     { title: "MyFollowing", key: "MyFollowing" },
-        //   ]}
-        //   renderTab={renderTab}
-        //   // onChangeTab={onChangeTab}
-        //   defaultIndex={isFollowings == true ? 1 : 0}
-        //   containerStyle={{ width: size, padding: 0 }}
-        //   headerBackgroundColor={"white"}
-        //   headerUnderlayColor={"gray"}
-        //   headerTextStyle={{
-        //     color: "black",
-        //     width: size / 4,
-        //     textAlign: "center",
-        //     bottom: 5,
+        // <Tab.Navigator
+        //   initialRouteName={isFollowings == true ? "Following" : "Followers"}
+        //   screenOptions={{
+        //     tabBarActiveTintColor: COLORS.Primary,
+        //     tabBarInactiveTintColor: COLORS.PrimaryLight,
+        //     tabBarIndicatorStyle: {
+        //       backgroundColor: COLORS.Primary,
+        //     },
+        //     borderTopWidth: 0,
         //   }}
-        // />
-      )}
+        // >
+        //   <Tab.Screen
+        //     name="Followers"
+        //     component={MyFollowers}
+        //     initialParams={{
+        //       UserFollowerFriendId: route.params.isUserFollowerFriendId,
+        //       isMyProfile: route.params.isMyProfile,
+        //     }}
+        //   />
 
+        //   <Tab.Screen
+        //     name="Following"
+        //     component={MyFollowing}
+        //     initialParams={{
+        //       UserFollowingFriendId: route.params.isUserFollowingFriendId,
+        //       isMyProfile: route.params.isMyProfile,
+        //     }}
+        //   />
+        // </Tab.Navigator>
+        <DynamicTabView
+          data={[
+            { title: "Followers", key: "Followers" },
+            { title: "Following", key: "Following" },
+          ]}
+          renderTab={renderTab}
+          // onChangeTab={onChangeTab}
+          defaultIndex={isFollowings == true ? 1 : 0}
+          containerStyle={{ width: size, padding: 0 }}
+          headerBackgroundColor={"white"}
+          headerUnderlayColor={"gray"}
+          headerTextStyle={{
+            color: "black",
+            width: size / 2.5,
+            textAlign: "center",
+            bottom: 5,
+          }}
+        />
+      )}
     </View>
   );
-}
+};
 
-
-export default NavUserFriendScreen
+export default NavUserFriendScreen;

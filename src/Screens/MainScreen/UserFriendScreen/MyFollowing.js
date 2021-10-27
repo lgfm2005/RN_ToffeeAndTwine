@@ -29,8 +29,13 @@ import { MyWhiteStatusbar } from "../../../Components/MyStatusBar/MyWhiteStatusb
 import { useActions } from "../../../redux/actions";
 import { useSelector } from "react-redux";
 
-const MyFollowing = ({ route, navigation }) => {
-  const { UserFollowingFriendId, isMyProfile } = route.params;
+const MyFollowing = ({
+  route,
+  navigation,
+  UserFollowingFriendId,
+  isMyProfile,
+}) => {
+  // const { UserFollowingFriendId, isMyProfile } = route.params;
   console.log("=========== UserFollowingFriend Id ===============");
   console.log("MyFollowing  ====>", UserFollowingFriendId);
   const userData = useSelector((state) => state.session);
@@ -92,7 +97,6 @@ const MyFollowing = ({ route, navigation }) => {
           await getUserFollowingFriendList(UserFollowingFriendId);
         setLoader(false);
         setMyFriendsList("0");
-        debugger;
         if (userFriendListResponse.data.StatusCode == "1") {
           setUserFollowing(userFriendListResponse.data.Result);
         } else {
@@ -124,7 +128,6 @@ const MyFollowing = ({ route, navigation }) => {
     setLoader(true);
     const { RemoveFriendResponse, RemoveFriendError } =
       await RemoveFollowerFriend(Id);
-    debugger;
     getDataFollowing(true);
   };
 
@@ -139,11 +142,9 @@ const MyFollowing = ({ route, navigation }) => {
 
   const selectFriend = (item) => {
     navigation.push("UserFriendProfile", {
-      userID: isMyProfile
+      userID: item.following_user_id
         ? item.following_user_id
-        : item.following_user_id
-          ? item.following_user_id
-          : item.friend_following_user_id,
+        : item.friend_following_user_id,
       MyProfileData: item.is_my_profile,
     });
   };
@@ -171,8 +172,8 @@ const MyFollowing = ({ route, navigation }) => {
             <Image
               source={
                 Data.item.user_profile_image == "" ||
-                  Data.item.user_profile_image == null ||
-                  Data.item.user_profile_image == undefined
+                Data.item.user_profile_image == null ||
+                Data.item.user_profile_image == undefined
                   ? imgPlaceHolder
                   : { uri: Data.item.user_profile_image }
               }
@@ -279,12 +280,12 @@ const MyFollowing = ({ route, navigation }) => {
                 data={getUserFollowing}
                 renderItem={(Data, index) => RenderItem(Data, index)}
                 keyExtractor={(item) => item.id}
-              // refreshControl={
-              //   <RefreshControl
-              //     refreshing={refreshing}
-              //     onRefresh={onRefresh}
-              //   />
-              // }
+                // refreshControl={
+                //   <RefreshControl
+                //     refreshing={refreshing}
+                //     onRefresh={onRefresh}
+                //   />
+                // }
               />
             )}
           </View>

@@ -56,7 +56,7 @@ import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusb
 const UserFriendProfile = ({ route, navigation }) => {
   const userData = useSelector((state) => state.session);
   const { userID, MyProfileData } = route.params;
-  debugger
+
   useEffect(() => {
     console.log("UserFriendProfile check point");
     // {
@@ -405,7 +405,7 @@ const UserFriendProfile = ({ route, navigation }) => {
   const getProfiles = async () => {
     setLoader(true);
     const { profileResponse, profileError } = await getProfile(userID);
-    debugger
+
     if (profileResponse.data.StatusCode == "1") {
       setResult(profileResponse.data.Result[0].user_details);
       setProfileImage(
@@ -484,7 +484,7 @@ const UserFriendProfile = ({ route, navigation }) => {
           >
             <TouchableOpacity
               onPress={() => navigation.goBack()}
-            // onPress={() => navigation.navigate("NavFriendScreen")}
+              // onPress={() => navigation.navigate("NavFriendScreen")}
             >
               <Image
                 source={imgBackleftWhite}
@@ -857,8 +857,8 @@ const UserFriendProfile = ({ route, navigation }) => {
             <View style={CommonStyle.Row}>
               <View style={{ width: "20%" }}>
                 {getSpecialMomentImage == "" ||
-                  getSpecialMomentImage == null ||
-                  getSpecialMomentImage == undefined ? (
+                getSpecialMomentImage == null ||
+                getSpecialMomentImage == undefined ? (
                   <Image
                     source={{
                       uri:
@@ -935,8 +935,8 @@ const UserFriendProfile = ({ route, navigation }) => {
               <View style={{ width: "20%" }}>
                 <TouchableOpacity disabled={true}>
                   {getImageNew == "" ||
-                    getImageNew == null ||
-                    getImageNew == undefined ? (
+                  getImageNew == null ||
+                  getImageNew == undefined ? (
                     <Image
                       source={{
                         uri: ImageUrl.Categories + getTitleName + ImageUrl.Png,
@@ -1005,8 +1005,8 @@ const UserFriendProfile = ({ route, navigation }) => {
               <View style={{ width: "20%" }}>
                 <TouchableOpacity disabled={true}>
                   {getImageNew == "" ||
-                    getImageNew == null ||
-                    getImageNew == undefined ? (
+                  getImageNew == null ||
+                  getImageNew == undefined ? (
                     <Image
                       source={{
                         uri: ImageUrl.Categories + getTitleName + ImageUrl.Png,

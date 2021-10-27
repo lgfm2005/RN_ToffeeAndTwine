@@ -26,8 +26,13 @@ import { useActions } from "../../../redux/actions";
 import { MyBlackStatusbar } from "../../../Components/MyStatusBar/MyBlackStatusbar";
 import { useSelector } from "react-redux";
 
-const MyFollowers = ({ route, navigation }) => {
-  const { UserFollowerFriendId, isMyProfile } = route.params;
+const MyFollowers = ({
+  route,
+  navigation,
+  UserFollowerFriendId,
+  isMyProfile,
+}) => {
+  // const { UserFollowerFriendId, isMyProfile } = route.params;
   const userData = useSelector((state) => state.session);
 
   console.log("=========== UserFollowerFriendId ===============");
@@ -124,11 +129,9 @@ const MyFollowers = ({ route, navigation }) => {
   };
   const selectFriend = (item) => {
     navigation.push("UserFriendProfile", {
-      userID: isMyProfile
+      userID: item.follower_user_id
         ? item.follower_user_id
-        : item.follower_user_id
-          ? item.follower_user_id
-          : item.friend_follower_user_id,
+        : item.friend_follower_user_id,
       isMyProfile: false,
       MyProfileData: item.is_my_profile,
     });
@@ -157,8 +160,8 @@ const MyFollowers = ({ route, navigation }) => {
             <Image
               source={
                 Data.item.user_profile_image == "" ||
-                  Data.item.user_profile_image == null ||
-                  Data.item.user_profile_image == undefined
+                Data.item.user_profile_image == null ||
+                Data.item.user_profile_image == undefined
                   ? imgPlaceHolder
                   : { uri: Data.item.user_profile_image }
               }
@@ -255,12 +258,12 @@ const MyFollowers = ({ route, navigation }) => {
                 data={getUserFollower}
                 renderItem={(Data, index) => RenderItem(Data, index)}
                 keyExtractor={(item) => item.id}
-              // refreshControl={
-              //   <RefreshControl
-              //     refreshing={refreshing}
-              //     onRefresh={onRefresh}
-              //   />
-              // }
+                // refreshControl={
+                //   <RefreshControl
+                //     refreshing={refreshing}
+                //     onRefresh={onRefresh}
+                //   />
+                // }
               />
             )}
           </View>

@@ -44,7 +44,6 @@ const Gifting = ({ navigation }) => {
   };
 
   const UserProfileScreenStyle = (user_id) => {
-    debugger
     navigation.navigate("UserFriendProfile", {
       userID: user_id,
     });
@@ -77,8 +76,8 @@ const Gifting = ({ navigation }) => {
                 <Image
                   source={
                     item.user_profile_image == "" ||
-                      item.user_profile_image == null ||
-                      item.user_profile_image == undefined
+                    item.user_profile_image == null ||
+                    item.user_profile_image == undefined
                       ? imgPlaceHolder
                       : { uri: item.user_profile_image }
                   }
@@ -136,8 +135,8 @@ const Gifting = ({ navigation }) => {
                 <Image
                   source={
                     item.user_profile_image == "" ||
-                      item.user_profile_image == null ||
-                      item.user_profile_image == undefined
+                    item.user_profile_image == null ||
+                    item.user_profile_image == undefined
                       ? imgPlaceHolder
                       : { uri: item.user_profile_image }
                   }

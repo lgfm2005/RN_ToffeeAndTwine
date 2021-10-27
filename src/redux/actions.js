@@ -180,7 +180,7 @@ export const useActions = () => {
       var data = new FormData();
       data.append("FName", userFname);
       data.append("LName", userLname);
-      data.append("Image", ImageUrl);
+      data.append("Image", ImageUrl.length == 0 ? "" : ImageUrl);
       data.append("DefaultSpecialMoment", DefaultSpecialMoment);
       let response, error;
       try {
@@ -217,7 +217,7 @@ export const useActions = () => {
       data.append("LimitRecord", LimitRecord);
       try {
         GetCategoryListresponse = await API.GetCategories.categories(
-          data,
+          LimitRecord ? data : {},
           session
         );
         if (GetCategoryListresponse.data.StatusCode == "1") {
@@ -519,18 +519,18 @@ export const useActions = () => {
     //   data.append("Fname", Fname);
     //   data.append("Lname", Lname);
     //   data.append("Type", Type);
-    //   debugger
+    //
     //   let response, error;
     //   try {
     //     response = await API.AppleLogin.get(sessions, data);
-    //     debugger
+    //
     //     if (response.data.StatusCode == "1") {
-    //       debugger
+    //
     //       var token = response.data.Result.Token;
     //       var user_fname = response.data.Result.user_fname;
     //       var user_lname = response.data.Result.user_lname;
     //       var user_profile_image = response.data.Result.user_profile_image;
-    //       debugger
+    //
     //       dispatch(
     //         loginAction({
     //           token: token,
@@ -547,11 +547,11 @@ export const useActions = () => {
     //       );
     //     } else {
     //       error = response.data.Message;
-    //       debugger
+    //
     //     }
     //   } catch (e) {
     //     error = e;
-    //     debugger
+    //
     //   }
     //   return { response, error };
     // },
@@ -639,15 +639,16 @@ export const useActions = () => {
       if (UserID) {
         data.append("UserID", UserID);
       }
-      debugger
+
       let profileResponse, profileError;
-      debugger
+
       try {
-        debugger
-        profileResponse = await API.GetProfile.get(sessions, data);
-        debugger
+        profileResponse = await API.GetProfile.get(
+          sessions,
+          UserID ? data : {}
+        );
+
         if (profileResponse.data.StatusCode == "1") {
-          debugger
         }
       } catch (e) {
         profileError = e;
@@ -657,15 +658,12 @@ export const useActions = () => {
 
     //getUserProfile
     getUserProfile: async () => {
-      debugger
       let profileResponse, profileError;
-      debugger
+
       try {
-        debugger
         profileResponse = await API.GetProfile.get(sessions);
-        debugger
+
         if (profileResponse.data.StatusCode == "1") {
-          debugger
         }
       } catch (e) {
         profileError = e;
@@ -680,7 +678,7 @@ export const useActions = () => {
         data.append("UserID", userFriendListID);
         userFriendListResponse = await API.GetUserFriendFollowingList.get(
           sessions,
-          data
+          userFriendListID ? data : {}
         );
         if (userFriendListResponse.data.StatusCode == "1") {
         }
@@ -697,7 +695,7 @@ export const useActions = () => {
         data.append("UserID", userFriendListID);
         userFriendListResponse = await API.getUserFriendFollowerList.get(
           sessions,
-          data
+          userFriendListID ? data : {}
         );
         if (userFriendListResponse.data.StatusCode == "1") {
         }
@@ -738,7 +736,7 @@ export const useActions = () => {
         data.append("FriendUserID", FriendUserID);
         UnfollowFriendListResponse = await API.getunfollowFriend.get(
           sessions,
-          data
+          FriendUserID ? data : {}
         );
         if (UnfollowFriendListResponse.data.StatusCode == "1") {
         }
@@ -755,7 +753,7 @@ export const useActions = () => {
         data.append("FriendUserID", FriendUserID);
         RemoveFriendResponse = await API.RemoveFollowerFriend.get(
           sessions,
-          data
+          FriendUserID ? data : {}
         );
         if (RemoveFriendResponse.data.StatusCode == "1") {
         }
@@ -785,7 +783,10 @@ export const useActions = () => {
       let friendCategorySpeciaResponse, friendCategorySpeciaError;
       try {
         friendCategorySpeciaResponse =
-          await API.GetFriendCategorySpecialMoment.get(sessions, data);
+          await API.GetFriendCategorySpecialMoment.get(
+            sessions,
+            calendarDate ? data : {}
+          );
         if (friendCategorySpeciaResponse.data.StatusCode == "1") {
         }
       } catch (e) {
@@ -820,7 +821,7 @@ export const useActions = () => {
         data.append("UserNotificationID", UserNotificationID);
         updateNotificationResponse = await API.UpdateNotification.get(
           token,
-          data
+          UserNotificationID ? data : {}
         );
         if (updateNotificationResponse.data.StatusCode == "1") {
         }
@@ -835,7 +836,10 @@ export const useActions = () => {
       try {
         var data = new FormData();
         data.append("FriendRequestTo", friendRequestTo);
-        followUserResponse = await API.FollowUser.get(sessions, data);
+        followUserResponse = await API.FollowUser.get(
+          sessions,
+          friendRequestTo ? data : {}
+        );
         if (followUserResponse.data.StatusCode == "1") {
         }
       } catch (e) {
