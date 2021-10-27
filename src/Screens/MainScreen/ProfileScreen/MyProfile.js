@@ -11,6 +11,7 @@ import {
   ScrollView,
   StatusBar,
   RefreshControl,
+  Platform,
 } from "react-native";
 
 // Lib
@@ -87,6 +88,7 @@ const MyProfile = ({ navigation, route }) => {
     updateCategoryQuestion,
     deleteUserCategoryQuestion,
     getProfile,
+    getUserProfile,
     GetSpecialMoment,
     deleteUserCategorySpecialDay,
     updateCategorySpecialMoment,
@@ -182,24 +184,27 @@ const MyProfile = ({ navigation, route }) => {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-  // useEffect(() => {
-  //   if (UserProfileCheck == "UserProfileCheck") {
-  //     navigation.navigate("UserFriendProfile", { userID: userId });
-  //   } else {
-  //   }
-  // }, []);
+
   //onRefresh
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    const { profileResponse, profileError } = await getProfile();
+    // const { profileResponse, profileError } = await getProfile();
+    const { profileResponse, profileError } = await getUserProfile();
+    debugger
     if (profileResponse.data.StatusCode == "1") {
+      debugger
       console.log("My Profile Get Profile Response");
 
+      debugger
       setFollowerCount(profileResponse.data.Result[0].follower_count);
+
+      debugger
       setFollowingCount(profileResponse.data.Result[0].following_count);
       setCategoryQuestionLimit(
         profileResponse.data.Result[0].user_details[0].category_question_limit
       );
+
+      debugger
       setUserSubscriptionStatus(
         profileResponse.data.Result[0].user_details[0].user_subscription_status
       );
@@ -996,10 +1001,16 @@ const MyProfile = ({ navigation, route }) => {
   }, [userSpecialMoment]);
 
   const getProfiles = async () => {
-    const { profileResponse, profileError } = await getProfile();
+    debugger
+    const { profileResponse, profileError } = await getUserProfile()
+    // const { profileResponse, profileError } = await Platform.OS == 'ios' ? getProfile() : getUserProfile();
+    debugger
     if (profileResponse.data.StatusCode == "1") {
+      debugger
       setFollowerCount(profileResponse.data.Result[0].follower_count);
+      debugger
       setFollowingCount(profileResponse.data.Result[0].following_count);
+      debugger
     }
   };
 

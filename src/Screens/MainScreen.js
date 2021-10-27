@@ -523,12 +523,16 @@ const MainScreen = ({ navigation }) => {
               >
                 <Image source={imgFacebook} style={Styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => onAppleButtonPress()}
-                style={Styles.iconbg}
-              >
-                <Image source={imgApple} style={Styles.icon} />
-              </TouchableOpacity>
+              {
+                Platform.OS == 'ios' ? (
+                  <TouchableOpacity
+                    onPress={() => onAppleButtonPress()}
+                    style={Styles.iconbg}
+                  >
+                    <Image source={imgApple} style={Styles.icon} />
+                  </TouchableOpacity>
+                ) : null}
+
             </View>
           </View>
         </View>

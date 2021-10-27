@@ -639,10 +639,15 @@ export const useActions = () => {
       if (UserID) {
         data.append("UserID", UserID);
       }
+      debugger
       let profileResponse, profileError;
+      debugger
       try {
+        debugger
         profileResponse = await API.GetProfile.get(sessions, data);
+        debugger
         if (profileResponse.data.StatusCode == "1") {
+          debugger
         }
       } catch (e) {
         profileError = e;
@@ -650,19 +655,22 @@ export const useActions = () => {
       return { profileResponse, profileError };
     },
 
-    getUserProfile: async (UserID) => {
-      let userProfileResponse, userProfileError;
+    //getUserProfile
+    getUserProfile: async () => {
+      debugger
+      let profileResponse, profileError;
+      debugger
       try {
-        var data = new FormData();
-        data.append("UserID", UserID);
-
-        userProfileResponse = await API.GetProfile.get(sessions);
-        if (userProfileResponse.data.StatusCode == "1") {
+        debugger
+        profileResponse = await API.GetProfile.get(sessions);
+        debugger
+        if (profileResponse.data.StatusCode == "1") {
+          debugger
         }
       } catch (e) {
-        userProfileError = e;
+        profileError = e;
       }
-      return { userProfileResponse, userProfileError };
+      return { profileResponse, profileError };
     },
 
     getUserFollowingFriendList: async (userFriendListID) => {

@@ -142,8 +142,8 @@ const MyFollowing = ({ route, navigation }) => {
       userID: isMyProfile
         ? item.following_user_id
         : item.following_user_id
-        ? item.following_user_id
-        : item.friend_following_user_id,
+          ? item.following_user_id
+          : item.friend_following_user_id,
       MyProfileData: item.is_my_profile,
     });
   };
@@ -171,8 +171,8 @@ const MyFollowing = ({ route, navigation }) => {
             <Image
               source={
                 Data.item.user_profile_image == "" ||
-                Data.item.user_profile_image == null ||
-                Data.item.user_profile_image == undefined
+                  Data.item.user_profile_image == null ||
+                  Data.item.user_profile_image == undefined
                   ? imgPlaceHolder
                   : { uri: Data.item.user_profile_image }
               }
@@ -279,12 +279,12 @@ const MyFollowing = ({ route, navigation }) => {
                 data={getUserFollowing}
                 renderItem={(Data, index) => RenderItem(Data, index)}
                 keyExtractor={(item) => item.id}
-                // refreshControl={
-                //   <RefreshControl
-                //     refreshing={refreshing}
-                //     onRefresh={onRefresh}
-                //   />
-                // }
+              // refreshControl={
+              //   <RefreshControl
+              //     refreshing={refreshing}
+              //     onRefresh={onRefresh}
+              //   />
+              // }
               />
             )}
           </View>

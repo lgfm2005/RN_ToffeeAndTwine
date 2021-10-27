@@ -96,11 +96,10 @@ const Followers = ({ navigation }) => {
     }
   };
   const selectFriend = (item) => {
-    // console.log("selectFriend", item);
+    console.log("selectFriend", item);
     navigation.push("UserFriendProfile", {
       userID: item.follower_user_id,
     });
-    console.log("1==========================");
     // navigation.navigate("FriendFollowersList", {
     //   userID: item.follower_user_id,
     // });
@@ -130,8 +129,8 @@ const Followers = ({ navigation }) => {
             <Image
               source={
                 Data.item.user_profile_image == "" ||
-                Data.item.user_profile_image == null ||
-                Data.item.user_profile_image == undefined
+                  Data.item.user_profile_image == null ||
+                  Data.item.user_profile_image == undefined
                   ? imgPlaceHolder
                   : { uri: Data.item.user_profile_image }
               }

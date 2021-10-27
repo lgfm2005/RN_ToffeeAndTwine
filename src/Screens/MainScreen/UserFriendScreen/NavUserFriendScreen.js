@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, View, StyleSheet, StatusBar } from "react-native";
+import { Text, View, StyleSheet, StatusBar, Dimensions } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 // Lib
@@ -10,10 +10,16 @@ import { COLORS } from "../../../Assets/utils/COLORS";
 import MyFollowers from "./MyFollowers";
 import MyFollowing from "./MyFollowing";
 import { UserFriendsToolbar } from "../../../Components/UserFriendsToolbar/UserFriendsToolbar";
+import { useNavigation } from "@react-navigation/native";
+
+// import DynamicTabView from "react-native-top-tabs";
+// const size = Dimensions.get("window").width;
 
 const Tab = createMaterialTopTabNavigator();
 
-const NavUserFriendScreen = ({ navigation, route }) => {
+const NavUserFriendScreen = ({ route }) => {
+  const navigation = useNavigation();
+
   var isFollowings = false;
   var usename = "";
   if (route.params) {
@@ -25,6 +31,26 @@ const NavUserFriendScreen = ({ navigation, route }) => {
     // isUserFollowerFriendIds = isUserFollowerFriendId;
     // isUserFollowingFriendIds = isUserFollowingFriendId;
   }
+
+  // const renderTab = (item, index) => {
+  //   if (index == 0) {
+  //     return <MyFollowers 
+  //     navigation={navigation}
+  //     initialParams={{
+  //       UserFollowerFriendId: route.params.isUserFollowerFriendId,
+  //       isMyProfile: route.params.isMyProfile,
+  //     }}
+  //      />;
+  //   }
+  //   if (index == 1) {
+  //     return <MyFollowing 
+  //     navigation={navigation}
+  //       initialParams={{
+  //             UserFollowerFriendId: route.params.isUserFollowerFriendId,
+  //             isMyProfile: route.params.isMyProfile,
+  //           }} />;
+  //   }
+  // };
 
   return (
     <View
@@ -44,37 +70,89 @@ const NavUserFriendScreen = ({ navigation, route }) => {
         onPressBack={() => navigation.goBack()}
         onPressSearch={() => navigation.navigate("Search")}
       />
-      <Tab.Navigator
-        initialRouteName={isFollowings == true ? "Following" : "Followers"}
-        screenOptions={{
-          tabBarActiveTintColor: COLORS.Primary,
-          tabBarInactiveTintColor: COLORS.PrimaryLight,
-          tabBarIndicatorStyle: {
-            backgroundColor: COLORS.Primary,
-          },
-          borderTopWidth: 0,
-        }}
-      >
-        <Tab.Screen
-          name="Followers"
-          component={MyFollowers}
-          initialParams={{
-            UserFollowerFriendId: route.params.isUserFollowerFriendId,
-            isMyProfile: route.params.isMyProfile,
+      {Platform.OS === "ios" ? (
+        <Tab.Navigator
+          initialRouteName={isFollowings == true ? "Following" : "Followers"}
+          screenOptions={{
+            tabBarActiveTintColor: COLORS.Primary,
+            tabBarInactiveTintColor: COLORS.PrimaryLight,
+            tabBarIndicatorStyle: {
+              backgroundColor: COLORS.Primary,
+            },
+            borderTopWidth: 0,
           }}
-        />
+        >
+          <Tab.Screen
+            name="Followers"
+            component={MyFollowers}
+            initialParams={{
+              UserFollowerFriendId: route.params.isUserFollowerFriendId,
+              isMyProfile: route.params.isMyProfile,
+            }}
+          />
 
-        <Tab.Screen
-          name="Following"
-          component={MyFollowing}
-          initialParams={{
-            UserFollowingFriendId: route.params.isUserFollowingFriendId,
-            isMyProfile: route.params.isMyProfile,
+          <Tab.Screen
+            name="Following"
+            component={MyFollowing}
+            initialParams={{
+              UserFollowingFriendId: route.params.isUserFollowingFriendId,
+              isMyProfile: route.params.isMyProfile,
+            }}
+          />
+        </Tab.Navigator>
+      ) : (
+        <Tab.Navigator
+          initialRouteName={isFollowings == true ? "Following" : "Followers"}
+          screenOptions={{
+            tabBarActiveTintColor: COLORS.Primary,
+            tabBarInactiveTintColor: COLORS.PrimaryLight,
+            tabBarIndicatorStyle: {
+              backgroundColor: COLORS.Primary,
+            },
+            borderTopWidth: 0,
           }}
-        />
-      </Tab.Navigator>
+        >
+          <Tab.Screen
+            name="Followers"
+            component={MyFollowers}
+            initialParams={{
+              UserFollowerFriendId: route.params.isUserFollowerFriendId,
+              isMyProfile: route.params.isMyProfile,
+            }}
+          />
+
+          <Tab.Screen
+            name="Following"
+            component={MyFollowing}
+            initialParams={{
+              UserFollowingFriendId: route.params.isUserFollowingFriendId,
+              isMyProfile: route.params.isMyProfile,
+            }}
+          />
+        </Tab.Navigator>
+        // <DynamicTabView
+        //   data={[
+        //     { title: "MyFollowers", key: "MyFollowers" },
+        //     { title: "MyFollowing", key: "MyFollowing" },
+        //   ]}
+        //   renderTab={renderTab}
+        //   // onChangeTab={onChangeTab}
+        //   defaultIndex={isFollowings == true ? 1 : 0}
+        //   containerStyle={{ width: size, padding: 0 }}
+        //   headerBackgroundColor={"white"}
+        //   headerUnderlayColor={"gray"}
+        //   headerTextStyle={{
+        //     color: "black",
+        //     width: size / 4,
+        //     textAlign: "center",
+        //     bottom: 5,
+        //   }}
+        // />
+      )}
+
     </View>
   );
-};
+}
 
-export default NavUserFriendScreen;
+
+export default NavUserFriendScreen
